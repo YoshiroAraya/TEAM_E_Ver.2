@@ -46,9 +46,11 @@ public:
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
 
-	bool GetRTriangle(void);
+	bool GetLand(void);
 
 	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
+
+	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
 
 private:
 	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
@@ -60,10 +62,10 @@ private:
 	D3DXMATRIX				m_mtxWorld;		// ワールドマトリックス
 
 	D3DXVECTOR3				m_move;			// ポリゴンの位置
+	D3DXVECTOR3				m_posOld;
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分
-	bool					m_bRTriangle;	// 右側にいるかどうか
 	STATE				m_State;		// 状態
-
+	bool					m_bLand;		// モデルに乗っているかどうか
 };
 #endif

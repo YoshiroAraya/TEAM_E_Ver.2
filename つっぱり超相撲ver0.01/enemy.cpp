@@ -17,6 +17,11 @@
 #include "shadow.h"
 
 //=============================================================================
+// マクロ定義
+//=============================================================================
+#define ENEMY_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
+
+//=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
 LPD3DXMESH CEnemy::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
@@ -31,8 +36,9 @@ CEnemy::CEnemy() : CSceneX(2)
 	// 値をクリア
 	m_pTexture = NULL;						// テクスチャへのポインタ
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
-	m_bRTriangle = false;					// 右にいるかどうか
+	m_bLand = false;					// 右にいるかどうか
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //=============================================================================
@@ -78,7 +84,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_move = D3DXVECTOR3(0, 0, 0);
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
-	m_bRTriangle = false;					// 右にいるかどうか
+	m_bLand = false;					// 右にいるかどうか
 
 	return S_OK;
 }
@@ -120,6 +126,9 @@ void CEnemy::Update(void)
 	// カメラの向きを取得
 	D3DXVECTOR3 cameraRot;
 	cameraRot = pCamera->GetRot();
+
+	// 前のフレームの位置代入
+	m_posOld = pos;
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
@@ -240,7 +249,7 @@ void CEnemy::Update(void)
 	pos += m_move;
 
 	// 重力加算
-	//m_move.y -= cosf(D3DX_PI * 0.0f) * 0.1f;
+	m_move.y -= cosf(D3DX_PI * 0.0f) * 0.1f;
 
 	//減速
 	m_move.x += (0.0f - m_move.x) * 0.5f;
@@ -252,6 +261,9 @@ void CEnemy::Update(void)
 	pMeshField = CManager::GetMeshField();
 
 	pShadow->SetPos(pos);
+
+	// モデルとの当たり判定
+	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
@@ -273,6 +285,38 @@ void CEnemy::Draw(void)
 {
 	// 2Dオブジェクト描画処理
 	CSceneX::Draw();
+}
+
+//=============================================================================
+// モデルとの当たり判定の処理
+//=============================================================================
+void CEnemy::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
+{
+	CScene *pScene = NULL;
+
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(DOHYO_PRIORITY);
+
+	while (pScene != NULL)
+	{// 優先順位が3のオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_DOHYO)
+			{// オブジェクトの種類を確かめる
+				m_bLand = ((CSceneX*)pScene)->Collision(pos, posOld, move, radius);
+				if (m_bLand == true)
+				{// モデルに当たる
+				 //m_bJump = false;
+				}
+			}
+		}
+
+		// 次のシーンに進める
+		pScene = pSceneNext;
+	}
 }
 
 //=============================================================================
@@ -327,7 +371,7 @@ void CEnemy::UnloadModel(void)
 //=============================================================================
 // 右側にいるかどうかを取得
 //=============================================================================
-bool CEnemy::GetRTriangle(void)
+bool CEnemy::GetLand(void)
 {
-	return m_bRTriangle;
+	return m_bLand;
 }
