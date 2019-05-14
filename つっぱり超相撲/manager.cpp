@@ -16,11 +16,11 @@
 #include "light.h"
 #include "debugProc.h"
 #include "player.h"
+#include "enemy.h"
 #include "bullet.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "mask.h"
-#include "dohyo.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -32,7 +32,9 @@ CLight *CManager::m_pLight = NULL;
 CDebugProc *CManager::m_pDebugProc = NULL;
 CScene3D *CManager::m_pScene3D = NULL;
 CPlayer *CManager::m_pPlayer = NULL;
+CEnemy *CManager::m_pEnemy = NULL;
 CShadow *CManager::m_pShadow = NULL;
+CMeshField *CManager::m_pMeshField = NULL;
 CMask *CManager::m_pMask = NULL;
 
 //=============================================================================
@@ -110,17 +112,24 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		m_pMask = CMask::Create();
 	}
 
+	if (m_pScene3D == NULL)
+	{
+		//m_pScene3D = CScene3D::Create(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
+	}
+
 	if (m_pPlayer == NULL)
 	{// プレイヤー
 		CPlayer::LoadModel();
-		
+
 		m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
 	}
 
-	CDohyo::LoadModel();
-	CDohyo::LoadMat();
+	if (m_pEnemy == NULL)
+	{// エネミー
+		CEnemy::LoadModel();
 
-	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
+	}
 
 #ifdef _DEBUG
 	if (m_pDebugProc == NULL)
@@ -135,8 +144,20 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	}
 #endif
 
+	if (m_pMeshField == NULL)
+	{
+		// メッシュフィールドの生成
+	//	m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+
 	// 2Dポリゴンの生成
-	CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
+	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
+
+	// 3Dポリゴンの生成
+	//CScene3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	// 3Dモデル
+	CSceneX::Create(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
 
 	// 弾のテクスチャを読み込む
 	CBullet::Load();
@@ -159,13 +180,13 @@ void CManager::Uninit(void)
 	CBullet::Unload();
 
 	CPlayer::UnloadModel();
-	CDohyo::UnloadModel();
-	CDohyo::UnloadMat();
 
 	CShadow::UnLoad();
 
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
+	m_pEnemy = NULL;
+	m_pMeshField = NULL;
 	m_pShadow = NULL;
 
 	if (m_pMask != NULL)
@@ -336,11 +357,28 @@ CPlayer *CManager::GetPlayer(void)
 }
 
 //=============================================================================
+// プレイヤーの取得
+//=============================================================================
+CEnemy * CManager::GetEnemy(void)
+{
+	return m_pEnemy;
+}
+
+//=============================================================================
 // 影の取得
 //=============================================================================
 CShadow *CManager::GetShadow(void)
 {
 	return m_pShadow;
+}
+
+
+//=============================================================================
+// メッシュフィールドの取得
+//=============================================================================
+CMeshField *CManager::GetMeshField(void)
+{
+	return m_pMeshField;
 }
 
 //=============================================================================
