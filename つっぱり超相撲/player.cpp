@@ -364,7 +364,6 @@ HRESULT CPlayer::LoadModel(void)
 	{
 		pDevice = pRenderer->GetDevice();
 	}
-
 	// Xƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	D3DXLoadMeshFromX(CAR_MODEL_NAME,
 		D3DXMESH_SYSTEMMEM,
