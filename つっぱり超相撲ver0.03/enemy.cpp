@@ -224,16 +224,16 @@ void CEnemy::Update(void)
 		rot.y += D3DX_PI* 2.0f;
 	}
 
-	if (pInputKeyboard->GetTrigger(DIK_PERIOD) == true)
+	if (CGame::GetHit() == true)
 	{
 		if (m_State == STATE_NEUTRAL)
 		{
 			m_State = STATE_KUMI;
 		}
-		else if (m_State == STATE_KUMI)
+		/*else if (m_State == STATE_KUMI)
 		{
-			m_State = STATE_NEUTRAL;
-		}
+		m_State = STATE_NEUTRAL;
+		}*/
 	}
 
 	if (pInputKeyboard->GetPress(DIK_I) == true)

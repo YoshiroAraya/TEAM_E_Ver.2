@@ -36,6 +36,8 @@ CEnemy *CGame::m_pEnemy = NULL;
 CShadow *CGame::m_pShadow = NULL;
 CMeshField *CGame::m_pMeshField = NULL;
 CBattleSys *CGame::m_pBatlteSys = NULL;
+bool CGame::m_bHit = false;
+
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -57,6 +59,7 @@ CGame::~CGame()
 //=============================================================================
 void CGame::Init(void)
 {
+	m_bHit = false;
 
 	//インスタンス
 	CManager *pManager = NULL;
@@ -151,7 +154,7 @@ void CGame::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 
-	bool bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), 10.0f);
+	m_bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), 10.0f);
 
 
 	CDebugProc::Print("c", "ゲームモード");
@@ -169,7 +172,7 @@ void CGame::Update(void)
 
 
 #ifdef _DEBUG
-	if (bHit == true)
+	if (m_bHit == true)
 	{
 		CDebugProc::Print("c", "当たっている");
 	}

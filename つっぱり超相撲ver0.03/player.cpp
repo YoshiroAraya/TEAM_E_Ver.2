@@ -236,16 +236,16 @@ void CPlayer::Update(void)
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
-	if (pInputKeyboard->GetTrigger(DIK_COMMA) == true)
+	if (CGame::GetHit() == true)
 	{
 		if (m_State == STATE_NEUTRAL)
 		{
 			m_State = STATE_KUMI;
 		}
-		else if (m_State == STATE_KUMI)
+		/*else if (m_State == STATE_KUMI)
 		{
-			m_State = STATE_NEUTRAL;
-		}
+		m_State = STATE_NEUTRAL;
+		}*/
 	}
 
 
