@@ -16,6 +16,8 @@
 #define NUM_PRIORITY	(8)		// —Dæ‡ˆÊ‚Ì”
 #define SCENEX_PRIORITY	(3)
 #define DOHYO_PRIORITY	(3)
+#define ENEMY_PRIORITY	(2)
+#define PLAYER_PRIORITY	(2)
 
 //========================================
 // ƒNƒ‰ƒX‚Ì’è‹`

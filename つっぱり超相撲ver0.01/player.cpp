@@ -31,12 +31,13 @@ DWORD CPlayer::m_nNumMat = 0;				// マテリアル情報の数
 //=============================================================================
 // プレイヤークラスのコンストラクタ
 //=============================================================================
-CPlayer::CPlayer() : CSceneX(2)
+CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 {
 	// 値をクリア
 	m_pTexture = NULL;						// テクスチャへのポインタ
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_bLand = false;					// 右にいるかどうか
+	m_bHit = false;					// 右にいるかどうか
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_State = STATE_NEUTRAL;
@@ -87,6 +88,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
 	m_bLand = false;					// 右にいるかどうか
+	m_bHit = false;					// 右にいるかどうか
 	m_State = STATE_NEUTRAL;
 
 	return S_OK;
@@ -270,7 +272,7 @@ void CPlayer::Update(void)
 	pShadow->SetPos(pos);
 
 	// モデルとの当たり判定
-	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, PLAYER_COLLISION);
+	CollisonDohyo(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, PLAYER_COLLISION);
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
@@ -280,6 +282,8 @@ void CPlayer::Update(void)
 	int nCnt = 0;
 
 	CDebugProc::Print("cfccfccfc", "プレイヤーの位置 : x", pos.x, "f", "   y", pos.y, "f", "  z", pos.z, "f");
+	CDebugProc::Print("cfccfccfc", "VtxMax : x", CSceneX::GetVtxMax().x, "f", "   y", CSceneX::GetVtxMax().y, "f", "  z", CSceneX::GetVtxMax().z, "f");
+	CDebugProc::Print("cfccfccfc", "VtxMin : x", CSceneX::GetVtxMin().x, "f", "   y", CSceneX::GetVtxMin().y, "f", "  z", CSceneX::GetVtxMin().z, "f");
 	CDebugProc::Print("cn", "プレイヤーの状態 : ", m_State);
 	/*for (int nCount = 0; nCount < NUM_VTX; nCount++)
 	{
@@ -337,9 +341,9 @@ void CPlayer::Draw(void)
 }
 
 //=============================================================================
-// モデルとの当たり判定の処理
+// 土俵との当たり判定の処理
 //=============================================================================
-void CPlayer::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
+void CPlayer::CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
 {
 	CScene *pScene = NULL;
 

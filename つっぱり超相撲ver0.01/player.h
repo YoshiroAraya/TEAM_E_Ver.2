@@ -41,8 +41,7 @@ public:
 	void Update(void);	// プレイヤー更新処理
 	void Draw(void);	// プレイヤー描画処理
 
-	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
-
+	void CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
 
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
@@ -65,6 +64,7 @@ private:
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分
 	bool					m_bLand;		// モデルに乗っているかどうか
+	bool					m_bHit;		// 敵に当たっているかどうか	
 
 	STATE				m_State;		// 状態
 

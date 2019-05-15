@@ -67,5 +67,6 @@ private:
 	float					m_fDiffAngle;	// Šp“x‚Ì·•ª
 	STATE				m_State;		// ó‘Ô
 	bool					m_bLand;		// ƒ‚ƒfƒ‹‚Éæ‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	bool					m_bHit;		// “G‚É“–‚½‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©	
 };
 #endif

@@ -31,7 +31,7 @@ DWORD CEnemy::m_nNumMat = 0;				// マテリアル情報の数
 //=============================================================================
 // エネミークラスのコンストラクタ
 //=============================================================================
-CEnemy::CEnemy() : CSceneX(2)
+CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 {
 	// 値をクリア
 	m_pTexture = NULL;						// テクスチャへのポインタ
@@ -273,6 +273,8 @@ void CEnemy::Update(void)
 	int nCnt = 0;
 
 	CDebugProc::Print("cfccfccfc", "エネミーの位置 : x", pos.x, "f", "   y", pos.y, "f", "  z", pos.z, "f");
+	CDebugProc::Print("cfccfccfc", "エネミーのVtxMax : x", CSceneX::GetVtxMax().x, "f", "   y", CSceneX::GetVtxMax().y, "f", "  z", CSceneX::GetVtxMax().z, "f");
+	CDebugProc::Print("cfccfccfc", "エネミーのVtxMin : x", CSceneX::GetVtxMin().x, "f", "   y", CSceneX::GetVtxMin().y, "f", "  z", CSceneX::GetVtxMin().z, "f");
 	CDebugProc::Print("cn", "エネミーの状態 : ", m_State);
 
 #endif

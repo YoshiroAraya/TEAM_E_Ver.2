@@ -280,6 +280,8 @@ void CManager::Update(void)
 	//	m_fData += 80.0f;
 	//}
 
+	bool bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), 10.0f);
+
 	if (m_pRenderer != NULL)
 	{// レンダラー更新処理
 		m_pRenderer->Update();
@@ -304,6 +306,17 @@ void CManager::Update(void)
 	{// キーボード入力更新処理
 		m_pMask->Update();
 	}
+
+#ifdef _DEBUG
+	if (bHit == true)
+	{
+		CDebugProc::Print("c", "当たっている");
+	}
+	else
+	{
+		CDebugProc::Print("c", "当たっていない");
+	}
+#endif
 }
 
 //=============================================================================
@@ -320,6 +333,27 @@ void CManager::Draw(void)
 	{// レンダラー描画処理
 		m_pRenderer->Draw();
 	}
+}
+
+//=============================================================================
+// ブロックとの当たり判定処理
+//=============================================================================
+bool CManager::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1)
+{
+	bool bHit = false;	// 当たっていない状態
+
+						// 中心と中心の差を求める
+	D3DXVECTOR3 DiffLength = D3DXVECTOR3(pos0->x - pos1->x, pos0->y - pos1->y, pos0->z - pos1->z);
+
+	// 中心から中心のベクトルの長さを算出
+	float fLength = sqrtf((DiffLength.x * DiffLength.x) + (DiffLength.y * DiffLength.y) + (DiffLength.z * DiffLength.z));
+
+	if (fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1)
+	{// 長さが半径の和より小さければ当たっている
+		bHit = true;
+	}
+
+	return bHit;	// ブロックに当たっているかどうかを返す
 }
 
 //=============================================================================

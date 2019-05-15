@@ -49,6 +49,7 @@ public:
 	static CShadow *GetShadow(void);
 	static CMeshField *GetMeshField(void);
 	static CMask *GetMask(void);
+	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);	// “–‚½‚è”»’è
 
 private:
 	static CRenderer *m_pRenderer;

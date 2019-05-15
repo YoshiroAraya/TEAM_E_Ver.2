@@ -43,6 +43,12 @@ public:
 	D3DXVECTOR3 GetRot(void);						// 向きの取得
 	void SetRot(D3DXVECTOR3 rot);					// 向きの設定
 
+	D3DXVECTOR3 GetVtxMax(void);						// 最大値の取得
+	void SetVtxMax(D3DXVECTOR3 VtxMax);					// 最大値の設定
+
+	D3DXVECTOR3 GetVtxMin(void);						// 最小値の取得
+	void SetVtxMin(D3DXVECTOR3 VtxMin);					// 最小値の設定
+
 	void SetVtx(void);																// 頂点座標の設定
 	bool Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 
