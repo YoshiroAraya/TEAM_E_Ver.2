@@ -265,9 +265,9 @@ void CPlayer::Update(void)
 	m_move.y -= cosf(D3DX_PI * 0.0f) * 0.1f;
 
 	//Œ¸‘¬
-	m_move.x += (0.0f - m_move.x) * 0.05f;
-	m_move.z += (0.0f - m_move.z) * 0.05f;
-	m_move.y += (0.0f - m_move.y) * 0.05f;
+	m_move.x += (0.0f - m_move.x) * 0.5f;
+	m_move.z += (0.0f - m_move.z) * 0.5f;
+	m_move.y += (0.0f - m_move.y) * 0.01f;
 
 	pShadow->SetPos(pos);
 
