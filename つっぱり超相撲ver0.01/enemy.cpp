@@ -254,7 +254,7 @@ void CEnemy::Update(void)
 	//減速
 	m_move.x += (0.0f - m_move.x) * 0.5f;
 	m_move.z += (0.0f - m_move.z) * 0.5f;
-	m_move.y += (0.0f - m_move.y) * 0.5f;
+	m_move.y += (0.0f - m_move.y) * 0.01f;
 
 	// メッシュフィールド取得
 	CMeshField *pMeshField;
