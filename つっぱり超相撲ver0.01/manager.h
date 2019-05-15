@@ -23,6 +23,7 @@ class CEnemy;
 class CMeshField;
 class CShadow;
 class CMask;
+class CBattleSys;
 
 //=============================================================================
 // ƒNƒ‰ƒX‚Ì’è‹`
@@ -63,6 +64,7 @@ private:
 	static CShadow *m_pShadow;
 	static CMeshField *m_pMeshField;
 	static CMask *m_pMask;
+	static CBattleSys *m_pBatlteSys;
 	float m_fData;
 };
 

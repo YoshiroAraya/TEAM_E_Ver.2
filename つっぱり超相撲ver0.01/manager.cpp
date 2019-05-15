@@ -22,6 +22,7 @@
 #include "shadow.h"
 #include "mask.h"
 #include "dohyo.h"
+#include "BattleSystem.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -37,6 +38,7 @@ CEnemy *CManager::m_pEnemy = NULL;
 CShadow *CManager::m_pShadow = NULL;
 CMeshField *CManager::m_pMeshField = NULL;
 CMask *CManager::m_pMask = NULL;
+CBattleSys *CManager::m_pBatlteSys = NULL;
 
 //=============================================================================
 // マネージャクラスのコンストラクタ
@@ -174,6 +176,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		m_pShadow = CShadow::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
+	if (m_pBatlteSys == NULL)
+	{
+		m_pBatlteSys = CBattleSys::Create();
+	}
 	return S_OK;
 }
 
@@ -194,6 +200,7 @@ void CManager::Uninit(void)
 	m_pEnemy = NULL;
 	m_pMeshField = NULL;
 	m_pShadow = NULL;
+	m_pBatlteSys = NULL;
 
 	if (m_pMask != NULL)
 	{// フェードの終了
@@ -303,10 +310,14 @@ void CManager::Update(void)
 	}
 
 	if (m_pMask != NULL)
-	{// キーボード入力更新処理
+	{// フェード更新処理
 		m_pMask->Update();
 	}
 
+	if (m_pBatlteSys != NULL)
+	{
+		m_pBatlteSys->Update();
+	}
 #ifdef _DEBUG
 	if (bHit == true)
 	{

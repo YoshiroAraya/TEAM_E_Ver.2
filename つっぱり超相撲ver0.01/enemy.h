@@ -47,6 +47,8 @@ public:
 	static void UnloadModel(void);	// モデルテクスチャ解放
 
 	bool GetLand(void);
+	STATE GetState(void);
+	void SetState(STATE state);
 
 	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
@@ -67,6 +69,6 @@ private:
 	float					m_fDiffAngle;	// 角度の差分
 	STATE				m_State;		// 状態
 	bool					m_bLand;		// モデルに乗っているかどうか
-	bool					m_bHit;		// 敵に当たっているかどうか	
+	bool					m_bHit;		// 敵に当たっているかどうか
 };
 #endif
