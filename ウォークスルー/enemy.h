@@ -35,6 +35,13 @@ public:
 		STATE_DOWN,
 	}STATE;
 
+	//向き
+	typedef enum
+	{
+		DIRECTION_RIGHT = 0,
+		DIRECTION_LEFT,
+	}DIRECTION;
+
 	CEnemy();	// コンストラクタ
 	~CEnemy();	// デストラクタ
 
@@ -49,6 +56,8 @@ public:
 	bool GetLand(void);
 	STATE GetState(void);
 	void SetState(STATE state);
+	DIRECTION GetDirection(void) { return m_Direction; }
+	void SetDirection(DIRECTION direction) { m_Direction = direction; }
 
 	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
@@ -68,8 +77,10 @@ private:
 	D3DXVECTOR3				m_posOld;
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分
-	STATE				m_State;		// 状態
 	bool					m_bLand;		// モデルに乗っているかどうか
 	bool					m_bHit;		// 敵に当たっているかどうか
+	STATE					m_State;		// 状態
+	DIRECTION				m_Direction;	// 向き(左右)
+
 };
 #endif

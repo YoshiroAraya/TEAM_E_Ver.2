@@ -23,6 +23,10 @@
 // マクロ
 //=============================================================================
 #define OSIAI_MOVE (5.0f)
+#define NAGE_MOVE (8.0f)
+
+#define OSIAI_FLAME (20)
+#define NAGE_FLAME (30)
 
 //=============================================================================
 // バトルシステムクラスのコンストラクタ
@@ -110,23 +114,105 @@ void CBattleSys::Update(void)
 		&& m_bAttack == false)
 	{
 		CDebugProc::Print("c", " 組み合い ");
-		//任意のキー→
-		if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
-		{
-			CDebugProc::Print("c", " 右へ ");
-			pPlayer->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
-			pEnemy->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
-			m_bAttack = true;
-		}
-		//任意のキー4
-		if (pInputKeyboard->GetTrigger(DIK_NUMPAD4) == true)
-		{
-			CDebugProc::Print("c", " 左へ ");
-			pPlayer->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
-			pEnemy->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
 
-			m_bAttack = true;
+		//向いてる方向に押す プレイヤー
+		switch (pPlayer->GetDirection())
+		{
+		case CPlayer::DIRECTION_LEFT:
+			if (pInputKeyboard->GetTrigger(DIK_LEFT) == true)
+			{
+				CDebugProc::Print("c", " 押す ");
+				pPlayer->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
+				m_nCntFlame = OSIAI_FLAME;
+				m_bAttack = true;
+			}
+
+			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
+			{
+				CDebugProc::Print("c", " 投げる ");
+				pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+				m_bAttack = true;
+				m_nCntFlame = NAGE_FLAME;
+				CGame::SetHit(false);
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+			break;
+		case CPlayer::DIRECTION_RIGHT:
+			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
+			{
+				CDebugProc::Print("c", " 押す ");
+				pPlayer->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
+				m_nCntFlame = OSIAI_FLAME;
+				m_bAttack = true;
+			}
+
+			if (pInputKeyboard->GetTrigger(DIK_LEFT) == true)
+			{
+				CDebugProc::Print("c", " 投げる ");
+				pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+				m_bAttack = true;
+				m_nCntFlame = NAGE_FLAME;
+				CGame::SetHit(false);
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+			break;
 		}
+
+		//向いてる方向に押す エネミー
+		switch (pEnemy->GetDirection())
+		{
+		case CEnemy::DIRECTION_LEFT:
+			if (pInputKeyboard->GetTrigger(DIK_NUMPAD4) == true)
+			{
+				CDebugProc::Print("c", " 押す ");
+				pPlayer->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-OSIAI_MOVE, 3.0f, 0.0f));
+				m_bAttack = true;
+				m_nCntFlame = OSIAI_FLAME;
+			}
+			if (pInputKeyboard->GetTrigger(DIK_NUMPAD6) == true)
+			{
+				CDebugProc::Print("c", " 投げる ");
+				pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+				m_bAttack = true;
+				m_nCntFlame = NAGE_FLAME;
+				CGame::SetHit(false);
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+
+			break;
+		case CEnemy::DIRECTION_RIGHT:
+			if (pInputKeyboard->GetTrigger(DIK_NUMPAD6) == true)
+			{
+				CDebugProc::Print("c", " 押す ");
+				pPlayer->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(OSIAI_MOVE, 3.0f, 0.0f));
+				m_bAttack = true;
+				m_nCntFlame = OSIAI_FLAME;
+			}
+
+			if (pInputKeyboard->GetTrigger(DIK_NUMPAD4) == true)
+			{
+					CDebugProc::Print("c", " 投げる ");
+					pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+					pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+					m_bAttack = true;
+					m_nCntFlame = NAGE_FLAME;
+					CGame::SetHit(false);
+					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+			break;
+		}
+
 	}
 	//リセット
 	if (pInputKeyboard->GetTrigger(DIK_R) == true)
@@ -149,11 +235,11 @@ void CBattleSys::Update(void)
 
 	if (m_bAttack == true)
 	{
-		m_nCntFlame++;
+		m_nCntFlame--;
 		if (pPlayer->GetState() == CPlayer::STATE_KUMI
 			&& pEnemy->GetState() == CEnemy::STATE_KUMI)
 		{
-			if (m_nCntFlame > 20)
+			if (m_nCntFlame <= 0)
 			{
 				m_nCntFlame = 0;
 				m_bAttack = false;

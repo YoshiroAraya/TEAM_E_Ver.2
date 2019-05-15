@@ -26,6 +26,7 @@
 //============================================================================
 #define SIZE_X (SCREEN_WIDTH)
 #define SIZE_Y (SCREEN_HEIGHT)
+#define COLISIONSIZE (8.0f)
 
 //============================================================================
 //静的メンバ変数宣言
@@ -154,7 +155,7 @@ void CGame::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 
-	m_bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), 10.0f);
+	m_bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), COLISIONSIZE);
 
 
 	CDebugProc::Print("c", "ゲームモード");

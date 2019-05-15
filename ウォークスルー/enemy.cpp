@@ -36,11 +36,12 @@ DWORD CEnemy::m_nNumMat = 0;				// マテリアル情報の数
 CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 {
 	// 値をクリア
-	m_pTexture = NULL;						// テクスチャへのポインタ
-	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
-	m_bLand = false;					// 右にいるかどうか
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
+	m_pTexture = NULL;							// テクスチャへのポインタ
+	m_pVtxBuff = NULL;							// 頂点バッファへのポインタ
+	m_bLand = false;							// 右にいるかどうか
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Direction = DIRECTION_LEFT;
 }
 
 //=============================================================================
@@ -87,6 +88,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
 	m_bLand = false;					// 右にいるかどうか
+	m_Direction = DIRECTION_LEFT;
 
 	return S_OK;
 }
@@ -246,6 +248,15 @@ void CEnemy::Update(void)
 		rot.y += D3DX_PI* 2.0f;
 	}
 
+	if (rot.y > 0.0f)
+	{
+		m_Direction = DIRECTION_RIGHT;
+	}
+	else if (rot.y < 0.0f)
+	{
+		m_Direction = DIRECTION_LEFT;
+	}
+
 	if (CGame::GetHit() == true)
 	{
 		if (m_State == STATE_NEUTRAL)
@@ -299,6 +310,8 @@ void CEnemy::Update(void)
 	CDebugProc::Print("cfccfccfc", "エネミーのVtxMax : x", CSceneX::GetVtxMax().x, "f", "   y", CSceneX::GetVtxMax().y, "f", "  z", CSceneX::GetVtxMax().z, "f");
 	CDebugProc::Print("cfccfccfc", "エネミーのVtxMin : x", CSceneX::GetVtxMin().x, "f", "   y", CSceneX::GetVtxMin().y, "f", "  z", CSceneX::GetVtxMin().z, "f");
 	CDebugProc::Print("cn", "エネミーの状態 : ", m_State);
+	CDebugProc::Print("cn", "エネミーの向き : ", m_Direction);
+	CDebugProc::Print("cf", "エネミーの向き : ", rot.y);
 
 #endif
 }

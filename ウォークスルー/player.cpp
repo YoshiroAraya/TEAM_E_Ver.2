@@ -42,7 +42,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_State = STATE_NEUTRAL;
-
+	m_Direction = DIRECTION_RIGHT;
 }
 
 //=============================================================================
@@ -91,6 +91,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bLand = false;					// 右にいるかどうか
 	m_bHit = false;					// 右にいるかどうか
 	m_State = STATE_NEUTRAL;
+	m_Direction = DIRECTION_RIGHT;
 
 	return S_OK;
 }
@@ -250,6 +251,15 @@ void CPlayer::Update(void)
 		rot.y += D3DX_PI* 2.0f;
 	}
 
+	if (rot.y > 0.0f)
+	{
+		m_Direction = DIRECTION_RIGHT;
+	}
+	else if (rot.y < 0.0f)
+	{
+		m_Direction = DIRECTION_LEFT;
+	}
+
 	if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
 	{// 弾発射
 		CBullet::Create(D3DXVECTOR3(pos.x + sinf(rot.y + D3DX_PI) * 10, pos.y, pos.z + cosf(rot.y + D3DX_PI) * 10),
@@ -307,6 +317,9 @@ void CPlayer::Update(void)
 	CDebugProc::Print("cfccfccfc", "VtxMax : x", CSceneX::GetVtxMax().x, "f", "   y", CSceneX::GetVtxMax().y, "f", "  z", CSceneX::GetVtxMax().z, "f");
 	CDebugProc::Print("cfccfccfc", "VtxMin : x", CSceneX::GetVtxMin().x, "f", "   y", CSceneX::GetVtxMin().y, "f", "  z", CSceneX::GetVtxMin().z, "f");
 	CDebugProc::Print("cn", "プレイヤーの状態 : ", m_State);
+	CDebugProc::Print("cn", "プレイヤーの向き : ", m_Direction);
+	CDebugProc::Print("cf", "プレイヤーの向き : ", rot.y);
+
 	/*for (int nCount = 0; nCount < NUM_VTX; nCount++)
 	{
 		if (abRight[nCount] == true)
