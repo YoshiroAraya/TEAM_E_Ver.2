@@ -42,6 +42,7 @@ public:
 	void Draw(void);	// プレイヤー描画処理
 
 	void CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
+	void SetMove(D3DXVECTOR3 move);
 
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放

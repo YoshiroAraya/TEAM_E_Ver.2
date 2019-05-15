@@ -53,6 +53,7 @@ public:
 	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
 	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
+	void SetMove(D3DXVECTOR3 move);
 
 private:
 	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
