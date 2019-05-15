@@ -8,7 +8,7 @@
 #include "main.h"
 #include "scene.h"
 #include "debugProc.h"
-
+#include "fade.h"
 //=============================================================================
 // レンダリングクラスのコンストラクタ
 //=============================================================================
@@ -159,10 +159,19 @@ void CRenderer::Draw(void)
 		(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL),
 		D3DCOLOR_RGBA(0, 0, 0, 255), 1.0f, 0);
 
+	CFade *pFade = CManager::GetFade();
+
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		CScene::DrawAll();
+
+		if (pFade != NULL)
+		{
+			// 描画処理
+			pFade->Draw();
+		}
+
 #ifdef _DEBUG
 		// FPS表示
 		CDebugProc::Draw();

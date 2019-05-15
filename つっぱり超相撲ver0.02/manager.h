@@ -17,14 +17,9 @@ class CInputKeyboard;
 class CCamera;
 class CLight;
 class CDebugProc;
-class CScene3D;
-class CPlayer;
-class CEnemy;
-class CMeshField;
-class CShadow;
 class CMask;
-class CBattleSys;
-
+class CFade;
+class CGame;
 //=============================================================================
 // クラスの定義
 //=============================================================================
@@ -34,6 +29,17 @@ class CBattleSys;
 class CManager
 {
 public:
+
+	typedef enum
+	{//モードの構造体
+		MODE_NONE = 0,
+		MODE_TITLE,
+		MODE_TUTORIAL,
+		MODE_GAME,
+		MODE_RESULT,
+		MODE_MAX
+	}MODE;
+
 	CManager();		// コンストラクタ
 	~CManager();	// デストラクタ
 
@@ -44,13 +50,11 @@ public:
 	static CRenderer *GetRenderer(void);
 	static CInputKeyboard *GetInputKeyboard(void);
 	static CCamera *GetCamera(void);
-	static CScene3D *GetScene3D(void);
-	static CPlayer *GetPlayer(void);
-	static CEnemy *GetEnemy(void);
-	static CShadow *GetShadow(void);
-	static CMeshField *GetMeshField(void);
 	static CMask *GetMask(void);
-	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);	// 当たり判定
+
+	static CFade *GetFade(void) { return m_pFade; };
+	MODE GetMode(void) { return m_mode; };
+	static void SetMode(MODE mode);
 
 private:
 	static CRenderer *m_pRenderer;
@@ -58,14 +62,11 @@ private:
 	static CCamera *m_pCamera;
 	static CLight *m_pLight;
 	static CDebugProc *m_pDebugProc;
-	static CScene3D *m_pScene3D;
-	static CPlayer *m_pPlayer;
-	static CEnemy *m_pEnemy;
-	static CShadow *m_pShadow;
-	static CMeshField *m_pMeshField;
 	static CMask *m_pMask;
-	static CBattleSys *m_pBatlteSys;
+	static CFade *m_pFade;
+	static CGame *m_pGame;
 	float m_fData;
+	static MODE m_mode;
 };
 
 #endif

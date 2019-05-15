@@ -15,6 +15,7 @@
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
+#include "game.h"
 
 //=============================================================================
 // マクロ定義
@@ -121,7 +122,7 @@ void CEnemy::Update(void)
 
 	// 影の取得
 	CShadow *pShadow;
-	pShadow = CManager::GetShadow();
+	pShadow = CGame::GetShadow();
 
 	// カメラの向きを取得
 	D3DXVECTOR3 cameraRot;
@@ -258,7 +259,7 @@ void CEnemy::Update(void)
 
 	// メッシュフィールド取得
 	CMeshField *pMeshField;
-	pMeshField = CManager::GetMeshField();
+	pMeshField = CGame::GetMeshField();
 
 	pShadow->SetPos(pos);
 

@@ -11,6 +11,7 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "player.h"
+#include "game.h"
 
 //=============================================================================
 // 3Dポリゴンクラスのコンストラクタ
@@ -376,7 +377,7 @@ float CScene3D::GetHeight(D3DXVECTOR3 pos)
 {
 	// プレイヤーを取得
 	CPlayer *pPlayer;
-	pPlayer = CManager::GetPlayer();
+	pPlayer = CGame::GetPlayer();
 
 	//// 右側の三角にいるかどうかを取得
 	//bool bRTriangle;

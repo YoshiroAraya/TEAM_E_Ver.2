@@ -15,6 +15,7 @@
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
+#include "game.h"
 
 //=============================================================================
 // マクロ定義
@@ -126,7 +127,7 @@ void CPlayer::Update(void)
 
 	// 影の取得
 	CShadow *pShadow;
-	pShadow = CManager::GetShadow();
+	pShadow = CGame::GetShadow();
 
 	// カメラの向きを取得
 	D3DXVECTOR3 cameraRot;

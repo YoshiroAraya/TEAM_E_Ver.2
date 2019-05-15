@@ -159,6 +159,8 @@
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="dohyo.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="fade.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="dohyo.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="fade.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />

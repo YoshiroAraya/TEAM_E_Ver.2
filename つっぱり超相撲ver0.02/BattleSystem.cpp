@@ -13,6 +13,8 @@
 
 #include "player.h"
 #include "enemy.h"
+#include "game.h"
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -91,10 +93,10 @@ void CBattleSys::Update(void)
 
 	// プレイヤーの取得
 	CPlayer *pPlayer;
-	pPlayer = CManager::GetPlayer ();
+	pPlayer = CGame::GetPlayer ();
 	// エネミーの取得
 	CEnemy *pEnemy;
-	pEnemy = CManager::GetEnemy();
+	pEnemy = CGame::GetEnemy();
 
 
 #ifdef _DEBUG

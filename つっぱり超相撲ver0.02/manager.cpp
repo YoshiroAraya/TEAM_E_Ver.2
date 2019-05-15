@@ -23,7 +23,8 @@
 #include "mask.h"
 #include "dohyo.h"
 #include "BattleSystem.h"
-
+#include "fade.h"
+#include "game.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -32,14 +33,10 @@ CInputKeyboard *CManager::m_pInputKeyboard = NULL;
 CCamera *CManager::m_pCamera = NULL;
 CLight *CManager::m_pLight = NULL;
 CDebugProc *CManager::m_pDebugProc = NULL;
-CScene3D *CManager::m_pScene3D = NULL;
-CPlayer *CManager::m_pPlayer = NULL;
-CEnemy *CManager::m_pEnemy = NULL;
-CShadow *CManager::m_pShadow = NULL;
-CMeshField *CManager::m_pMeshField = NULL;
 CMask *CManager::m_pMask = NULL;
-CBattleSys *CManager::m_pBatlteSys = NULL;
-
+CGame *CManager::m_pGame = NULL;
+CFade *CManager::m_pFade = NULL;
+CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 //=============================================================================
 // マネージャクラスのコンストラクタ
 //=============================================================================
@@ -115,28 +112,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		m_pMask = CMask::Create();
 	}
 
-	if (m_pScene3D == NULL)
-	{
-		//m_pScene3D = CScene3D::Create(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
-	}
-
-	CDohyo::LoadModel();
-	CDohyo::LoadMat();
-	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
-	if (m_pPlayer == NULL)
-	{// プレイヤー
-		CPlayer::LoadModel();
-
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
-	}
-
-	if (m_pEnemy == NULL)
-	{// エネミー
-		CEnemy::LoadModel();
-
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f));
-	}
+	
+	
 
 #ifdef _DEBUG
 	if (m_pDebugProc == NULL)
@@ -151,35 +128,17 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	}
 #endif
 
-	if (m_pMeshField == NULL)
+	if (m_pFade == NULL)
 	{
-		// メッシュフィールドの生成
-	//	m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		//フェードの生成
+		m_pFade = CFade::Create();
+
+		if (m_pFade != NULL)
+		{
+			m_pFade->SetFade(m_mode, m_pFade->FADE_IN);
+		}
 	}
 
-	// 2Dポリゴンの生成
-	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
-
-	// 3Dポリゴンの生成
-	//CScene3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
-	// 3Dモデル
-	//CSceneX::Create(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
-
-	// 弾のテクスチャを読み込む
-	CBullet::Load();
-
-	CShadow::Load();
-
-	if (m_pShadow == NULL)
-	{
-		m_pShadow = CShadow::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
-
-	if (m_pBatlteSys == NULL)
-	{
-		m_pBatlteSys = CBattleSys::Create();
-	}
 	return S_OK;
 }
 
@@ -188,20 +147,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 //=============================================================================
 void CManager::Uninit(void)
 {
-	CBullet::Unload();
-
-	CPlayer::UnloadModel();
-	CDohyo::UnloadModel();
-	CDohyo::UnloadMat();
-	CShadow::UnLoad();
-
-	//m_pScene3D = NULL;
-	m_pPlayer = NULL;
-	m_pEnemy = NULL;
-	m_pMeshField = NULL;
-	m_pShadow = NULL;
-	m_pBatlteSys = NULL;
-
 	if (m_pMask != NULL)
 	{// フェードの終了
 		m_pMask->Uninit();
@@ -249,6 +194,19 @@ void CManager::Uninit(void)
 		m_pInputKeyboard = NULL;
 	}
 
+	//フェードクラスの破棄
+	if (m_pFade != NULL)
+	{
+		// 終了処理
+		m_pFade->Uninit();
+
+		//メモリの開放
+		delete m_pFade;
+
+		//NULLにする
+		m_pFade = NULL;
+	}
+
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)
 	{// デバック表示クラスの破棄
@@ -287,7 +245,6 @@ void CManager::Update(void)
 	//	m_fData += 80.0f;
 	//}
 
-	bool bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), 10.0f);
 
 	if (m_pRenderer != NULL)
 	{// レンダラー更新処理
@@ -314,20 +271,47 @@ void CManager::Update(void)
 		m_pMask->Update();
 	}
 
-	if (m_pBatlteSys != NULL)
-	{
-		m_pBatlteSys->Update();
+	
+
+	if (m_pFade != NULL)
+	{//フェードの更新処理
+		m_pFade->Update();
 	}
-#ifdef _DEBUG
-	if (bHit == true)
+
+	switch (m_mode)
 	{
-		CDebugProc::Print("c", "当たっている");
+		//	//タイトルモードの更新処理
+		//case CManager::MODE_TITLE:
+		//	if (m_pTitle != NULL)
+		//	{
+		//		m_pTitle->Update();
+		//	}
+		//	break;
+
+		//	//チュートリアルモードの更新処理
+		//case CManager::MODE_TUTORIAL:
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		m_pTutorial->Update();
+		//	}
+		//	break;
+
+		//ゲームモードの更新処理
+	case CManager::MODE_GAME:
+		if (m_pGame != NULL)
+		{
+			m_pGame->Update();
+		}
+		break;
+
+		//	//リザルトモードの更新処理
+		//case CManager::MODE_RESULT:
+		//	if (m_pResult != NULL)
+		//	{
+		//		m_pResult->Update();
+		//	}
+		//	break;
 	}
-	else
-	{
-		CDebugProc::Print("c", "当たっていない");
-	}
-#endif
 }
 
 //=============================================================================
@@ -344,27 +328,6 @@ void CManager::Draw(void)
 	{// レンダラー描画処理
 		m_pRenderer->Draw();
 	}
-}
-
-//=============================================================================
-// ブロックとの当たり判定処理
-//=============================================================================
-bool CManager::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1)
-{
-	bool bHit = false;	// 当たっていない状態
-
-						// 中心と中心の差を求める
-	D3DXVECTOR3 DiffLength = D3DXVECTOR3(pos0->x - pos1->x, pos0->y - pos1->y, pos0->z - pos1->z);
-
-	// 中心から中心のベクトルの長さを算出
-	float fLength = sqrtf((DiffLength.x * DiffLength.x) + (DiffLength.y * DiffLength.y) + (DiffLength.z * DiffLength.z));
-
-	if (fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1)
-	{// 長さが半径の和より小さければ当たっている
-		bHit = true;
-	}
-
-	return bHit;	// ブロックに当たっているかどうかを返す
 }
 
 //=============================================================================
@@ -391,46 +354,7 @@ CCamera *CManager::GetCamera(void)
 	return m_pCamera;
 }
 
-//=============================================================================
-// 3Dポリゴンの取得
-//=============================================================================
-CScene3D *CManager::GetScene3D(void)
-{
-	return m_pScene3D;
-}
 
-//=============================================================================
-// プレイヤーの取得
-//=============================================================================
-CPlayer *CManager::GetPlayer(void)
-{
-	return m_pPlayer;
-}
-
-//=============================================================================
-// プレイヤーの取得
-//=============================================================================
-CEnemy * CManager::GetEnemy(void)
-{
-	return m_pEnemy;
-}
-
-//=============================================================================
-// 影の取得
-//=============================================================================
-CShadow *CManager::GetShadow(void)
-{
-	return m_pShadow;
-}
-
-
-//=============================================================================
-// メッシュフィールドの取得
-//=============================================================================
-CMeshField *CManager::GetMeshField(void)
-{
-	return m_pMeshField;
-}
 
 //=============================================================================
 // マスクの取得
@@ -438,4 +362,172 @@ CMeshField *CManager::GetMeshField(void)
 CMask *CManager::GetMask(void)
 {
 	return m_pMask;
+}
+
+//=============================================================================
+// モードの設定
+//=============================================================================
+void CManager::SetMode(MODE mode)
+{
+	switch (m_mode)
+	{
+		//case CManager::MODE_TITLE:
+		//	//タイトルクラスの破棄
+		//	if (m_pTitle != NULL)
+		//	{
+		//		// 終了処理
+		//		m_pTitle->Uninit();
+
+		//		//メモリの開放
+		//		delete m_pTitle;
+
+		//		//NULLにする
+		//		m_pTitle = NULL;
+		//	}
+		//	break;
+
+		//case CManager::MODE_TUTORIAL:
+		//	//リザルトクラスの破棄
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		// 終了処理
+		//		m_pTutorial->Uninit();
+
+		//		//メモリの開放
+		//		delete m_pTutorial;
+
+		//		//NULLにする
+		//		m_pTutorial = NULL;
+
+		//		//セレクトモード中のBGM
+		//		m_pSound->StopSound(CSound::SOUND_LABEL_BGM_SELECTTUTORIAL);
+		//	}
+		//	break;
+
+	case CManager::MODE_GAME:
+		//ゲームクラスの破棄
+		if (m_pGame != NULL)
+		{
+			// 終了処理
+			m_pGame->Uninit();
+
+			delete m_pGame;
+
+			m_pGame = NULL;
+		}
+		break;
+
+		//case CManager::MODE_RESULT:
+		//	//リザルトクラスの破棄
+		//	if (m_pResult != NULL)
+		//	{
+		//		// 終了処理
+		//		m_pResult->Uninit();
+
+		//		//メモリの開放
+		//		delete m_pResult;
+
+		//		//NULLにする
+		//		m_pResult = NULL;
+		//	}
+		//	break;
+	}
+	m_mode = mode;
+
+	switch (mode)
+	{
+		//case CManager::MODE_TITLE:
+		//	//タイトルの初期化
+		//	if (m_pTitle == NULL)
+		//	{
+		//		//キーボードのメモリを動的確保
+		//		m_pTitle = new CTitle;
+
+		//		if (m_pTitle != NULL)
+		//		{
+		//			// 初期化処理
+		//			m_pTitle->Init();
+		//		}
+		//		else
+		//		{
+		//			MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		MessageBox(0, "aaaNULLでした", "警告", MB_OK);
+		//	}
+
+		//	break;
+
+	case CManager::MODE_GAME:
+		//ゲームの初期化
+		if (m_pGame == NULL)
+		{
+			//ゲームのメモリを動的確保
+			m_pGame = new CGame;
+
+			if (m_pGame != NULL)
+			{
+				// 初期化処理
+				m_pGame->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
+
+		//case CManager::MODE_RESULT:
+		//	//リザルトの初期化
+		//	if (m_pResult == NULL)
+		//	{
+		//		//リザルトのメモリを動的確保
+		//		m_pResult = new CResult;
+
+		//		if (m_pResult != NULL)
+		//		{
+		//			// 初期化処理
+		//			m_pResult->Init();
+		//		}
+		//		else
+		//		{
+		//			MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		MessageBox(0, "NULLでした", "警告", MB_OK);
+		//	}
+		//	break;
+
+		//case CManager::MODE_TUTORIAL:
+		//	//チュートーリアルの初期化
+		//	if (m_pTutorial == NULL)
+		//	{
+		//		//キーボードのメモリを動的確保
+		//		m_pTutorial = new CTutorial;
+
+		//		if (m_pTutorial != NULL)
+		//		{
+		//			// 初期化処理
+		//			m_pTutorial->Init();
+		//		}
+		//		else
+		//		{
+		//			MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		MessageBox(0, "NULLでした", "警告", MB_OK);
+		//	}
+		//	break;
+
+	}
 }
