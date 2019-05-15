@@ -16,6 +16,7 @@
 #include "meshField.h"
 #include "shadow.h"
 #include "game.h"
+#include "player.h"
 
 //=============================================================================
 // マクロ定義
@@ -128,6 +129,10 @@ void CEnemy::Update(void)
 	D3DXVECTOR3 cameraRot;
 	cameraRot = pCamera->GetRot();
 
+	// 敵取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+
 	// 前のフレームの位置代入
 	m_posOld = pos;
 
@@ -143,20 +148,17 @@ void CEnemy::Update(void)
 				//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.75f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.75f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y + D3DX_PI * 0.75f);
 			}
 			else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
 			{//左下移動
 				//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.25f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.25f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y + D3DX_PI * 0.25f);
 			}
 			else
 			{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y + D3DX_PI * 0.5f);
 			}
 		}
 		//任意のキー→
@@ -167,20 +169,17 @@ void CEnemy::Update(void)
 			 //モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.75f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.75f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y - D3DX_PI * 0.75f);
 			}
 			else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
 			{//右下移動
 			 //モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.25f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.25f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y - D3DX_PI * 0.25f);
 			}
 			else
 			{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.5f) * fMoveEnemy;
 				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.5f) * fMoveEnemy;
-				m_fDestAngle = (cameraRot.y - D3DX_PI * 0.5f);
 			}
 		}
 		//任意のキー↑
@@ -188,7 +187,6 @@ void CEnemy::Update(void)
 		{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 			m_move.x += sinf(cameraRot.y) * fMoveEnemy;
 			m_move.z += cosf(cameraRot.y) * fMoveEnemy;
-			m_fDestAngle = (cameraRot.y + D3DX_PI * 1.0f);
 		}
 		//任意のキー↓
 		else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
@@ -196,8 +194,32 @@ void CEnemy::Update(void)
 			//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 			m_move.x -= sinf(cameraRot.y) * fMoveEnemy;
 			m_move.z -= cosf(cameraRot.y) * fMoveEnemy;
-			m_fDestAngle = (cameraRot.y + D3DX_PI * 0.0f);
 		}
+	}
+
+	// 目的の角度
+	m_fDestAngle = atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
+	// 差分
+	m_fDiffAngle = m_fDestAngle - rot.y;
+
+	if (m_fDiffAngle > D3DX_PI)
+	{
+		m_fDiffAngle -= D3DX_PI * 2.0f;
+	}
+	if (m_fDiffAngle < -D3DX_PI)
+	{
+		m_fDiffAngle += D3DX_PI * 2.0f;
+	}
+
+	rot.y += m_fDiffAngle * 0.1f;
+
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI * 2.0f;
+	}
+	if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2.0f;
 	}
 
 	//向きの慣性
