@@ -29,6 +29,7 @@ public:
 	void Uninit(void);	// バトルシステム終了処理
 	void Update(void);	// バトルシステム更新処理
 
+	void Recovery(void);	//硬直処理まとめ
 	static CBattleSys *Create();	// オブジェクトの生成
 
 private:

@@ -62,6 +62,7 @@ void CCamera::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
+#if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// 左方向に移動
 		if (pInputKeyboard->GetPress(DIK_W) == true)
@@ -204,6 +205,7 @@ void CCamera::Update(void)
 	{// 下
 		m_posV.y -= 3.0f;
 	}
+#endif
 
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
@@ -232,7 +234,7 @@ void CCamera::SetCamera(void)
 	// プロジェクションマトリックスを作成
 	D3DXMatrixPerspectiveFovLH(&m_mtxProjection,
 		D3DXToRadian(45.0f),						// 視野角
-		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,	// 画面比率	
+		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,	// 画面比率
 		10.0f,										// カメラからの距離（手前）
 		1000.0f);									// カメラからの距離（奥）
 

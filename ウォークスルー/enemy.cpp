@@ -140,7 +140,8 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
-	if (m_State == STATE_NEUTRAL)
+	//通常状態で硬直していない
+	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 	{
 		//任意のキー←
 		if (pInputKeyboard->GetPress(DIK_NUMPAD4) == true)
@@ -164,7 +165,7 @@ void CEnemy::Update(void)
 			}
 		}
 		//任意のキー→
-		else if (pInputKeyboard->GetPress(DIK_NUMPAD6) == true)
+		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
 		{
 			if (pInputKeyboard->GetPress(DIK_NUMPAD8) == true)
 			{//右上移動
@@ -199,6 +200,16 @@ void CEnemy::Update(void)
 		}
 	}
 
+	//硬直しているとき
+	if (m_bRecovery == true)
+	{
+		m_nRecoveryTime--;
+		if (m_nRecoveryTime <= 0)
+		{
+			m_bRecovery = false;
+			m_nRecoveryTime = 0;
+		}
+	}
 	// 目的の角度
 	m_fDestAngle = atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
 	// 差分

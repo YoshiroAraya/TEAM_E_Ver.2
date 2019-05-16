@@ -60,6 +60,10 @@ public:
 	void SetState(STATE state);
 	DIRECTION GetDirection(void) { return m_Direction; }
 	void SetDirection(DIRECTION direction) { m_Direction = direction; }
+	bool GetRecovery(void) { return m_bRecovery; }
+	void SetRecovery(bool bReco) { m_bRecovery = bReco; }
+	int GetRecoveryTime(void) { return m_nRecoveryTime; }
+	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }
 
 	static CPlayer *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
@@ -77,8 +81,9 @@ private:
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分
 	bool					m_bLand;		// モデルに乗っているかどうか
-	bool					m_bHit;		// 敵に当たっているかどうか
-
+	bool					m_bHit;			// 敵に当たっているかどうか
+	bool					m_bRecovery;	// 硬直フラグ
+	int						m_nRecoveryTime;// 硬直時間
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
 

@@ -43,6 +43,8 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_State = STATE_NEUTRAL;
 	m_Direction = DIRECTION_RIGHT;
+	m_bRecovery = false;	// 硬直フラグ
+	m_nRecoveryTime = 0;	// 硬直時間
 }
 
 //=============================================================================
@@ -92,6 +94,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bHit = false;					// 右にいるかどうか
 	m_State = STATE_NEUTRAL;
 	m_Direction = DIRECTION_RIGHT;
+	m_bRecovery = false;	// 硬直フラグ
+	m_nRecoveryTime = 0;	// 硬直時間
 
 	return S_OK;
 }
@@ -143,10 +147,11 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-	if (m_State == STATE_NEUTRAL)
+	//通常状態で硬直していない
+	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 	{
 		//任意のキー←
-		if (pInputKeyboard->GetPress(DIK_LEFT) == true)
+		if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
 		{
 			if (pInputKeyboard->GetPress(DIK_UP) == true)
 			{//左上移動
@@ -167,7 +172,7 @@ void CPlayer::Update(void)
 			}
 		}
 		//任意のキー→
-		else if (pInputKeyboard->GetPress(DIK_RIGHT) == true)
+		else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
 		{
 			if (pInputKeyboard->GetPress(DIK_UP) == true)
 			{//右上移動
@@ -199,6 +204,17 @@ void CPlayer::Update(void)
 			//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
 			m_move.x -= sinf(cameraRot.y) * fMovePlayer;
 			m_move.z -= cosf(cameraRot.y) * fMovePlayer;
+		}
+	}
+
+	//硬直しているとき
+	if (m_bRecovery == true)
+	{
+		m_nRecoveryTime--;
+		if (m_nRecoveryTime <= 0)
+		{
+			m_bRecovery = false;
+			m_nRecoveryTime = 0;
 		}
 	}
 

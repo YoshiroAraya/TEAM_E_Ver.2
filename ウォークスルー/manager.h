@@ -20,6 +20,20 @@ class CDebugProc;
 class CMask;
 class CFade;
 class CGame;
+
+//=============================================================================
+// マクロ
+//=============================================================================
+#define PLAYER_RIGHT		(DIK_D)
+#define PLAYER_LEFT			(DIK_A)
+#define PLAYER_A_BUTTON		(DIK_F)
+#define PLAYER_B_BUTTON		(DIK_G)
+
+#define ENEMY_RIGHT			(DIK_NUMPAD6)
+#define ENEMY_LEFT			(DIK_NUMPAD4)
+#define ENEMY_A_BUTTON		(DIK_ADD)
+#define ENEMY_B_BUTTON		(DIK_NUMPADENTER)
+
 //=============================================================================
 // クラスの定義
 //=============================================================================
