@@ -89,9 +89,9 @@ void CGame::Init(void)
 		nRand1 = rand() % 3 + 1;
 		nRand2 = rand() % 3 + 1;
 
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 120.0f), nRand0);
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 150.0f), nRand1);
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 180.0f), nRand2);
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 150.0f), nRand0);
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 180.0f), nRand1);
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 210.0f), nRand2);
 	}
 
 	if (m_pScene3D == NULL)
