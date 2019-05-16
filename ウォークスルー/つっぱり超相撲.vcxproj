@@ -156,8 +156,11 @@
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="characterMove.cpp" />
+    <ClCompile Include="customer.cpp" />
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="dohyo.cpp" />
+    <ClCompile Include="dohyocircle.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
@@ -180,8 +183,11 @@
     <ClInclude Include="billboard.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="characterMove.h" />
+    <ClInclude Include="customer.h" />
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="dohyo.h" />
+    <ClInclude Include="dohyocircle.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
