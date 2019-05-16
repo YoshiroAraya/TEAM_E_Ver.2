@@ -119,7 +119,7 @@ void CGame::Init(void)
 	}
 
 	CDohyoCircle::Load();
-	CDohyoCircle::Create(D3DXVECTOR3(0, 23.0f, 0), 0.0f, 0.0f);
+	CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
 
 	// 2DÉ|ÉäÉSÉìÇÃê∂ê¨
 	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
