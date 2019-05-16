@@ -17,6 +17,7 @@
 #include "shadow.h"
 #include "game.h"
 #include "player.h"
+#include "characterMove.h"
 
 //=============================================================================
 // マクロ定義
@@ -135,6 +136,10 @@ void CEnemy::Update(void)
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
 
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+
 	// 前のフレームの位置代入
 	m_posOld = pos;
 
@@ -144,59 +149,17 @@ void CEnemy::Update(void)
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 	{
 		//任意のキー←
-		if (pInputKeyboard->GetPress(DIK_NUMPAD4) == true)
+		if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
 		{
-			if (pInputKeyboard->GetPress(DIK_NUMPAD8) == true)
-			{//左上移動
-				//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.75f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.75f) * fMoveEnemy;
-			}
-			else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
-			{//左下移動
-				//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.25f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.25f) * fMoveEnemy;
-			}
-			else
-			{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fMoveEnemy;
-			}
+			// 左に進む
+			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
 		}
+
 		//任意のキー→
 		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
 		{
-			if (pInputKeyboard->GetPress(DIK_NUMPAD8) == true)
-			{//右上移動
-			 //モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.75f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.75f) * fMoveEnemy;
-			}
-			else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
-			{//右下移動
-			 //モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.25f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.25f) * fMoveEnemy;
-			}
-			else
-			{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-				m_move.x -= sinf(cameraRot.y - D3DX_PI * 0.5f) * fMoveEnemy;
-				m_move.z -= cosf(cameraRot.y - D3DX_PI * 0.5f) * fMoveEnemy;
-			}
-		}
-		//任意のキー↑
-		else if (pInputKeyboard->GetPress(DIK_NUMPAD8) == true)
-		{	//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-			m_move.x += sinf(cameraRot.y) * fMoveEnemy;
-			m_move.z += cosf(cameraRot.y) * fMoveEnemy;
-		}
-		//任意のキー↓
-		else if (pInputKeyboard->GetPress(DIK_NUMPAD2) == true)
-		{
-			//モデルの移動	モデルの移動する角度(カメラの向き + 角度) * 移動量
-			m_move.x -= sinf(cameraRot.y) * fMoveEnemy;
-			m_move.z -= cosf(cameraRot.y) * fMoveEnemy;
+			// 右に進む
+			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
 		}
 	}
 

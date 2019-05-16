@@ -25,6 +25,8 @@
 #include "BattleSystem.h"
 #include "fade.h"
 #include "game.h"
+#include "characterMove.h"
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -36,6 +38,7 @@ CDebugProc *CManager::m_pDebugProc = NULL;
 CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CFade *CManager::m_pFade = NULL;
+CCharacterMove *CManager::m_pCharacterMove = NULL;
 CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 //=============================================================================
 // マネージャクラスのコンストラクタ
@@ -112,7 +115,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		m_pMask = CMask::Create();
 	}
 
-	
+	if (m_pCharacterMove == NULL)
+	{
+		m_pCharacterMove = CCharacterMove::Create();
+	}
 	
 
 #ifdef _DEBUG
@@ -152,6 +158,13 @@ void CManager::Uninit(void)
 		m_pMask->Uninit();
 		delete m_pMask;
 		m_pMask = NULL;
+	}
+
+	if (m_pCharacterMove != NULL)
+	{// 移動処理の終了
+		m_pCharacterMove->Uninit();
+		delete m_pCharacterMove;
+		m_pCharacterMove = NULL;
 	}
 
 	if (m_pRenderer != NULL)
@@ -354,7 +367,13 @@ CCamera *CManager::GetCamera(void)
 	return m_pCamera;
 }
 
-
+//=============================================================================
+// マスクの取得
+//=============================================================================
+CCharacterMove *CManager::GetCharacterMove(void)
+{
+	return m_pCharacterMove;
+}
 
 //=============================================================================
 // マスクの取得
