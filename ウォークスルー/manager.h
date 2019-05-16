@@ -20,6 +20,7 @@ class CDebugProc;
 class CMask;
 class CFade;
 class CGame;
+class CCharacterMove;
 
 //=============================================================================
 // É}ÉNÉç
@@ -65,7 +66,7 @@ public:
 	static CInputKeyboard *GetInputKeyboard(void);
 	static CCamera *GetCamera(void);
 	static CMask *GetMask(void);
-
+	static CCharacterMove *GetCharacterMove(void);
 	static CFade *GetFade(void) { return m_pFade; };
 	MODE GetMode(void) { return m_mode; };
 	static void SetMode(MODE mode);
@@ -79,6 +80,7 @@ private:
 	static CDebugProc *m_pDebugProc;
 	static CMask *m_pMask;
 	static CFade *m_pFade;
+	static CCharacterMove *m_pCharacterMove;
 	static CGame *m_pGame;
 	float m_fData;
 	static MODE m_mode;
