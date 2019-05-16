@@ -139,8 +139,8 @@ void CDohyoCircle::Update(void)
 		float fAnglePlayer = atan2f(PlayerPos.x - m_pos.x, PlayerPos.z - m_pos.z);
 
 		//プレイヤーがえんの外に行ったら範囲内に戻す
-		PlayerPos.x = m_pos.x + sinf(fAnglePlayer) * GROUND_SIZE;
-		PlayerPos.z = m_pos.z + cosf(fAnglePlayer) * GROUND_SIZE;
+		//PlayerPos.x = m_pos.x + sinf(fAnglePlayer) * GROUND_SIZE;
+		//PlayerPos.z = m_pos.z + cosf(fAnglePlayer) * GROUND_SIZE;
 	}
 	//プレイヤーの位置を設定
 	pGame->GetPlayer()->SetPosition(D3DXVECTOR3(PlayerPos));
@@ -157,12 +157,12 @@ void CDohyoCircle::Update(void)
 		float fAngleEnemy = atan2f(EnemyPos.x - m_pos.x, EnemyPos.z - m_pos.z);
 
 		//プレイヤーがえんの外に行ったら範囲内に戻す
-		EnemyPos.x = m_pos.x + sinf(fAngleEnemy) * GROUND_SIZE;
-		EnemyPos.z = m_pos.z + cosf(fAngleEnemy) * GROUND_SIZE;
+		//EnemyPos.x = m_pos.x + sinf(fAngleEnemy) * GROUND_SIZE;
+		//EnemyPos.z = m_pos.z + cosf(fAngleEnemy) * GROUND_SIZE;
 	}
 	//プレイヤーの位置を設定
 	pGame->GetEnemy()->SetPosition(D3DXVECTOR3(EnemyPos));
-	
+
 
 	//CDebugProc::print(1, "\n\n\nLength %.1f", fLength);
 	//CScene3D::SetPosition(D3DXVECTOR3(m_pos), m_fHeight, m_fWidth);
