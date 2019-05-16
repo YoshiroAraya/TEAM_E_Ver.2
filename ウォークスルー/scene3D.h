@@ -14,7 +14,7 @@
 // マクロ定義
 //*****************************************************************************
 #define GROUND_TEXTURE_NAME			"data\\TEXTURE\\field.jpg"	// 地面のテクスチャ名
-#define GROUND_SIZE					(50.0f)							// 地面の大きさ
+#define GROUND_SIZE					(70.0f)							// 地面の大きさ
 #define NUM_VTX						(4)								// 頂点の数
 //========================================
 // クラスの定義
@@ -38,6 +38,7 @@ public:
 	float GetHeight(D3DXVECTOR3 pos);			// 高さの取得
 
 	static CScene3D *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
+	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ

@@ -69,6 +69,7 @@ public:
 	static CFade *GetFade(void) { return m_pFade; };
 	MODE GetMode(void) { return m_mode; };
 	static void SetMode(MODE mode);
+	static CGame *GetGame(void) { return m_pGame; }
 
 private:
 	static CRenderer *m_pRenderer;

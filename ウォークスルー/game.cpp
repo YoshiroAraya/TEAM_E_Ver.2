@@ -21,6 +21,9 @@
 #include "fade.h"
 #include "input.h"
 #include "BattleSystem.h"
+#include "customer.h"
+#include "dohyocircle.h"
+#include <time.h>
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -71,6 +74,26 @@ void CGame::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
+	CCustomer::LoadModel();
+	CCustomer::LoadMat();
+
+	srand((unsigned int)time(0));
+
+	int nRand0 = 0;
+	int nRand1 = 0;
+	int nRand2 = 0;
+
+	for (int nCnt = 0; nCnt < 10; nCnt++)
+	{//客
+		nRand0 = rand() % 3 + 1;
+		nRand1 = rand() % 3 + 1;
+		nRand2 = rand() % 3 + 1;
+
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 120.0f), nRand0);
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 150.0f), nRand1);
+		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 180.0f), nRand2);
+	}
+
 	if (m_pScene3D == NULL)
 	{
 		//m_pScene3D = CScene3D::Create(D3DXVECTOR3(200.0f, 0.0f, 0.0f));
@@ -94,6 +117,9 @@ void CGame::Init(void)
 		// メッシュフィールドの生成
 		//	m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
+
+	CDohyoCircle::Load();
+	CDohyoCircle::Create(D3DXVECTOR3(0, 23.0f, 0), 0.0f, 0.0f);
 
 	// 2Dポリゴンの生成
 	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
@@ -126,12 +152,14 @@ void CGame::Init(void)
 void CGame::Uninit(void)
 {
 	CBullet::Unload();
+	CDohyoCircle::Unload();
 
 	CPlayer::UnloadModel();
 	CDohyo::UnloadModel();
 	CDohyo::UnloadMat();
 	CShadow::UnLoad();
-
+	CCustomer::UnloadModel();
+	CCustomer::UnloadMat();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;

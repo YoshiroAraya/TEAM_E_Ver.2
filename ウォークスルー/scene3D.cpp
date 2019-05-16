@@ -110,7 +110,7 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	}
 
 	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, GROUND_TEXTURE_NAME, &m_pTexture);
+	//D3DXCreateTextureFromFile(pDevice, GROUND_TEXTURE_NAME, &m_pTexture);
 
 	// 頂点バッファを生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
@@ -394,4 +394,13 @@ float CScene3D::GetHeight(D3DXVECTOR3 pos)
 
 	
 	return pos.y;
+}
+
+//=============================================================================
+// テクスチャの設定
+//=============================================================================
+void CScene3D::BindTexture(LPDIRECT3DTEXTURE9 pTexture)
+{
+	//持ってきた情報を代入
+	m_pTexture = pTexture;
 }
