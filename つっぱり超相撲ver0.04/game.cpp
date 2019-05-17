@@ -24,6 +24,8 @@
 #include "customer.h"
 #include "dohyocircle.h"
 #include <time.h>
+#include "gauge.h"
+
 //============================================================================
 //	É}ÉNÉçíËã`
 //============================================================================
@@ -76,6 +78,9 @@ void CGame::Init(void)
 
 	CCustomer::LoadModel();
 	CCustomer::LoadMat();
+
+	CGauge::Load();
+	CGauge::Create(D3DXVECTOR3(100, 80, 0));
 
 	srand((unsigned int)time(0));
 
@@ -160,6 +165,7 @@ void CGame::Uninit(void)
 	CShadow::UnLoad();
 	CCustomer::UnloadModel();
 	CCustomer::UnloadMat();
+	CGauge::UnLoad();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
