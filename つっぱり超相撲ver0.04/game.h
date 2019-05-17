@@ -16,6 +16,7 @@ class CEnemy;
 class CMeshField;
 class CShadow;
 class CBattleSys;
+class CGauge;
 
 //クラス（シーン2Dの派生クラス）
 class CGame
@@ -38,7 +39,7 @@ public:
 	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);	// 当たり判定
 	static bool GetHit(void) { return m_bHit; };
 	static void SetHit(bool bHit) { m_bHit = bHit; };
-
+	static CGauge *GetGauge(void);
 private:
 	static CScene3D *m_pScene3D;
 	static CPlayer *m_pPlayer;
@@ -47,6 +48,6 @@ private:
 	static CMeshField *m_pMeshField;
 	static CBattleSys *m_pBatlteSys;
 	static bool m_bHit;
-
+	static CGauge *m_pGauge;
 };
 #endif

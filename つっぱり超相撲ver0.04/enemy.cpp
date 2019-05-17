@@ -43,6 +43,10 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// ˆÚ“®—Ê
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Direction = DIRECTION_LEFT;
+	m_nLife = 0;
+	m_nLife = 100;
+	m_bDying = false;
+
 }
 
 //=============================================================================
@@ -91,6 +95,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_bLand = false;					// ‰E‚É‚¢‚é‚©‚Ç‚¤‚©
 	m_Direction = DIRECTION_LEFT;
 	m_State = STATE_JANKEN;
+	m_bDying = false;
 
 	return S_OK;
 }

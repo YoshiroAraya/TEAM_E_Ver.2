@@ -43,6 +43,8 @@ public:
 	static HRESULT Load(void);
 	static void UnLoad(void);
 
+	void SetGaugeRightLeft(float fRight, float fLeft);
+
 private:
 	static LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9			m_pVtxBuff;					// 頂点バッファへのポインタ

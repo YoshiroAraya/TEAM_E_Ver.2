@@ -46,6 +46,8 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_Direction = DIRECTION_RIGHT;
 	m_bRecovery = false;	// çdíºÉtÉâÉO
 	m_nRecoveryTime = 0;	// çdíºéûä‘
+	m_nLife = 0;
+	m_bDying = false;
 }
 
 //=============================================================================
@@ -98,6 +100,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bRecovery = false;	// çdíºÉtÉâÉO
 	m_nRecoveryTime = 0;	// çdíºéûä‘
 	m_bJanken = false;
+	m_nLife = 100;
+	m_bDying = false;
 
 	return S_OK;
 }

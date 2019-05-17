@@ -23,13 +23,21 @@
 class CBattleSys
 {
 public:
-	//向き
+	//3すくみ
 	typedef enum
 	{
 		JANKEN_GU = 0,
 		JANKEN_CHOKI,
 		JANKEN_PA,
 	}JANKEN;
+
+	//攻撃の種類
+	typedef enum
+	{
+		ATTACK_TYPE_YORI = 0,
+		ATTACK_TYPE_OSI,
+		ATTACK_TYPE_NAGE,
+	}ATTACK_TYPE;
 
 	CBattleSys();	// コンストラクタ
 	~CBattleSys();	// デストラクタ
@@ -39,6 +47,8 @@ public:
 	void Update(void);	// バトルシステム更新処理
 
 	void Recovery(void);	//硬直処理まとめ
+	void Battle(int nPlayer, ATTACK_TYPE AttackType);
+
 	static CBattleSys *Create();	// オブジェクトの生成
 
 private:

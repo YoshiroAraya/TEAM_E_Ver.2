@@ -67,6 +67,8 @@ public:
 	int GetRecoveryTime(void) { return m_nRecoveryTime; }
 	bool GetJanken(void) { return m_bJanken; }
 	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }
+	bool GetDying(void) { return m_bDying; }
+	void SetDying(bool bDying) { m_bDying = bDying; }
 
 	static CPlayer *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
@@ -90,6 +92,8 @@ private:
 	int						m_nRecoveryTime;// 硬直時間
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
+	bool					m_bDying;		// 瀕死かどうか
 
+	int						m_nLife;		// 体力
 };
 #endif

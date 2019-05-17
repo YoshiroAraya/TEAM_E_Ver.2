@@ -12,7 +12,9 @@
 #include "debugProc.h"
 #include "input.h"
 #include "gauge.h"
-
+#include "player.h"
+#include "enemy.h"
+#include "game.h"
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
@@ -228,4 +230,59 @@ void CGauge::UnLoad(void)
 		m_pTexture->Release();
 		m_pTexture = NULL;
 	}
+}
+
+//=============================================================================
+// 左右
+//=============================================================================
+void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
+{
+	// プレイヤーの取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// エネミーの取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
+	m_fRight += fRight;
+	m_fLeft += fLeft;
+	//上限を超えないように
+	if (m_fLeft > 0)
+	{
+		m_fLeft = 0;
+	}
+	else if (m_fLeft > -570)
+	{
+		pEnemy->SetDying(false);
+	}
+	else if (m_fLeft <= -570)
+	{
+		pEnemy->SetDying(true);
+	}
+	else if (m_fLeft < -600)
+	{
+		m_fLeft = -600;
+	}
+
+
+	if (m_fRight > 0)
+	{
+		m_fRight = 0;
+	}
+	else if (m_fRight > -570)
+	{
+		pPlayer->SetDying(false);
+	}
+	else if (m_fRight <= -570)
+	{
+		pPlayer->SetDying(true);
+	}
+	else if (m_fRight < -600)
+	{
+		m_fRight = -600;
+	}
+
+	//ゲージの左右を調整
+	m_pScene2D[0]->SetRIghtLeft(m_fRight, 0.0f);
+	m_pScene2D[1]->SetRIghtLeft(0.0f, m_fLeft);
 }

@@ -42,6 +42,8 @@ CEnemy *CGame::m_pEnemy = NULL;
 CShadow *CGame::m_pShadow = NULL;
 CMeshField *CGame::m_pMeshField = NULL;
 CBattleSys *CGame::m_pBatlteSys = NULL;
+CGauge *CGame::m_pGauge = NULL;
+
 bool CGame::m_bHit = false;
 
 //=============================================================================
@@ -80,7 +82,7 @@ void CGame::Init(void)
 	CCustomer::LoadMat();
 
 	CGauge::Load();
-	CGauge::Create(D3DXVECTOR3(100, 80, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
 
 	srand((unsigned int)time(0));
 
@@ -268,6 +270,13 @@ CMeshField *CGame::GetMeshField(void)
 }
 
 //=============================================================================
+// ゲージの取得
+//=============================================================================
+CGauge *CGame::GetGauge(void)
+{
+	return m_pGauge;
+}
+//=============================================================================
 // ブロックとの当たり判定処理
 //=============================================================================
 bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1)
@@ -287,3 +296,5 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 
 	return bHit;	// ブロックに当たっているかどうかを返す
 }
+
+
