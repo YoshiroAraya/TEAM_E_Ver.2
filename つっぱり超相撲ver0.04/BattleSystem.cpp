@@ -23,7 +23,7 @@
 // É}ÉNÉç
 //=============================================================================
 #define YORI_MOVE	(5.0f)
-#define NAGE_MOVE	(8.0f)
+#define NAGE_MOVE	(25.0f)
 #define OSI_MOVE	(8.0f)
 
 #define YORI_FLAME	(20)
@@ -302,13 +302,12 @@ void CBattleSys::Update(void)
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
 				{
 					CDebugProc::Print("c", " ìäÇ∞ÇÈ ");
-					pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+					//pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
 					pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
 					m_bAttack = true;
 					m_nCntFlame = NAGE_FLAME;
-					//CGame::SetHit(false);
-					//pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-					//pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					//çdíº
+					Recovery();
 				}
 			}
 			break;
@@ -338,13 +337,12 @@ void CBattleSys::Update(void)
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
 				{
 					CDebugProc::Print("c", " ìäÇ∞ÇÈ ");
-					pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+					//pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
 					pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
 					m_bAttack = true;
 					m_nCntFlame = NAGE_FLAME;
-					//CGame::SetHit(false);
-					//pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-					//pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					//çdíº
+					Recovery();
 				}
 			}
 			break;
@@ -380,12 +378,11 @@ void CBattleSys::Update(void)
 				{
 					CDebugProc::Print("c", " ìäÇ∞ÇÈ ");
 					pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
+					//pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
 					m_bAttack = true;
 					m_nCntFlame = NAGE_FLAME;
-					//CGame::SetHit(false);
-					//pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-					//pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					//çdíº
+					Recovery();
 				}
 			}
 
@@ -417,12 +414,11 @@ void CBattleSys::Update(void)
 				{
 					CDebugProc::Print("c", " ìäÇ∞ÇÈ ");
 					pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
+					//pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
 					m_bAttack = true;
 					m_nCntFlame = NAGE_FLAME;
-					//CGame::SetHit(false);
-					//pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-					//pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					//çdíº
+					Recovery();
 				}
 			}
 			break;
