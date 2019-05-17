@@ -29,6 +29,8 @@
 #define YORI_FLAME	(20)
 #define NAGE_FLAME	(30)
 #define OSI_FLAME	(20)
+#define GU_COUNTER	(70)
+#define CHOKI_COUNTER	(10)
 //=============================================================================
 // バトルシステムクラスのコンストラクタ
 //=============================================================================
@@ -38,6 +40,13 @@ CBattleSys::CBattleSys()
 	m_nCntFlame = 0;
 	m_nImpossibleFlame = 0;
 	m_bAttack = false;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
+	{
+		m_aGUCounter[nCntPlayer] = 0;
+		m_aCHOKICounter[nCntPlayer] = 0;
+		m_abPA[nCntPlayer] = false;
+	}
 }
 
 //=============================================================================
@@ -82,6 +91,14 @@ HRESULT CBattleSys::Init()
 	m_nCntFlame = 0;
 	m_nImpossibleFlame = 0;
 	m_bAttack = false;
+	m_aJanken[0] = JANKEN_GU;
+	m_aJanken[1] = JANKEN_GU;
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
+	{
+		m_aGUCounter[nCntPlayer] = 0;
+		m_aCHOKICounter[nCntPlayer] = 0;
+		m_abPA[nCntPlayer] = false;
+	}
 
 	return S_OK;
 }
@@ -104,13 +121,150 @@ void CBattleSys::Update(void)
 
 	// プレイヤーの取得
 	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer ();
+	pPlayer = CGame::GetPlayer();
 	// エネミーの取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 
 
 #ifdef _DEBUG
+
+	if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
+	{
+		CDebugProc::Print("c", " pじゃんけん ");
+
+		if (pInputKeyboard->GetPress(DIK_Z) == true)
+		{
+			m_aJanken[0] = JANKEN_GU;
+			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+		}
+		else if (pInputKeyboard->GetPress(DIK_X) == true)
+		{
+			m_aJanken[0] = JANKEN_CHOKI;
+			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+		}
+		else if (pInputKeyboard->GetPress(DIK_C) == true)
+		{
+			m_aJanken[0] = JANKEN_PA;
+			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+			m_abPA[0] = true;
+		}
+	}
+
+	if (pEnemy->GetState() == CEnemy::STATE_JANKEN)
+	{
+		CDebugProc::Print("c", " eじゃんけん ");
+
+		if (pInputKeyboard->GetPress(DIK_B) == true)
+		{
+			m_aJanken[1] = JANKEN_GU;
+			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+		}
+		else if (pInputKeyboard->GetPress(DIK_N) == true)
+		{
+			m_aJanken[1] = JANKEN_CHOKI;
+			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+		}
+		else if (pInputKeyboard->GetPress(DIK_M) == true)
+		{
+			m_aJanken[1] = JANKEN_PA;
+			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+			m_abPA[1] = true;
+		}
+	}
+
+	if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA && pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
+	{// 2人のじゃんけんが決まったら
+	 //===================================
+	 // キャラ1
+	 //===================================
+		if (m_aJanken[0] == JANKEN_GU)
+		{
+			m_aGUCounter[0]++;
+
+			if (m_aGUCounter[0] < GU_COUNTER)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(1.5f, 0.0f, 0.0f));
+			}
+			else if (m_aGUCounter[0] >= GU_COUNTER)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				m_aGUCounter[0] = 0;
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_CHOKI)
+		{
+			m_aCHOKICounter[0]++;
+
+			if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
+			{
+				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+			}
+			else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				m_aCHOKICounter[0] = 0;
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_PA)
+		{
+			if (m_abPA[0] == true)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[0] = false;
+			}
+
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			}
+		}
+
+		//===================================
+		// キャラ2
+		//===================================
+		if (m_aJanken[1] == JANKEN_GU)
+		{
+			m_aGUCounter[1]++;
+
+			if (m_aGUCounter[1] < GU_COUNTER)
+			{
+				pEnemy->SetMove(D3DXVECTOR3(-1.5f, 0.0f, 0.0f));
+			}
+			else if (m_aGUCounter[1] >= GU_COUNTER)
+			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				m_aGUCounter[1] = 0;
+			}
+		}
+		else if (m_aJanken[1] == JANKEN_CHOKI)
+		{
+			m_aCHOKICounter[1]++;
+
+			if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
+			{
+				pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
+			}
+			else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
+			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				m_aCHOKICounter[1] = 0;
+			}
+		}
+		else if (m_aJanken[1] == JANKEN_PA)
+		{
+			if (m_abPA[1] == true)
+			{
+				pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[1] = false;
+			}
+
+			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL)
+			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+		}
+	}
 
 	//2pの方が強い(処理が後に入る)
 	if (pPlayer->GetState() == CPlayer::STATE_KUMI
@@ -303,7 +457,7 @@ void CBattleSys::Update(void)
 		}
 	}
 
-	CDebugProc::Print("cn", " 行動不可フレーム ",m_nCntFlame);
+	CDebugProc::Print("cn", " 行動不可フレーム ", m_nCntFlame);
 
 #endif
 }
