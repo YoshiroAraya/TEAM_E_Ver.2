@@ -39,6 +39,7 @@ CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
+CXInputJoyPad *CManager::m_pXInput = NULL;
 CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 //=============================================================================
 // マネージャクラスのコンストラクタ
@@ -107,6 +108,17 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		if (m_pInputKeyboard != NULL)
 		{
 			m_pInputKeyboard->Init(hInstance, hWnd);
+		}
+	}
+
+	if (m_pXInput == NULL)
+	{//エックスインプットコントローラーの生成
+
+		m_pXInput = new CXInputJoyPad;
+
+		if (m_pXInput != NULL)
+		{
+			m_pXInput->Init();
 		}
 	}
 
@@ -207,6 +219,15 @@ void CManager::Uninit(void)
 		m_pInputKeyboard = NULL;
 	}
 
+	if (m_pXInput != NULL)
+	{// レンダリングクラスの破棄
+	 // 終了処理
+
+	 // メモリを開放
+		delete m_pXInput;
+		m_pXInput = NULL;
+	}
+
 	//フェードクラスの破棄
 	if (m_pFade != NULL)
 	{
@@ -277,6 +298,11 @@ void CManager::Update(void)
 	if (m_pInputKeyboard != NULL)
 	{// キーボード入力更新処理
 		m_pInputKeyboard->Update();
+	}
+
+	if (m_pXInput != NULL)
+	{
+		m_pXInput->Update();
 	}
 
 	if (m_pMask != NULL)

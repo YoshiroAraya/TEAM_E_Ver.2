@@ -21,6 +21,7 @@ class CMask;
 class CFade;
 class CGame;
 class CCharacterMove;
+class CXInputJoyPad;
 
 //=============================================================================
 // É}ÉNÉç
@@ -71,6 +72,7 @@ public:
 	MODE GetMode(void) { return m_mode; };
 	static void SetMode(MODE mode);
 	static CGame *GetGame(void) { return m_pGame; }
+	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
 
 private:
 	static CRenderer *m_pRenderer;
@@ -82,6 +84,7 @@ private:
 	static CFade *m_pFade;
 	static CCharacterMove *m_pCharacterMove;
 	static CGame *m_pGame;
+	static CXInputJoyPad *m_pXInput;
 	float m_fData;
 	static MODE m_mode;
 };

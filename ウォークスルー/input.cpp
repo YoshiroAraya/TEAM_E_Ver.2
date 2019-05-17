@@ -161,3 +161,160 @@ bool CInputKeyboard::GetTrigger(int nKey)
 {
 	return(m_aKeyStateTrigger[nKey] & 0x80) ? true : false;
 }
+
+//=============================================================================
+// コンストラクタ
+//=============================================================================
+CXInputJoyPad::CXInputJoyPad()
+{
+
+}
+//=============================================================================
+// デストラクタ
+//=============================================================================
+CXInputJoyPad::~CXInputJoyPad()
+{
+
+}
+//=============================================================================
+// 初期化処理
+//=============================================================================
+HRESULT CXInputJoyPad::Init()
+{
+	ZeroMemory(m_Controllers, sizeof(CONTROLER_STATE) * MAX_CONTROLLERS);
+
+	return S_OK;
+}
+//=============================================================================
+// 更新処理
+//=============================================================================
+void CXInputJoyPad::Update(void)
+{
+	// 
+	UpdateControllerState();
+
+	WORD xijs;
+
+	for (DWORD dCnt = 0; dCnt < MAX_CONTROLLERS; dCnt++)
+	{
+		if ((m_Controllers[dCnt].state.Gamepad.sThumbLX < INPUT_DEADZONE &&
+			m_Controllers[dCnt].state.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
+			(m_Controllers[dCnt].state.Gamepad.sThumbLY < INPUT_DEADZONE &&
+				m_Controllers[dCnt].state.Gamepad.sThumbLY > -INPUT_DEADZONE))
+		{
+			m_Controllers[dCnt].state.Gamepad.sThumbLX = 0;
+			m_Controllers[dCnt].state.Gamepad.sThumbLY = 0;
+		}
+
+		if ((m_Controllers[dCnt].state.Gamepad.sThumbRX < INPUT_DEADZONE &&
+			m_Controllers[dCnt].state.Gamepad.sThumbRX > -INPUT_DEADZONE) &&
+			(m_Controllers[dCnt].state.Gamepad.sThumbRY < INPUT_DEADZONE &&
+				m_Controllers[dCnt].state.Gamepad.sThumbRY > -INPUT_DEADZONE))
+		{
+			m_Controllers[dCnt].state.Gamepad.sThumbRX = 0;
+			m_Controllers[dCnt].state.Gamepad.sThumbRY = 0;
+		}
+
+		m_LeftAxizX[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbLX;
+		m_LeftAxizY[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbLY;
+		m_RightAxizX[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbRX;
+		m_RightAxizY[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbRY;
+
+		// 情報持ってる
+		xijs = m_Controllers[dCnt].state.Gamepad.wButtons;
+
+		// ジョイパッド入力情報保存(トリガー)
+		m_aKeyStateTrigger[dCnt] = (m_aKeyState[dCnt] ^ xijs)& xijs;
+
+		// ジョイパッド入力情報保存(リリース)
+		m_aKeyStateRelese[dCnt] = (m_aKeyState[dCnt] ^ xijs)& xijs;
+
+		// ジョイパッド入力情報保存(プレス)
+		m_aKeyState[dCnt] = xijs;
+	}
+}
+//=============================================================================
+// 
+//=============================================================================
+HRESULT CXInputJoyPad::UpdateControllerState(void)
+{
+	DWORD dwResult;
+	for (DWORD dCnt = 0; dCnt < MAX_CONTROLLERS; dCnt++)
+	{
+		dwResult = XInputGetState(dCnt, &m_Controllers[dCnt].state);
+		if (dwResult == ERROR_SUCCESS)
+		{
+			m_Controllers[dCnt].bConnected = true;
+		}
+		else
+		{
+			m_Controllers[dCnt].bConnected = false;
+		}
+	}
+	return S_OK;
+}
+//=============================================================================
+// XInputの入力情報(プレス情報)を取得
+//=============================================================================
+bool CXInputJoyPad::GetPress(int nButton, int indexpad)
+{
+	return(m_aKeyState[indexpad] & nButton) ? true : false;
+}
+//=============================================================================
+// XInputの入力情報(トリガー情報)を取得
+//=============================================================================
+bool CXInputJoyPad::GetTrigger(int nButton, int indexpad)
+{
+	return(m_aKeyStateTrigger[indexpad] & nButton) ? true : false;
+}
+//=============================================================================
+// ジョイパッドの入力情報(リリース情報)を取得
+//=============================================================================
+bool CXInputJoyPad::GetRelese(int nButton, int indexpad)
+{
+	return(m_aKeyStateRelese[indexpad] & nButton) ? true : false;
+}
+//=============================================================================
+// 左スティック
+//=============================================================================
+float CXInputJoyPad::GetLeftAxiz(int indexpad)
+{
+	float Axiz = atan2f(m_LeftAxizX[indexpad], m_LeftAxizY[indexpad]);
+
+	return Axiz;
+}
+//=============================================================================
+// 右スティック
+//=============================================================================
+float CXInputJoyPad::GetRightAxiz(int indexpad)
+{
+	float Axiz = atan2f(m_RightAxizX[indexpad], m_RightAxizY[indexpad]);
+
+	return Axiz;
+}
+//=============================================================================
+// スティックの取得
+//=============================================================================
+bool CXInputJoyPad::GetStick(int nLR, int indexpad)
+{
+	if (m_Controllers[indexpad].bConnected == true)
+	{
+		if (nLR == 0)
+		{
+			if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.1f ||
+				m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MAX * 0.1f)
+			{
+				return true;
+			}
+		}
+		else if (nLR == 1)
+		{
+			if (m_Controllers[indexpad].state.Gamepad.sThumbRX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbRX > XINPUT_STICK_MAX * 0.1f ||
+				m_Controllers[indexpad].state.Gamepad.sThumbRY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbRY > XINPUT_STICK_MAX * 0.1f)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}

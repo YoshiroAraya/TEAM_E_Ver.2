@@ -254,6 +254,16 @@ void CEnemy::Update(void)
 		pos.y -= 1.0f;
 	}
 
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
+
+	if (pXInput->GetPress(XINPUT_GAMEPAD_A, 1) == true)
+	{
+		// ƒWƒƒƒ“ƒv—Í
+		pos.y += 1.0f;
+		CDebugProc::Print("c", "‰Ÿ‚µ‚½");
+	}
+
 	pos += m_move;
 
 	// d—Í‰ÁZ

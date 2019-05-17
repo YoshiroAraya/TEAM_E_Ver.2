@@ -13,7 +13,11 @@
 // マクロ定義
 //*****************************************************************************
 #define	NUM_KEY_MAX			(256)	// キーの最大数
-
+#define DI_JOY_I_INPUT (1000)
+#define MAX_CONTROLLERS (4)		// コントローラー4つ分
+#define INPUT_DEADZONE  (0.24f * FLOAT(0x7FFF) )
+#define XINPUT_STICK_MAX (32767)
+#define XINPUT_STICK_MIN (-32768)
 //========================================
 // クラスの定義
 //========================================
@@ -53,5 +57,49 @@ public:
 private:
 	BYTE m_aKeyState[NUM_KEY_MAX];			// キーボードの入力情報（プレス情報）
 	BYTE m_aKeyStateTrigger[NUM_KEY_MAX];	// キーボードの入力情報（トリガー情報）
+};
+
+//*****************************************************************************
+// ジョイパッドクラス(XInput)
+//*****************************************************************************
+class CXInputJoyPad
+{
+public:
+	struct CONTROLER_STATE
+	{
+		XINPUT_STATE state;
+		bool bConnected;
+	};
+
+	CXInputJoyPad();
+	~CXInputJoyPad();
+
+	HRESULT Init(void);
+	void Update(void);
+	bool GetPress(int nButton, int indexpad);
+	bool GetTrigger(int nButton, int indexpad);
+	bool GetRelese(int nButton, int indexpad);
+	bool GetStick(int nLR, int indexpad);
+	float GetLeftAxiz(int indexpad);
+	float GetRightAxiz(int indexpad);
+
+private:
+	HRESULT UpdateControllerState(void);
+
+	CONTROLER_STATE m_Controllers[MAX_CONTROLLERS];
+	WORD m_aKeyState[MAX_CONTROLLERS];
+	WORD m_aKeyStateTrigger[MAX_CONTROLLERS];
+	WORD m_aKeyStateRelese[MAX_CONTROLLERS];
+	WORD m_Stick[MAX_CONTROLLERS];
+
+	float m_LeftAxizX[MAX_CONTROLLERS];
+	float m_LeftAxizY[MAX_CONTROLLERS];
+	float m_RightAxizX[MAX_CONTROLLERS];
+	float m_RightAxizY[MAX_CONTROLLERS];
+
+
+	//WCHAR m_szMessage[4][1024] = { 0 };
+	//HWND    m_hWnd;
+	//bool    m_bDeadZoneOn = true;
 };
 #endif
