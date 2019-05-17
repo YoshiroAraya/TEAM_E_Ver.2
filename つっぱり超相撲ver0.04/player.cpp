@@ -30,9 +30,9 @@ LPD3DXMESH CPlayer::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
 LPD3DXBUFFER CPlayer::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
 DWORD CPlayer::m_nNumMat = 0;				// マテリアル情報の数
 
-//=============================================================================
-// プレイヤークラスのコンストラクタ
-//=============================================================================
+											//=============================================================================
+											// プレイヤークラスのコンストラクタ
+											//=============================================================================
 CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 {
 	// 値をクリア
@@ -93,10 +93,11 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_fDiffAngle = 0;
 	m_bLand = false;					// 右にいるかどうか
 	m_bHit = false;					// 右にいるかどうか
-	m_State = STATE_NEUTRAL;
+	m_State = STATE_JANKEN;
 	m_Direction = DIRECTION_RIGHT;
 	m_bRecovery = false;	// 硬直フラグ
 	m_nRecoveryTime = 0;	// 硬直時間
+	m_bJanken = false;
 
 	return S_OK;
 }
@@ -152,7 +153,7 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-	//通常状態で硬直していない
+										//通常状態で硬直していない
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 	{
 		//任意のキー←
@@ -161,7 +162,7 @@ void CPlayer::Update(void)
 			// 左に進む
 			m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
 		}
-		
+
 		//任意のキー→
 		else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
 		{
@@ -248,7 +249,7 @@ void CPlayer::Update(void)
 
 	if (CGame::GetHit() == true)
 	{
-		if (m_State == STATE_NEUTRAL)
+		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 		{
 			m_State = STATE_KUMI;
 		}
@@ -268,16 +269,6 @@ void CPlayer::Update(void)
 	{
 		// ジャンプ力
 		pos.y -= 1.0f;
-	}
-
-	CXInputJoyPad *pXInput = NULL;
-	pXInput = CManager::GetXInput();
-
-	if (pXInput->GetPress(XINPUT_GAMEPAD_A, 0) == true)
-	{
-		// ジャンプ力
-		pos.y += 1.0f;
-		CDebugProc::Print("c", "押した");
 	}
 
 	pos += m_move;
@@ -311,26 +302,26 @@ void CPlayer::Update(void)
 
 	/*for (int nCount = 0; nCount < NUM_VTX; nCount++)
 	{
-		if (abRight[nCount] == true)
-		{
-			CDebugProc::Print("nc", nCount, " : 右");
-			nCnt++;
-		}
-		else
-		{
-			CDebugProc::Print("nc", nCount, " : 左");
-		}
+	if (abRight[nCount] == true)
+	{
+	CDebugProc::Print("nc", nCount, " : 右");
+	nCnt++;
+	}
+	else
+	{
+	CDebugProc::Print("nc", nCount, " : 左");
+	}
 	}
 
 	if (m_bRTriangle == true)
 	{
-		CDebugProc::Print("c", "aの範囲内 : false");
-		CDebugProc::Print("c", "bの範囲内 : true");
+	CDebugProc::Print("c", "aの範囲内 : false");
+	CDebugProc::Print("c", "bの範囲内 : true");
 	}
 	else
 	{
-		CDebugProc::Print("c", "aの範囲内 : true");
-		CDebugProc::Print("c", "bの範囲内 : false");
+	CDebugProc::Print("c", "aの範囲内 : true");
+	CDebugProc::Print("c", "bの範囲内 : false");
 	}*/
 
 	//if (bRTriangle == true)
@@ -346,11 +337,11 @@ void CPlayer::Update(void)
 
 	/*if (nCnt == NUM_VTX)
 	{
-		CDebugProc::Print("c", "範囲内");
+	CDebugProc::Print("c", "範囲内");
 	}
 	else
 	{
-		CDebugProc::Print("c", "範囲外");
+	CDebugProc::Print("c", "範囲外");
 	}*/
 #endif
 }
@@ -386,7 +377,7 @@ void CPlayer::CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *
 				m_bLand = ((CSceneX*)pScene)->Collision(pos, posOld, move, radius);
 				if (m_bLand == true)
 				{// モデルに当たる
-					//m_bJump = false;
+				 //m_bJump = false;
 				}
 			}
 		}

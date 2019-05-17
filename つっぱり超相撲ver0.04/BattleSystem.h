@@ -12,6 +12,7 @@
 //========================================
 // マクロ定義
 //========================================
+#define MAX_CHARACTER (2)
 
 //========================================
 // クラスの定義
@@ -22,6 +23,14 @@
 class CBattleSys
 {
 public:
+	//向き
+	typedef enum
+	{
+		JANKEN_GU = 0,
+		JANKEN_CHOKI,
+		JANKEN_PA,
+	}JANKEN;
+
 	CBattleSys();	// コンストラクタ
 	~CBattleSys();	// デストラクタ
 
@@ -35,6 +44,10 @@ public:
 private:
 	int		m_nCntFlame;			//攻撃のフレーム数
 	int		m_nImpossibleFlame;		//操作不可時間
+	int		m_aGUCounter[MAX_CHARACTER];
+	int		m_aCHOKICounter[MAX_CHARACTER];
+	bool	m_abPA[MAX_CHARACTER];
 	bool	m_bAttack;				//攻撃しているかどうか
+	JANKEN	m_aJanken[MAX_CHARACTER];
 };
 #endif

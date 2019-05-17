@@ -31,9 +31,9 @@ LPD3DXMESH CEnemy::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
 LPD3DXBUFFER CEnemy::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
 DWORD CEnemy::m_nNumMat = 0;				// マテリアル情報の数
 
-//=============================================================================
-// エネミークラスのコンストラクタ
-//=============================================================================
+											//=============================================================================
+											// エネミークラスのコンストラクタ
+											//=============================================================================
 CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 {
 	// 値をクリア
@@ -90,6 +90,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_fDiffAngle = 0;
 	m_bLand = false;					// 右にいるかどうか
 	m_Direction = DIRECTION_LEFT;
+	m_State = STATE_JANKEN;
 
 	return S_OK;
 }
@@ -145,7 +146,7 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
-	//通常状態で硬直していない
+									//通常状態で硬直していない
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 	{
 		//任意のキー←
@@ -233,7 +234,7 @@ void CEnemy::Update(void)
 
 	if (CGame::GetHit() == true)
 	{
-		if (m_State == STATE_NEUTRAL)
+		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 		{
 			m_State = STATE_KUMI;
 		}
@@ -252,16 +253,6 @@ void CEnemy::Update(void)
 	{
 		// ジャンプ力
 		pos.y -= 1.0f;
-	}
-
-	CXInputJoyPad *pXInput = NULL;
-	pXInput = CManager::GetXInput();
-
-	if (pXInput->GetPress(XINPUT_GAMEPAD_A, 1) == true)
-	{
-		// ジャンプ力
-		pos.y += 1.0f;
-		CDebugProc::Print("c", "押した");
 	}
 
 	pos += m_move;

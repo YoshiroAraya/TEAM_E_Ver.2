@@ -31,6 +31,8 @@ public:
 		STATE_NAGE,
 		STATE_TSUPPARI,
 		STATE_DAMAGE,
+		STATE_JANKEN,
+		STATE_NOKOTTA,
 		STATE_DOWN,
 	}STATE;
 
@@ -63,6 +65,7 @@ public:
 	bool GetRecovery(void) { return m_bRecovery; }
 	void SetRecovery(bool bReco) { m_bRecovery = bReco; }
 	int GetRecoveryTime(void) { return m_nRecoveryTime; }
+	bool GetJanken(void) { return m_bJanken; }
 	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }
 
 	static CPlayer *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
@@ -83,6 +86,7 @@ private:
 	bool					m_bLand;		// モデルに乗っているかどうか
 	bool					m_bHit;			// 敵に当たっているかどうか
 	bool					m_bRecovery;	// 硬直フラグ
+	bool					m_bJanken;		// じゃんけん
 	int						m_nRecoveryTime;// 硬直時間
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
