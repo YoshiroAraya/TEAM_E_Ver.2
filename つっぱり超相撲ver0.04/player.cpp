@@ -174,6 +174,7 @@ void CPlayer::Update(void)
 	//d’¼‚µ‚Ä‚¢‚é‚Æ‚«
 	if (m_bRecovery == true)
 	{
+		CGame::SetHit(false);
 		m_nRecoveryTime--;
 		if (m_nRecoveryTime <= 0)
 		{
