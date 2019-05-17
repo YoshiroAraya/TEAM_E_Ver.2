@@ -184,7 +184,7 @@ void CBattleSys::Update(void)
 
 			if (m_aGUCounter[0] < GU_COUNTER)
 			{
-				pPlayer->SetMove(D3DXVECTOR3(1.5f, 0.0f, 0.0f));
+				pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
 			}
 			else if (m_aGUCounter[0] >= GU_COUNTER)
 			{
@@ -214,7 +214,7 @@ void CBattleSys::Update(void)
 				m_abPA[0] = false;
 			}
 
-			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL || m_aJanken[1] == JANKEN_PA)
 			{
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 			}
@@ -229,7 +229,7 @@ void CBattleSys::Update(void)
 
 			if (m_aGUCounter[1] < GU_COUNTER)
 			{
-				pEnemy->SetMove(D3DXVECTOR3(-1.5f, 0.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
 			}
 			else if (m_aGUCounter[1] >= GU_COUNTER)
 			{
@@ -259,7 +259,7 @@ void CBattleSys::Update(void)
 				m_abPA[1] = false;
 			}
 
-			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL)
+			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL || m_aJanken[0] == JANKEN_PA)
 			{
 				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			}
