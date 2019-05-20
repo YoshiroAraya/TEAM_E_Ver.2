@@ -39,14 +39,18 @@ class CXInputJoyPad;
 //=============================================================================
 // マクロ(コントローラー)
 //=============================================================================
-#define XPLAYER_RIGHT			(DIK_D)
-#define XPLAYER_LEFT			(DIK_A)
-#define XPLAYER_A_BUTTON		(XINPUT_GAMEPAD_A)
+#define XPLAYER_RIGHT			(XINPUT_GAMEPAD_DPAD_RIGHT)
+#define XPLAYER_LEFT			(XINPUT_GAMEPAD_DPAD_LEFT)
+#define XPLAYER_A_BUTTON		(XINPUT_GAMEPAD_A) //グー
+#define XPLAYER_Y_BUTTON		(XINPUT_GAMEPAD_Y) //チョキ
+#define XPLAYER_X_BUTTON		(XINPUT_GAMEPAD_X) //パー
 #define XPLAYER_B_BUTTON		(XINPUT_GAMEPAD_B)
 
-#define XENEMY_RIGHT			(DIK_NUMPAD6)
-#define XENEMY_LEFT				(DIK_NUMPAD4)
-#define XENEMY_A_BUTTON			(XINPUT_GAMEPAD_A)
+#define XENEMY_RIGHT			(XINPUT_GAMEPAD_DPAD_RIGHT)
+#define XENEMY_LEFT				(XINPUT_GAMEPAD_DPAD_LEFT)
+#define XENEMY_A_BUTTON			(XINPUT_GAMEPAD_A) //グー
+#define XENEMY_Y_BUTTON			(XINPUT_GAMEPAD_Y) //チョキ
+#define XENEMY_X_BUTTON			(XINPUT_GAMEPAD_X) //パー
 #define XENEMY_B_BUTTON			(XINPUT_GAMEPAD_B)
 
 
