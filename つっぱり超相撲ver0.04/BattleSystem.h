@@ -50,8 +50,8 @@ public:
 	void Battle(int nPlayer, ATTACK_TYPE AttackType);
 
 	static CBattleSys *Create();	// オブジェクトの生成
-	void ControllerOperation(void);
-	void KeyboardOperation(void);
+
+	void Operation(void);
 private:
 	int		m_nCntFlame;			//攻撃のフレーム数
 	int		m_nImpossibleFlame;		//操作不可時間

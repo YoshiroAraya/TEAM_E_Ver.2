@@ -16,7 +16,6 @@
 #include "game.h"
 
 #include "gauge.h"
-
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -136,11 +135,10 @@ void CBattleSys::Update(void)
 
 #ifdef _DEBUG
 
-	//キーボード操作
-	KeyboardOperation();
+	//キーボード/コントローラー操作
+	Operation();
 
-	//コントローラー操作
-	ControllerOperation();
+
 
 	if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL
 		&& pEnemy->GetState() == CEnemy::STATE_NEUTRAL
@@ -165,11 +163,14 @@ void CBattleSys::Update(void)
 }
 
 //=============================================================================
-// コントローラーの移動処理
+// キーボード/コントローラーの操作処理
 //=============================================================================
-void CBattleSys::ControllerOperation(void)
+void CBattleSys::Operation(void)
 {
 	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 
@@ -189,17 +190,20 @@ void CBattleSys::ControllerOperation(void)
 	{
 		CDebugProc::Print("c", " pじゃんけん ");
 
-		if (pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
+		if (pInputKeyboard->GetPress(DIK_Z) == true || 
+			pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_GU;
 			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
 		}
-		else if (pXInput->GetPress(XPLAYER_Y_BUTTON, 0) == true)
+		else if (pInputKeyboard->GetPress(DIK_X) == true ||
+			pXInput->GetPress(XPLAYER_Y_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_CHOKI;
 			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
 		}
-		else if (pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
+		else if (pInputKeyboard->GetPress(DIK_Z) == true || 
+			pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_PA;
 			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
@@ -211,17 +215,20 @@ void CBattleSys::ControllerOperation(void)
 	{
 		CDebugProc::Print("c", " eじゃんけん ");
 
-		if (pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+		if (pInputKeyboard->GetPress(DIK_B) == true || 
+			pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_GU;
 			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
 		}
-		else if (pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
+		else if (pInputKeyboard->GetPress(DIK_N) == true || 
+			pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_CHOKI;
 			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
 		}
-		else if (pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+		else if (pInputKeyboard->GetPress(DIK_M) == true || 
+			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_PA;
 			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
@@ -343,9 +350,11 @@ void CBattleSys::ControllerOperation(void)
 		switch (pPlayer->GetDirection())
 		{
 		case CPlayer::DIRECTION_LEFT:
-			if (pXInput->GetPress(XPLAYER_LEFT, 0) == true)
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true || 
+				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 			{
-				if (pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
 					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
@@ -354,7 +363,8 @@ void CBattleSys::ControllerOperation(void)
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_bAttack = true;
 				}
-				else if (pXInput->GetTrigger(XPLAYER_B_BUTTON,0) == true)
+				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
 
@@ -373,9 +383,11 @@ void CBattleSys::ControllerOperation(void)
 					Recovery();
 				}
 			}
-			else if (pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true || 
+				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 			{
-				if (pXInput->GetTrigger(XPLAYER_A_BUTTON,0) == true)
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
 					if (pEnemy->GetDying() == true)
@@ -395,9 +407,11 @@ void CBattleSys::ControllerOperation(void)
 			}
 			break;
 		case CPlayer::DIRECTION_RIGHT:
-			if (pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
+			if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true || 
+				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 			{
-				if (pXInput->GetTrigger(XPLAYER_A_BUTTON,0) == true)
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
 					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
@@ -406,7 +420,8 @@ void CBattleSys::ControllerOperation(void)
 					m_nCntFlame = YORI_FLAME;
 					m_bAttack = true;
 				}
-				else if (pXInput->GetTrigger(XPLAYER_B_BUTTON,0) == true)
+				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
 					if (pEnemy->GetDying() == true)
@@ -424,9 +439,11 @@ void CBattleSys::ControllerOperation(void)
 					Recovery();
 				}
 			}
-			else if (pXInput->GetPress(XPLAYER_LEFT,0) == true)
+			else if (pInputKeyboard->GetPress(PLAYER_LEFT) == true || 
+				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 			{
-				if (pXInput->GetTrigger(XPLAYER_A_BUTTON,0) == true)
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
 					if (pEnemy->GetDying() == true)
@@ -451,9 +468,11 @@ void CBattleSys::ControllerOperation(void)
 		switch (pEnemy->GetDirection())
 		{
 		case CEnemy::DIRECTION_LEFT:
-			if (pXInput->GetPress(XENEMY_LEFT,1) == true)
+			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true || 
+				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
-				if (pXInput->GetTrigger(XENEMY_A_BUTTON,1) == true)
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
 					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
@@ -462,7 +481,8 @@ void CBattleSys::ControllerOperation(void)
 					m_bAttack = true;
 					m_nCntFlame = YORI_FLAME;
 				}
-				else if (pXInput->GetTrigger(XENEMY_B_BUTTON,1) == true)
+				else if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true || 
+					pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
 
@@ -481,9 +501,11 @@ void CBattleSys::ControllerOperation(void)
 					Recovery();
 				}
 			}
-			else if (pXInput->GetPress(XENEMY_RIGHT,1) == true)
+			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true || 
+				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 			{
-				if (pXInput->GetTrigger(XENEMY_A_BUTTON,1) == true)
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
+					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
 					if (pPlayer->GetDying() == true)
@@ -504,9 +526,11 @@ void CBattleSys::ControllerOperation(void)
 
 			break;
 		case CEnemy::DIRECTION_RIGHT:
-			if (pXInput->GetPress(XENEMY_RIGHT,1) == true)
+			if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true || 
+				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 			{
-				if (pXInput->GetTrigger(XENEMY_A_BUTTON,1) == true)
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
 					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
@@ -515,7 +539,8 @@ void CBattleSys::ControllerOperation(void)
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = YORI_FLAME;
 				}
-				else if (pXInput->GetTrigger(XENEMY_A_BUTTON,1) == true)
+				else if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
 					if (pPlayer->GetDying() == true)
@@ -532,9 +557,11 @@ void CBattleSys::ControllerOperation(void)
 					Recovery();
 				}
 			}
-			else if (pXInput->GetPress(XENEMY_LEFT,1) == true)
+			else if (pInputKeyboard->GetPress(ENEMY_LEFT) == true || 
+				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
-				if (pXInput->GetTrigger(XENEMY_A_BUTTON,1) == true)
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
 					if (pPlayer->GetDying() == true)
@@ -555,7 +582,7 @@ void CBattleSys::ControllerOperation(void)
 		}
 	}
 	//リセット
-	if (pXInput->GetTrigger(XINPUT_GAMEPAD_START,0) == true)
+	if (pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
 	{
 		pPlayer->SetPosition(D3DXVECTOR3(-20.0f, 50.0f, 0.0f));
 		pEnemy->SetPosition(D3DXVECTOR3(20.0f, 50.0f, 0.0f));
@@ -566,410 +593,6 @@ void CBattleSys::ControllerOperation(void)
 		CGame::SetHit(false);
 	}
 
-#endif
-}
-
-//=============================================================================
-// キーボードの操作処理
-//=============================================================================
-void CBattleSys::KeyboardOperation(void)
-{
-	// 入力情報を取得
-	CInputKeyboard *pInputKeyboard;
-	pInputKeyboard = CManager::GetInputKeyboard();
-
-	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
-	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
-
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-
-#ifdef _DEBUG
-
-	if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
-	{
-		CDebugProc::Print("c", " pじゃんけん ");
-
-		if (pInputKeyboard->GetPress(DIK_Z) == true)
-		{
-			m_aJanken[0] = JANKEN_GU;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_X) == true)
-		{
-			m_aJanken[0] = JANKEN_CHOKI;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_C) == true)
-		{
-			m_aJanken[0] = JANKEN_PA;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-			m_abPA[0] = true;
-		}
-	}
-
-	if (pEnemy->GetState() == CEnemy::STATE_JANKEN)
-	{
-		CDebugProc::Print("c", " eじゃんけん ");
-
-		if (pInputKeyboard->GetPress(DIK_B) == true)
-		{
-			m_aJanken[1] = JANKEN_GU;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_N) == true)
-		{
-			m_aJanken[1] = JANKEN_CHOKI;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_M) == true)
-		{
-			m_aJanken[1] = JANKEN_PA;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-			m_abPA[1] = true;
-		}
-	}
-
-	if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA && pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
-	{// 2人のじゃんけんが決まったら
-	 //===================================
-	 // キャラ1
-	 //===================================
-		if (m_aJanken[0] == JANKEN_GU)
-		{
-			m_aGUCounter[0]++;
-
-			if (m_aGUCounter[0] < GU_COUNTER)
-			{
-				pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
-			}
-			else if (m_aGUCounter[0] >= GU_COUNTER)
-			{
-				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-				m_aGUCounter[0] = 0;
-			}
-		}
-		else if (m_aJanken[0] == JANKEN_CHOKI)
-		{
-			m_aCHOKICounter[0]++;
-
-			if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
-			{
-				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
-			}
-			else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
-			{
-				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-				m_aCHOKICounter[0] = 0;
-			}
-		}
-		else if (m_aJanken[0] == JANKEN_PA)
-		{
-			if (m_abPA[0] == true)
-			{
-				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
-				m_abPA[0] = false;
-			}
-
-			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL || m_aJanken[1] == JANKEN_PA)
-			{
-				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-			}
-		}
-
-		//===================================
-		// キャラ2
-		//===================================
-		if (m_aJanken[1] == JANKEN_GU)
-		{
-			m_aGUCounter[1]++;
-
-			if (m_aGUCounter[1] < GU_COUNTER)
-			{
-				pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
-			}
-			else if (m_aGUCounter[1] >= GU_COUNTER)
-			{
-				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-				m_aGUCounter[1] = 0;
-			}
-		}
-		else if (m_aJanken[1] == JANKEN_CHOKI)
-		{
-			m_aCHOKICounter[1]++;
-
-			if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
-			{
-				pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
-			}
-			else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
-			{
-				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-				m_aCHOKICounter[1] = 0;
-			}
-		}
-		else if (m_aJanken[1] == JANKEN_PA)
-		{
-			if (m_abPA[1] == true)
-			{
-				pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
-				m_abPA[1] = false;
-			}
-
-			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL || m_aJanken[0] == JANKEN_PA)
-			{
-				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-			}
-		}
-	}
-
-	//瀕死時の移動量
-	float fMoveDying[2] = { 1.0f,1.0f };
-	//瀕死時
-	if (pPlayer->GetDying() == true)
-	{
-	}
-	if (pEnemy->GetDying() == true)
-	{
-	}
-
-	//2pの方が強い(処理が後に入る)
-	if (pPlayer->GetState() == CPlayer::STATE_KUMI
-		&& pEnemy->GetState() == CEnemy::STATE_KUMI
-		&& m_bAttack == false)
-	{
-		CDebugProc::Print("c", " 組み合い ");
-
-		//向いてる方向 プレイヤー
-		switch (pPlayer->GetDirection())
-		{
-		case CPlayer::DIRECTION_LEFT:
-			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					m_nCntFlame = YORI_FLAME;
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					m_bAttack = true;
-				}
-				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 押す ");
-
-					if (pEnemy->GetDying() == true)
-					{
-						pEnemy->SetMove(D3DXVECTOR3(-OSI_MOVE * 5, 3.0f, 0.0f));
-					}
-					else
-					{
-						pEnemy->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
-					}
-					m_nCntFlame = OSI_FLAME;
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					m_bAttack = true;
-					//硬直
-					Recovery();
-				}
-			}
-			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 投げる ");
-					if (pEnemy->GetDying() == true)
-					{
-						pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE * 2, 3.0f, 0.0f));
-					}
-					else
-					{
-						pEnemy->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
-					}
-					m_bAttack = true;
-					m_nCntFlame = NAGE_FLAME;
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					//硬直
-					Recovery();
-				}
-			}
-			break;
-		case CPlayer::DIRECTION_RIGHT:
-			if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					m_nCntFlame = YORI_FLAME;
-					m_bAttack = true;
-				}
-				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 押す ");
-					if (pEnemy->GetDying() == true)
-					{
-						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * 5, 3.0f, 0.0f));
-					}
-					else
-					{
-						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
-					}
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					m_nCntFlame = OSI_FLAME;
-					m_bAttack = true;
-					//硬直
-					Recovery();
-				}
-			}
-			else if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 投げる ");
-					if (pEnemy->GetDying() == true)
-					{
-						pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE * 2, 3.0f, 0.0f));
-					}
-					else
-					{
-						pEnemy->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
-					}
-					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-					m_bAttack = true;
-					m_nCntFlame = NAGE_FLAME;
-					//硬直
-					Recovery();
-				}
-			}
-			break;
-		}
-
-		//向いてる方向 エネミー
-		switch (pEnemy->GetDirection())
-		{
-		case CEnemy::DIRECTION_LEFT:
-			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_bAttack = true;
-					m_nCntFlame = YORI_FLAME;
-				}
-				else if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 押す ");
-
-					if (pPlayer->GetDying() == true)
-					{
-						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE * 5, 3.0f, 0.0f));
-					}
-					else
-					{
-						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
-					}
-					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_nCntFlame = OSI_FLAME;
-					m_bAttack = true;
-					//硬直
-					Recovery();
-				}
-			}
-			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 投げる ");
-					if (pPlayer->GetDying() == true)
-					{
-						pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE * 2, 3.0f, 0.0f));
-					}
-					else
-					{
-						pPlayer->SetMove(D3DXVECTOR3(NAGE_MOVE, 3.0f, 0.0f));
-					}
-					m_bAttack = true;
-					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_nCntFlame = NAGE_FLAME;
-					//硬直
-					Recovery();
-				}
-			}
-
-			break;
-		case CEnemy::DIRECTION_RIGHT:
-			if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					m_bAttack = true;
-					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_nCntFlame = YORI_FLAME;
-				}
-				else if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 押す ");
-					if (pPlayer->GetDying() == true)
-					{
-						pPlayer->SetMove(D3DXVECTOR3(OSI_MOVE * 5, 3.0f, 0.0f));
-					}
-					else
-					{
-						pPlayer->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
-					}					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_nCntFlame = OSI_FLAME;
-					m_bAttack = true;
-					//硬直
-					Recovery();
-				}
-			}
-			else if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
-			{
-				if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true)
-				{
-					CDebugProc::Print("c", " 投げる ");
-					if (pPlayer->GetDying() == true)
-					{
-						pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE * 2, 3.0f, 0.0f));
-					}
-					else
-					{
-						pPlayer->SetMove(D3DXVECTOR3(-NAGE_MOVE, 3.0f, 0.0f));
-					}					m_bAttack = true;
-					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-					m_nCntFlame = NAGE_FLAME;
-					//硬直
-					Recovery();
-				}
-			}
-			break;
-		}
-	}
-	//リセット
-	if (pInputKeyboard->GetTrigger(DIK_R) == true)
-	{
-		pPlayer->SetPosition(D3DXVECTOR3(-20.0f, 50.0f, 0.0f));
-		pEnemy->SetPosition(D3DXVECTOR3(20.0f, 50.0f, 0.0f));
-		pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-		pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-		m_bAttack = false;
-		m_nCntFlame = 0;
-		CGame::SetHit(false);
-	}
 #endif
 }
 
