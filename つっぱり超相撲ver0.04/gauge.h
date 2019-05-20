@@ -47,7 +47,6 @@ public:
 
 private:
 	static LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9			m_pVtxBuff;					// 頂点バッファへのポインタ
 
 	CScene2D						*m_pScene2D[MAX_GAUGE];		// 2dへのポインタ
 

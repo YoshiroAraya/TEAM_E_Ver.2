@@ -32,6 +32,8 @@ int						g_nCountFPS;			// FPSƒJƒEƒ“ƒ^
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	WNDCLASSEX wcex =
 	{
 		sizeof(WNDCLASSEX),
@@ -142,7 +144,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					// •`‰æˆ—
 					pManager->Draw();
 				}
-				
+
 				dwFrameCount++;
 			}
 		}

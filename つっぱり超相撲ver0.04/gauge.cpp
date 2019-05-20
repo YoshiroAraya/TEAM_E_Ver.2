@@ -29,8 +29,6 @@ CGauge::CGauge(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	// 値をクリア
 	//m_pTexture = NULL;
 
-	//m_pVtxBuff = NULL;
-
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fRight = 0.0f;
 	m_fLeft = 0.0f;			// 左右の値
@@ -91,11 +89,13 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(300.0f, 580.0f, 0.0f));
 	m_pScene2D[0]->SetWidthHeight(300.0f, 50.0f);
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+	m_pScene2D[0]->BindTexture(NULL);
 
 	//2p側
 	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(980.0f, 580.0f, 0.0f));
 	m_pScene2D[1]->SetWidthHeight(300.0f, 50.0f);
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	m_pScene2D[1]->BindTexture(NULL);
 
 	return S_OK;
 }
@@ -105,12 +105,6 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CGauge::Uninit(void)
 {
-	// 頂点バッファの破棄
-	if (m_pVtxBuff != NULL)
-	{
-		m_pVtxBuff->Release();
-		m_pVtxBuff = NULL;
-	}
 	// テクスチャの破棄
 	if (m_pTexture != NULL)
 	{

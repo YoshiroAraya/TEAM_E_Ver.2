@@ -22,6 +22,11 @@
 #include <XInput.h>						// XInput API
 #include "xaudio2.h"					// サウンド処理で必要
 
+#include <crtdbg.h>
+#define malloc(X) _malloc_dbg(X,_NORMAL_BLOCK,__FILE__,__LINE__)
+#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define _CRTDBG_MAP_ALLOC
+
 //*****************************************************************************
 // ライブラリファイルのリンク
 //*****************************************************************************

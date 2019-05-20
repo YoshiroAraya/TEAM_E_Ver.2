@@ -174,7 +174,20 @@ void CGame::Uninit(void)
 	m_pMeshField = NULL;
 	m_pShadow = NULL;
 
-	//全ての終了処理
+	if (m_pBatlteSys != NULL)
+	{
+		//メモリの開放
+		delete m_pBatlteSys;
+		m_pBatlteSys = NULL;
+	}
+	if (m_pBatlteSys != NULL)
+	{
+		//メモリの開放
+		delete m_pGauge;
+		m_pGauge = NULL;
+	}
+
+		//全ての終了処理
 	CScene::ReleseAll();
 }
 

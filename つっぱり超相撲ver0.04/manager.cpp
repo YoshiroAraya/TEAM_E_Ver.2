@@ -131,7 +131,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	{
 		m_pCharacterMove = CCharacterMove::Create();
 	}
-	
+
 
 #ifdef _DEBUG
 	if (m_pDebugProc == NULL)
@@ -253,6 +253,43 @@ void CManager::Uninit(void)
 	}
 #endif
 
+	switch (m_mode)
+	{
+		//	//タイトルモードの更新処理
+		//case CManager::MODE_TITLE:
+		//	if (m_pTitle != NULL)
+		//	{
+		//		m_pTitle->Update();
+		//	}
+		//	break;
+
+		//	//チュートリアルモードの更新処理
+		//case CManager::MODE_TUTORIAL:
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		m_pTutorial->Update();
+		//	}
+		//	break;
+
+		//ゲームモードの更新処理
+	case CManager::MODE_GAME:
+		if (m_pGame != NULL)
+		{
+			m_pGame->Uninit();
+			delete m_pGame;
+			m_pGame = NULL;
+		}
+		break;
+
+		//	//リザルトモードの更新処理
+		//case CManager::MODE_RESULT:
+		//	if (m_pResult != NULL)
+		//	{
+		//		m_pResult->Update();
+		//	}
+		//	break;
+	}
+
 	// 全てのオブジェクトを解放
 	CScene::ReleseAll();
 }
@@ -310,7 +347,7 @@ void CManager::Update(void)
 		m_pMask->Update();
 	}
 
-	
+
 
 	if (m_pFade != NULL)
 	{//フェードの更新処理
