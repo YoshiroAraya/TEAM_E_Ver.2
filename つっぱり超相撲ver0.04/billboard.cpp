@@ -9,6 +9,11 @@
 #include "manager.h"
 #include "debugProc.h"
 
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define TEXTURENAME000			 "data\\TEXTURE\\EFFECT\\particle000.jpg"		//テクスチャのファイル名
+
 //=============================================================================
 // 3Dポリゴンクラスのコンストラクタ
 //=============================================================================
@@ -30,7 +35,7 @@ CBillboard::~CBillboard()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CBillboard *CBillboard::Create(D3DXVECTOR3 pos)
+CBillboard *CBillboard::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 {
 	CBillboard *pSceneBillboard = NULL;
 
@@ -42,6 +47,8 @@ CBillboard *CBillboard::Create(D3DXVECTOR3 pos)
 		if (pSceneBillboard != NULL)
 		{
 			pSceneBillboard->Init(pos);
+			pSceneBillboard->m_fHeight = fHeight;
+			pSceneBillboard->m_fWidth = fWidth;
 		}
 	}
 
@@ -69,6 +76,10 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 	{
 		pDevice = pRenderer->GetDevice();
 	}
+
+	//テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture);
+
 
 	// 頂点情報の作成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
@@ -114,7 +125,7 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 // 終了処理
 //=============================================================================
 void CBillboard::Uninit(void)
-{	
+{
 	// 頂点バッファの開放
 	if (m_pVtxBuff != NULL)
 	{
@@ -132,7 +143,7 @@ void CBillboard::Uninit(void)
 void CBillboard::Update(void)
 {
 #ifdef _DEBUG
-	CDebugProc::Print("cfccfccfc", "BillboardPos    : x", m_pos.x, "f", "   y", m_pos.y, "f", "   z", m_pos.z, "f");
+	//CDebugProc::Print("cfccfccfc", "BillboardPos    : x", m_pos.x, "f", "   y", m_pos.y, "f", "   z", m_pos.z, "f");
 #endif
 }
 
@@ -219,6 +230,26 @@ void CBillboard::SetVtxBuff(LPDIRECT3DVERTEXBUFFER9 VtxBuff)
 }
 
 //=============================================================================
+// ビルボードの設定処理
+//=============================================================================
+void CBillboard::SetBillboard(D3DXVECTOR3 pos, float fHeight, float fWidth)
+{
+	VERTEX_3D *pVtx;//頂点情報へのポインタ
+					//頂点バッファをロックし頂点データのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	m_pos = pos;
+
+	//頂点座標
+	pVtx[0].pos = D3DXVECTOR3(-fWidth, fHeight, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(fWidth, fHeight, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(-fWidth, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(fWidth, 0.0f, 0.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
 // オブジェクトの取得
 //=============================================================================
 D3DXVECTOR3 CBillboard::GetPosition(void)
@@ -240,4 +271,25 @@ void CBillboard::SetPosition(D3DXVECTOR3 pos)
 void CBillboard::BindTexture(LPDIRECT3DTEXTURE9 Texture)
 {
 	m_pTexture = Texture;
+}
+
+
+//=============================================================================
+//ビルボード色設定
+//=============================================================================
+void CBillboard::SetCol(D3DXCOLOR col)
+{
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+	//頂点バッファをロックし頂点データのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点カラー
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }

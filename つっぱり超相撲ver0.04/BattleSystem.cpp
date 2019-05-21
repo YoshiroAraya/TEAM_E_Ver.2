@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // バトルシステム処理 [BattleSystem.cpp]
-// Author : 目黒 未来也
+// Author : 目黒 未来也 & 長山 拓実 & 山下 敦史
 //
 //=============================================================================
 #include "BattleSystem.h"
@@ -190,7 +190,7 @@ void CBattleSys::Operation(void)
 	{
 		CDebugProc::Print("c", " pじゃんけん ");
 
-		if (pInputKeyboard->GetPress(DIK_Z) == true || 
+		if (pInputKeyboard->GetPress(DIK_Z) == true ||
 			pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_GU;
@@ -202,7 +202,7 @@ void CBattleSys::Operation(void)
 			m_aJanken[0] = JANKEN_CHOKI;
 			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
 		}
-		else if (pInputKeyboard->GetPress(DIK_Z) == true || 
+		else if (pInputKeyboard->GetPress(DIK_Z) == true ||
 			pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_PA;
@@ -215,19 +215,19 @@ void CBattleSys::Operation(void)
 	{
 		CDebugProc::Print("c", " eじゃんけん ");
 
-		if (pInputKeyboard->GetPress(DIK_B) == true || 
+		if (pInputKeyboard->GetPress(DIK_B) == true ||
 			pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_GU;
 			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
 		}
-		else if (pInputKeyboard->GetPress(DIK_N) == true || 
+		else if (pInputKeyboard->GetPress(DIK_N) == true ||
 			pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_CHOKI;
 			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
 		}
-		else if (pInputKeyboard->GetPress(DIK_M) == true || 
+		else if (pInputKeyboard->GetPress(DIK_M) == true ||
 			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
 		{
 			m_aJanken[1] = JANKEN_PA;
@@ -350,10 +350,10 @@ void CBattleSys::Operation(void)
 		switch (pPlayer->GetDirection())
 		{
 		case CPlayer::DIRECTION_LEFT:
-			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true || 
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
 				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 			{
-				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
@@ -363,7 +363,7 @@ void CBattleSys::Operation(void)
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_bAttack = true;
 				}
-				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true || 
+				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
@@ -383,10 +383,10 @@ void CBattleSys::Operation(void)
 					Recovery();
 				}
 			}
-			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true || 
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
 				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 			{
-				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
@@ -407,10 +407,10 @@ void CBattleSys::Operation(void)
 			}
 			break;
 		case CPlayer::DIRECTION_RIGHT:
-			if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true || 
+			if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
 				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 			{
-				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
@@ -420,7 +420,7 @@ void CBattleSys::Operation(void)
 					m_nCntFlame = YORI_FLAME;
 					m_bAttack = true;
 				}
-				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true || 
+				else if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
@@ -439,10 +439,10 @@ void CBattleSys::Operation(void)
 					Recovery();
 				}
 			}
-			else if (pInputKeyboard->GetPress(PLAYER_LEFT) == true || 
+			else if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
 				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 			{
-				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(PLAYER_A_BUTTON) == true ||
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
@@ -468,10 +468,10 @@ void CBattleSys::Operation(void)
 		switch (pEnemy->GetDirection())
 		{
 		case CEnemy::DIRECTION_LEFT:
-			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true || 
+			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
 				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
-				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
@@ -481,7 +481,7 @@ void CBattleSys::Operation(void)
 					m_bAttack = true;
 					m_nCntFlame = YORI_FLAME;
 				}
-				else if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true || 
+				else if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
 					pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
@@ -501,7 +501,7 @@ void CBattleSys::Operation(void)
 					Recovery();
 				}
 			}
-			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true || 
+			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 			{
 				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
@@ -526,10 +526,10 @@ void CBattleSys::Operation(void)
 
 			break;
 		case CEnemy::DIRECTION_RIGHT:
-			if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true || 
+			if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 			{
-				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
@@ -539,7 +539,7 @@ void CBattleSys::Operation(void)
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = YORI_FLAME;
 				}
-				else if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+				else if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 押す ");
@@ -557,10 +557,10 @@ void CBattleSys::Operation(void)
 					Recovery();
 				}
 			}
-			else if (pInputKeyboard->GetPress(ENEMY_LEFT) == true || 
+			else if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
 				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
-				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true || 
+				if (pInputKeyboard->GetPress(ENEMY_A_BUTTON) == true ||
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");

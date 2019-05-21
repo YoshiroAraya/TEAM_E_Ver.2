@@ -25,7 +25,7 @@
 #include "dohyocircle.h"
 #include <time.h>
 #include "gauge.h"
-
+#include "effect.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -73,7 +73,7 @@ void CGame::Init(void)
 	CManager *pManager = NULL;
 
 
-
+	CEffect::Load();
 	CDohyo::LoadModel();
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -230,6 +230,32 @@ void CGame::Update(void)
 	{
 		CDebugProc::Print("c", "当たっていない");
 	}
+
+	//エフェクト用関数
+	D3DXVECTOR3 RotRand;
+	D3DXVECTOR3 PosRand;
+	D3DXVECTOR3 effectmove =D3DXVECTOR3(0.0f,0.0f,0.0f);
+
+	//任意のキー←
+	if (pInputKeyboard->GetTrigger(DIK_J) == true)
+	{
+		for (int nCnt = 0; nCnt < 20; nCnt++)
+		{
+			PosRand.x = (float)(rand() % 100 - 50);
+			PosRand.y = (float)(rand() % 100 - 50);
+
+
+			/*effectmove.x = sinf(RotRand.y + 1) * 5.5f;
+			effectmove.y = sinf(RotRand.y + 1) * 0.1f;
+			effectmove.z = RotRand.x * -0.05f;*/
+
+			//m_effectCol = D3DXCOLOR(1, 1, 1, 1);
+
+			CEffect::Create(D3DXVECTOR3(0 + PosRand.x, 100.0f, 0.0f), effectmove, D3DXCOLOR(1, 1, 1, 1),
+				5, 10, 1, 50, CEffect::EFFECTTEX_NORMAL000);
+		}
+	}
+
 #endif
 }
 

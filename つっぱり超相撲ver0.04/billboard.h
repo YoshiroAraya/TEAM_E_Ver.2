@@ -41,19 +41,21 @@ public:
 
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void);			// 頂点バッファの取得
 	void SetVtxBuff(LPDIRECT3DVERTEXBUFFER9 VtxBuff);	// 頂点バッファの設定
-
+	void SetBillboard(D3DXVECTOR3 pos, float fHeight, float fWidth);
 	D3DXVECTOR3 GetPosition(void);						// 位置を取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
+	void SetCol(D3DXCOLOR col);
 
 	void BindTexture(LPDIRECT3DTEXTURE9	Texture);	// 共有テクスチャを割り当てる
 
-	static CBillboard *Create(D3DXVECTOR3 pos);							// オブジェクトの生成
+	static CBillboard *Create(D3DXVECTOR3 pos,float fWidth, float fHeight);		// オブジェクトの生成
 
 private:
 	D3DXVECTOR3 m_pos;					// 位置
 	D3DXMATRIX	m_mtxWorld;				// ワールドマトリックス
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DTEXTURE9	m_pTexture;		//テクスチャへのポインタ
+	float					m_fWidth, m_fHeight;		// 幅,高さ
 };
 
 #endif

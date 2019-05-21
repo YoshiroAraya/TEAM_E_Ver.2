@@ -161,6 +161,7 @@
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="dohyo.cpp" />
     <ClCompile Include="dohyocircle.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="dohyo.h" />
     <ClInclude Include="dohyocircle.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
