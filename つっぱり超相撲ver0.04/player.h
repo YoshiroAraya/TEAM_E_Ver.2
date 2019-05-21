@@ -69,6 +69,7 @@ public:
 	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }
 	bool GetDying(void) { return m_bDying; }
 	void SetDying(bool bDying) { m_bDying = bDying; }
+	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }
 
 	static CPlayer *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 

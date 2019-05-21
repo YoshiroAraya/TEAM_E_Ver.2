@@ -412,7 +412,6 @@ void CBattleSys::Operation(void)
 		{// パーとパー
 			if (m_abPA[0] == true)
 			{
-
 				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
 				m_abPA[0] = false;
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);

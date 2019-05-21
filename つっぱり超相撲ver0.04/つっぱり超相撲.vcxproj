@@ -167,6 +167,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="jankenUI.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="jankenUI.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />

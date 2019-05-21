@@ -26,12 +26,13 @@
 #include <time.h>
 #include "gauge.h"
 #include "effect.h"
+#include "jankenUI.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
 #define SIZE_X (SCREEN_WIDTH)
 #define SIZE_Y (SCREEN_HEIGHT)
-#define COLISIONSIZE (8.0f)
+#define COLISIONSIZE (10.0f)
 
 //============================================================================
 //静的メンバ変数宣言
@@ -151,6 +152,9 @@ void CGame::Init(void)
 	{
 		m_pBatlteSys = CBattleSys::Create();
 	}
+
+	CJankenUI::Load();
+	CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
 }
 
 //=============================================================================
@@ -168,6 +172,7 @@ void CGame::Uninit(void)
 	CCustomer::UnloadModel();
 	CCustomer::UnloadMat();
 	CGauge::UnLoad();
+	CJankenUI::Unload();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
@@ -204,7 +209,7 @@ void CGame::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 
-	m_bHit = Collision(&m_pPlayer->GetPosition(), 10.0f, &m_pEnemy->GetPosition(), COLISIONSIZE);
+	m_bHit = Collision(&m_pPlayer->GetPosition(), COLISIONSIZE, &m_pEnemy->GetPosition(), COLISIONSIZE);
 
 
 	CDebugProc::Print("c", "ゲームモード");
@@ -299,7 +304,6 @@ CShadow *CGame::GetShadow(void)
 	return m_pShadow;
 }
 
-
 //=============================================================================
 // メッシュフィールドの取得
 //=============================================================================
@@ -315,6 +319,7 @@ CGauge *CGame::GetGauge(void)
 {
 	return m_pGauge;
 }
+
 //=============================================================================
 // ブロックとの当たり判定処理
 //=============================================================================
@@ -322,7 +327,7 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 {
 	bool bHit = false;	// 当たっていない状態
 
-						// 中心と中心の差を求める
+	// 中心と中心の差を求める
 	D3DXVECTOR3 DiffLength = D3DXVECTOR3(pos0->x - pos1->x, pos0->y - pos1->y, pos0->z - pos1->z);
 
 	// 中心から中心のベクトルの長さを算出
