@@ -328,7 +328,7 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 	// 中心から中心のベクトルの長さを算出
 	float fLength = sqrtf((DiffLength.x * DiffLength.x) + (DiffLength.y * DiffLength.y) + (DiffLength.z * DiffLength.z));
 
-	if (fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1 && fLength < fRadius0 + fRadius1)
+	if (fLength < fRadius0 + fRadius1)
 	{// 長さが半径の和より小さければ当たっている
 		bHit = true;
 	}
