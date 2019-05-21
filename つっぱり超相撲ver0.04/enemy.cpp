@@ -96,7 +96,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_Direction = DIRECTION_LEFT;
 	m_State = STATE_JANKEN;
 	m_bDying = false;
-
+	m_bRecovery = false;	// çdíºÉtÉâÉO
+	m_nRecoveryTime = 0;	// çdíºéûä‘
 	return S_OK;
 }
 
