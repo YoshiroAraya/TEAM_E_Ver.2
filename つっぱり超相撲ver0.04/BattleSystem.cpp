@@ -202,7 +202,7 @@ void CBattleSys::Operation(void)
 			m_aJanken[0] = JANKEN_CHOKI;
 			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
 		}
-		else if (pInputKeyboard->GetPress(DIK_Z) == true ||
+		else if (pInputKeyboard->GetPress(DIK_C) == true ||
 			pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
 		{
 			m_aJanken[0] = JANKEN_PA;
@@ -238,11 +238,13 @@ void CBattleSys::Operation(void)
 
 	if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA && pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
 	{// 2人のじゃんけんが決まったら
-	 //===================================
-	 // キャラ1
-	 //===================================
-		if (m_aJanken[0] == JANKEN_GU)
-		{
+		if (m_aJanken[0] == JANKEN_GU && m_aJanken[1] == JANKEN_GU)
+		{// グーとグー
+			pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
+			pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
+		}
+		else if (m_aJanken[0] == JANKEN_GU && m_aJanken[1] == JANKEN_CHOKI)
+		{// グーとチョキ
 			m_aGUCounter[0]++;
 
 			if (m_aGUCounter[0] < GU_COUNTER)
@@ -254,40 +256,45 @@ void CBattleSys::Operation(void)
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 				m_aGUCounter[0] = 0;
 			}
-		}
-		else if (m_aJanken[0] == JANKEN_CHOKI)
-		{
-			m_aCHOKICounter[0]++;
 
-			if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
+			if (CGame::GetHit() == true)
 			{
-				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * 3, 5.0f, 0.0f));
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				CGame::SetHit(false);
 			}
-			else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
+		}
+		else if (m_aJanken[0] == JANKEN_GU && m_aJanken[1] == JANKEN_PA)
+		{// グーとパー
+			m_aGUCounter[0]++;
+
+			if (m_aGUCounter[0] < GU_COUNTER)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
+			}
+			else if (m_aGUCounter[0] >= GU_COUNTER)
 			{
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-				m_aCHOKICounter[0] = 0;
-			}
-		}
-		else if (m_aJanken[0] == JANKEN_PA)
-		{
-			if (m_abPA[0] == true)
-			{
-				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
-				m_abPA[0] = false;
+				m_aGUCounter[0] = 0;
 			}
 
-			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL || m_aJanken[1] == JANKEN_PA)
+			if (m_abPA[1] == true)
 			{
+				pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[1] = false;
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_CHOKI && m_aJanken[1] == JANKEN_GU)
+		{// チョキとグー
+			if (CGame::GetHit() == true)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE * 3, 5.0f, 0.0f));
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				CGame::SetHit(false);
 			}
-		}
 
-		//===================================
-		// キャラ2
-		//===================================
-		if (m_aJanken[1] == JANKEN_GU)
-		{
 			m_aGUCounter[1]++;
 
 			if (m_aGUCounter[1] < GU_COUNTER)
@@ -300,8 +307,20 @@ void CBattleSys::Operation(void)
 				m_aGUCounter[1] = 0;
 			}
 		}
-		else if (m_aJanken[1] == JANKEN_CHOKI)
-		{
+		else if (m_aJanken[0] == JANKEN_CHOKI && m_aJanken[1] == JANKEN_CHOKI)
+		{// チョキとチョキ
+			m_aCHOKICounter[0]++;
+
+			if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
+			{
+				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+			}
+			else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				m_aCHOKICounter[0] = 0;
+			}
+
 			m_aCHOKICounter[1]++;
 
 			if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
@@ -314,16 +333,92 @@ void CBattleSys::Operation(void)
 				m_aCHOKICounter[1] = 0;
 			}
 		}
-		else if (m_aJanken[1] == JANKEN_PA)
-		{
+		else if (m_aJanken[0] == JANKEN_CHOKI && m_aJanken[1] == JANKEN_PA)
+		{// チョキとパー
+			m_aCHOKICounter[0]++;
+
+			if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
+			{
+				pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+			}
+			else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				m_aCHOKICounter[0] = 0;
+			}
+
 			if (m_abPA[1] == true)
 			{
 				pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
 				m_abPA[1] = false;
 			}
-
-			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL || m_aJanken[0] == JANKEN_PA)
+			if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL)
 			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_PA && m_aJanken[1] == JANKEN_GU)
+		{// パーとグー
+			if (m_abPA[0] == true)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[0] = false;
+			}
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			}
+
+			m_aGUCounter[1]++;
+
+			if (m_aGUCounter[1] < GU_COUNTER)
+			{
+				pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
+			}
+			else if (m_aGUCounter[1] >= GU_COUNTER)
+			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				m_aGUCounter[1] = 0;
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_PA && m_aJanken[1] == JANKEN_CHOKI)
+		{// パーとチョキ
+			if (m_abPA[0] == true)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[0] = false;
+			}
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
+			{
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			}
+
+			m_aCHOKICounter[1]++;
+
+			if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
+			{
+				pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
+			}
+			else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
+			{
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				m_aCHOKICounter[1] = 0;
+			}
+		}
+		else if (m_aJanken[0] == JANKEN_PA && m_aJanken[1] == JANKEN_PA)
+		{// パーとパー
+			if (m_abPA[0] == true)
+			{
+
+				pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[0] = false;
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			}
+
+			if (m_abPA[1] == true)
+			{
+				pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
+				m_abPA[1] = false;
 				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			}
 		}
