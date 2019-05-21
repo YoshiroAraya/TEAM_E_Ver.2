@@ -30,7 +30,7 @@
 #define YORI_FLAME	(20)
 #define NAGE_FLAME	(30)
 #define OSI_FLAME	(20)
-#define GU_COUNTER	(70)
+#define GU_COUNTER	(40)
 #define CHOKI_COUNTER	(10)
 
 #define DAMAGE			(30)
@@ -240,8 +240,11 @@ void CBattleSys::Operation(void)
 	{// 2人のじゃんけんが決まったら
 		if (m_aJanken[0] == JANKEN_GU && m_aJanken[1] == JANKEN_GU)
 		{// グーとグー
-			pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
-			pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
+			if (CGame::GetHit() == false)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
+			}
 		}
 		else if (m_aJanken[0] == JANKEN_GU && m_aJanken[1] == JANKEN_CHOKI)
 		{// グーとチョキ
