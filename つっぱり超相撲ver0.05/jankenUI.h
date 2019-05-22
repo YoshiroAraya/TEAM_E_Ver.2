@@ -18,12 +18,11 @@ class CScene2D;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define PAUSE_NAME				"data/TEXTURE/PAUSE/pause100.png"		// ポーズのテクスチャ名
-#define PAUSET_TEXTURE_NAME0	"data/TEXTURE/PAUSE/pause200.png"	// ポーズセレクト0のテクスチャ名
-#define PAUSET_TEXTURE_NAME1	"data/TEXTURE/PAUSE/pause201.png"	// ポーズセレクト1のテクスチャ名
-#define PAUSET_TEXTURE_NAME2	"data/TEXTURE/PAUSE/pause202.png"	// ポーズセレクト2のテクスチャ名
-#define MAX_PAUSE_TEXTURE		(6)								// ポーズセレクトのテクスチャ数
-#define MAX_PAUSE				(3)								// ポーズセレクトの数
+#define BUCHIKAMASHI		"data/TEXTURE/JANKEN/Buchikamashi.png"
+#define HENKA				"data/TEXTURE/JANKEN/Henka.png"
+#define STUPPARI			"data/TEXTURE/JANKEN/Stuppari.png"
+#define MAX_JANKENUI_TEXTURE	(6)
+#define MAX_JANKENUI			(3)										
 
 //=========================
 // ポーズクラス
@@ -62,10 +61,10 @@ public:
 	int GetSelect(void);
 
 private:
-	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_PAUSE];
-	CScene2D *m_apScene2D[MAX_PAUSE_TEXTURE];
-	SELECT m_aSelect[MAX_PAUSE];
-	D3DXCOLOR m_aCol[MAX_PAUSE];
+	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_JANKENUI];
+	CScene2D *m_apScene2D[MAX_JANKENUI_TEXTURE];
+	SELECT m_aSelect[MAX_JANKENUI];
+	D3DXCOLOR m_aCol[MAX_JANKENUI];
 	static MODE m_Mode;
 	int	m_nSelect;
 };

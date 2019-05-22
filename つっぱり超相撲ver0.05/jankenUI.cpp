@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// ポーズの処理 [pause.cpp]
+// ３すくみの処理 [pause.cpp]
 // Author : 長山拓実
 //
 //=============================================================================
@@ -17,20 +17,20 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define PAUSE_POS_X		((SCREEN_WIDTH / 2))		// ポーズの左上X座標
-#define PAUSE_POS_Y		((SCREEN_HEIGHT / 2))		// ポーズの左上Y座標
-#define PAUSE_WIDTH		((SCREEN_WIDTH / 2))		// ポーズの幅
-#define PAUSE_HEIGHT	((SCREEN_HEIGHT / 2))		// ポーズの高さ
-#define PAUSE_SIZE		(200)						// ポーズのサイズ
+#define PAUSE_POS_X		((SCREEN_WIDTH / 2))		// ３すくみの左上X座標
+#define PAUSE_POS_Y		((SCREEN_HEIGHT / 2))		// ３すくみの左上Y座標
+#define PAUSE_WIDTH		((SCREEN_WIDTH / 2))		// ３すくみの幅
+#define PAUSE_HEIGHT	((SCREEN_HEIGHT / 2))		// ３すくみの高さ
+#define PAUSE_SIZE		(200)						// ３すくみのサイズ
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPDIRECT3DTEXTURE9 CJankenUI::m_apTexture[MAX_PAUSE] = {};
+LPDIRECT3DTEXTURE9 CJankenUI::m_apTexture[MAX_JANKENUI] = {};
 CJankenUI::MODE CJankenUI::m_Mode = CJankenUI::MODE_GU;
 
 //=============================================================================
-// ポーズの生成処理
+// ３すくみの生成処理
 //=============================================================================
 CJankenUI *CJankenUI::Create(D3DXVECTOR3 pos)
 {
@@ -44,25 +44,23 @@ CJankenUI *CJankenUI::Create(D3DXVECTOR3 pos)
 		if (pPause != NULL)
 		{
 			pPause->Init(pos);
-
-			//D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 200.0f, 200.0f
 		}
 	}
 	return pPause;
 }
 
 //=============================================================================
-// ポーズクラスのコンストラクタ
+// ３すくみクラスのコンストラクタ
 //=============================================================================
 CJankenUI::CJankenUI(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 {
 	// 値をクリア
-	for (int nCntPause = 0; nCntPause < MAX_PAUSE_TEXTURE; nCntPause++)
+	for (int nCntPause = 0; nCntPause < MAX_JANKENUI_TEXTURE; nCntPause++)
 	{
 		m_apScene2D[nCntPause] = NULL;
 	}
 
-	for (int nCntPause = 0; nCntPause < MAX_PAUSE; nCntPause++)
+	for (int nCntPause = 0; nCntPause < MAX_JANKENUI; nCntPause++)
 	{
 		m_aCol[nCntPause] = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	}
@@ -71,21 +69,21 @@ CJankenUI::CJankenUI(int nPriority, OBJTYPE objType) : CScene(nPriority, objType
 }
 
 //=============================================================================
-// ポーズクラスのデストラクタ
+// ３すくみクラスのデストラクタ
 //=============================================================================
 CJankenUI::~CJankenUI()
 {
 }
 
 //=============================================================================
-// ポーズ初期化処理
+// ３すくみ初期化処理
 //=============================================================================
 HRESULT CJankenUI::Init(D3DXVECTOR3 pos)
 {
 	m_nSelect = 0;
 	m_Mode = MODE_GU;
 
-	for (int nCntPause = 0; nCntPause < MAX_PAUSE; nCntPause++)
+	for (int nCntPause = 0; nCntPause < MAX_JANKENUI; nCntPause++)
 	{
 		m_aSelect[nCntPause] = SELECT_NONE;
 		m_aCol[nCntPause] = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -131,12 +129,12 @@ HRESULT CJankenUI::Init(D3DXVECTOR3 pos)
 }
 
 //=============================================================================
-// ポーズ終了処理
+// ３すくみ終了処理
 //=============================================================================
 void CJankenUI::Uninit(void)
 {
 	// 2Dオブジェクト終了処理
-	for (int nCntPause = 0; nCntPause < MAX_PAUSE_TEXTURE; nCntPause++)
+	for (int nCntPause = 0; nCntPause < MAX_JANKENUI_TEXTURE; nCntPause++)
 	{
 		if (m_apScene2D[nCntPause] != NULL)
 		{
@@ -150,7 +148,7 @@ void CJankenUI::Uninit(void)
 }
 
 //=============================================================================
-// ポーズ更新処理
+// ３すくみ更新処理
 //=============================================================================
 void CJankenUI::Update(void)
 {
@@ -169,7 +167,7 @@ void CJankenUI::Update(void)
 
 	if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA)
 	{
-		for (int nCntUI = 0; nCntUI < MAX_PAUSE; nCntUI++)
+		for (int nCntUI = 0; nCntUI < MAX_JANKENUI; nCntUI++)
 		{
 			m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
 		}
@@ -177,56 +175,28 @@ void CJankenUI::Update(void)
 
 	if (pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
 	{
-		for (int nCntUI = 3; nCntUI < MAX_PAUSE_TEXTURE; nCntUI++)
+		for (int nCntUI = 3; nCntUI < MAX_JANKENUI_TEXTURE; nCntUI++)
 		{
 			m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
 		}
 	}
 
-	//if (pInputKeyboard->GetTrigger(DIK_DOWN) == true || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_DOWN) == true
-	//	|| pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_LS_DOWN) == true)
-	//{
-	//	pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
-	//	m_aSelect[m_nSelect] = SELECT_NONE;
-	//	m_nSelect = (m_nSelect + 1) % 3;
-	//	m_aSelect[m_nSelect] = SELECT_SELECT;
-	//}
-	//if (pInputKeyboard->GetTrigger(DIK_UP) == true || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_UP) == true
-	//	|| pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_LS_UP) == true)
-	//{
-	//	pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
-	//	m_aSelect[m_nSelect] = SELECT_NONE;
-	//	m_nSelect = (m_nSelect + 2) % 3;
-	//	m_aSelect[m_nSelect] = SELECT_SELECT;
-	//}
-
-	//for (int nCntPause = 0; nCntPause < MAX_PAUSE; nCntPause++)
-	//{
-	//	if (m_aSelect[nCntPause] == SELECT_SELECT)
-	//	{// 選択
-	//		m_aCol[m_nSelect] = D3DXCOLOR(0.5f, 1.0f, 1.0f, 1.0f);
-	//	}
-	//	else
-	//	{// 選択していない
-	//		m_aCol[m_nSelect] = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	//	}
-
-	//	if (m_apScene2D[nCntPause + 1] != NULL)
-	//	{// 情報が入っていたら色を設定する
-	//		m_apScene2D[nCntPause + 1]->SetCol(m_aCol[m_nSelect]);
-	//	}
-	//}
+	if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && pEnemy->GetState() == CEnemy::STATE_NEUTRAL
+		|| pPlayer->GetState() == CPlayer::STATE_KUMI && pEnemy->GetState() == CEnemy::STATE_KUMI)
+	{
+		Uninit();
+	}
 }
 
 //=============================================================================
-// ポーズ描画処理
+// ３すくみ描画処理
 //=============================================================================
 void CJankenUI::Draw(void)
 {
 }
 
 //=============================================================================
-// ポーズのテクスチャ読み込み処理
+// ３すくみのテクスチャ読み込み処理
 //=============================================================================
 HRESULT CJankenUI::Load(void)
 {
@@ -242,19 +212,19 @@ HRESULT CJankenUI::Load(void)
 	}
 
 	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, PAUSE_NAME, &m_apTexture[0]);
-	D3DXCreateTextureFromFile(pDevice, PAUSET_TEXTURE_NAME0, &m_apTexture[1]);
-	D3DXCreateTextureFromFile(pDevice, PAUSET_TEXTURE_NAME1, &m_apTexture[2]);
+	D3DXCreateTextureFromFile(pDevice, BUCHIKAMASHI, &m_apTexture[0]);
+	D3DXCreateTextureFromFile(pDevice, HENKA, &m_apTexture[1]);
+	D3DXCreateTextureFromFile(pDevice, STUPPARI, &m_apTexture[2]);
 
 	return S_OK;
 }
 
 //=============================================================================
-// ポーズのテクスチャ解放処理
+// ３すくみのテクスチャ解放処理
 //=============================================================================
 void CJankenUI::Unload(void)
 {
-	for (int nCntPause = 0; nCntPause < MAX_PAUSE; nCntPause++)
+	for (int nCntPause = 0; nCntPause < MAX_JANKENUI; nCntPause++)
 	{
 		if (m_apTexture[nCntPause] != NULL)
 		{// テクスチャの破棄
@@ -265,7 +235,7 @@ void CJankenUI::Unload(void)
 }
 
 //=============================================================================
-// ポーズセレクトの取得
+// ３すくみセレクトの取得
 //=============================================================================
 CJankenUI::MODE CJankenUI::GetMode(void)
 {
