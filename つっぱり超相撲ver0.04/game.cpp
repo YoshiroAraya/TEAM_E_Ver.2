@@ -27,6 +27,8 @@
 #include "gauge.h"
 #include "effect.h"
 #include "jankenUI.h"
+#include "field.h"
+#include "wall.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -129,6 +131,16 @@ void CGame::Init(void)
 	CDohyoCircle::Load();
 	CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
 
+	CField::Load();
+	CField::Create(D3DXVECTOR3(0, -10.0f, 0), 700.0f);
+
+	CWall::Load();
+	CWall::Create(D3DXVECTOR3(0, 200.0f, 500), D3DXVECTOR3(300.0f, 0.0f, 0.0f), 200.0f, 700.0f);
+	CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);
+
+	CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
+	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
+
 	// 2Dポリゴンの生成
 	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
 
@@ -173,6 +185,8 @@ void CGame::Uninit(void)
 	CCustomer::UnloadMat();
 	CGauge::UnLoad();
 	CJankenUI::Unload();
+	CField::Unload();
+	CWall::Unload();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;

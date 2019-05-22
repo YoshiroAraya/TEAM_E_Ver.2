@@ -95,6 +95,9 @@ HRESULT CDohyoCircle::Init(void)
 	//テクスチャの貼り付け
 	BindTexture(m_pTextures);
 
+	//サイズの設定
+	CScene3D::SetSize(130.0f, 130.0f);
+
 	//初期化処理
 	CScene3D::Init(m_pos);
 

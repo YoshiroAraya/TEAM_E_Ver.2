@@ -39,7 +39,8 @@ public:
 
 	static CScene3D *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
 	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
-
+	void SetSize(float fHeight,float fWidth);
+	void SetRot(D3DXVECTOR3 rot);
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
@@ -50,6 +51,8 @@ private:
 	D3DXVECTOR3				m_aPos[NUM_VTX];					// 頂点の位置
 	D3DXVECTOR3				m_rot;						// 上方向ベクトル
 	float					m_fSize;					// 大きさ
+	float					m_fHeight;
+	float					m_fWidth;
 };
 
 #endif

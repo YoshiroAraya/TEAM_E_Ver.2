@@ -23,7 +23,7 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
-
+	
 	//for (int nCntNor = 0; nCntNor < 2; nCntNor++)
 	//{
 	//	m_aNor[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
@@ -93,7 +93,7 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	// ポリゴンの位置を設定
 	m_pos = pos;
 
-	m_fSize = GROUND_SIZE ;
+	//m_fSize = GROUND_SIZE ;
 
 	// オブジェクトの種類の設定
 	//SetObjType(CScene::OBJTYPE_SCENE3D);
@@ -127,10 +127,10 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(-m_fSize, 0.0f, m_fSize);
-	pVtx[1].pos = D3DXVECTOR3(m_fSize, 0.0f, m_fSize);
-	pVtx[2].pos = D3DXVECTOR3(-m_fSize, 0.0f, -m_fSize);
-	pVtx[3].pos = D3DXVECTOR3(m_fSize, 0.0f, -m_fSize);
+	pVtx[0].pos = D3DXVECTOR3(-m_fWidth, 0.0f, m_fHeight);
+	pVtx[1].pos = D3DXVECTOR3(m_fWidth, 0.0f, m_fHeight);
+	pVtx[2].pos = D3DXVECTOR3(-m_fWidth, 0.0f, -m_fHeight);
+	pVtx[3].pos = D3DXVECTOR3(m_fWidth, 0.0f, -m_fHeight);
 
 	//pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
 	//pVtx[1].pos = D3DXVECTOR3(pVtx[1].pos.x, pVtx[1].pos.y, m_fSize);
@@ -403,4 +403,23 @@ void CScene3D::BindTexture(LPDIRECT3DTEXTURE9 pTexture)
 {
 	//持ってきた情報を代入
 	m_pTexture = pTexture;
+}
+
+//=============================================================================
+// サイズの設定
+//=============================================================================
+void CScene3D::SetSize(float fHeight,float fWidth)
+{
+	//取得したサイズを代入
+	m_fHeight = fHeight;
+	m_fWidth = fWidth;
+}
+
+//=============================================================================
+// 位置の設定
+//=============================================================================
+void CScene3D::SetRot(D3DXVECTOR3 rot)
+{
+	//取得したサイズを代入
+	m_rot = rot;
 }
