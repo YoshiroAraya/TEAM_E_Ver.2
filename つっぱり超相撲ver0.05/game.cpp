@@ -48,6 +48,7 @@ CBattleSys *CGame::m_pBatlteSys = NULL;
 CGauge *CGame::m_pGauge = NULL;
 
 bool CGame::m_bHit = false;
+CGame::STATE CGame::m_State = CGame::STATE_START;
 
 //=============================================================================
 //	コンストラクタ
@@ -71,6 +72,8 @@ CGame::~CGame()
 void CGame::Init(void)
 {
 	m_bHit = false;
+	m_bUI = true;
+	m_State = STATE_START;
 
 	//インスタンス
 	CManager *pManager = NULL;
@@ -166,7 +169,6 @@ void CGame::Init(void)
 	}
 
 	CJankenUI::Load();
-	CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
 }
 
 //=============================================================================
@@ -222,9 +224,7 @@ void CGame::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-
 	m_bHit = Collision(&m_pPlayer->GetPosition(), COLISIONSIZE, &m_pEnemy->GetPosition(), COLISIONSIZE);
-
 
 	CDebugProc::Print("c", "ゲームモード");
 
@@ -237,6 +237,15 @@ void CGame::Update(void)
 	if (m_pBatlteSys != NULL)
 	{
 		m_pBatlteSys->Update();
+	}
+
+	if (m_State == STATE_GAME)
+	{
+		if (m_bUI == true)
+		{// じゃんけんのUIを出す
+			CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
+			m_bUI = false;
+		}
 	}
 
 

@@ -156,21 +156,24 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
-									//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	if (CGame::GetState() == CGame::STATE_GAME)
 	{
-		//任意のキー←
-		if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
+		//通常状態で硬直していない
+		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-		}
+			//任意のキー←
+			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
+			{
+				// 左に進む
+				m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+			}
 
-		//任意のキー→
-		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
-		{
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+			//任意のキー→
+			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
+			{
+				// 右に進む
+				m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+			}
 		}
 	}
 

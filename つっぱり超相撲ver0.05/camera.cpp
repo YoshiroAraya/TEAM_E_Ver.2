@@ -9,11 +9,14 @@
 #include "renderer.h"
 #include "manager.h"
 #include "debugProc.h"
+#include "game.h"
+#include "player.h"
+#include "enemy.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define CAMERA_SPEED	(4.0f)
+#define CAMERA_SPEED	(2.0f)
 
 //=============================================================================
 // カメラクラスのコンストラクタ
@@ -25,6 +28,7 @@ CCamera::CCamera()
 	m_recU = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
 	m_fLength = 0.0f;
+	m_nStartCounter = 0;
 }
 
 //=============================================================================
@@ -44,6 +48,7 @@ void CCamera::Init(void)
 	m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));
+	m_nStartCounter = 0;
 }
 
 //=============================================================================
@@ -61,6 +66,67 @@ void CCamera::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
+	// プレイヤー取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// 敵取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_GAME)
+	{
+		if (CGame::GetState() == CGame::STATE_START)
+		{
+			int nTime = m_nStartCounter / 60;
+
+			m_nStartCounter++;
+
+			if (nTime < 3)
+			{
+				m_posV = D3DXVECTOR3(15.0f, 40.0f, -40.0f);	// 視点
+				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 18.0f, pPlayer->GetPosition().z);		// 注視点
+			}
+			else if (nTime >= 3 && nTime < 6)
+			{
+				m_posV = D3DXVECTOR3(-15.0f, 40.0f, -40.0f);	// 視点
+				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 18.0f, pEnemy->GetPosition().z);		// 注視点
+				
+			}
+			else if (nTime >= 6)
+			{
+				m_posV.x = 0.0f;
+				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
+
+				if (m_posV.y <= 200.0f)
+				{// y軸移動
+					m_posV.y += 2.6f;
+
+					if (m_posV.y > 200.0f)
+					{
+						m_posV.y = 200.0f;
+					}
+				}
+
+				if (m_posV.z >= -280.0f)
+				{
+					m_posV.z -= 4.0f;
+
+					if (m_posV.z < -280.0f)
+					{
+						m_posV.z = -280.0f;
+					}
+				}
+
+				if (m_posV.y == 200.0f && m_posV.z == -280.0f)
+				{
+					CGame::SetState(CGame::STATE_GAME);
+				}
+			}
+		}
+	}
 
 #if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
@@ -208,7 +274,7 @@ void CCamera::Update(void)
 #endif
 
 #ifdef _DEBUG
-	//CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
+	CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
 #endif
 }
 

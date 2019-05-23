@@ -22,6 +22,11 @@ class CGauge;
 class CGame
 {
 public:
+	typedef enum
+	{
+		STATE_START = 0,
+		STATE_GAME,
+	}STATE;
 	CGame();
 	~CGame();
 
@@ -40,6 +45,8 @@ public:
 	static bool GetHit(void) { return m_bHit; };
 	static void SetHit(bool bHit) { m_bHit = bHit; };
 	static CGauge *GetGauge(void);
+	static STATE GetState(void) { return m_State; };
+	static void SetState(STATE state) { m_State = state; };
 private:
 	static CScene3D *m_pScene3D;
 	static CPlayer *m_pPlayer;
@@ -49,5 +56,7 @@ private:
 	static CBattleSys *m_pBatlteSys;
 	static bool m_bHit;
 	static CGauge *m_pGauge;
+	static STATE m_State;
+	bool m_bUI;
 };
 #endif

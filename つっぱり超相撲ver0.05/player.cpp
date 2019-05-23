@@ -160,21 +160,24 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-										//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	if (CGame::GetState() == CGame::STATE_GAME)
 	{
-		//任意のキー←
-		if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
+		//通常状態で硬直していない
+		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
-		}
+			//任意のキー←
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
+			{
+				// 左に進む
+				m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
+			}
 
-		//任意のキー→
-		else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
-		{
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
+			//任意のキー→
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
+			{
+				// 右に進む
+				m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
+			}
 		}
 	}
 

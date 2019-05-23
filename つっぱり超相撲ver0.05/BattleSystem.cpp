@@ -204,54 +204,56 @@ void CBattleSys::Operation(void)
 	pGauge = CGame::GetGauge();
 
 #ifdef _DEBUG
-
-	if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
+	if (CGame::GetState() == CGame::STATE_GAME)
 	{
-		CDebugProc::Print("c", " p‚¶‚á‚ñ‚¯‚ñ ");
+		if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
+		{
+			CDebugProc::Print("c", " p‚¶‚á‚ñ‚¯‚ñ ");
 
-		if (pInputKeyboard->GetPress(DIK_Z) == true ||
-			pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
-		{
-			m_aJanken[0] = JANKEN_GU;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+			if (pInputKeyboard->GetPress(DIK_Z) == true ||
+				pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
+			{
+				m_aJanken[0] = JANKEN_GU;
+				pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+			}
+			else if (pInputKeyboard->GetPress(DIK_X) == true ||
+				pXInput->GetPress(XPLAYER_Y_BUTTON, 0) == true)
+			{
+				m_aJanken[0] = JANKEN_CHOKI;
+				pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+			}
+			else if (pInputKeyboard->GetPress(DIK_C) == true ||
+				pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
+			{
+				m_aJanken[0] = JANKEN_PA;
+				pPlayer->SetState(CPlayer::STATE_NOKOTTA);
+				m_abPA[0] = true;
+			}
 		}
-		else if (pInputKeyboard->GetPress(DIK_X) == true ||
-			pXInput->GetPress(XPLAYER_Y_BUTTON, 0) == true)
-		{
-			m_aJanken[0] = JANKEN_CHOKI;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_C) == true ||
-			pXInput->GetPress(XPLAYER_X_BUTTON, 0) == true)
-		{
-			m_aJanken[0] = JANKEN_PA;
-			pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-			m_abPA[0] = true;
-		}
-	}
 
-	if (pEnemy->GetState() == CEnemy::STATE_JANKEN)
-	{
-		CDebugProc::Print("c", " e‚¶‚á‚ñ‚¯‚ñ ");
+		if (pEnemy->GetState() == CEnemy::STATE_JANKEN)
+		{
+			CDebugProc::Print("c", " e‚¶‚á‚ñ‚¯‚ñ ");
 
-		if (pInputKeyboard->GetPress(DIK_B) == true ||
-			pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-		{
-			m_aJanken[1] = JANKEN_GU;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_N) == true ||
-			pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
-		{
-			m_aJanken[1] = JANKEN_CHOKI;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-		}
-		else if (pInputKeyboard->GetPress(DIK_M) == true ||
-			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
-		{
-			m_aJanken[1] = JANKEN_PA;
-			pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-			m_abPA[1] = true;
+			if (pInputKeyboard->GetPress(DIK_B) == true ||
+				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+			{
+				m_aJanken[1] = JANKEN_GU;
+				pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+			}
+			else if (pInputKeyboard->GetPress(DIK_N) == true ||
+				pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
+			{
+				m_aJanken[1] = JANKEN_CHOKI;
+				pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+			}
+			else if (pInputKeyboard->GetPress(DIK_M) == true ||
+				pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+			{
+				m_aJanken[1] = JANKEN_PA;
+				pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+				m_abPA[1] = true;
+			}
 		}
 	}
 

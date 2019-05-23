@@ -86,7 +86,7 @@ public:
 	static CMask *GetMask(void);
 	static CCharacterMove *GetCharacterMove(void);
 	static CFade *GetFade(void) { return m_pFade; };
-	MODE GetMode(void) { return m_mode; };
+	static MODE GetMode(void) { return m_mode; };
 	static void SetMode(MODE mode);
 	static CGame *GetGame(void) { return m_pGame; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
