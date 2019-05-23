@@ -59,6 +59,7 @@ private:
 	int		m_aCHOKICounter[MAX_CHARACTER];
 	bool	m_abPA[MAX_CHARACTER];
 	bool	m_bAttack;				//çUåÇÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
+	int		m_nStartCounter;
 	JANKEN	m_aJanken[MAX_CHARACTER];
 };
 #endif
