@@ -309,6 +309,7 @@ void CBattleSys::Operation(void)
 				else if (m_aGUCounter[0] >= GU_COUNTER)
 				{
 					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 					m_aGUCounter[0] = 0;
 				}
 
@@ -377,6 +378,7 @@ void CBattleSys::Operation(void)
 				else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
 				{
 					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 					m_aCHOKICounter[0] = 0;
 				}
 
@@ -385,10 +387,6 @@ void CBattleSys::Operation(void)
 					pEnemy->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
 					m_abPA[1] = false;
 				}
-				if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL)
-				{
-					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-				}
 			}
 			else if (m_aJanken[0] == JANKEN_PA && m_aJanken[1] == JANKEN_GU)
 			{// パーとグー
@@ -396,10 +394,6 @@ void CBattleSys::Operation(void)
 				{
 					pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
 					m_abPA[0] = false;
-				}
-				if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
-				{
-					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 				}
 
 				m_aGUCounter[1]++;
@@ -411,6 +405,7 @@ void CBattleSys::Operation(void)
 				else if (m_aGUCounter[1] >= GU_COUNTER)
 				{
 					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 					m_aGUCounter[1] = 0;
 				}
 			}
@@ -420,10 +415,6 @@ void CBattleSys::Operation(void)
 				{
 					pPlayer->SetMove(D3DXVECTOR3(0.0, 10.0f, 0.0f));
 					m_abPA[0] = false;
-				}
-				if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL)
-				{
-					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 				}
 
 				m_aCHOKICounter[1]++;
@@ -435,6 +426,7 @@ void CBattleSys::Operation(void)
 				else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
 				{
 					pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 					m_aCHOKICounter[1] = 0;
 				}
 			}
