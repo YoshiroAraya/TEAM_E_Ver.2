@@ -52,6 +52,12 @@ public:
 		DIRECTION_LEFT,
 	}DIRECTION;
 
+	/*typedef enum
+	{
+		HIGASHI = 0,
+		NISHI
+	} TOUZAI;*/
+
 	CPlayer();	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
@@ -110,5 +116,6 @@ private:
 
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
+	//TOUZAI					m_Touzai;
 };
 #endif

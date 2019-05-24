@@ -34,19 +34,19 @@ CJankenUI::MODE CJankenUI::m_Mode = CJankenUI::MODE_GU;
 //=============================================================================
 CJankenUI *CJankenUI::Create(D3DXVECTOR3 pos)
 {
-	CJankenUI *pPause = NULL;
+	CJankenUI *pJankenUI = NULL;
 
-	if (pPause == NULL)
+	if (pJankenUI == NULL)
 	{
 		// ”wŒiƒNƒ‰ƒX‚Ì¶¬
-		pPause = new CJankenUI;
+		pJankenUI = new CJankenUI;
 
-		if (pPause != NULL)
+		if (pJankenUI != NULL)
 		{
-			pPause->Init(pos);
+			pJankenUI->Init(pos);
 		}
 	}
-	return pPause;
+	return pJankenUI;
 }
 
 //=============================================================================
@@ -109,19 +109,19 @@ HRESULT CJankenUI::Init(D3DXVECTOR3 pos)
 
 	m_apScene2D[3] = new CScene2D(7);
 	m_apScene2D[3]->BindTexture(m_apTexture[0]);
-	m_apScene2D[3]->Init(D3DXVECTOR3(pos.x + 800.0f, pos.y, 0.0f));
+	m_apScene2D[3]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x, pos.y, 0.0f));
 	m_apScene2D[3]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[3]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	m_apScene2D[4] = new CScene2D(7);
 	m_apScene2D[4]->BindTexture(m_apTexture[1]);
-	m_apScene2D[4]->Init(D3DXVECTOR3(pos.x + 50.0f + 800.0f, pos.y + 60.0f, 0.0f));
+	m_apScene2D[4]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x + 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[4]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[4]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	m_apScene2D[5] = new CScene2D(7);
 	m_apScene2D[5]->BindTexture(m_apTexture[2]);
-	m_apScene2D[5]->Init(D3DXVECTOR3(pos.x - 50.0f + 800.0f, pos.y + 60.0f, 0.0f));
+	m_apScene2D[5]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x - 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[5]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[5]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 

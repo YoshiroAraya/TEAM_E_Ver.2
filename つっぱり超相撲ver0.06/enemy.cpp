@@ -181,6 +181,18 @@ void CEnemy::Update(void)
 		}
 	}
 
+	if (CCamera::GetState() == CCamera::STATE_NISHI)
+	{
+		// ¶‚Éi‚Ş
+		if (pos.x <= 20.0f)
+		{
+			fMoveEnemy = 0.0f;
+			pos.x = 20.0f;
+		}
+
+		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
+	}
+
 	//d’¼‚µ‚Ä‚¢‚é‚Æ‚«
 	if (m_bRecovery == true)
 	{

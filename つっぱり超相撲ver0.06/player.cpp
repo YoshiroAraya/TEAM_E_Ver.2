@@ -108,6 +108,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bDying = false;
 	m_pTuppari = CTuppari::Create(pos);
 	m_DohyoState = DOHYO_NORMAL;
+	//m_Touzai = HIGASHI;
 
 	return S_OK;
 }
@@ -183,6 +184,35 @@ void CPlayer::Update(void)
 			}
 		}
 	}
+
+	//if (m_Touzai == HIGASHI)
+	//{
+		if (CCamera::GetState() == CCamera::STATE_HIGASHI)
+		{
+			// âEÇ…êiÇﬁ
+			if (pos.x >= -20.0f)
+			{
+				fMovePlayer = 0.0f;
+				pos.x = -20.0f;
+			}
+
+			m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
+		}
+	//}
+	//else if(m_Touzai == NISHI)
+	//{
+	//	if (CCamera::GetState() == CCamera::STATE_NISHI)
+	//	{
+	//		// ç∂Ç…êiÇﬁ
+	//		if (pos.x <= 20.0f)
+	//		{
+	//			fMovePlayer = 0.0f;
+	//			pos.x = 20.0f;
+	//		}
+
+	//		m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer * 0.7f);
+	//	}
+	//}
 
 	//çdíºÇµÇƒÇ¢ÇÈÇ∆Ç´
 	if (m_bRecovery == true)

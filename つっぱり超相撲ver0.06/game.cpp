@@ -118,14 +118,14 @@ void CGame::Init(void)
 	{// プレイヤー
 		CPlayer::LoadModel();
 
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
 		CEnemy::LoadModel();
 
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(20.0f, 50.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 50.0f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
 	{
