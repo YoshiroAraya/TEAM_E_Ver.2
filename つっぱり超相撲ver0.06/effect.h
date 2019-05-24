@@ -19,8 +19,17 @@ public:
 	typedef enum
 	{
 		EFFECTTEX_NORMAL000 = 0,	//通常
+		EFFECTTEX_NORMAL001,	//通常
+
 		EFFECTTEX_MAX				//テクスチャの総数
 	}EFFECTTEX;
+
+	typedef enum
+	{
+		EFFECTTYPE_00 = 0,
+		EFFECTTYPE_01,
+		EFFECTTYPE_MAX
+	}EFFECTTYPE;
 
 	CEffect();
 	~CEffect();
@@ -49,5 +58,6 @@ private:
 	CBillboard					*m_pBillBoard;
 
 	EFFECTTEX					m_TexType;
+	EFFECTTYPE					m_EffectType;
 };
 #endif

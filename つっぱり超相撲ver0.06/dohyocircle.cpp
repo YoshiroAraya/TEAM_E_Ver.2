@@ -101,6 +101,10 @@ HRESULT CDohyoCircle::Init(void)
 	//‰Šú‰»ˆ—
 	CScene3D::Init(m_pos);
 
+	//F‚Ìİ’è
+	CScene3D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+
 	//CScene3D::SetPosition(D3DXVECTOR3(m_pos), m_fWidth, m_fHeight);
 
 	m_fCol = 0.0f;

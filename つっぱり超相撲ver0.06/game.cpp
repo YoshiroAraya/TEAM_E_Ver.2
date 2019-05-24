@@ -30,6 +30,7 @@
 #include "field.h"
 #include "wall.h"
 #include "touzai.h"
+#include "animation.h"
 
 //============================================================================
 //	マクロ定義
@@ -146,6 +147,7 @@ void CGame::Init(void)
 	CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 
+	CAnimation::Load();
 	// 2Dポリゴンの生成
 	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
 
@@ -195,6 +197,7 @@ void CGame::Uninit(void)
 	CField::Unload();
 	CWall::Unload();
 	CTouzai::Unload();
+	CAnimation::Unload();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
@@ -273,20 +276,27 @@ void CGame::Update(void)
 	//任意のキー←
 	if (pInputKeyboard->GetTrigger(DIK_J) == true)
 	{
-		for (int nCnt = 0; nCnt < 20; nCnt++)
+		//アニメーションテクスチャの生成
+		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 / 
+		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
+
+		CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);
+
+		for (int nCnt = 0; nCnt < 10; nCnt++)
 		{
 			PosRand.x = (float)(rand() % 100 - 50);
 			PosRand.y = (float)(rand() % 100 - 50);
 
 
-			/*effectmove.x = sinf(RotRand.y + 1) * 5.5f;
+			effectmove.x = sinf(RotRand.y + 1) * 5.5f;
 			effectmove.y = sinf(RotRand.y + 1) * 0.1f;
-			effectmove.z = RotRand.x * -0.05f;*/
+			effectmove.z = RotRand.x * -0.05f;
 
 			//m_effectCol = D3DXCOLOR(1, 1, 1, 1);
 
 			CEffect::Create(D3DXVECTOR3(0 + PosRand.x, 100.0f, 0.0f), effectmove, D3DXCOLOR(1, 1, 1, 1),
-				5, 10, 1, 50, CEffect::EFFECTTEX_NORMAL000);
+				10, 10, 1, 50, CEffect::EFFECTTEX_NORMAL000);
 		}
 	}
 

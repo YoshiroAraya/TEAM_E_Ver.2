@@ -99,6 +99,8 @@ HRESULT CField::Init(void)
 	CScene3D::SetSize(m_fSize, m_fSize);
 	CScene3D::Init(m_pos);
 
+	//êFÇÃê›íË
+	CScene3D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	//CScene3D::SetPosition(D3DXVECTOR3(m_pos), m_fWidth, m_fHeight);
 
 	m_fCol = 0.0f;
