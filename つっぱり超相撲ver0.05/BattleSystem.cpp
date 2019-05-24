@@ -23,10 +23,12 @@
 //=============================================================================
 // マクロ
 //=============================================================================
-#define YORI_MOVE	(5.0f)
-#define NAGE_MOVE	(35.0f)
-#define OSI_MOVE	(8.0f)
-#define TUPARI_MOVE	(10.0f)
+#define YORI_MOVE		(5.0f)
+#define NAGE_MOVE		(35.5f)
+#define OSI_MOVE		(8.0f)
+#define TUPARI_MOVE		(8.6f)
+#define KNOCKUP_MOVE	(3.0f)
+#define NAGE_DIVIDED	(4.5f)
 
 #define YORI_FLAME			(20)
 #define NAGE_FLAME			(30)
@@ -40,6 +42,7 @@
 #define DAMAGE				(30)
 #define HEEL				(20)
 #define START_SECOND		(2)	// 対戦が始まるまでの秒数
+#define DOHYO_HAZI_NUM		(135.0f)
 
 //=============================================================================
 // バトルシステムクラスのコンストラクタ
@@ -202,6 +205,11 @@ void CBattleSys::Operation(void)
 
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
+
+	//プレイヤー1の位置を取得
+	D3DXVECTOR3 p1pos = pPlayer->GetPosition();
+	//プレイヤー2の位置を取得
+	D3DXVECTOR3 p2pos = pEnemy->GetPosition();
 
 #ifdef _DEBUG
 	if (CGame::GetState() == CGame::STATE_GAME)
@@ -460,8 +468,6 @@ void CBattleSys::Operation(void)
 	{
 		fMoveDying[1] = 2.0f;
 	}
-	//プレイヤー1の位置を取得
-	D3DXVECTOR3 p1pos = pPlayer->GetPosition();
 
 
 
@@ -484,8 +490,18 @@ void CBattleSys::Operation(void)
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
+
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+					}
+
 					m_nCntFlame = YORI_FLAME;
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_bAttack = true;
@@ -495,7 +511,16 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 押す ");
 
-					pEnemy->SetMove(D3DXVECTOR3(-OSI_MOVE * fMoveDying[1], 3.0f, 0.0f));
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(OSI_MOVE / 2, 0.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pEnemy->SetMove(D3DXVECTOR3(-OSI_MOVE * fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+					}
+
 					m_nCntFlame = OSI_FLAME;
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_bAttack = true;
@@ -511,7 +536,19 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 投げる ");
 
-					pEnemy->SetMove(D3DXVECTOR3((NAGE_MOVE * fMoveDying[1]) / 1.5f, 3.0f, 0.0f));
+					if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3((-NAGE_MOVE) / NAGE_DIVIDED, 0.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3((NAGE_MOVE) / NAGE_DIVIDED, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pEnemy->SetMove(D3DXVECTOR3((NAGE_MOVE * fMoveDying[1]) / 1.5f, KNOCKUP_MOVE, 0.0f));
+					}
+
+
+
+					//pEnemy->SetMove(D3DXVECTOR3((NAGE_MOVE * fMoveDying[1]) / 1.5f, KNOCKUP_MOVE, 0.0f));
 
 
 					m_bAttack = true;
@@ -533,8 +570,17 @@ void CBattleSys::Operation(void)
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+					}
+
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_nCntFlame = YORI_FLAME;
 					m_bAttack = true;
@@ -544,7 +590,16 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 押す ");
 
-					pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * fMoveDying[1], 3.0f, 0.0f));
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE / 2, 0.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+					}
+
 
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_nCntFlame = OSI_FLAME;
@@ -560,7 +615,18 @@ void CBattleSys::Operation(void)
 					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					CDebugProc::Print("c", " 投げる ");
-					pEnemy->SetMove(D3DXVECTOR3((-NAGE_MOVE * fMoveDying[1]) / 1.5f, 3.0f, 0.0f));
+
+					if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3((NAGE_MOVE) / NAGE_DIVIDED, 0.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3((-NAGE_MOVE) / NAGE_DIVIDED, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pEnemy->SetMove(D3DXVECTOR3((-NAGE_MOVE * fMoveDying[1]) / 1.5f, KNOCKUP_MOVE, 0.0f));
+					}
+
+					//pEnemy->SetMove(D3DXVECTOR3((-NAGE_MOVE * fMoveDying[1]) / 1.5f, KNOCKUP_MOVE, 0.0f));
 
 					pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 					m_bAttack = true;
@@ -586,8 +652,17 @@ void CBattleSys::Operation(void)
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, 3.0f, 0.0f));
+					if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+					}
+
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_bAttack = true;
 					m_nCntFlame = YORI_FLAME;
@@ -597,7 +672,15 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 押す ");
 
-					pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE * fMoveDying[0], 3.0f, 0.0f));
+					if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE / 2, 0.0f, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE * fMoveDying[0], KNOCKUP_MOVE, 0.0f));
+					}
 
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = OSI_FLAME;
@@ -614,7 +697,16 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 投げる ");
 
-					pPlayer->SetMove(D3DXVECTOR3((NAGE_MOVE * fMoveDying[0]) / 1.5f, 3.0f, 0.0f));
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pEnemy->SetMove(D3DXVECTOR3((-NAGE_MOVE) / NAGE_DIVIDED, 0.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3((NAGE_MOVE) / NAGE_DIVIDED, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3((NAGE_MOVE * fMoveDying[0]) / 1.5f, KNOCKUP_MOVE, 0.0f));
+					}
+
 
 					m_bAttack = true;
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
@@ -636,8 +728,17 @@ void CBattleSys::Operation(void)
 					pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{
 					CDebugProc::Print("c", " 寄り ");
-					pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
-					pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, 3.0f, 0.0f));
+					if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+					}
+
 					m_bAttack = true;
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = YORI_FLAME;
@@ -647,7 +748,15 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 押す ");
 
-					pPlayer->SetMove(D3DXVECTOR3(OSI_MOVE * fMoveDying[0], 3.0f, 0.0f));
+					if (pPlayer->GetDohyo() == CEnemy::DOHYO_HAZI && pPlayer->GetDying() == false)
+					{
+						pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(-OSI_MOVE / 2, 0.0f, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3(OSI_MOVE * fMoveDying[0], KNOCKUP_MOVE, 0.0f));
+					}
 
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = OSI_FLAME;
@@ -664,13 +773,25 @@ void CBattleSys::Operation(void)
 				{
 					CDebugProc::Print("c", " 投げる ");
 
-					pPlayer->SetMove(D3DXVECTOR3((-NAGE_MOVE * fMoveDying[0]) / 1.5f, 3.0f, 0.0f));
+					if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+					{
+						pEnemy->SetMove(D3DXVECTOR3((NAGE_MOVE) / NAGE_DIVIDED, 0.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3((-NAGE_MOVE) / NAGE_DIVIDED, KNOCKUP_MOVE, 0.0f));
+					}
+					else
+					{
+						pPlayer->SetMove(D3DXVECTOR3((-NAGE_MOVE * fMoveDying[0]) / 1.5f, KNOCKUP_MOVE, 0.0f));
+					}
+
 
 					m_bAttack = true;
 					pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 					m_nCntFlame = NAGE_FLAME;
 					//硬直
 					Recovery();
+					CGame::SetHit(false);
+					pEnemy->SetState(CEnemy::STATE_NAGE);
+					pPlayer->SetState(CPlayer::STATE_NAGE);
 				}
 			}
 			break;
@@ -737,11 +858,32 @@ void CBattleSys::Operation(void)
 		switch (pPlayer->GetDirection())
 		{
 		case CPlayer::DIRECTION_LEFT:
-			pEnemy->SetMove(D3DXVECTOR3(-TUPARI_MOVE, 3.0f, 0.0f));
+
+			if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(TUPARI_MOVE / 2, 0.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+			}
+			else
+			{
+				pEnemy->SetMove(D3DXVECTOR3(-TUPARI_MOVE * fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+			}
+
+			//pEnemy->SetMove(D3DXVECTOR3(-TUPARI_MOVE, KNOCKUP_MOVE, 0.0f));
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			break;
 		case CPlayer::DIRECTION_RIGHT:
-			pEnemy->SetMove(D3DXVECTOR3(TUPARI_MOVE, 3.0f, 0.0f));
+
+			if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+			{
+				pPlayer->SetMove(D3DXVECTOR3(-TUPARI_MOVE / 2, 0.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+			}
+			else
+			{
+				pEnemy->SetMove(D3DXVECTOR3(TUPARI_MOVE * fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+			}
+			//pEnemy->SetMove(D3DXVECTOR3(TUPARI_MOVE, KNOCKUP_MOVE, 0.0f));
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			break;
 		}
@@ -766,6 +908,41 @@ void CBattleSys::Operation(void)
 		//ダメージ
 		pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 	}
+
+	//プレイヤー1の位置を取得
+	p1pos = pPlayer->GetPosition();
+	//プレイヤー2の位置を取得
+	p2pos = pEnemy->GetPosition();
+
+	//土俵端で体力があるなら残る
+	if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+	{
+		if (pPlayer->GetPosition().x > DOHYO_HAZI_NUM)
+		{
+			pPlayer->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pPlayer->SetPosition(D3DXVECTOR3(DOHYO_HAZI_NUM, p1pos.y, p1pos.z));
+		}
+		else if (pPlayer->GetPosition().x < -DOHYO_HAZI_NUM)
+		{
+			pPlayer->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pPlayer->SetPosition(D3DXVECTOR3(-DOHYO_HAZI_NUM, p1pos.y, p1pos.z));
+		}
+	}
+
+	if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+	{
+		if (pEnemy->GetPosition().x > DOHYO_HAZI_NUM)
+		{
+			pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(DOHYO_HAZI_NUM, p2pos.y, p2pos.z));
+		}
+		else if (pEnemy->GetPosition().x < -DOHYO_HAZI_NUM)
+		{
+			pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(-DOHYO_HAZI_NUM, p2pos.y, p2pos.z));
+		}
+	}
+
 	//リセット
 	if (pInputKeyboard->GetTrigger(DIK_R) == true ||
 		pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
@@ -806,7 +983,7 @@ void CBattleSys::Recovery(void)
 //=============================================================================
 // バトル処理まとめ
 //=============================================================================
-void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType)
+void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move, D3DXVECTOR3 P2move)
 {
 
 }

@@ -37,6 +37,7 @@ public:
 		ATTACK_TYPE_YORI = 0,
 		ATTACK_TYPE_OSI,
 		ATTACK_TYPE_NAGE,
+		ATTACK_TYPE_TUPPARI,
 	}ATTACK_TYPE;
 
 	CBattleSys();	// コンストラクタ
@@ -47,7 +48,7 @@ public:
 	void Update(void);	// バトルシステム更新処理
 
 	void Recovery(void);	//硬直処理まとめ
-	void Battle(int nPlayer, ATTACK_TYPE AttackType);
+	void Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move, D3DXVECTOR3 P2move);
 
 	static CBattleSys *Create();	// オブジェクトの生成
 

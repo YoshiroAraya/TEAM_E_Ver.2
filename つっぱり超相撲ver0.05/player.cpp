@@ -22,7 +22,8 @@
 // マクロ定義
 //=============================================================================
 #define PLAYER_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//プレイヤーの当たり判定
-
+#define DOHYO_HAZI_MAX			(135.0f)
+#define DOHYO_HAZI_MIN			(110.0f)
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -49,6 +50,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_nLife = 0;
 	m_bDying = false;
 	m_pTuppari = NULL;
+	m_DohyoState = DOHYO_NORMAL;
 
 }
 
@@ -105,6 +107,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_nLife = 100;
 	m_bDying = false;
 	m_pTuppari = CTuppari::Create(pos);
+	m_DohyoState = DOHYO_NORMAL;
 
 	return S_OK;
 }
@@ -313,6 +316,22 @@ void CPlayer::Update(void)
 	//つっぱり位置更新
 	m_pTuppari->SetPosition(pos);
 
+	//土俵際判定
+	if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+	{
+		m_DohyoState = DOHYO_HAZI;
+	}
+	else
+	{
+		m_DohyoState = DOHYO_NORMAL;
+	}
+
+	if (pos.y <= 0)
+	{
+		pos.y = 0;
+		CSceneX::SetPosition(pos);
+	}
+
 #ifdef _DEBUG
 
 	int nCnt = 0;
@@ -331,6 +350,15 @@ void CPlayer::Update(void)
 	{
 		CDebugProc::Print("c", " プレイヤーリカバリー　OFF ");
 	}
+	if (m_DohyoState == DOHYO_NORMAL)
+	{
+		CDebugProc::Print("c", " 土俵端　OFF ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " 土俵端　ON ");
+	}
+
 	/*for (int nCount = 0; nCount < NUM_VTX; nCount++)
 	{
 	if (abRight[nCount] == true)

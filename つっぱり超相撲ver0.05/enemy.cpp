@@ -23,6 +23,8 @@
 // マクロ定義
 //=============================================================================
 #define ENEMY_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
+#define DOHYO_HAZI_MAX			(135.0f)
+#define DOHYO_HAZI_MIN			(110.0f)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -47,6 +49,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_nLife = 100;
 	m_bDying = false;
 	m_pTuppari = NULL;
+	m_DohyoState = DOHYO_NORMAL;
 
 }
 
@@ -101,6 +104,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_nRecoveryTime = 0;	// 硬直時間
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
+	m_DohyoState = DOHYO_NORMAL;
 
 	return S_OK;
 }
@@ -305,6 +309,22 @@ void CEnemy::Update(void)
 	//つっぱり位置更新
 	m_pTuppari->SetPosition(pos);
 
+	//土俵際判定
+	if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+	{
+		m_DohyoState = DOHYO_HAZI;
+	}
+	else
+	{
+		m_DohyoState = DOHYO_NORMAL;
+	}
+
+
+	if (pos.y <= 0)
+	{
+		pos.y = 0;
+		CSceneX::SetPosition(pos);
+	}
 #ifdef _DEBUG
 
 	int nCnt = 0;
@@ -322,6 +342,15 @@ void CEnemy::Update(void)
 	else
 	{
 		CDebugProc::Print("c", " エネミーリカバリー　OFF ");
+	}
+
+	if (m_DohyoState == DOHYO_NORMAL)
+	{
+		CDebugProc::Print("c", " 土俵端　OFF ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " 土俵端　ON ");
 	}
 #endif
 }

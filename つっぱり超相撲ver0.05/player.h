@@ -38,6 +38,13 @@ public:
 		STATE_DOWN,
 	}STATE;
 
+	//土俵端状態
+	typedef enum
+	{
+		DOHYO_NORMAL = 0,
+		DOHYO_HAZI,
+	}DOHYO;
+
 	//向き
 	typedef enum
 	{
@@ -73,6 +80,8 @@ public:
 	void SetDying(bool bDying) { m_bDying = bDying; }
 	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }
 	CTuppari GetTuppari(void) { return *m_pTuppari; }
+	DOHYO GetDohyo(void) { return m_DohyoState; }
+	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }
 	static CPlayer *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
 private:
@@ -100,5 +109,6 @@ private:
 	int						m_nLife;		// 体力
 
 	CTuppari				*m_pTuppari;
+	DOHYO					m_DohyoState;
 };
 #endif
