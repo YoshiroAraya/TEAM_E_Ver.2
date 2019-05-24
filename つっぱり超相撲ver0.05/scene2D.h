@@ -44,6 +44,8 @@ public:
 	void SetWidthHeight(float fWidth, float fHeight);
 	void SetRIghtLeft(float fRight, float fLeft);
 	void SetCol(D3DXCOLOR col);
+	LPDIRECT3DVERTEXBUFFER9 GetBuff(void) { return m_pVtxBuff; }
+	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ

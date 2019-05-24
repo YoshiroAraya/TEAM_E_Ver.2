@@ -29,6 +29,8 @@
 #include "jankenUI.h"
 #include "field.h"
 #include "wall.h"
+#include "touzai.h"
+
 //============================================================================
 //	É}ÉNÉçíËã`
 //============================================================================
@@ -169,6 +171,9 @@ void CGame::Init(void)
 	}
 
 	CJankenUI::Load();
+
+	CTouzai::Load();
+	CTouzai::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 }
 
 //=============================================================================
@@ -189,6 +194,7 @@ void CGame::Uninit(void)
 	CJankenUI::Unload();
 	CField::Unload();
 	CWall::Unload();
+	CTouzai::Unload();
 	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;

@@ -18,6 +18,13 @@
 class CCamera
 {
 public:
+	typedef enum
+	{
+		STATE_NONE = 0,
+		STATE_HIGASHI,
+		STATE_NISHI
+	}STATE;
+
 	CCamera();		// コンストラクタ
 	~CCamera();		// デストラクタ
 
@@ -27,6 +34,7 @@ public:
 	void SetCamera(void);
 
 	D3DXVECTOR3 GetRot(void);						// 位置の取得
+	static STATE GetState(void) { return m_State; }
 
 private:
 	D3DXVECTOR3 m_posV;				// 視点
@@ -38,6 +46,7 @@ private:
 	D3DXMATRIX	m_mtxProjection;	// プロジェクションマトリックス
 	D3DXMATRIX	m_mtxView;			// ビューマトリックス
 	int m_nStartCounter;
+	static STATE m_State;
 };
 
 #endif

@@ -19,6 +19,11 @@
 #define CAMERA_SPEED	(2.0f)
 
 //=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+CCamera::STATE CCamera::m_State = STATE_NONE;
+
+//=============================================================================
 // カメラクラスのコンストラクタ
 //=============================================================================
 CCamera::CCamera()
@@ -49,6 +54,7 @@ void CCamera::Init(void)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));
 	m_nStartCounter = 0;
+	m_State = STATE_NONE;
 }
 
 //=============================================================================
@@ -86,17 +92,19 @@ void CCamera::Update(void)
 
 			if (nTime < 3)
 			{
+				m_State = STATE_HIGASHI;
 				m_posV = D3DXVECTOR3(15.0f, 40.0f, -40.0f);	// 視点
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 18.0f, pPlayer->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= 3 && nTime < 6)
 			{
+				m_State = STATE_NISHI;
 				m_posV = D3DXVECTOR3(-15.0f, 40.0f, -40.0f);	// 視点
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 18.0f, pEnemy->GetPosition().z);		// 注視点
-				
 			}
 			else if (nTime >= 6)
 			{
+				m_State = STATE_NONE;
 				m_posV.x = 0.0f;
 				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
 
