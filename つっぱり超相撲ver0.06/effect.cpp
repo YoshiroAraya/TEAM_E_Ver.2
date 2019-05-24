@@ -8,12 +8,13 @@
 #include "manager.h"
 #include "renderer.h"
 #include "billboard.h"
+#include "debugProc.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
 #define TEXTURENAME000			 "data\\TEXTURE\\EFFECT\\particle000.jpg"		//テクスチャのファイル名
-#define TEXTURENAME001			 "data\\TEXTURE\\EFFECT\\effect002.png"		//テクスチャのファイル名
+#define TEXTURENAME001			 "data\\TEXTURE\\EFFECT\\コンポ _0.png"		//テクスチャのファイル名
 #define TEXTURENAME002			 "data\\TEXTURE\\EFFECT\\effect003.png"		//テクスチャのファイル名
 #define TEXTURENAME003			 "data\\TEXTURE\\EFFECT\\effect004.png"		//テクスチャのファイル名
 #define TEXTURENAME004			 "data\\TEXTURE\\EFFECT\\effect005.png"		//テクスチャのファイル名
@@ -33,14 +34,14 @@ LPDIRECT3DTEXTURE9			CEffect::m_pTexture[EFFECTTEX_MAX] = {};
 //--------------------------------------------
 //エフェクトクラス コンストラクタ
 //--------------------------------------------
-CEffect::CEffect()
+CEffect::CEffect() :CBillboard(7, CScene::OBJTYPE_EFFECT)
 {
 	m_pos = D3DXVECTOR3(0,0,0);						// 位置
 	m_move = D3DXVECTOR3(0, 0, 0);					// 移動量
 	m_posold = D3DXVECTOR3(0, 0, 0);				// 前回の位置
 
 
-	m_TexType = EFFECTTEX_NORMAL000;
+	//m_TexType = EFFECTTEX_NORMAL000;
 }
 
 //--------------------------------------------
@@ -56,21 +57,27 @@ CEffect::~CEffect()
 CEffect *CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 	float fWidth, float fHeight, int nNumMax, int nLife, EFFECTTEX TexType)
 {
-	CEffect *pEffect;
+	CEffect *pEffect = NULL;
 
-	pEffect = new CEffect;
+	if (pEffect == NULL)
+	{
+		//メモリを動的確保
+		pEffect = new CEffect;
 
-	pEffect->m_pos = pos;
-	pEffect->m_move = move;
-	pEffect->m_Col = col;
-	pEffect->m_fHeight = fHeight;
-	pEffect->m_fWidth = fWidth;
-	pEffect->m_nNumMax = nNumMax;
-	pEffect->m_nLife = nLife;
-	pEffect->m_TexType = TexType;
+		if (pEffect != NULL)
+		{
+			pEffect->m_pos = pos;
+			pEffect->m_move = move;
+			pEffect->m_Col = col;
+			pEffect->m_fHeight = fHeight;
+			pEffect->m_fWidth = fWidth;
+			pEffect->m_nNumMax = nNumMax;
+			pEffect->m_nLife = nLife;
+			pEffect->m_TexType = TexType;
 
-	pEffect->Init();
-
+			pEffect->Init();
+		}
+	}
 	return pEffect;
 }
 
@@ -83,10 +90,16 @@ HRESULT CEffect::Init(void)
 	//CRenderer *pRenderer = CManager::GetRenderer();
 	//LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	m_pBillBoard = CBillboard::Create(m_pos, m_fWidth, m_fHeight);
+	/*m_pBillBoard = CBillboard::Create(m_pos, m_fWidth, m_fHeight);
 	m_pBillBoard->BindTexture(m_pTexture[0]);
 	m_pBillBoard->SetPosition(m_pos);
-	m_pBillBoard->SetCol(m_Col);
+	m_pBillBoard->SetCol(m_Col);*/
+
+	//CBillboard::SetPosition(m_pos);
+	CBillboard::BindTexture(m_pTexture[m_TexType]);
+	CBillboard::Init(m_pos);
+	CBillboard::SetCol(m_Col);
+
 
 	//オブジェクト種類の設定
 	//if (m_TexType == EFFECTTEX_NORMAL000 || m_TexType == EFFECTTEX_SMOKE)
@@ -111,13 +124,7 @@ HRESULT CEffect::Init(void)
 //=============================================================================
 void CEffect::Uninit(void)
 {
-	if (m_pBillBoard != NULL)
-	{
-		m_pBillBoard->Uninit();
-		m_pBillBoard = NULL;
-	}
-	//自分を消す(破棄)
-	Release();
+	CBillboard::Uninit();
 }
 
 //=============================================================================
@@ -125,6 +132,9 @@ void CEffect::Uninit(void)
 //=============================================================================
 void CEffect::Update(void)
 {
+	//自分用の死亡フラグ変数
+	bool bDestroy = false;
+
 	m_nCntTimer++;
 
 	if (m_nLife > 0)
@@ -150,15 +160,24 @@ void CEffect::Update(void)
 			m_Col.a = 0;
 		}
 		//色を設定
-		m_pBillBoard->SetCol(m_Col);
+		CBillboard::SetCol(m_Col);
 
 		//設定処理
-		m_pBillBoard->SetBillboard(m_pos, m_fHeight, m_fWidth);
+		CBillboard::SetBillboard(m_pos, m_fHeight, m_fWidth);
 	}
-	else if (m_nLife == 0)
+	else if (m_nLife <= 0)
+	{
+		//自分を消すフラグを立てる
+		bDestroy = true;
+	}
+
+	if (bDestroy == true)
 	{
 		//自分を消す(破棄)
 		Uninit();
+
+		//falseに戻す
+		bDestroy = false;
 	}
 }
 
@@ -167,7 +186,29 @@ void CEffect::Update(void)
 //=============================================================================
 void CEffect::Draw(void)
 {
+	LPDIRECT3DDEVICE9 pDevice;
 
+	//デバイスを取得
+	CManager Manager;
+	pDevice = Manager.GetRenderer()->GetDevice();
+
+	// αブレンディングを加算合成に設定
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+	//if (m_pBillBoard != NULL)
+	{
+		CBillboard::Draw();
+	}
+
+	// αブレンディングを元に戻す
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	//ライトを有効にする
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 //=============================================================================
 // テクスチャロード処理
@@ -185,7 +226,7 @@ HRESULT CEffect::Load(void)
 
 	//テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture[0]);
-	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME001, &m_pTexture[1]);
+	D3DXCreateTextureFromFile(pDevice, TEXTURENAME001, &m_pTexture[1]);
 	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME002, &m_pTexture[2]);
 	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME003, &m_pTexture[3]);
 	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME004, &m_pTexture[4]);

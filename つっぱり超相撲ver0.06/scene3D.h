@@ -41,6 +41,8 @@ public:
 	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
 	void SetSize(float fHeight,float fWidth);
 	void SetRot(D3DXVECTOR3 rot);
+	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
+	void SetColor(D3DXCOLOR col);
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
@@ -50,6 +52,7 @@ private:
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
 	D3DXVECTOR3				m_aPos[NUM_VTX];					// 頂点の位置
 	D3DXVECTOR3				m_rot;						// 上方向ベクトル
+	D3DXCOLOR               m_col;
 	float					m_fSize;					// 大きさ
 	float					m_fHeight;
 	float					m_fWidth;
