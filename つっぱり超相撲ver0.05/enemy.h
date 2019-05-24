@@ -39,6 +39,13 @@ public:
 		STATE_DOWN,
 	}STATE;
 
+	//土俵端状態
+	typedef enum
+	{
+		DOHYO_NORMAL = 0,
+		DOHYO_HAZI,
+	}DOHYO;
+
 	//向き
 	typedef enum
 	{
@@ -75,6 +82,8 @@ public:
 	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
 	void SetMove(D3DXVECTOR3 move);
 	CTuppari GetTuppari(void) { return *m_pTuppari; }
+	DOHYO GetDohyo(void) { return m_DohyoState; }
+	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }
 
 private:
 	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
@@ -99,5 +108,6 @@ private:
 	bool					m_bDying;		// 瀕死かどうか
 
 	CTuppari				*m_pTuppari;
+	DOHYO					m_DohyoState;
 };
 #endif

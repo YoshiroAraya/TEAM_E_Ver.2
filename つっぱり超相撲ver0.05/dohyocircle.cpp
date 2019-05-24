@@ -28,7 +28,7 @@ LPDIRECT3DTEXTURE9 CDohyoCircle::m_pTextures = NULL;
 #define MAX_HEIGHT (20)   //（高さ）
 #define MAX_WITH   (10)   //（幅）
 
-#define MAX_SIZE3D (70)  //3Dポリゴンの大きさ
+#define MAX_SIZE3D (135)  //3Dポリゴンの大きさ
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -96,7 +96,7 @@ HRESULT CDohyoCircle::Init(void)
 	BindTexture(m_pTextures);
 
 	//サイズの設定
-	CScene3D::SetSize(130.0f, 130.0f);
+	CScene3D::SetSize(MAX_SIZE3D, MAX_SIZE3D);
 
 	//初期化処理
 	CScene3D::Init(m_pos);
