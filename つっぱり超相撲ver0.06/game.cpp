@@ -176,6 +176,13 @@ void CGame::Init(void)
 
 	CTouzai::Load();
 	CTouzai::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+	CCamera *pCamera = CManager::GetCamera();
+
+	if (pCamera != NULL)
+	{
+		pCamera->Init();
+	}
 }
 
 //=============================================================================
@@ -277,7 +284,7 @@ void CGame::Update(void)
 	if (pInputKeyboard->GetTrigger(DIK_J) == true)
 	{
 		//アニメーションテクスチャの生成
-		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 / 
+		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 
 		CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
