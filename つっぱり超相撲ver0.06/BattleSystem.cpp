@@ -840,12 +840,12 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false
 			|| pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
 		{//‘Ì—Í‚ª‚ ‚éê‡‚Å“y•U’[‚Ì‰Ÿ‚µUŒ‚
-			if (nPlayer == 0)
+			if (nPlayer == 0 && pEnemy->GetDying() == false)
 			{//ƒvƒŒƒCƒ„[‚ÌUŒ‚
 				pPlayer->SetMove(D3DXVECTOR3(-P2move.x / OSI_RECOIL, 0.0f, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
-			else
+			else if(nPlayer == 1 && pPlayer->GetDying() == false)
 			{//ƒGƒlƒ~[‚ÌUŒ‚
 				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / OSI_RECOIL, 0.0f, 0.0f));

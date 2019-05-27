@@ -52,6 +52,7 @@ CGauge *CGame::m_pGauge = NULL;
 
 bool CGame::m_bHit = false;
 CGame::STATE CGame::m_State = CGame::STATE_START;
+CGame::WINNER CGame::m_Winner = CGame::WINNER_NONE;
 
 //=============================================================================
 //	コンストラクタ
@@ -77,7 +78,7 @@ void CGame::Init(void)
 	m_bHit = false;
 	m_bUI = true;
 	m_State = STATE_START;
-
+	m_Winner = WINNER_NONE;
 	//インスタンス
 	CManager *pManager = NULL;
 
@@ -272,6 +273,15 @@ void CGame::Update(void)
 	else
 	{
 		CDebugProc::Print("c", "当たっていない");
+	}
+
+	if (m_Winner == WINNER_PLAYER1)
+	{
+		CDebugProc::Print("c", "プレイヤー1の勝利");
+	}
+	else if(m_Winner == WINNER_PLAYER2)
+	{
+		CDebugProc::Print("c", "プレイヤー2の勝利");
 	}
 
 	//エフェクト用関数

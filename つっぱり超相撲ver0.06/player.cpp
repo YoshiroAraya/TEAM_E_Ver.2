@@ -360,6 +360,7 @@ void CPlayer::Update(void)
 	{
 		pos.y = 0;
 		CSceneX::SetPosition(pos);
+		CGame::SetWinner(CGame::WINNER_PLAYER2);
 	}
 
 #ifdef _DEBUG

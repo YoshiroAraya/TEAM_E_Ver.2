@@ -24,9 +24,17 @@ class CGame
 public:
 	typedef enum
 	{
+		WINNER_NONE = 0,
+		WINNER_PLAYER1,
+		WINNER_PLAYER2,
+	}WINNER;
+
+	typedef enum
+	{
 		STATE_START = 0,
 		STATE_GAME,
 	}STATE;
+
 	CGame();
 	~CGame();
 
@@ -47,6 +55,9 @@ public:
 	static CGauge *GetGauge(void);
 	static STATE GetState(void) { return m_State; };
 	static void SetState(STATE state) { m_State = state; };
+	static WINNER GetWinner(void) { return m_Winner; };
+	static void SetWinner(WINNER Winner) { m_Winner = Winner; };
+
 private:
 	static CScene3D *m_pScene3D;
 	static CPlayer *m_pPlayer;
@@ -57,6 +68,7 @@ private:
 	static bool m_bHit;
 	static CGauge *m_pGauge;
 	static STATE m_State;
+	static WINNER m_Winner;
 	bool m_bUI;
 };
 #endif
