@@ -1,6 +1,40 @@
 ﻿  wall.cpp
-  field.cpp
-  dohyocircle.cpp
+  tuppari.cpp
+  touzai.cpp
+  sound.cpp
+  shadow.cpp
+  sceneX.cpp
+  scene3D.cpp
+  scene2D.cpp
+  scene.cpp
+  renderer.cpp
+  player.cpp
+  meshField.cpp
+  mask.cpp
+  manager.cpp
+  main.cpp
+  light.cpp
+  jankenUI.cpp
+  input.cpp
+  gauge.cpp
+  game.cpp
   コードを生成中...
-  つっぱり超相撲.vcxproj -> C:\Users\game133\Documents\GitHub\TEAM_E_Ver.2\つっぱり超相撲ver0.06\つっぱり超相撲.exe
-  つっぱり超相撲.vcxproj -> C:\Users\game133\Documents\GitHub\TEAM_E_Ver.2\つっぱり超相撲ver0.06\つっぱり超相撲.pdb (Full PDB)
+  コンパイル中...
+  field.cpp
+  fade.cpp
+  enemy.cpp
+  effect.cpp
+  dohyocircle.cpp
+  dohyo.cpp
+  debugProc.cpp
+  customer.cpp
+  characterMove.cpp
+  camera.cpp
+  bullet.cpp
+  billboard.cpp
+  BattleSystem.cpp
+  animation.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで C:\Users\game130\Documents\GitHub\TEAM_E_Ver.2\つっぱり超相撲ver0.06\つっぱり超相撲.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  つっぱり超相撲.vcxproj -> C:\Users\game130\Documents\GitHub\TEAM_E_Ver.2\つっぱり超相撲ver0.06\つっぱり超相撲.exe
+  つっぱり超相撲.vcxproj -> C:\Users\game130\Documents\GitHub\TEAM_E_Ver.2\つっぱり超相撲ver0.06\つっぱり超相撲.pdb (Full PDB)
