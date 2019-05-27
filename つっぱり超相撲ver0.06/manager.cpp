@@ -26,7 +26,7 @@
 #include "fade.h"
 #include "game.h"
 #include "characterMove.h"
-
+#include "sound.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -41,6 +41,8 @@ CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
 CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
+CSound	*CManager::m_pSound[MAX_SOUND] = {};
+
 //=============================================================================
 // マネージャクラスのコンストラクタ
 //=============================================================================
@@ -132,7 +134,15 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		m_pCharacterMove = CCharacterMove::Create();
 	}
 
-
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		m_pSound[nCnt] = new CSound;
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->InitSound(hWnd);
+		}
+	}
 #ifdef _DEBUG
 	if (m_pDebugProc == NULL)
 	{
@@ -244,6 +254,16 @@ void CManager::Uninit(void)
 		m_pFade = NULL;
 	}
 
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->UninitSound();
+			delete m_pSound[nCnt];
+			m_pSound[nCnt] = NULL;
+		}
+	}
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)
 	{// デバック表示クラスの破棄
@@ -450,6 +470,14 @@ CMask *CManager::GetMask(void)
 }
 
 //=============================================================================
+// マネージャークラス サウンドを取得
+//=============================================================================
+CSound *CManager::GetSound(int nNum)
+{
+	return m_pSound[nNum];
+}
+
+//=============================================================================
 // モードの設定
 //=============================================================================
 void CManager::SetMode(MODE mode)
@@ -554,6 +582,7 @@ void CManager::SetMode(MODE mode)
 
 			if (m_pGame != NULL)
 			{
+				m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_BGM_GAME);
 				// 初期化処理
 				m_pGame->Init();
 			}

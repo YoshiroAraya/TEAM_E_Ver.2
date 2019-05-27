@@ -8,6 +8,7 @@
 #define _MANAGER_H_
 
 #include "main.h"
+#include "sound.h"
 
 //=============================================================================
 // 前方宣言
@@ -22,7 +23,7 @@ class CFade;
 class CGame;
 class CCharacterMove;
 class CXInputJoyPad;
-
+class CSound;
 //=============================================================================
 // マクロ
 //=============================================================================
@@ -35,6 +36,7 @@ class CXInputJoyPad;
 #define ENEMY_LEFT			(DIK_NUMPAD4)
 #define ENEMY_A_BUTTON		(DIK_ADD)
 #define ENEMY_B_BUTTON		(DIK_NUMPADENTER)
+#define MAX_SOUND			(3)
 
 //=============================================================================
 // マクロ(コントローラー)
@@ -90,6 +92,7 @@ public:
 	static void SetMode(MODE mode);
 	static CGame *GetGame(void) { return m_pGame; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
+	static CSound *GetSound(int nNum);
 
 private:
 	static CRenderer *m_pRenderer;
@@ -104,6 +107,8 @@ private:
 	static CXInputJoyPad *m_pXInput;
 	float m_fData;
 	static MODE m_mode;
+	static CSound			*m_pSound[MAX_SOUND];	// サウンドのポインタ
+
 };
 
 #endif
