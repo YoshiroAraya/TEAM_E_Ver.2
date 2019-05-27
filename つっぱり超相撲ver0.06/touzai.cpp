@@ -175,7 +175,7 @@ void CTouzai::Update(void)
 	CScene2D::SetBuff(pVtxBuff);
 	CScene2D::SetPos(pos, 0.0f, m_fScale, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	if (CCamera::GetState() == CCamera::STATE_NONE)
+	if (CCamera::GetState() == CCamera::STATE_NORMAL)
 	{
 		Uninit();
 	}

@@ -264,7 +264,6 @@ void CGame::Update(void)
 		}
 	}
 
-
 #ifdef _DEBUG
 	if (m_bHit == true)
 	{

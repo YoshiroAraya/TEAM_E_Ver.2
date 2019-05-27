@@ -21,6 +21,7 @@ public:
 	typedef enum
 	{
 		STATE_NONE = 0,
+		STATE_NORMAL,
 		STATE_HIGASHI,
 		STATE_NISHI
 	}STATE;
