@@ -182,6 +182,7 @@
     <ClCompile Include="scene3D.cpp" />
     <ClCompile Include="sceneX.cpp" />
     <ClCompile Include="shadow.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="touzai.cpp" />
     <ClCompile Include="tuppari.cpp" />
     <ClCompile Include="wall.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="scene3D.h" />
     <ClInclude Include="sceneX.h" />
     <ClInclude Include="shadow.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="touzai.h" />
     <ClInclude Include="tuppari.h" />
     <ClInclude Include="wall.h" />
