@@ -301,6 +301,10 @@ void CPlayer::Update(void)
 		m_State = STATE_NEUTRAL;
 		}*/
 	}
+		else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
+	{
+		m_State = STATE_NEUTRAL;
+	}
 
 
 	if (pInputKeyboard->GetPress(DIK_I) == true)
@@ -387,7 +391,17 @@ void CPlayer::Update(void)
 	}
 	else
 	{
-		CDebugProc::Print("c", " 土俵端　ON ");
+		CDebug
+		Proc::Print("c", " 土俵端　ON ");
+	}
+	
+	if (m_bDying == true)
+	{
+		CDebugProc::Print("c", "プレイヤー 瀕死 ");
+	}
+	else
+	{
+		CDebugProc::Print("c", "プレイヤー 生存 ");
 	}
 
 	/*for (int nCount = 0; nCount < NUM_VTX; nCount++)

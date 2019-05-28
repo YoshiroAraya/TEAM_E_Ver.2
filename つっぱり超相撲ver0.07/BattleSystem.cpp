@@ -746,6 +746,8 @@ void CBattleSys::Operation(void)
 		pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 		m_bAttack = false;
 		m_nCntFlame = 0;
+		pGauge->SetGaugeRightLeft(600, 600);
+		CGame::SetWinner(CGame::WINNER_NONE);
 		CGame::SetHit(false);
 	}
 
@@ -849,6 +851,11 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			{//エネミーの攻撃
 				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / OSI_RECOIL, 0.0f, 0.0f));
+			}
+			else
+			{
+				pPlayer->SetMove(P1move);
+				pEnemy->SetMove(P2move);
 			}
 		}
 		else

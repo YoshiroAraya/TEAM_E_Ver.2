@@ -273,6 +273,11 @@ void CEnemy::Update(void)
 		m_State = STATE_NEUTRAL;
 		}*/
 	}
+	
+	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
+	{
+		m_State = STATE_NEUTRAL;
+	}
 
 	if (pInputKeyboard->GetPress(DIK_I) == true)
 	{
