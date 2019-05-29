@@ -31,12 +31,13 @@
 #define NAGE_DIVIDED	(4.0f)
 #define OSI_RECOIL		(2.0f)
 #define TUPPARI_RECOIL	(2.0f)
+#define HINSI_MOVE		(2.0f)
 
 #define YORI_FLAME			(20)
 #define NAGE_FLAME			(30)
 #define OSI_FLAME			(20)
 #define TUPARI_FLAME		(2)
-#define TUPARI_RECOVERY		(40)
+#define TUPARI_RECOVERY		(20)
 
 #define GU_COUNTER			(40)
 #define CHOKI_COUNTER		(10)
@@ -465,11 +466,11 @@ void CBattleSys::Operation(void)
 	//•mŽ€Žž
 	if (pPlayer->GetDying() == true)
 	{
-		fMoveDying[0] = 2.0f;
+		fMoveDying[0] = HINSI_MOVE;
 	}
 	if (pEnemy->GetDying() == true)
 	{
-		fMoveDying[1] = 2.0f;
+		fMoveDying[1] = HINSI_MOVE;
 	}
 
 
@@ -842,12 +843,12 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false
 			|| pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
 		{//‘Ì—Í‚ª‚ ‚éê‡‚Å“y•U’[‚Ì‰Ÿ‚µUŒ‚
-			if (nPlayer == 0 && pEnemy->GetDying() == false)
+			if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && nPlayer == 0 && pEnemy->GetDying() == false && pPlayer->GetDohyo() != CPlayer::DOHYO_HAZI)
 			{//ƒvƒŒƒCƒ„[‚ÌUŒ‚
 				pPlayer->SetMove(D3DXVECTOR3(-P2move.x / OSI_RECOIL, 0.0f, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
-			else if(nPlayer == 1 && pPlayer->GetDying() == false)
+			else if(pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && nPlayer == 1 && pPlayer->GetDying() == false && pEnemy->GetDohyo() != CEnemy::DOHYO_HAZI)
 			{//ƒGƒlƒ~[‚ÌUŒ‚
 				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / OSI_RECOIL, 0.0f, 0.0f));

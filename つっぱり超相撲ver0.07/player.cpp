@@ -24,6 +24,8 @@
 #define PLAYER_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//プレイヤーの当たり判定
 #define DOHYO_HAZI_MAX			(135.0f)
 #define DOHYO_HAZI_MIN			(110.0f)
+#define DASH_MOVE				(0.9f)
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -131,6 +133,9 @@ void CPlayer::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
+
 	// 位置取得
 	D3DXVECTOR3 pos;
 	pos = CSceneX::GetPosition();
@@ -164,20 +169,29 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
+	//ダッシュ設定
+	if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+		pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+	{
+		fMovePlayer = DASH_MOVE;
+	}
+
 	if (CGame::GetState() == CGame::STATE_GAME)
 	{
 		//通常状態で硬直していない
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
 			//任意のキー←
-			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true)
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
+				pXInput->GetPress(XPLAYER_LEFT, 1) == true)
 			{
 				// 左に進む
 				m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
 			}
 
 			//任意のキー→
-			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true)
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
+				pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
 			{
 				// 右に進む
 				m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
@@ -283,13 +297,6 @@ void CPlayer::Update(void)
 		m_Direction = DIRECTION_LEFT;
 	}
 
-	if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
-	{// 弾発射
-		CBullet::Create(D3DXVECTOR3(pos.x + sinf(rot.y + D3DX_PI) * 10, pos.y, pos.z + cosf(rot.y + D3DX_PI) * 10),
-			D3DXVECTOR3(sinf(rot.y + D3DX_PI) * 8.5f, 0, cosf(rot.y + D3DX_PI) * 8.5f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-
 	if (CGame::GetHit() == true)
 	{
 		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
@@ -391,10 +398,9 @@ void CPlayer::Update(void)
 	}
 	else
 	{
-		CDebug
-		Proc::Print("c", " 土俵端　ON ");
+		CDebugProc::Print("c", " 土俵端　ON ");
 	}
-	
+
 	if (m_bDying == true)
 	{
 		CDebugProc::Print("c", "プレイヤー 瀕死 ");

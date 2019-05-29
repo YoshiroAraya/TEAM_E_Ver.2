@@ -245,11 +245,11 @@ void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 	{
 		m_fLeft = 0;
 	}
-	else if (m_fLeft > -570)
+	else if (m_fLeft > -590)
 	{
 		pEnemy->SetDying(false);
 	}
-	else if (m_fLeft <= -570)
+	else if (m_fLeft <= -590)
 	{
 		pEnemy->SetDying(true);
 	}
@@ -263,11 +263,11 @@ void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 	{
 		m_fRight = 0;
 	}
-	else if (m_fRight > -570)
+	else if (m_fRight > -590)
 	{
 		pPlayer->SetDying(false);
 	}
-	else if (m_fRight <= -570)
+	else if (m_fRight <= -590)
 	{
 		pPlayer->SetDying(true);
 	}
