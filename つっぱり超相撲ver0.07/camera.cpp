@@ -147,6 +147,12 @@ void CCamera::Update(void)
 		}
 	}
 
+	if (mode == CManager::MODE_TITLE)
+	{
+		m_posV = D3DXVECTOR3(0.0f, 25.0f, -200.0f);	// ‹“_
+		m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// ’‹“_
+	}
+
 #if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// ¶•ûŒü‚ÉˆÚ“®

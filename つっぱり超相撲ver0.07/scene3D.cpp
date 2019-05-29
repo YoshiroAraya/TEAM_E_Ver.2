@@ -33,9 +33,8 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	{
 		m_aVec[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
 		m_aPos[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-		m_aNor[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
 	}
-	
+	m_Nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
 
 	m_fSize = 0.0f;							// 大きさ
 }
@@ -85,8 +84,8 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	{
 		m_aVec[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
 		m_aPos[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-		m_aNor[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
 	}
+
 
 	//m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -139,18 +138,18 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 
 	// 法線の設定
 	// ベクトルを求める
-	m_aVec[0] = pVtx[2].pos - pVtx[3].pos;
-	m_aVec[1] = pVtx[1].pos - pVtx[3].pos;
-	m_aVec[2] = pVtx[1].pos - pVtx[0].pos;
-	m_aVec[3] = pVtx[2].pos - pVtx[0].pos;
+	//m_aVec[0] = pVtx[2].pos - pVtx[3].pos;
+	//m_aVec[1] = pVtx[1].pos - pVtx[3].pos;
+	//m_aVec[2] = pVtx[1].pos - pVtx[0].pos;
+	//m_aVec[3] = pVtx[2].pos - pVtx[0].pos;
 
 	// 外積を使って法線を求める
-	D3DXVec3Cross(&m_aNor[0], &m_aVec[0], &m_aVec[1]);
-	D3DXVec3Cross(&m_aNor[1], &m_aVec[2], &m_aVec[3]);
+	//D3DXVec3Cross(&m_aNor[0], &m_aVec[0], &m_aVec[1]);
+	//D3DXVec3Cross(&m_aNor[1], &m_aVec[2], &m_aVec[3]);
 
-	// 正規化する
-	D3DXVec3Normalize(&m_aNor[0], &m_aNor[0]);
-	D3DXVec3Normalize(&m_aNor[1], &m_aNor[1]);
+	//// 正規化する
+	//D3DXVec3Normalize(&m_aNor[0], &m_aNor[0]);
+	//D3DXVec3Normalize(&m_aNor[1], &m_aNor[1]);
 
 	// 法線の設定
 	/*pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
@@ -158,15 +157,15 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	pVtx[2].nor = m_aNor[0];
 	pVtx[3].nor = (m_aNor[0] + m_aNor[1]) / 2;*/
 
-	pVtx[0].nor = m_aNor[1];
-	pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	pVtx[3].nor = m_aNor[0];
+	//pVtx[0].nor = m_aNor[1];
+	//pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	//pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	//pVtx[3].nor = m_aNor[0];
 	
-	/*pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	pVtx[1].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	pVtx[2].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	pVtx[3].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);*/
+	pVtx[0].nor = m_Nor;
+	pVtx[1].nor = m_Nor;
+	pVtx[2].nor = m_Nor;
+	pVtx[3].nor = m_Nor;
 
 	// 頂点カラーの設定
 	pVtx[0].col = m_col;
@@ -183,7 +182,6 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
 	{
 		m_aPos[nCntPos] = pVtx[nCntPos].pos;
-		m_aNor[nCntPos] = pVtx[nCntPos].nor;
 	}
 
 	// 頂点バッファをアンロックする
@@ -218,94 +216,94 @@ void CScene3D::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 #ifdef _DEBUG
-	// 頂点情報の設定
-	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+	//// 頂点情報の設定
+	//VERTEX_3D *pVtx;	// 頂点情報へのポインタ
 
-	// 頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	//// 頂点バッファをロックし、頂点データへのポインタを取得
+	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	if (pInputKeyboard->GetPress(DIK_I) == true)
-	{
-		pVtx[1].pos.y += 1.0f;
-		pVtx[2].pos.y += 1.0f;
-	}
-	if (pInputKeyboard->GetPress(DIK_K) == true)
-	{
-		pVtx[1].pos.y -= 1.0f;
-		pVtx[2].pos.y -= 1.0f;
-	}
+	//if (pInputKeyboard->GetPress(DIK_I) == true)
+	//{
+	//	pVtx[1].pos.y += 1.0f;
+	//	pVtx[2].pos.y += 1.0f;
+	//}
+	//if (pInputKeyboard->GetPress(DIK_K) == true)
+	//{
+	//	pVtx[1].pos.y -= 1.0f;
+	//	pVtx[2].pos.y -= 1.0f;
+	//}
 
-	// 頂点座標の設定
-	//pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
-	//pVtx[1].pos = D3DXVECTOR3(m_fSize, pVtx[1].pos.y, m_fSize);
-	//pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, -m_fSize);
-	//pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, -m_fSize);
+	//// 頂点座標の設定
+	////pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
+	////pVtx[1].pos = D3DXVECTOR3(m_fSize, pVtx[1].pos.y, m_fSize);
+	////pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, -m_fSize);
+	////pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, -m_fSize);
 
-	pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, -m_fSize);
-	pVtx[1].pos = D3DXVECTOR3(-m_fSize, pVtx[1].pos.y, m_fSize);
-	pVtx[2].pos = D3DXVECTOR3(m_fSize, pVtx[2].pos.y, -m_fSize);
-	pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, m_fSize);
-	//pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
-	//pVtx[1].pos = D3DXVECTOR3(pVtx[1].pos.x, pVtx[1].pos.y, m_fSize);
-	//pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, pVtx[2].pos.z);
-	//pVtx[3].pos = D3DXVECTOR3(pVtx[3].pos.x, pVtx[3].pos.y, pVtx[3].pos.z);
+	//pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, -m_fSize);
+	//pVtx[1].pos = D3DXVECTOR3(-m_fSize, pVtx[1].pos.y, m_fSize);
+	//pVtx[2].pos = D3DXVECTOR3(m_fSize, pVtx[2].pos.y, -m_fSize);
+	//pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, m_fSize);
+	////pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
+	////pVtx[1].pos = D3DXVECTOR3(pVtx[1].pos.x, pVtx[1].pos.y, m_fSize);
+	////pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, pVtx[2].pos.z);
+	////pVtx[3].pos = D3DXVECTOR3(pVtx[3].pos.x, pVtx[3].pos.y, pVtx[3].pos.z);
 
-	// 法線の設定
-	// ベクトルを求める
-	m_aVec[0] = pVtx[2].pos - pVtx[3].pos;
-	m_aVec[1] = pVtx[1].pos - pVtx[3].pos;
-	m_aVec[2] = pVtx[1].pos - pVtx[0].pos;
-	m_aVec[3] = pVtx[2].pos - pVtx[0].pos;
+	//// 法線の設定
+	//// ベクトルを求める
+	//m_aVec[0] = pVtx[2].pos - pVtx[3].pos;
+	//m_aVec[1] = pVtx[1].pos - pVtx[3].pos;
+	//m_aVec[2] = pVtx[1].pos - pVtx[0].pos;
+	//m_aVec[3] = pVtx[2].pos - pVtx[0].pos;
 
-	// 外積を使って法線を求める
-	D3DXVec3Cross(&m_aNor[0], &m_aVec[0], &m_aVec[1]);
-	D3DXVec3Cross(&m_aNor[1], &m_aVec[2], &m_aVec[3]);
+	//// 外積を使って法線を求める
+	//D3DXVec3Cross(&m_aNor[0], &m_aVec[0], &m_aVec[1]);
+	//D3DXVec3Cross(&m_aNor[1], &m_aVec[2], &m_aVec[3]);
 
-	// 正規化する
-	D3DXVec3Normalize(&m_aNor[0], &m_aNor[0]);
-	D3DXVec3Normalize(&m_aNor[1], &m_aNor[1]);
+	//// 正規化する
+	//D3DXVec3Normalize(&m_aNor[0], &m_aNor[0]);
+	//D3DXVec3Normalize(&m_aNor[1], &m_aNor[1]);
 
-	// 法線の設定
-	//pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	//pVtx[1].nor = m_aNor[1];
-	//pVtx[2].nor = m_aNor[0];
-	//pVtx[3].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	//// 法線の設定
+	////pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	////pVtx[1].nor = m_aNor[1];
+	////pVtx[2].nor = m_aNor[0];
+	////pVtx[3].nor = (m_aNor[0] + m_aNor[1]) / 2;
 
-	pVtx[0].nor = m_aNor[1];
-	pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	pVtx[3].nor = m_aNor[0];
+	//pVtx[0].nor = m_aNor[1];
+	//pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	//pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
+	//pVtx[3].nor = m_aNor[0];
 
-	for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
-	{
-		m_aPos[nCntPos] = pVtx[nCntPos].pos;
-		m_aNor[nCntPos] = pVtx[nCntPos].nor;
-	}
+	//for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
+	//{
+	//	m_aPos[nCntPos] = pVtx[nCntPos].pos;
+	//	m_aNor[nCntPos] = pVtx[nCntPos].nor;
+	//}
 
-	// 頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
+	//// 頂点バッファをアンロックする
+	//m_pVtxBuff->Unlock();
 
-	if (pInputKeyboard->GetPress(DIK_4) == true)
-	{
-		m_rot.y += 0.1f;
-	}
+	//if (pInputKeyboard->GetPress(DIK_4) == true)
+	//{
+	//	m_rot.y += 0.1f;
+	//}
 
-	//CDebugProc::Print("cfccfccfc", "3DPos    : x", m_pos.x, "f", "   y", m_pos.y, "f", "   z", m_pos.z, "f");
-	for (int nCntNor = 0; nCntNor < 2; nCntNor++)
-	{
-		CDebugProc::Print("cncfcfcfc", "m_aNor[", nCntNor, "] : (", m_aNor[nCntNor].x,", ", m_aNor[nCntNor].y, ", ", m_aNor[nCntNor].z, ")");
-	}
+	////CDebugProc::Print("cfccfccfc", "3DPos    : x", m_pos.x, "f", "   y", m_pos.y, "f", "   z", m_pos.z, "f");
+	//for (int nCntNor = 0; nCntNor < 2; nCntNor++)
+	//{
+	//	CDebugProc::Print("cncfcfcfc", "m_aNor[", nCntNor, "] : (", m_aNor[nCntNor].x,", ", m_aNor[nCntNor].y, ", ", m_aNor[nCntNor].z, ")");
+	//}
 
-	for (int nCntNor = 0; nCntNor < NUM_VTX; nCntNor++)
-	{
-		CDebugProc::Print("f", pVtx[nCntNor].pos.y);
-	}
+	//for (int nCntNor = 0; nCntNor < NUM_VTX; nCntNor++)
+	//{
+	//	CDebugProc::Print("f", pVtx[nCntNor].pos.y);
+	//}
 
 
-	if (pInputKeyboard->GetTrigger(DIK_2) == true)
-	{
-		Uninit();
-	}
+	//if (pInputKeyboard->GetTrigger(DIK_2) == true)
+	//{
+	//	Uninit();
+	//}
 #endif
 }
 
@@ -360,7 +358,28 @@ void CScene3D::Draw(void)
 D3DXVECTOR3 CScene3D::GetNor(int nIdx)
 {
 	D3DXVECTOR3 vecA[2];
-	return m_aNor[nIdx];
+	return m_Nor;
+}
+
+//=============================================================================
+// 法線を設定
+//=============================================================================
+void CScene3D::SetNor(D3DXVECTOR3 nor)
+{
+	m_Nor = nor;
+	// 頂点情報の設定
+	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+
+	// 頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx[0].nor = m_Nor;
+	pVtx[1].nor = m_Nor;
+	pVtx[2].nor = m_Nor;
+	pVtx[3].nor = m_Nor;
+
+	// 頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }
 
 //=============================================================================

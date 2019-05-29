@@ -34,6 +34,7 @@ public:
 	void Draw(void);							// 3Dオブジェクト描画処理
 
 	D3DXVECTOR3 GetNor(int nIdx);				// 法線を取得
+	void SetNor(D3DXVECTOR3 nor);				// 法線を設定
 
 	float GetHeight(D3DXVECTOR3 pos);			// 高さの取得
 
@@ -47,7 +48,7 @@ private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
 	D3DXMATRIX				m_mtxWorld;					// ワールドマトリックス
-	D3DXVECTOR3				m_aNor[NUM_VTX];					// 法線
+	D3DXVECTOR3				m_Nor;					// 法線
 	D3DXVECTOR3				m_aVec[NUM_VTX];					// ベクトル
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
 	D3DXVECTOR3				m_aPos[NUM_VTX];					// 頂点の位置

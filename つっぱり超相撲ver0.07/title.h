@@ -13,6 +13,12 @@
 class CTitle
 {
 public:
+	typedef enum
+	{
+		STATE_NEWS = 0,
+		STATE_TITLE,
+	}STATE;
+
 	CTitle();
 	~CTitle();
 
@@ -21,8 +27,10 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CTitle *Create(void);
+	STATE GetState(void) { return m_state; }
+	void SetState(STATE state) { m_state = state; }
 
 private:
-	
+	STATE m_state;
 };
 #endif
