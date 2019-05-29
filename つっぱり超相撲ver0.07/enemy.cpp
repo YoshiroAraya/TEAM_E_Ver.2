@@ -25,6 +25,7 @@
 #define ENEMY_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
 #define DOHYO_HAZI_MAX			(135.0f)
 #define DOHYO_HAZI_MIN			(110.0f)
+#define DASH_MOVE				(0.9f)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -127,6 +128,9 @@ void CEnemy::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
+
 	// 位置取得
 	D3DXVECTOR3 pos;
 	pos = CSceneX::GetPosition();
@@ -160,20 +164,29 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
+	//ダッシュ設定
+	if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+		pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+	{
+		fMoveEnemy = DASH_MOVE;
+	}
+
 	if (CGame::GetState() == CGame::STATE_GAME)
 	{
 		//通常状態で硬直していない
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
 			//任意のキー←
-			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true)
+			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
+				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
 				// 左に進む
 				m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
 			}
 
 			//任意のキー→
-			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true)
+			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
+				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 			{
 				// 右に進む
 				m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
@@ -273,7 +286,7 @@ void CEnemy::Update(void)
 		m_State = STATE_NEUTRAL;
 		}*/
 	}
-	
+
 	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 	{
 		m_State = STATE_NEUTRAL;
