@@ -86,7 +86,7 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 		m_aPos[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// –@ü
 	}
 
-
+	m_Nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	//m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ƒ|ƒŠƒSƒ“‚ÌˆÊ’u‚ðÝ’è
