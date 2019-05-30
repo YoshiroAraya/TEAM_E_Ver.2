@@ -120,7 +120,7 @@ void CNewsCaster::Update(void)
 		m_nCntTimer++;
 		int nTime = m_nCntTimer / 60;
 
-		if (nTime > 2)
+		if (nTime >= 1)
 		{
 			pTitle->SetState(CTitle::STATE_TITLE);
 		}
