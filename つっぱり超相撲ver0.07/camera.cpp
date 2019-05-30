@@ -90,13 +90,13 @@ void CCamera::Update(void)
 
 			m_nStartCounter++;
 
-			if (nTime < 3)
+			if (nTime < 3 && pPlayer != NULL)
 			{
 				m_State = STATE_HIGASHI;
 				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 35.0f, pPlayer->GetPosition().y + 17.0f, pPlayer->GetPosition().z - 40.0f);	// Ž‹“_
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 18.0f, pPlayer->GetPosition().z);		// ’Ž‹“_
 			}
-			else if (nTime >= 3 && nTime < 6)
+			else if (nTime >= 3 && nTime < 6 && pEnemy != NULL)
 			{
 				m_State = STATE_NISHI;
 				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 35.0f, pEnemy->GetPosition().y + 17.0f, pEnemy->GetPosition().z - 40.0f);	// Ž‹“_
