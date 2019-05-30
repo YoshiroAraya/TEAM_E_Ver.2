@@ -88,27 +88,41 @@ void CGame::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	CCustomer::LoadModel();
-	CCustomer::LoadMat();
+
 
 	CGauge::Load();
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
 
-	srand((unsigned int)time(0));
+	int nCntZ;
+	int nCnt;
+	CCustomer::LoadModel();
+	CCustomer::LoadMat();
 
-	int nRand0 = 0;
-	int nRand1 = 0;
-	int nRand2 = 0;
+	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	{//‰œ‹q
+		for (nCnt = 0; nCnt < 3; nCnt++)
+		{//‹q
 
-	for (int nCnt = 0; nCnt < 10; nCnt++)
-	{//‹q
-		nRand0 = rand() % 3 + 1;
-		nRand1 = rand() % 3 + 1;
-		nRand2 = rand() % 3 + 1;
+			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1);
+		}
+	}
 
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 150.0f), nRand0);
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 180.0f), nRand1);
-		CCustomer::Create(D3DXVECTOR3(-100.0f + (nCnt * 20.0f), 30.0f, 210.0f), nRand2);
+	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	{//‰E‹q
+		for (nCnt = 0; nCnt < 3; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 1);
+		}
+	}
+
+	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	{//¶‹q
+		for (nCnt = 0; nCnt < 3; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 1);
+		}
 	}
 
 	if (m_pScene3D == NULL)

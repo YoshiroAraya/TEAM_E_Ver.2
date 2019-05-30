@@ -24,9 +24,9 @@ LPD3DXBUFFER CCustomer::m_pBuffMat[MAX_CUSTOMERTYPE] = {};		// ƒ}ƒeƒŠƒAƒ‹î•ñ‚Ö‚
 DWORD CCustomer::m_nNumMat[MAX_CUSTOMERTYPE] = {};				// ƒ}ƒeƒŠƒAƒ‹î•ñ‚Ì”
 LPDIRECT3DTEXTURE9 *CCustomer::m_pTexture = NULL;				// ƒeƒNƒXƒ`ƒƒ
 
-//=============================================================================
-// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
-//=============================================================================
+																//=============================================================================
+																// ƒvƒŒƒCƒ„[ƒNƒ‰ƒX‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^
+																//=============================================================================
 CCustomer::CCustomer() : CSceneX(DOHYO_PRIORITY)
 {
 	// ’l‚ğƒNƒŠƒA
@@ -44,10 +44,10 @@ CCustomer::~CCustomer()
 //=============================================================================
 // ƒIƒuƒWƒFƒNƒg‚Ì¶¬ˆ—
 //=============================================================================
-CCustomer *CCustomer::Create(D3DXVECTOR3 pos,int nType)
+CCustomer *CCustomer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType)
 {
 	CCustomer *pCustomer = NULL;
-	
+
 	if (pCustomer == NULL)
 	{
 		// ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX‚Ì¶¬
@@ -56,8 +56,8 @@ CCustomer *CCustomer::Create(D3DXVECTOR3 pos,int nType)
 		if (pCustomer != NULL)
 		{
 			pCustomer->BindModel(m_pBuffMat[nType], m_nNumMat[nType], m_pMesh[nType]);
-			pCustomer->BindMat(m_pTexture);
-			pCustomer->Init(pos);
+			//pCustomer->BindMat(m_pTexture);
+			pCustomer->Init(pos, rot);
 		}
 	}
 
@@ -67,10 +67,13 @@ CCustomer *CCustomer::Create(D3DXVECTOR3 pos,int nType)
 //=============================================================================
 // ƒvƒŒƒCƒ„[‰Šú‰»ˆ—
 //=============================================================================
-HRESULT CCustomer::Init(D3DXVECTOR3 pos)
+HRESULT CCustomer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	// 2DƒIƒuƒWƒFƒNƒg‰Šú‰»ˆ—
+	// ƒIƒuƒWƒFƒNƒg‰Šú‰»ˆ—
 	CSceneX::Init(pos);
+
+	//ƒIƒuƒWƒFƒNƒg‚ÌŒü‚«
+	CSceneX::SetRot(rot);
 
 	// ƒIƒuƒWƒFƒNƒg‚Ìí—Ş‚Ìİ’è
 	SetObjType(CScene::OBJTYPE_DOHYO);
@@ -121,7 +124,7 @@ HRESULT CCustomer::LoadModel(void)
 	}
 
 	// Xƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
-	D3DXLoadMeshFromX(DOHYO_MODEL_NAME,
+	D3DXLoadMeshFromX(PLAYER_MODEL_NAME,
 		D3DXMESH_SYSTEMMEM,
 		pDevice,
 		NULL,
@@ -150,16 +153,6 @@ HRESULT CCustomer::LoadModel(void)
 		&m_nNumMat[2],
 		&m_pMesh[2]);
 
-	// Xƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
-	D3DXLoadMeshFromX(ENEMY_MODEL_NAME,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat[3],
-		NULL,
-		&m_nNumMat[3],
-		&m_pMesh[3]);
-
 	return S_OK;
 }
 
@@ -173,8 +166,11 @@ void CCustomer::UnloadModel(void)
 	{
 		for (int nCntMesh = 0; nCntMesh < MAX_CUSTOMERTYPE; nCntMesh++)
 		{
-			m_pMesh[nCntMesh]->Release();
-			m_pMesh[nCntMesh] = NULL;
+			if (m_pMesh[nCntMesh] != NULL)
+			{
+				m_pMesh[nCntMesh]->Release();
+				m_pMesh[nCntMesh] = NULL;
+			}
 		}
 	}
 
@@ -183,8 +179,11 @@ void CCustomer::UnloadModel(void)
 	{
 		for (int nCntMat = 0; nCntMat < MAX_CUSTOMERTYPE; nCntMat++)
 		{
-			m_pBuffMat[nCntMat]->Release();
-			m_pBuffMat[nCntMat] = NULL;
+			if (m_pBuffMat[nCntMat] != NULL)
+			{
+				m_pBuffMat[nCntMat]->Release();
+				m_pBuffMat[nCntMat] = NULL;
+			}
 		}
 	}
 }
@@ -208,12 +207,12 @@ HRESULT CCustomer::LoadMat(void)
 
 	D3DXMATERIAL *pMat;					// ƒ}ƒeƒŠƒAƒ‹ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
 
-	for (int nCntNum = 0; nCntNum < MAX_CUSTOMERTYPE; nCntNum++)
-	{
+										//for (int nCntNum = 0; nCntNum < MAX_CUSTOMERTYPE; nCntNum++)
+										//{
 
-		// ƒ}ƒeƒŠƒAƒ‹ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-		pMat = (D3DXMATERIAL*)m_pBuffMat[nCntNum]->GetBufferPointer();
-	}
+										//	// ƒ}ƒeƒŠƒAƒ‹ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
+										//	pMat = (D3DXMATERIAL*)m_pBuffMat[nCntNum]->GetBufferPointer();
+										//}
 
 	return S_OK;
 }

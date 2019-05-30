@@ -170,7 +170,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	}
 
 	// ÉÇÅ[Éhêÿë÷
-	SetMode(m_mode);
+	//SetMode(m_mode);
 
 	return S_OK;
 }
