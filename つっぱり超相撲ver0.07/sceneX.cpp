@@ -158,8 +158,12 @@ void CSceneX::Draw(void)
 
 		if (pMat[nCntMat].pTextureFilename != NULL)
 		{// マテリアルにテクスチャがあった場合
-		 // テクスチャの設定
-			pDevice->SetTexture(0, m_pTexture[nCntMat]);
+
+			if (m_pTexture != NULL)
+			{
+				// テクスチャの設定
+				pDevice->SetTexture(0, m_pTexture[nCntMat]);
+			}
 		}
 		else
 		{// マテリアルにテクスチャが無かった場合

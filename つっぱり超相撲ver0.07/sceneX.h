@@ -13,7 +13,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODEL_NAME			"data\\MODEL\\airplane000.x"	// 車のモデル名
+#define MODEL_NAME			"data\\MODEL\\customer.x"	// 車のモデル名
 #define PLAYER_MODEL_NAME	"data\\MODEL\\rikisi.x"		// 車のモデル名
 #define ENEMY_MODEL_NAME	"data\\MODEL\\rikisi2.x"		// 車のモデル名
 #define DOHYO_MODEL_NAME	"data\\MODEL\\dohyo.x"	// 土俵のモデル名
