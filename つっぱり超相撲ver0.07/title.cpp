@@ -16,6 +16,7 @@
 #include "field.h"
 #include "wall.h"
 #include "logo.h"
+#include "time.h"
 
 //============================================================================
 //	マクロ定義
@@ -63,6 +64,8 @@ void CTitle::Init(void)
 	CField::Load();
 	CWall::Load();
 	CLogo::Load();
+	CTime::Load();
+	CTime::Create(D3DXVECTOR3(100.0f, 55.0f, 0.0f));
 }
 
 //=============================================================================
@@ -79,6 +82,7 @@ void CTitle::Uninit(void)
 	CWall::Unload();
 	CNewsBG::Unload();
 	CLogo::Unload();
+	CTime::Unload();
 
 	//全ての終了処理
 	CScene::ReleseAll();
@@ -93,14 +97,8 @@ void CTitle::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
-	}
 
 	if (m_state == CTitle::STATE_TITLE)
 	{
@@ -119,6 +117,10 @@ void CTitle::Update(void)
 		}
 	}
 
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+	}
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "タイトル");
