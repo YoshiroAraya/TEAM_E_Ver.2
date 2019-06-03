@@ -12,6 +12,7 @@
 #include "game.h"
 #include "player.h"
 #include "enemy.h"
+#include "title.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -146,11 +147,25 @@ void CCamera::Update(void)
 			}
 		}
 	}
-
-	if (mode == CManager::MODE_TITLE)
+	else if (mode == CManager::MODE_TITLE)
 	{
-		m_posV = D3DXVECTOR3(0.0f, 25.0f, -200.0f);	// 視点
-		m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+		// タイトル取得
+		CTitle *pTitle;
+		pTitle = CManager::GetTitle();
+
+		if (pTitle != NULL)
+		{
+			if (pTitle->GetState() == CTitle::STATE_TITLE)
+			{
+				m_posV = D3DXVECTOR3(-340.0f, 400.0f, -400.0f);	// 視点
+				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+			}
+			else
+			{
+				m_posV = D3DXVECTOR3(0.0f, 25.0f, -200.0f);	// 視点
+				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+			}
+		}
 	}
 
 #if 0
@@ -327,7 +342,7 @@ void CCamera::SetCamera(void)
 		D3DXToRadian(45.0f),						// 視野角
 		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,	// 画面比率
 		10.0f,										// カメラからの距離（手前）
-		1000.0f);									// カメラからの距離（奥）
+		10000.0f);									// カメラからの距離（奥）
 
 													// プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);

@@ -32,5 +32,6 @@ public:
 
 private:
 	STATE m_state;
+	bool m_bSetDohyo;
 };
 #endif
