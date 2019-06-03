@@ -586,7 +586,7 @@ void CManager::SetMode(MODE mode)
 
 			if (m_pGame != NULL)
 			{
-				m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_BGM_GAME);
+				//m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_BGM_GAME);
 				// ‰Šú‰»ˆ—
 				m_pGame->Init();
 			}
