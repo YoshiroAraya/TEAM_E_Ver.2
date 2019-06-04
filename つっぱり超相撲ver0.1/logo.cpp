@@ -11,17 +11,11 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "input.h"
+#include "load.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPDIRECT3DTEXTURE9 *CLogo::m_pTexture = NULL;
-
-const char *CLogo::m_apFilename[] =
-{
-	"data\\TEXTURE\\TITLE\\title.png",
-	"data\\TEXTURE\\mikiya005.jpg",
-};
 
 //=============================================================================
 // シーンクラスのコンストラクタ
@@ -45,7 +39,7 @@ CLogo::CLogo(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CLogo *CLogo::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, TYPE type)
+CLogo *CLogo::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType)
 {
 	CLogo *pLogo = NULL;
 
@@ -59,7 +53,7 @@ CLogo *CLogo::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, TYPE type)
 			pLogo->m_fWidth = fWidth;
 			pLogo->m_fHeight = fHeight;
 			pLogo->Init(pos);
-			pLogo->m_type = type;
+			pLogo->m_nType = nType;
 		}
 	}
 
@@ -193,60 +187,8 @@ void CLogo::Draw(void)
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	// テクスチャの設定
-	pDevice->SetTexture(0, m_pTexture[m_type]);
+	pDevice->SetTexture(0, CLoad::GetTexture(m_nType));
 
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
-}
-
-//=============================================================================
-// テクスチャ読み込み処理
-//=============================================================================
-HRESULT CLogo::Load(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	if (m_pTexture != NULL)
-	{
-		// メモリを解放する
-		delete[] m_pTexture;
-		m_pTexture = NULL;
-	}
-
-	int nTexData = (sizeof m_apFilename);
-	int nTexSize = (sizeof m_apFilename[0]);
-	int nNumTex = nTexData / nTexSize;
-
-	// テクスチャの数を動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[nNumTex];
-
-	for (int nCntTex = 0; nCntTex < nNumTex; nCntTex++)
-	{
-		D3DXCreateTextureFromFile(pDevice, m_apFilename[nCntTex], &m_pTexture[nCntTex]);
-	}
-
-	return S_OK;
-}
-
-//=============================================================================
-// テクスチャ解放処理
-//=============================================================================
-void CLogo::Unload(void)
-{
-	// テクスチャの破棄
-	if (m_pTexture != NULL)
-	{
-		// メモリを解放する
-		delete[] m_pTexture;
-		m_pTexture = NULL;
-	}
 }

@@ -33,14 +33,11 @@ public:
 
 	//静的メンバ関数
 	static CAnimation *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth,float fUV_U,float fUV_V,int nCntSpeed,int nTotalAnim,int nRoop,int nDrawType);
-	static HRESULT Load(void);						//テクスチャ読み込み
-	static void Unload(void);
 
 private:
 	//	D3DXVECTOR3 m_pos;							//位置
 	D3DXCOLOR m_col;								//色
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;				// 頂点バッファへのポインタ
-	static LPDIRECT3DTEXTURE9 m_pTexture;
 
 	int m_nCounterAnim;								//アニメーションカウンター
 	int m_nPatternAnim;								//アニメーションパターンNO

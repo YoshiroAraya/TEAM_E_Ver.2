@@ -10,7 +10,7 @@
 #include "scene2D.h"
 #include "player.h"
 #include "mask.h"
-#include "loadModel.h"
+#include "load.h"
 
 //*****************************************************************************
 // ƒ}ƒNƒ’è‹`
@@ -53,7 +53,7 @@ CShadow * CShadow::Create(D3DXVECTOR3 pos)
 		if (pShadow != NULL)
 		{
 			pShadow->m_pos = pos;
-			pShadow->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_SHADOW), CLoadModel::GetNumMat(CLoadModel::MODEL_SHADOW), CLoadModel::GetMesh(CLoadModel::MODEL_SHADOW));
+			pShadow->BindModel(CLoad::GetBuffMat(CLoad::MODEL_SHADOW), CLoad::GetNumMat(CLoad::MODEL_SHADOW), CLoad::GetMesh(CLoad::MODEL_SHADOW));
 			pShadow->Init();
 		}
 	}

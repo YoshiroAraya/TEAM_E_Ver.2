@@ -18,9 +18,6 @@ class CScene2D;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define BUCHIKAMASHI		"data/TEXTURE/JANKEN/Buchikamashi.png"
-#define HENKA				"data/TEXTURE/JANKEN/Henka.png"
-#define STUPPARI			"data/TEXTURE/JANKEN/Stuppari.png"
 #define MAX_JANKENUI_TEXTURE	(6)
 #define MAX_JANKENUI			(3)										
 
@@ -48,9 +45,6 @@ public:
 	CJankenUI(int nPriority = 7, OBJTYPE objType = OBJTYPE_UI);									// コンストラクタ
 	~CJankenUI();													// デストラクタ
 
-	static HRESULT Load(void);									// テクスチャ読み込み
-	static void Unload(void);									// テクスチャ解放
-
 	static CJankenUI *Create(D3DXVECTOR3 pos);								// ポーズを生成
 
 	HRESULT Init(D3DXVECTOR3 pos);	// ポーズ初期化処理
@@ -61,7 +55,6 @@ public:
 	int GetSelect(void);
 
 private:
-	static LPDIRECT3DTEXTURE9 m_apTexture[MAX_JANKENUI];
 	CScene2D *m_apScene2D[MAX_JANKENUI_TEXTURE];
 	SELECT m_aSelect[MAX_JANKENUI];
 	D3DXCOLOR m_aCol[MAX_JANKENUI];

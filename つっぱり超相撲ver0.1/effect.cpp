@@ -9,12 +9,11 @@
 #include "renderer.h"
 #include "billboard.h"
 #include "debugProc.h"
+#include "load.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURENAME000			 "data\\TEXTURE\\EFFECT\\particle000.jpg"		//テクスチャのファイル名
-#define TEXTURENAME001			 "data\\TEXTURE\\EFFECT\\コンポ _0.png"		//テクスチャのファイル名
 #define TEXTURENAME002			 "data\\TEXTURE\\EFFECT\\effect003.png"		//テクスチャのファイル名
 #define TEXTURENAME003			 "data\\TEXTURE\\EFFECT\\effect004.png"		//テクスチャのファイル名
 #define TEXTURENAME004			 "data\\TEXTURE\\EFFECT\\effect005.png"		//テクスチャのファイル名
@@ -29,7 +28,6 @@
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
-LPDIRECT3DTEXTURE9			CEffect::m_pTexture[EFFECTTEX_MAX] = {};
 
 //--------------------------------------------
 //エフェクトクラス コンストラクタ
@@ -55,7 +53,7 @@ CEffect::~CEffect()
 //エフェクトの生成
 //--------------------------------------------
 CEffect *CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
-	float fWidth, float fHeight, int nNumMax, int nLife, EFFECTTEX TexType)
+	float fWidth, float fHeight, int nNumMax, int nLife, int TexType)
 {
 	CEffect *pEffect = NULL;
 
@@ -73,7 +71,7 @@ CEffect *CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 			pEffect->m_fWidth = fWidth;
 			pEffect->m_nNumMax = nNumMax;
 			pEffect->m_nLife = nLife;
-			pEffect->m_TexType = TexType;
+			pEffect->m_nTexType = TexType;
 
 			pEffect->Init();
 		}
@@ -96,7 +94,7 @@ HRESULT CEffect::Init(void)
 	m_pBillBoard->SetCol(m_Col);*/
 
 	//CBillboard::SetPosition(m_pos);
-	CBillboard::BindTexture(m_pTexture[m_TexType]);
+	CBillboard::BindTexture(CLoad::GetTexture(m_nTexType));
 	CBillboard::Init(m_pos);
 	CBillboard::SetCol(m_Col);
 
@@ -209,42 +207,4 @@ void CEffect::Draw(void)
 
 	//ライトを有効にする
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-}
-//=============================================================================
-// テクスチャロード処理
-//=============================================================================
-HRESULT CEffect::Load(void)
-{
-	//デバイスを取得
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-
-	for (int nCnt = 0; nCnt < EFFECTTEX_MAX; nCnt++)
-	{
-		m_pTexture[nCnt] = NULL;
-	}
-
-	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture[0]);
-	D3DXCreateTextureFromFile(pDevice, TEXTURENAME001, &m_pTexture[1]);
-	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME002, &m_pTexture[2]);
-	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME003, &m_pTexture[3]);
-	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME004, &m_pTexture[4]);
-
-	return S_OK;
-}
-//=============================================================================
-// テクスチャ破棄処理
-//=============================================================================
-void CEffect::UnLoad(void)
-{
-	for (int nCnt = 0; nCnt < EFFECTTEX_MAX; nCnt++)
-	{
-		// テクスチャの破棄
-		if (m_pTexture[nCnt] != NULL)
-		{
-			m_pTexture[nCnt]->Release();
-			m_pTexture[nCnt] = NULL;
-		}
-	}
 }

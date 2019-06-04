@@ -11,11 +11,10 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
-#include "loadModel.h"
+#include "load.h"
 
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -53,7 +52,7 @@ CCustomer *CCustomer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType)
 
 		if (pCustomer != NULL)
 		{
-			pCustomer->BindModel(CLoadModel::GetBuffMat(nType), CLoadModel::GetNumMat(nType), CLoadModel::GetMesh(nType));
+			pCustomer->BindModel(CLoad::GetBuffMat(nType), CLoad::GetNumMat(nType), CLoad::GetMesh(nType));
 			//pCustomer->BindMat(m_pTexture);
 			pCustomer->Init(pos, rot);
 		}

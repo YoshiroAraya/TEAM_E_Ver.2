@@ -11,11 +11,10 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
-#include "loadModel.h"
+#include "load.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -57,7 +56,7 @@ CDohyo *CDohyo::Create(D3DXVECTOR3 pos)
 
 		if (pDohyo != NULL)
 		{
-			pDohyo->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_DOHYO), CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO), CLoadModel::GetMesh(CLoadModel::MODEL_DOHYO));
+			pDohyo->BindModel(CLoad::GetBuffMat(CLoad::MODEL_DOHYO), CLoad::GetNumMat(CLoad::MODEL_DOHYO), CLoad::GetMesh(CLoad::MODEL_DOHYO));
 			pDohyo->BindMat(m_pTexture);
 			pDohyo->Init(pos);
 		}
@@ -129,12 +128,12 @@ HRESULT CDohyo::LoadMat(void)
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
 										// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)CLoadModel::GetBuffMat(CLoadModel::MODEL_DOHYO)->GetBufferPointer();
+	pMat = (D3DXMATERIAL*)CLoad::GetBuffMat(CLoad::MODEL_DOHYO)->GetBufferPointer();
 
 	// マテリアルの数分テクスチャを入れるものを動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO)];
+	m_pTexture = new LPDIRECT3DTEXTURE9[CLoad::GetNumMat(CLoad::MODEL_DOHYO)];
 
-	for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO); nCntMat++)
+	for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_DOHYO); nCntMat++)
 	{
 		// 入れる前に空にする
 		m_pTexture[nCntMat] = NULL;
@@ -156,7 +155,7 @@ void CDohyo::UnloadMat(void)
 {
 	if (m_pTexture != NULL)
 	{// テクスチャのポインタのNULLチェック(家)
-		for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO); nCntMat++)
+		for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_DOHYO); nCntMat++)
 		{
 			if (m_pTexture[nCntMat] != NULL)
 			{// ポインタの中のNULLチェック(家具)

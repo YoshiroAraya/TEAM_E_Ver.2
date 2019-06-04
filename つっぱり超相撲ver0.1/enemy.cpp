@@ -11,14 +11,13 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "game.h"
 #include "player.h"
 #include "characterMove.h"
-#include "loadModel.h"
+#include "load.h"
 
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
@@ -73,7 +72,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 
 		if (pEnemy != NULL)
 		{
-			pEnemy->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_ENEMY), CLoadModel::GetNumMat(CLoadModel::MODEL_ENEMY), CLoadModel::GetMesh(CLoadModel::MODEL_ENEMY));
+			pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			pEnemy->Init(pos);
 		}
 	}

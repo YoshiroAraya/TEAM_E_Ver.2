@@ -17,7 +17,6 @@
 #include "debugProc.h"
 #include "player.h"
 #include "enemy.h"
-#include "bullet.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "mask.h"
@@ -28,6 +27,7 @@
 #include "characterMove.h"
 #include "sound.h"
 #include "title.h"
+#include "load.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -169,6 +169,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		}
 	}
 
+	CLoad::LoadModel();
+	CLoad::LoadTex();
+
 	// モード切替
 	//SetMode(m_mode);
 
@@ -266,6 +269,7 @@ void CManager::Uninit(void)
 			m_pSound[nCnt] = NULL;
 		}
 	}
+
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)
 	{// デバック表示クラスの破棄
@@ -316,6 +320,9 @@ void CManager::Uninit(void)
 		//	}
 		//	break;
 	}
+
+	CLoad::UnloadModel();
+	CLoad::UnloadTex();
 
 	// 全てのオブジェクトを解放
 	CScene::ReleseAll();

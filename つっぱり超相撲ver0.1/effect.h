@@ -18,14 +18,6 @@ class CEffect : public CBillboard //派生クラス
 public:
 	typedef enum
 	{
-		EFFECTTEX_NORMAL000 = 0,	//通常
-		EFFECTTEX_NORMAL001,	//通常
-
-		EFFECTTEX_MAX				//テクスチャの総数
-	}EFFECTTEX;
-
-	typedef enum
-	{
 		EFFECTTYPE_00 = 0,
 		EFFECTTYPE_01,
 		EFFECTTYPE_MAX
@@ -38,13 +30,10 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CEffect *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move,D3DXCOLOR col,
-							float fWidth, float fHeight,int nNumMax,int nLife, EFFECTTEX TexType);
-	static HRESULT Load(void);
-	static void UnLoad(void);
-
+							float fWidth, float fHeight,int nNumMax,int nLife, int TexType);
+	
 private:
 	//メンバ変数
-	static LPDIRECT3DTEXTURE9	m_pTexture[EFFECTTEX_MAX];	// テクスチャへのポインタ
 	D3DXVECTOR3					m_pos;						// 位置
 	D3DXVECTOR3					m_move;						// 移動量
 	D3DXVECTOR3					m_posold;					// 前回の位置
@@ -57,7 +46,7 @@ private:
 	int							m_nCntTimer;				// タイマー
 	CBillboard					*m_pBillBoard;
 
-	EFFECTTEX					m_TexType;
+	int					m_nTexType;
 	EFFECTTYPE					m_EffectType;
 };
 #endif

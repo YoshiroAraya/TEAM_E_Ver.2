@@ -1,11 +1,11 @@
 //=============================================================================
 //
-// モデルの読み込み処理 [loadModel.h]
+// モデルの読み込み処理 [load.h]
 // Author : 長山拓実
 //
 //=============================================================================
-#ifndef _LOADMODEL_H_
-#define _LOADMODEL_H_
+#ifndef _LOAD_H_
+#define _LOAD_H_
 
 #include "main.h"
 #include "scene.h"
@@ -20,11 +20,10 @@
 //=====================
 // オブジェクトクラス
 //=====================
-class CLoadModel
+class CLoad
 {
 public:
-	// サウンドファイル
-	typedef enum //ラベルと数と並びを揃える
+	typedef enum // cppのやつと数と並びを揃える
 	{
 		MODEL_DOHYO = 0,	// 土俵
 		MODEL_PLAYER,		// 力士1
@@ -34,14 +33,36 @@ public:
 		MODEL_NEWSCASTER,	// ニュースキャスター
 	} MODEL;
 
-	CLoadModel();		// コンストラクタ
-	~CLoadModel();	// デストラクタ
+	typedef enum // cppのやつと数と並びを揃える
+	{
+		TEXTURE_DOHYOCIRCLE = 0,	// 土俵の円
+		TEXTURE_NEWS,				// ニュースの背景
+		TEXTURE_FIELD,				// 地面
+		TEXTURE_WALL,				// 壁
+		TEXTURE_TITLE,				// ロゴ
+		TEXTURE_TIME,				// 時間
+		TEXTURE_GAUGE,				// ゲージ
+		TEXTURE_BUCHIKAMASHI,		// ぶちかまし
+		TEXTURE_HENKA,				// 変化
+		TEXTURE_TSUPPARI,			// 突っ張り
+		TEXTURE_TOUZAI,				// 東西
+		TEXTURE_EFFECT_NORMAL000,	// エフェクト000
+		TEXTURE_EFFECT_NORMAL001,	// エフェクト001
+		TEXTURE_ANIMATION,			// アニメーション
+	} TEXTURE;
 
-	static HRESULT Load(void);
-	static void Unload(void);
+	CLoad();		// コンストラクタ
+	~CLoad();	// デストラクタ
+
+	static HRESULT LoadModel(void);
+	static void UnloadModel(void);
+	static HRESULT LoadTex(void);
+	static void UnloadTex(void);
+
 	static LPD3DXMESH GetMesh(int nIdx);
 	static LPD3DXBUFFER GetBuffMat(int nIdx);
 	static DWORD GetNumMat(int nIdx);
+	static LPDIRECT3DTEXTURE9 GetTexture(int nIdx);
 
 private:
 	static LPDIRECT3DTEXTURE9	*m_pTexture;					// テクスチャへのポインタ
@@ -49,7 +70,8 @@ private:
 	static LPD3DXBUFFER		*m_pBuffMat;		// マテリアル情報へのポインタ
 	static DWORD			*m_nNumMat;		// マテリアル情報の数
 	//static LPDIRECT3DTEXTURE9	m_pTexture;					// テクスチャへのポインタ
-	static const char *m_apFilename[];
+	static const char *m_apModelFilename[];
+	static const char *m_apTexFilename[];
 };
 
 #endif

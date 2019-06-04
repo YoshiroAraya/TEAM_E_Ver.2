@@ -10,17 +10,16 @@
 #include "manager.h"
 #include "input.h"
 #include "debugproc.h"
-#include "bullet.h"
 #include "game.h"
 #include "player.h"
 #include "enemy.h"
+#include "load.h"
 #include <string>
 #include <time.h>
 
 //============================================================================
 //	静的メンバ変数宣言
 //============================================================================
-LPDIRECT3DTEXTURE9 CDohyoCircle::m_pTextures = NULL;
 
 //============================================================================
 //	マクロ定義
@@ -52,36 +51,6 @@ CDohyoCircle::~CDohyoCircle()
 }
 
 //=============================================================================
-// テクスチャの読み込み処理
-//=============================================================================
-HRESULT CDohyoCircle::Load(void)
-{
-	LPDIRECT3DDEVICE9 pDevice;
-
-	//デバイスの取得
-	CManager Manager;
-	pDevice = Manager.GetRenderer()->GetDevice();
-
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/dohyo.png", &m_pTextures);
-
-	return S_OK;
-}
-
-//=============================================================================
-// テクスチャの開放処理
-//=============================================================================
-void CDohyoCircle::Unload(void)
-{
-	//テクスチャの破棄
-	if (m_pTextures != NULL)
-	{
-		m_pTextures->Release();
-		m_pTextures = NULL;
-	}
-}
-
-//=============================================================================
 // ポリゴンの初期化処理
 //=============================================================================
 HRESULT CDohyoCircle::Init(void)
@@ -93,7 +62,7 @@ HRESULT CDohyoCircle::Init(void)
 	pDevice = Manager.GetRenderer()->GetDevice();
 
 	//テクスチャの貼り付け
-	BindTexture(m_pTextures);
+	BindTexture(CLoad::GetTexture(CLoad::TEXTURE_DOHYOCIRCLE));
 
 	//サイズの設定
 	CScene3D::SetSize(MAX_SIZE3D, MAX_SIZE3D);

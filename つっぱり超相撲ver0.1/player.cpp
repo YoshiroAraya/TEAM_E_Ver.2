@@ -10,14 +10,13 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "game.h"
 #include "enemy.h"
 #include "characterMove.h"
-#include "loadModel.h"
+#include "load.h"
 
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
@@ -75,7 +74,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 
 		if (pPlayer != NULL)
 		{
-			pPlayer->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_PLAYER), CLoadModel::GetNumMat(CLoadModel::MODEL_PLAYER), CLoadModel::GetMesh(CLoadModel::MODEL_PLAYER));
+			pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			pPlayer->Init(pos);
 		}
 	}

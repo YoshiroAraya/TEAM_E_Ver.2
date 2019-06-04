@@ -10,17 +10,16 @@
 #include "manager.h"
 #include "input.h"
 #include "debugproc.h"
-#include "bullet.h"
 #include "game.h"
 #include "player.h"
 #include "enemy.h"
+#include "load.h"
 #include <string>
 #include <time.h>
 
 //============================================================================
 //	静的メンバ変数宣言
 //============================================================================
-LPDIRECT3DTEXTURE9 CWall::m_pTextures = NULL;
 
 //============================================================================
 //	マクロ定義
@@ -52,36 +51,6 @@ CWall::~CWall()
 }
 
 //=============================================================================
-// テクスチャの読み込み処理
-//=============================================================================
-HRESULT CWall::Load(void)
-{
-	LPDIRECT3DDEVICE9 pDevice;
-
-	//デバイスの取得
-	CManager Manager;
-	pDevice = Manager.GetRenderer()->GetDevice();
-
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, "data/TEXTURE/wall.png", &m_pTextures);
-
-	return S_OK;
-}
-
-//=============================================================================
-// テクスチャの開放処理
-//=============================================================================
-void CWall::Unload(void)
-{
-	//テクスチャの破棄
-	if (m_pTextures != NULL)
-	{
-		m_pTextures->Release();
-		m_pTextures = NULL;
-	}
-}
-
-//=============================================================================
 // ポリゴンの初期化処理
 //=============================================================================
 HRESULT CWall::Init(void)
@@ -93,7 +62,7 @@ HRESULT CWall::Init(void)
 	pDevice = Manager.GetRenderer()->GetDevice();
 
 	//テクスチャの貼り付け
-	BindTexture(m_pTextures);
+	BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WALL));
 
 	//初期化処理
 	CScene3D::SetSize(m_fHeight,m_fWidth);

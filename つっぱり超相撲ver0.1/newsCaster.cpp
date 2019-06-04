@@ -10,12 +10,11 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "title.h"
-#include "loadModel.h"
+#include "load.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -58,7 +57,7 @@ CNewsCaster *CNewsCaster::Create(D3DXVECTOR3 pos)
 
 		if (pDohyo != NULL)
 		{
-			pDohyo->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_NEWSCASTER), CLoadModel::GetNumMat(CLoadModel::MODEL_NEWSCASTER), CLoadModel::GetMesh(CLoadModel::MODEL_NEWSCASTER));
+			pDohyo->BindModel(CLoad::GetBuffMat(CLoad::MODEL_NEWSCASTER), CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER), CLoad::GetMesh(CLoad::MODEL_NEWSCASTER));
 			pDohyo->BindMat(m_pTexture);
 			pDohyo->Init(pos);
 		}
@@ -166,12 +165,12 @@ HRESULT CNewsCaster::LoadMat(void)
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
 										// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)CLoadModel::GetBuffMat(CLoadModel::MODEL_NEWSCASTER)->GetBufferPointer();
+	pMat = (D3DXMATERIAL*)CLoad::GetBuffMat(CLoad::MODEL_NEWSCASTER)->GetBufferPointer();
 
 	// マテリアルの数分テクスチャを入れるものを動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[CLoadModel::GetNumMat(CLoadModel::MODEL_NEWSCASTER)];
+	m_pTexture = new LPDIRECT3DTEXTURE9[CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER)];
 
-	for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_NEWSCASTER); nCntMat++)
+	for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER); nCntMat++)
 	{
 		// 入れる前に空にする
 		m_pTexture[nCntMat] = NULL;
@@ -193,7 +192,7 @@ void CNewsCaster::UnloadMat(void)
 {
 	if (m_pTexture != NULL)
 	{// テクスチャのポインタのNULLチェック(家)
-		for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_NEWSCASTER); nCntMat++)
+		for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER); nCntMat++)
 		{
 			if (m_pTexture[nCntMat] != NULL)
 			{// ポインタの中のNULLチェック(家具)

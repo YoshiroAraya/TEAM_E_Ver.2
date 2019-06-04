@@ -17,8 +17,7 @@
 
 //*****************************************************************************
 // マクロ定義
-//*****************************************************************************
-#define TOUZAI				"data/TEXTURE/touzai.png"						
+//*****************************************************************************					
 
 //=========================
 // ポーズクラス
@@ -29,9 +28,6 @@ public:
 	CTouzai();									// コンストラクタ
 	~CTouzai();													// デストラクタ
 
-	static HRESULT Load(void);									// テクスチャ読み込み
-	static void Unload(void);									// テクスチャ解放
-
 	static CTouzai *Create(D3DXVECTOR3 pos);								// ポーズを生成
 
 	HRESULT Init(D3DXVECTOR3 pos);	// ポーズ初期化処理
@@ -40,7 +36,6 @@ public:
 	void Draw(void);											// ポーズ描画処理
 
 private:
-	static LPDIRECT3DTEXTURE9 m_pTexture;
 	D3DXCOLOR m_Col;
 	int	m_nSelect;
 	float m_fScale;

@@ -23,11 +23,6 @@
 class CLogo : public CScene
 {
 public:
-	typedef enum
-	{
-		TYPE_TITLE = 0,
-		TYPE_TEST,
-	}TYPE;
 
 	CLogo(int nPriority = 6, OBJTYPE objType = OBJTYPE_SCENE2D);											// コンストラクタ
 	~CLogo();										// デストラクタ
@@ -37,14 +32,9 @@ public:
 	void Update(void);							// 2Dオブジェクト更新処理
 	void Draw(void);							// 2Dオブジェクト描画処理
 
-	static HRESULT Load(void);
-	static void Unload(void);
-
-	static CLogo *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, TYPE type);			// オブジェクトの生成
+	static CLogo *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, int nType);			// オブジェクトの生成
 
 private:
-	static LPDIRECT3DTEXTURE9	*m_pTexture;					// テクスチャへのポインタ
-	static const char *m_apFilename[];
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
 
 	D3DXVECTOR3				m_Pos;						// ポリゴンの位置
@@ -54,7 +44,7 @@ private:
 	float					m_fLength;				// 大きさ
 	float					m_fScale;				// 大きさ変更
 	D3DXCOLOR				m_Col;
-	TYPE m_type;
+	int m_nType;
 
 };
 

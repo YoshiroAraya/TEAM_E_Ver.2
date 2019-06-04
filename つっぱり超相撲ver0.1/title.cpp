@@ -17,7 +17,7 @@
 #include "wall.h"
 #include "logo.h"
 #include "time.h"
-#include "loadModel.h"
+#include "load.h"
 
 //============================================================================
 //	マクロ定義
@@ -51,21 +51,12 @@ void CTitle::Init(void)
 	m_state = STATE_NEWS;
 	m_bSetDohyo = true;
 
-	CLoadModel::Load();
-
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
-	CDohyoCircle::Load();
-
-	CNewsBG::Load();
 
 	CNewsBG::Create(D3DXVECTOR3(0.0f, 25.0f, 40.0f), D3DXVECTOR3(-D3DX_PI * 0.5f, 0.0f, 0.0f), 100.0f, 180.0f);
 	CNewsCaster::Create(D3DXVECTOR3(0.0f, 0.0f, -130.0f));
 
-	CField::Load();
-	CWall::Load();
-	CLogo::Load();
-	CTime::Load();
 	CTime::Create(D3DXVECTOR3(100.0f, 55.0f, 0.0f));
 }
 
@@ -75,16 +66,7 @@ void CTitle::Init(void)
 void CTitle::Uninit(void)
 {
 	CNewsCaster::UnloadMat();
-	//CDohyo::UnloadModel();
 	CDohyo::UnloadMat();
-	CDohyoCircle::Unload();
-	CField::Unload();
-	CWall::Unload();
-	CNewsBG::Unload();
-	CLogo::Unload();
-	CTime::Unload();
-
-	CLoadModel::Unload();
 
 	//全ての終了処理
 	CScene::ReleseAll();
@@ -113,7 +95,7 @@ void CTitle::Update(void)
 			CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
-			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, CLogo::TYPE_TITLE);
+			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, CLoad::TEXTURE_TITLE);
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
 			m_bSetDohyo = false;
 		}
