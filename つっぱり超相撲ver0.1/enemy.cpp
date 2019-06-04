@@ -18,6 +18,7 @@
 #include "game.h"
 #include "player.h"
 #include "characterMove.h"
+#include "loadModel.h"
 
 //=============================================================================
 // マクロ定義
@@ -30,9 +31,6 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH CEnemy::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
-LPD3DXBUFFER CEnemy::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
-DWORD CEnemy::m_nNumMat = 0;				// マテリアル情報の数
 
 //=============================================================================
 // エネミークラスのコンストラクタ
@@ -75,7 +73,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 
 		if (pEnemy != NULL)
 		{
-			pEnemy->BindModel(m_pBuffMat, m_nNumMat, m_pMesh);
+			pEnemy->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_ENEMY), CLoadModel::GetNumMat(CLoadModel::MODEL_ENEMY), CLoadModel::GetMesh(CLoadModel::MODEL_ENEMY));
 			pEnemy->Init(pos);
 		}
 	}
@@ -424,55 +422,6 @@ void CEnemy::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *
 
 		// 次のシーンに進める
 		pScene = pSceneNext;
-	}
-}
-
-//=============================================================================
-// エネミーのモデル読み込み処理
-//=============================================================================
-HRESULT CEnemy::LoadModel(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	// Xファイルの読み込み
-	D3DXLoadMeshFromX(ENEMY_MODEL_NAME,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat,
-		NULL,
-		&m_nNumMat,
-		&m_pMesh);
-
-	return S_OK;
-}
-
-//=============================================================================
-// エネミーのテクスチャ解放処理
-//=============================================================================
-void CEnemy::UnloadModel(void)
-{
-	// メッシュの開放
-	if (m_pMesh != NULL)
-	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-
-	// マテリアルの開放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
 	}
 }
 

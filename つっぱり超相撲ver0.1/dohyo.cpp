@@ -15,13 +15,11 @@
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
+#include "loadModel.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH CDohyo::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
-LPD3DXBUFFER CDohyo::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
-DWORD CDohyo::m_nNumMat = 0;				// マテリアル情報の数
 LPDIRECT3DTEXTURE9 *CDohyo::m_pTexture = NULL;				// テクスチャ
 
 //=============================================================================
@@ -59,7 +57,7 @@ CDohyo *CDohyo::Create(D3DXVECTOR3 pos)
 
 		if (pDohyo != NULL)
 		{
-			pDohyo->BindModel(m_pBuffMat, m_nNumMat, m_pMesh);
+			pDohyo->BindModel(CLoadModel::GetBuffMat(CLoadModel::MODEL_DOHYO), CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO), CLoadModel::GetMesh(CLoadModel::MODEL_DOHYO));
 			pDohyo->BindMat(m_pTexture);
 			pDohyo->Init(pos);
 		}
@@ -112,55 +110,6 @@ void CDohyo::Draw(void)
 }
 
 //=============================================================================
-// プレイヤーのモデル読み込み処理
-//=============================================================================
-HRESULT CDohyo::LoadModel(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	// Xファイルの読み込み
-	D3DXLoadMeshFromX(DOHYO_MODEL_NAME,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat,
-		NULL,
-		&m_nNumMat,
-		&m_pMesh);
-
-	return S_OK;
-}
-
-//=============================================================================
-// プレイヤーのテクスチャ解放処理
-//=============================================================================
-void CDohyo::UnloadModel(void)
-{
-	// メッシュの開放
-	if (m_pMesh != NULL)
-	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-
-	// マテリアルの開放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
-	}
-}
-
-//=============================================================================
 // ブロックのモデル読み込み処理
 //=============================================================================
 HRESULT CDohyo::LoadMat(void)
@@ -180,12 +129,12 @@ HRESULT CDohyo::LoadMat(void)
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
 										// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+	pMat = (D3DXMATERIAL*)CLoadModel::GetBuffMat(CLoadModel::MODEL_DOHYO)->GetBufferPointer();
 
 	// マテリアルの数分テクスチャを入れるものを動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+	m_pTexture = new LPDIRECT3DTEXTURE9[CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO)];
 
-	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+	for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO); nCntMat++)
 	{
 		// 入れる前に空にする
 		m_pTexture[nCntMat] = NULL;
@@ -207,7 +156,7 @@ void CDohyo::UnloadMat(void)
 {
 	if (m_pTexture != NULL)
 	{// テクスチャのポインタのNULLチェック(家)
-		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+		for (int nCntMat = 0; nCntMat < (int)CLoadModel::GetNumMat(CLoadModel::MODEL_DOHYO); nCntMat++)
 		{
 			if (m_pTexture[nCntMat] != NULL)
 			{// ポインタの中のNULLチェック(家具)

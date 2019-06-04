@@ -31,6 +31,7 @@
 #include "wall.h"
 #include "touzai.h"
 #include "animation.h"
+#include "loadModel.h"
 
 //============================================================================
 //	マクロ定義
@@ -82,9 +83,10 @@ void CGame::Init(void)
 	//インスタンス
 	CManager *pManager = NULL;
 
+	CLoadModel::Load();
 
 	CEffect::Load();
-	CDohyo::LoadModel();
+	//CDohyo::LoadModel();
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
@@ -95,15 +97,13 @@ void CGame::Init(void)
 
 	int nCntZ;
 	int nCnt;
-	CCustomer::LoadModel();
-	CCustomer::LoadMat();
 
 	for (nCntZ = 0; nCntZ < 2; nCntZ++)
 	{//奥客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3);
 		}
 	}
 
@@ -112,7 +112,7 @@ void CGame::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3);
 		}
 	}
 
@@ -121,7 +121,7 @@ void CGame::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3);
 		}
 	}
 
@@ -132,15 +132,11 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		CPlayer::LoadModel();
-
 		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		CEnemy::LoadModel();
-
 		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 50.0f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
@@ -175,8 +171,6 @@ void CGame::Init(void)
 	// 弾のテクスチャを読み込む
 	CBullet::Load();
 
-	CShadow::Load();
-
 	if (m_pShadow == NULL)
 	{
 		m_pShadow = CShadow::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -208,12 +202,8 @@ void CGame::Uninit(void)
 	CBullet::Unload();
 	CDohyoCircle::Unload();
 
-	CPlayer::UnloadModel();
-	CDohyo::UnloadModel();
+	//CDohyo::UnloadModel();
 	CDohyo::UnloadMat();
-	CShadow::UnLoad();
-	CCustomer::UnloadModel();
-	CCustomer::UnloadMat();
 	CGauge::UnLoad();
 	CJankenUI::Unload();
 	CField::Unload();
@@ -238,6 +228,8 @@ void CGame::Uninit(void)
 		delete m_pGauge;
 		m_pGauge = NULL;
 	}
+
+	CLoadModel::Unload();
 
 		//全ての終了処理
 	CScene::ReleseAll();

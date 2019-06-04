@@ -17,6 +17,7 @@
 #include "wall.h"
 #include "logo.h"
 #include "time.h"
+#include "loadModel.h"
 
 //============================================================================
 //	マクロ定義
@@ -50,9 +51,9 @@ void CTitle::Init(void)
 	m_state = STATE_NEWS;
 	m_bSetDohyo = true;
 
-	CNewsCaster::LoadModel();
+	CLoadModel::Load();
+
 	CNewsCaster::LoadMat();
-	CDohyo::LoadModel();
 	CDohyo::LoadMat();
 	CDohyoCircle::Load();
 
@@ -73,9 +74,8 @@ void CTitle::Init(void)
 //=============================================================================
 void CTitle::Uninit(void)
 {
-	CNewsCaster::UnloadModel();
 	CNewsCaster::UnloadMat();
-	CDohyo::UnloadModel();
+	//CDohyo::UnloadModel();
 	CDohyo::UnloadMat();
 	CDohyoCircle::Unload();
 	CField::Unload();
@@ -83,6 +83,8 @@ void CTitle::Uninit(void)
 	CNewsBG::Unload();
 	CLogo::Unload();
 	CTime::Unload();
+
+	CLoadModel::Unload();
 
 	//全ての終了処理
 	CScene::ReleseAll();

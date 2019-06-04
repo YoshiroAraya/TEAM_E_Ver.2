@@ -31,17 +31,12 @@ public:
 	void Update(void);	// ニュースキャスター更新処理
 	void Draw(void);	// ニュースキャスター描画処理
 
-	static HRESULT LoadModel(void);	// モデル読み込み
-	static void UnloadModel(void);	// モデルテクスチャ解放
 	static HRESULT LoadMat(void);	// マテリアル読み込み
 	static void UnloadMat(void);	// マテリアル解放
 
 	static CNewsCaster *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
 private:
-	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
-	static LPD3DXBUFFER		m_pBuffMat;		// マテリアル情報へのポインタ
-	static DWORD			m_nNumMat;		// マテリアル情報の数
 	static LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		// 頂点バッファへのポインタ
 

@@ -25,16 +25,11 @@ public:
 	void Draw(void);
 	void SetPos(D3DXVECTOR3 pos);
 	static CShadow *Create(D3DXVECTOR3 pos);
-	static HRESULT Load(void);
-	static void UnLoad(void);
 
 	//メンバ変数
 private:
 	LPDIRECT3DVERTEXBUFFER9				m_pVtxBuff = NULL;	//頂点バッファへのポインタ
 	static LPDIRECT3DTEXTURE9			m_pTexture;	//テクスチャへのポインタ
-	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
-	static LPD3DXBUFFER		m_pBuffMat;		// マテリアル情報へのポインタ
-	static DWORD			m_nNumMat;		// マテリアル情報の数
 	float								m_Height;
 
 	D3DXVECTOR3							m_pos;							//位置

@@ -171,6 +171,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="jankenUI.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="loadModel.cpp" />
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="jankenUI.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="loadModel.h" />
     <ClInclude Include="logo.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
