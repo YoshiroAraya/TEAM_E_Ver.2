@@ -10,18 +10,15 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "title.h"
+#include "load.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH CNewsCaster::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
-LPD3DXBUFFER CNewsCaster::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
-DWORD CNewsCaster::m_nNumMat = 0;				// マテリアル情報の数
 LPDIRECT3DTEXTURE9 *CNewsCaster::m_pTexture = NULL;				// テクスチャ
 
 //=============================================================================
@@ -60,7 +57,7 @@ CNewsCaster *CNewsCaster::Create(D3DXVECTOR3 pos)
 
 		if (pDohyo != NULL)
 		{
-			pDohyo->BindModel(m_pBuffMat, m_nNumMat, m_pMesh);
+			pDohyo->BindModel(CLoad::GetBuffMat(CLoad::MODEL_NEWSCASTER), CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER), CLoad::GetMesh(CLoad::MODEL_NEWSCASTER));
 			pDohyo->BindMat(m_pTexture);
 			pDohyo->Init(pos);
 		}
@@ -149,55 +146,6 @@ void CNewsCaster::Draw(void)
 }
 
 //=============================================================================
-// ニュースキャスターのモデル読み込み処理
-//=============================================================================
-HRESULT CNewsCaster::LoadModel(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	// Xファイルの読み込み
-	D3DXLoadMeshFromX(PLAYER_MODEL_NAME,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat,
-		NULL,
-		&m_nNumMat,
-		&m_pMesh);
-
-	return S_OK;
-}
-
-//=============================================================================
-// ニュースキャスターのテクスチャ解放処理
-//=============================================================================
-void CNewsCaster::UnloadModel(void)
-{
-	// メッシュの開放
-	if (m_pMesh != NULL)
-	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-
-	// マテリアルの開放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
-	}
-}
-
-//=============================================================================
 // ブロックのモデル読み込み処理
 //=============================================================================
 HRESULT CNewsCaster::LoadMat(void)
@@ -217,12 +165,12 @@ HRESULT CNewsCaster::LoadMat(void)
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
 										// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+	pMat = (D3DXMATERIAL*)CLoad::GetBuffMat(CLoad::MODEL_NEWSCASTER)->GetBufferPointer();
 
 	// マテリアルの数分テクスチャを入れるものを動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+	m_pTexture = new LPDIRECT3DTEXTURE9[CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER)];
 
-	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+	for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER); nCntMat++)
 	{
 		// 入れる前に空にする
 		m_pTexture[nCntMat] = NULL;
@@ -244,7 +192,7 @@ void CNewsCaster::UnloadMat(void)
 {
 	if (m_pTexture != NULL)
 	{// テクスチャのポインタのNULLチェック(家)
-		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+		for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_NEWSCASTER); nCntMat++)
 		{
 			if (m_pTexture[nCntMat] != NULL)
 			{// ポインタの中のNULLチェック(家具)

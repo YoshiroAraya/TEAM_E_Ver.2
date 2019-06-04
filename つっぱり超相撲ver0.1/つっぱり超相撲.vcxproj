@@ -155,7 +155,6 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="BattleSystem.cpp" />
     <ClCompile Include="billboard.cpp" />
-    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="characterMove.cpp" />
     <ClCompile Include="customer.cpp" />
@@ -171,6 +170,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="jankenUI.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="load.cpp" />
     <ClCompile Include="logo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -196,7 +196,6 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="BattleSystem.h" />
     <ClInclude Include="billboard.h" />
-    <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="characterMove.h" />
     <ClInclude Include="customer.h" />
@@ -212,6 +211,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="jankenUI.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="load.h" />
     <ClInclude Include="logo.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />

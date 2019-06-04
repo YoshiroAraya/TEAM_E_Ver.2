@@ -18,7 +18,6 @@
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
-LPDIRECT3DTEXTURE9			CGauge::m_pTexture = {};
 
 
 //=============================================================================
@@ -105,12 +104,6 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CGauge::Uninit(void)
 {
-	// テクスチャの破棄
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
 
 	// オブジェクトの解放
 	Release();
@@ -197,33 +190,6 @@ D3DXVECTOR3 CGauge::GetPosition(void)
 void CGauge::SetPosition(D3DXVECTOR3 pos)
 {
 	m_Pos = pos;
-}
-
-//=============================================================================
-// テクスチャの読み込み
-//=============================================================================
-HRESULT CGauge::Load(void)
-{
-	//デバイスを取得
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, GAUGE_NAME, &m_pTexture);
-
-	return S_OK;
-}
-//=============================================================================
-// テクスチャの破棄
-//=============================================================================
-void CGauge::UnLoad(void)
-{
-	// テクスチャの破棄
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
 }
 
 //=============================================================================

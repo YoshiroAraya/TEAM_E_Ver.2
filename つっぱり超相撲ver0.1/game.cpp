@@ -15,7 +15,6 @@
 #include "meshField.h"
 #include "dohyo.h"
 #include "shadow.h"
-#include "bullet.h"
 #include "debugProc.h"
 #include "scene.h"
 #include "fade.h"
@@ -31,6 +30,7 @@
 #include "wall.h"
 #include "touzai.h"
 #include "animation.h"
+#include "load.h"
 
 //============================================================================
 //	マクロ定義
@@ -82,28 +82,20 @@ void CGame::Init(void)
 	//インスタンス
 	CManager *pManager = NULL;
 
-
-	CEffect::Load();
-	CDohyo::LoadModel();
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-
-
-	CGauge::Load();
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
 
 	int nCntZ;
 	int nCnt;
-	CCustomer::LoadModel();
-	CCustomer::LoadMat();
 
 	for (nCntZ = 0; nCntZ < 2; nCntZ++)
 	{//奥客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3);
 		}
 	}
 
@@ -112,7 +104,7 @@ void CGame::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3);
 		}
 	}
 
@@ -121,7 +113,7 @@ void CGame::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 1);
+			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3);
 		}
 	}
 
@@ -132,15 +124,11 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		CPlayer::LoadModel();
-
 		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		CEnemy::LoadModel();
-
 		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 50.0f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
@@ -149,20 +137,16 @@ void CGame::Init(void)
 		//	m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	}
 
-	CDohyoCircle::Load();
 	CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
 
-	CField::Load();
 	CField::Create(D3DXVECTOR3(0, -10.0f, 0), 700.0f);
 
-	CWall::Load();
 	CWall::Create(D3DXVECTOR3(0, 200.0f, 500), D3DXVECTOR3(300.0f, 0.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);
 
 	CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 
-	CAnimation::Load();
 	// 2Dポリゴンの生成
 	//CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH -50.0f, 50.0f, 0.0f));
 
@@ -171,11 +155,6 @@ void CGame::Init(void)
 
 	// 3Dモデル
 	//CSceneX::Create(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
-
-	// 弾のテクスチャを読み込む
-	CBullet::Load();
-
-	CShadow::Load();
 
 	if (m_pShadow == NULL)
 	{
@@ -187,9 +166,6 @@ void CGame::Init(void)
 		m_pBatlteSys = CBattleSys::Create();
 	}
 
-	CJankenUI::Load();
-
-	CTouzai::Load();
 	CTouzai::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
 	CCamera *pCamera = CManager::GetCamera();
@@ -205,22 +181,7 @@ void CGame::Init(void)
 //=============================================================================
 void CGame::Uninit(void)
 {
-	CBullet::Unload();
-	CDohyoCircle::Unload();
-
-	CPlayer::UnloadModel();
-	CDohyo::UnloadModel();
 	CDohyo::UnloadMat();
-	CShadow::UnLoad();
-	CCustomer::UnloadModel();
-	CCustomer::UnloadMat();
-	CGauge::UnLoad();
-	CJankenUI::Unload();
-	CField::Unload();
-	CWall::Unload();
-	CTouzai::Unload();
-	CAnimation::Unload();
-	//m_pScene3D = NULL;
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
 	m_pMeshField = NULL;
@@ -326,7 +287,7 @@ void CGame::Update(void)
 			//m_effectCol = D3DXCOLOR(1, 1, 1, 1);
 
 			CEffect::Create(D3DXVECTOR3(0 + PosRand.x, 100.0f, 0.0f), effectmove, D3DXCOLOR(1, 1, 1, 1),
-				10, 10, 1, 50, CEffect::EFFECTTEX_NORMAL000);
+				10, 10, 1, 50, CLoad::TEXTURE_EFFECT_NORMAL000);
 		}
 	}
 

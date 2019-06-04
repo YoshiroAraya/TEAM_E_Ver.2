@@ -15,6 +15,7 @@
 #include "game.h"
 #include "camera.h"
 #include "title.h"
+#include "load.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -28,7 +29,6 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPDIRECT3DTEXTURE9 CTime::m_pTexture = NULL;
 
 //=============================================================================
 // 時間の生成処理
@@ -45,7 +45,7 @@ CTime *CTime::Create(D3DXVECTOR3 pos)
 		if (pTouzai != NULL)
 		{
 			pTouzai->Init(pos);
-			pTouzai->BindTexture(m_pTexture);
+			pTouzai->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TIME));
 		}
 	}
 	return pTouzai;
@@ -166,38 +166,4 @@ void CTime::Update(void)
 void CTime::Draw(void)
 {
 	CScene2D::Draw();
-}
-
-//=============================================================================
-// 時間のテクスチャ読み込み処理
-//=============================================================================
-HRESULT CTime::Load(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, TIME, &m_pTexture);
-
-	return S_OK;
-}
-
-//=============================================================================
-// 時間のテクスチャ解放処理
-//=============================================================================
-void CTime::Unload(void)
-{
-	if (m_pTexture != NULL)
-	{// テクスチャの破棄
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
 }

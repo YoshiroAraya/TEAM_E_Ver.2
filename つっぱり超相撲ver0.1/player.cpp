@@ -10,13 +10,13 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "camera.h"
-#include "bullet.h"
 #include "scene3D.h"
 #include "meshField.h"
 #include "shadow.h"
 #include "game.h"
 #include "enemy.h"
 #include "characterMove.h"
+#include "load.h"
 
 //=============================================================================
 // マクロ定義
@@ -29,9 +29,6 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH CPlayer::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
-LPD3DXBUFFER CPlayer::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
-DWORD CPlayer::m_nNumMat = 0;				// マテリアル情報の数
 
 //=============================================================================
 // プレイヤークラスのコンストラクタ
@@ -77,7 +74,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 
 		if (pPlayer != NULL)
 		{
-			pPlayer->BindModel(m_pBuffMat, m_nNumMat, m_pMesh);
+			pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			pPlayer->Init(pos);
 		}
 	}
@@ -494,54 +491,6 @@ void CPlayer::CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *
 
 		// 次のシーンに進める
 		pScene = pSceneNext;
-	}
-}
-
-//=============================================================================
-// プレイヤーのモデル読み込み処理
-//=============================================================================
-HRESULT CPlayer::LoadModel(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-	// Xファイルの読み込み
-	D3DXLoadMeshFromX(PLAYER_MODEL_NAME,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat,
-		NULL,
-		&m_nNumMat,
-		&m_pMesh);
-
-	return S_OK;
-}
-
-//=============================================================================
-// プレイヤーのテクスチャ解放処理
-//=============================================================================
-void CPlayer::UnloadModel(void)
-{
-	// メッシュの開放
-	if (m_pMesh != NULL)
-	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-
-	// マテリアルの開放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
 	}
 }
 

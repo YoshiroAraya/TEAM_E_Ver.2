@@ -10,11 +10,10 @@
 #include "manager.h"
 #include "renderer.h"
 #include "debugProc.h"
+#include "load.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define TEXTURE_NAME	"data/TEXTURE/EFFECT/コンポ 10.png"		//読み込むテクスチャ　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
-LPDIRECT3DTEXTURE9 CAnimation::m_pTexture = {};
 
 //=============================================================================
 //	コンストラクタ
@@ -40,35 +39,6 @@ CAnimation::~CAnimation()
 }
 
 //=============================================================================
-// テクスチャの読み込み処理
-//=============================================================================
-HRESULT CAnimation::Load(void)
-{
-	LPDIRECT3DDEVICE9 pDevice;
-
-	//デバイスの取得
-	CManager Manager;
-	pDevice = Manager.GetRenderer()->GetDevice();
-
-	// テクスチャの生成
-	D3DXCreateTextureFromFile(pDevice, TEXTURE_NAME, &m_pTexture);
-
-	return S_OK;
-}
-
-//=============================================================================
-// テクスチャの開放処理
-//=============================================================================
-void CAnimation::Unload(void)
-{
-	//テクスチャの破棄
-	if (m_pTexture != NULL)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
-}
-//=============================================================================
 // アニメーションの初期化処理
 //=============================================================================
 HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, int nCntSpeed, int nTotalAnim,int nRoop,
@@ -86,7 +56,7 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 	//初期化
 	CScene3D::Init(pos);
 	//テクスチャの貼り付け
-	CScene3D::BindTexture(m_pTexture);
+	CScene3D::BindTexture(CLoad::GetTexture(CLoad::TEXTURE_ANIMATION));
 	CScene3D::SetColor(m_col);
 	//UVの値を代入
 	m_fUV_U = fUV_U;

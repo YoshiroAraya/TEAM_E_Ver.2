@@ -10,14 +10,11 @@
 #include "scene2D.h"
 #include "player.h"
 #include "mask.h"
+#include "load.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODEL_SHADOW			"data\\MODEL\\shadow000.x"	//テクスチャのファイル名
-LPD3DXMESH CShadow::m_pMesh = NULL;			// メッシュ情報（頂点情報）へのポインタ
-LPD3DXBUFFER CShadow::m_pBuffMat = NULL;	// マテリアル情報へのポインタ
-DWORD CShadow::m_nNumMat = 0;				// マテリアル情報の数
 
 //--------------------------------------------
 //静的メンバ変数宣言
@@ -56,7 +53,7 @@ CShadow * CShadow::Create(D3DXVECTOR3 pos)
 		if (pShadow != NULL)
 		{
 			pShadow->m_pos = pos;
-			pShadow->BindModel(m_pBuffMat, m_nNumMat, m_pMesh);
+			pShadow->BindModel(CLoad::GetBuffMat(CLoad::MODEL_SHADOW), CLoad::GetNumMat(CLoad::MODEL_SHADOW), CLoad::GetMesh(CLoad::MODEL_SHADOW));
 			pShadow->Init();
 		}
 	}
@@ -163,52 +160,4 @@ void CShadow::Draw(void)
 void CShadow::SetPos(D3DXVECTOR3 pos)
 {
 	m_pos = pos;
-}
-
-//=============================================================================
-// テクスチャロード処理
-//=============================================================================
-HRESULT CShadow::Load(void)
-{
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
-
-	// Xファイルの読み込み
-	D3DXLoadMeshFromX(MODEL_SHADOW,
-		D3DXMESH_SYSTEMMEM,
-		pDevice,
-		NULL,
-		&m_pBuffMat,
-		NULL,
-		&m_nNumMat,
-		&m_pMesh);
-
-	return S_OK;
-}
-//=============================================================================
-// テクスチャ破棄処理
-//=============================================================================
-void CShadow::UnLoad(void)
-{
-	// メッシュの開放
-	if (m_pMesh != NULL)
-	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-
-	// マテリアルの開放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
-	}
 }

@@ -39,9 +39,6 @@ public:
 	static CDohyo *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
 private:
-	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
-	static LPD3DXBUFFER		m_pBuffMat;		// マテリアル情報へのポインタ
-	static DWORD			m_nNumMat;		// マテリアル情報の数
 	static LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		// 頂点バッファへのポインタ
 

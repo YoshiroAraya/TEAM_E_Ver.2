@@ -61,9 +61,6 @@ public:
 	void Update(void);	// エネミー更新処理
 	void Draw(void);	// エネミー描画処理
 
-	static HRESULT LoadModel(void);	// モデル読み込み
-	static void UnloadModel(void);	// モデルテクスチャ解放
-
 	bool GetLand(void);
 	STATE GetState(void);
 	void SetState(STATE state);
@@ -86,9 +83,6 @@ public:
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }
 
 private:
-	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
-	static LPD3DXBUFFER		m_pBuffMat;		// マテリアル情報へのポインタ
-	static DWORD			m_nNumMat;		// マテリアル情報の数
 	LPDIRECT3DTEXTURE9		m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		// 頂点バッファへのポインタ
 

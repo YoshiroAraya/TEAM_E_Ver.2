@@ -27,12 +27,8 @@ public:
 	//静的メンバ関数
 	static CField *Create(D3DXVECTOR3 pos, float fSize);
 
-	static HRESULT Load(void);						//テクスチャ読み込み
-	static void Unload(void);
-
 	//void SetLifeBar(int nLife);
 private:
-	static LPDIRECT3DTEXTURE9		m_pTextures;	// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9         m_pVtxBuff;		// 頂点バッファへのポインタ
 
 	D3DXVECTOR3				m_pos;					// ポリゴンの位置

@@ -142,7 +142,6 @@ void CCamera::Update(void)
 				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
 				pPlayer->SetPosition(D3DXVECTOR3(-20.0f, 30.0f, 0.0f));
 				pEnemy->SetPosition(D3DXVECTOR3(20.0f, 30.0f, 0.0f));
-
 				CGame::SetState(CGame::STATE_GAME);
 			}
 		}
