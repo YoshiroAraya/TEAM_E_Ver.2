@@ -77,11 +77,25 @@ HRESULT CLoad::LoadModel(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
-	if (m_pTexture != NULL)
+	if (m_pMesh != NULL)
 	{
 		// ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
-		delete[] m_pTexture;
-		m_pTexture = NULL;
+		delete[] m_pMesh;
+		m_pMesh = NULL;
+	}
+
+	if (m_pBuffMat != NULL)
+	{
+		// ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
+		delete[] m_pBuffMat;
+		m_pBuffMat = NULL;
+	}
+
+	if (m_nNumMat != NULL)
+	{
+		// ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
+		delete[] m_nNumMat;
+		m_nNumMat = NULL;
 	}
 
 	int nModelData = (sizeof m_apModelFilename);

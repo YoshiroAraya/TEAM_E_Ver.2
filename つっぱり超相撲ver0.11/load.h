@@ -69,7 +69,6 @@ private:
 	static LPD3DXMESH		*m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
 	static LPD3DXBUFFER		*m_pBuffMat;		// マテリアル情報へのポインタ
 	static DWORD			*m_nNumMat;		// マテリアル情報の数
-	//static LPDIRECT3DTEXTURE9	m_pTexture;					// テクスチャへのポインタ
 	static const char *m_apModelFilename[];
 	static const char *m_apTexFilename[];
 };
