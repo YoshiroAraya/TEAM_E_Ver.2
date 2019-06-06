@@ -18,6 +18,7 @@
 #include "logo.h"
 #include "time.h"
 #include "load.h"
+#include "numPlayer.h"
 
 //============================================================================
 //	ƒ}ƒNƒ’è‹`
@@ -84,6 +85,11 @@ void CTitle::Update(void)
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		m_state = CTitle::STATE_TITLE;
+	}
+
 	if (m_state == CTitle::STATE_TITLE)
 	{
 		if (m_bSetDohyo == true)
@@ -96,12 +102,13 @@ void CTitle::Update(void)
 			CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, CLoad::TEXTURE_TITLE);
+			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
 			m_bSetDohyo = false;
 		}
 	}
 
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (m_state == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}
