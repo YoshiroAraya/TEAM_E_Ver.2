@@ -159,10 +159,15 @@ void CCamera::Update(void)
 				m_posV = D3DXVECTOR3(-340.0f, 400.0f, -400.0f);	// 視点
 				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
 			}
-			else
+			else if(pTitle->GetState() == CTitle::STATE_NEWS)
 			{
 				m_posV = D3DXVECTOR3(0.0f, 25.0f, -200.0f);	// 視点
 				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+			}
+			else if(pTitle->GetState() == CTitle::STATE_CHARASELECT)
+			{
+				m_posV = D3DXVECTOR3(-80.0f, 50.0f, 15.0f);	// 視点
+				m_posR = D3DXVECTOR3(0.0f, 40.0f, 15.0f);		// 注視点
 			}
 		}
 	}
