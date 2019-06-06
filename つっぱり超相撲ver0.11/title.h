@@ -17,6 +17,7 @@ public:
 	{
 		STATE_NEWS = 0,
 		STATE_TITLE,
+		STATE_CHARASELECT,
 	}STATE;
 
 	CTitle();

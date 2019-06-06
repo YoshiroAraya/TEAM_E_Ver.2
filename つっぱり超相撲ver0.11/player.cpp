@@ -109,6 +109,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_DohyoState = DOHYO_NORMAL;
 	//m_Touzai = HIGASHI;
 
+	CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
 	return S_OK;
 }
 
@@ -166,15 +168,15 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-	//ダッシュ設定
-	if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-		pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
-	{
-		fMovePlayer = DASH_MOVE;
-	}
-
 	if (CGame::GetState() == CGame::STATE_GAME)
 	{
+		//ダッシュ設定
+		if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+			pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+		{
+			fMovePlayer = DASH_MOVE;
+		}
+
 		//通常状態で硬直していない
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
@@ -193,6 +195,116 @@ void CPlayer::Update(void)
 				// 右に進む
 				m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
 			}
+		}
+
+		//硬直しているとき
+		if (m_bRecovery == true)
+		{
+			m_nRecoveryTime--;
+			if (m_nRecoveryTime <= 0)
+			{
+				m_bRecovery = false;
+				m_nRecoveryTime = 0;
+			}
+		}
+
+		// 目的の角度
+		m_fDestAngle = atan2f((pEnemy->GetPosition().x - sinf(rot.y)) - pos.x, (pEnemy->GetPosition().z - cosf(rot.y)) - pos.z);
+		// 差分
+		m_fDiffAngle = m_fDestAngle - rot.y;
+
+		if (m_fDiffAngle > D3DX_PI)
+		{
+			m_fDiffAngle -= D3DX_PI * 2.0f;
+		}
+		if (m_fDiffAngle < -D3DX_PI)
+		{
+			m_fDiffAngle += D3DX_PI * 2.0f;
+		}
+
+		rot.y += m_fDiffAngle * 0.1f;
+
+		if (rot.y > D3DX_PI)
+		{
+			rot.y -= D3DX_PI * 2.0f;
+		}
+		if (rot.y < -D3DX_PI)
+		{
+			rot.y += D3DX_PI * 2.0f;
+		}
+
+		//向きの慣性
+		m_fDiffAngle = m_fDestAngle - rot.y;
+
+		//角度の設定
+		if (m_fDiffAngle > D3DX_PI)
+		{
+			m_fDiffAngle -= D3DX_PI* 2.0f;
+		}
+		if (m_fDiffAngle < -D3DX_PI)
+		{
+			m_fDiffAngle += D3DX_PI* 2.0f;
+		}
+
+		rot.y += m_fDiffAngle * 0.1f;
+
+		if (rot.y > D3DX_PI)
+		{
+			rot.y -= D3DX_PI* 2.0f;
+		}
+		if (rot.y < -D3DX_PI)
+		{
+			rot.y += D3DX_PI* 2.0f;
+		}
+
+		if (rot.y > 0.0f)
+		{
+			m_Direction = DIRECTION_RIGHT;
+		}
+		else if (rot.y < 0.0f)
+		{
+			m_Direction = DIRECTION_LEFT;
+		}
+
+		if (CGame::GetHit() == true)
+		{
+			if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
+			{
+				m_State = STATE_KUMI;
+			}
+			/*else if (m_State == STATE_KUMI)
+			{
+			m_State = STATE_NEUTRAL;
+			}*/
+		}
+		else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
+		{
+			m_State = STATE_NEUTRAL;
+		}
+
+		// つっぱりとの当たり判定
+		if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
+		{
+			bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+			//つっぱりにあたった
+			if (bHit == true)
+			{
+				m_State = STATE_DAMAGE;
+				CGame::SetHit(false);
+			}
+		}
+
+		//つっぱり位置更新
+		m_pTuppari->SetPosition(pos);
+
+		//土俵際判定
+		if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+		{
+			m_DohyoState = DOHYO_HAZI;
+		}
+		else
+		{
+			m_DohyoState = DOHYO_NORMAL;
 		}
 	}
 
@@ -225,91 +337,6 @@ void CPlayer::Update(void)
 	//	}
 	//}
 
-	//硬直しているとき
-	if (m_bRecovery == true)
-	{
-		m_nRecoveryTime--;
-		if (m_nRecoveryTime <= 0)
-		{
-			m_bRecovery = false;
-			m_nRecoveryTime = 0;
-		}
-	}
-
-	// 目的の角度
-	m_fDestAngle = atan2f((pEnemy->GetPosition().x - sinf(rot.y)) - pos.x, (pEnemy->GetPosition().z - cosf(rot.y)) - pos.z);
-	// 差分
-	m_fDiffAngle = m_fDestAngle - rot.y;
-
-	if (m_fDiffAngle > D3DX_PI)
-	{
-		m_fDiffAngle -= D3DX_PI * 2.0f;
-	}
-	if (m_fDiffAngle < -D3DX_PI)
-	{
-		m_fDiffAngle += D3DX_PI * 2.0f;
-	}
-
-	rot.y += m_fDiffAngle * 0.1f;
-
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
-
-	//向きの慣性
-	m_fDiffAngle = m_fDestAngle - rot.y;
-
-	//角度の設定
-	if (m_fDiffAngle > D3DX_PI)
-	{
-		m_fDiffAngle -= D3DX_PI* 2.0f;
-	}
-	if (m_fDiffAngle < -D3DX_PI)
-	{
-		m_fDiffAngle += D3DX_PI* 2.0f;
-	}
-
-	rot.y += m_fDiffAngle * 0.1f;
-
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI* 2.0f;
-	}
-	if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI* 2.0f;
-	}
-
-	if (rot.y > 0.0f)
-	{
-		m_Direction = DIRECTION_RIGHT;
-	}
-	else if (rot.y < 0.0f)
-	{
-		m_Direction = DIRECTION_LEFT;
-	}
-
-	if (CGame::GetHit() == true)
-	{
-		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
-		{
-			m_State = STATE_KUMI;
-		}
-		/*else if (m_State == STATE_KUMI)
-		{
-		m_State = STATE_NEUTRAL;
-		}*/
-	}
-		else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
-	{
-		m_State = STATE_NEUTRAL;
-	}
-
 
 	if (pInputKeyboard->GetPress(DIK_I) == true)
 	{
@@ -332,37 +359,16 @@ void CPlayer::Update(void)
 	m_move.z += (0.0f - m_move.z) * 0.5f;
 	m_move.y += (0.0f - m_move.y) * 0.01f;
 
-	pShadow->SetPos(pos);
+	if (pShadow != NULL)
+	{
+		pShadow->SetPos(pos);
+	}
 
 	// モデルとの当たり判定
 	CollisonDohyo(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, PLAYER_COLLISION);
-	// つっぱりとの当たり判定
-	if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
-	{
-		bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
-		//つっぱりにあたった
-		if (bHit == true)
-		{
-			m_State = STATE_DAMAGE;
-			CGame::SetHit(false);
-		}
-	}
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
-
-	//つっぱり位置更新
-	m_pTuppari->SetPosition(pos);
-
-	//土俵際判定
-	if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
-	{
-		m_DohyoState = DOHYO_HAZI;
-	}
-	else
-	{
-		m_DohyoState = DOHYO_NORMAL;
-	}
 
 	if (pos.y <= 0)
 	{

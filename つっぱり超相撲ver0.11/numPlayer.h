@@ -51,6 +51,7 @@ public:
 	void Draw(void);											// 人数選択描画処理
 	static	MODE GetMode(void);									// 人数選択を取得
 	int GetSelect(void);
+	static bool GetDecision(void) { return m_bDecision; }
 
 private:
 	CScene2D *m_apScene2D[MAX_NUMPLAYER];
@@ -58,5 +59,6 @@ private:
 	D3DXCOLOR m_aCol[MAX_NUMPLAYER];
 	static MODE m_Mode;
 	int	m_nSelect;
+	static bool m_bDecision;
 };
 #endif

@@ -12,6 +12,7 @@
 #include "debugProc.h"
 #include "input.h"
 #include "load.h"
+#include "title.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -159,6 +160,15 @@ void CLogo::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
+
+	// タイトル取得
+	CTitle *pTitle;
+	pTitle = CManager::GetTitle();
+
+	if (pTitle->GetState() == CTitle::STATE_CHARASELECT)
+	{
+		Uninit();
+	}
 
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "2DPos    : x", m_Pos.x, "f", " y", m_Pos.y, "f", " z", m_Pos.z, "f");

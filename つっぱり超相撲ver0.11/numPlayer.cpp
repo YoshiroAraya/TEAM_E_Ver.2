@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "game.h"
 #include "load.h"
+#include "title.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -28,6 +29,7 @@
 // 静的メンバ変数宣言
 //=============================================================================
 CNumPlayer::MODE CNumPlayer::m_Mode = CNumPlayer::MODE_1P;
+bool CNumPlayer::m_bDecision = false;
 
 //=============================================================================
 // ３すくみの生成処理
@@ -82,6 +84,7 @@ HRESULT CNumPlayer::Init(D3DXVECTOR3 pos)
 {
 	m_nSelect = 0;
 	m_Mode = MODE_1P;
+	m_bDecision = false;
 
 	for (int nCntPause = 0; nCntPause < MAX_NUMPLAYER; nCntPause++)
 	{
@@ -143,6 +146,10 @@ void CNumPlayer::Update(void)
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 
+	// タイトル取得
+	CTitle *pTitle;
+	pTitle = CManager::GetTitle();
+
 	if (pInputKeyboard->GetTrigger(DIK_DOWN) == true/* || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_DOWN) == true
 		|| pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_LS_DOWN) == true*/)
 	{
@@ -183,6 +190,16 @@ void CNumPlayer::Update(void)
 		{// 情報が入っていたら色を設定する
 			m_apScene2D[nCntPause]->SetCol(m_aCol[m_nSelect]);
 		}
+	}
+
+	if (pTitle->GetState() == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		m_bDecision = true;
+	}
+
+	if (pTitle->GetState() == CTitle::STATE_CHARASELECT)
+	{
+		Uninit();
 	}
 }
 
