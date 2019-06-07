@@ -85,14 +85,14 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	}
 
 	//1p‘¤
-	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(300.0f, 580.0f, 0.0f));
-	m_pScene2D[0]->SetWidthHeight(300.0f, 50.0f);
+	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(300.0f, pos.y, 0.0f));
+	m_pScene2D[0]->SetWidthHeight(300.0f, 30.0f);
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 	m_pScene2D[0]->BindTexture(NULL);
 
 	//2p‘¤
-	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(980.0f, 580.0f, 0.0f));
-	m_pScene2D[1]->SetWidthHeight(300.0f, 50.0f);
+	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(980.0f, pos.y, 0.0f));
+	m_pScene2D[1]->SetWidthHeight(300.0f, 30.0f);
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 	m_pScene2D[1]->BindTexture(NULL);
 

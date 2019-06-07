@@ -50,6 +50,9 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_pTuppari = NULL;
 	m_DohyoState = DOHYO_NORMAL;
 	m_fLength = 0.0f;
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
 }
 
 //=============================================================================
@@ -105,7 +108,9 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_pTuppari = CTuppari::Create(pos);
 	m_DohyoState = DOHYO_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
-
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
 	CSceneX::SetRot(D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f));
 
 	return S_OK;
@@ -208,7 +213,19 @@ void CEnemy::Update(void)
 					m_nRecoveryTime = 0;
 				}
 			}
+			//カウンターしているとき
+			if (m_bCounter == true)
+			{
+				m_bRecovery = true;
 
+				m_nCounterTime--;
+				if (m_nCounterTime <= 0)
+				{
+					m_bCounter = false;
+					m_nCounterTime = 0;
+					m_nRecoveryTime = 30;
+				}
+			}
 			// 目的の角度
 			m_fDestAngle = atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
 			// 差分
@@ -302,10 +319,20 @@ void CEnemy::Update(void)
 			if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
 			{
 				m_DohyoState = DOHYO_HAZI;
+
+				if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX)
+				{	//左端
+					m_DohyoHaziLR = HAZI_LEFT;
+				}
+				else if (pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+				{	//右端
+					m_DohyoHaziLR = HAZI_RIGHT;
+				}
 			}
 			else
 			{
 				m_DohyoState = DOHYO_NORMAL;
+				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 
 		}
@@ -378,7 +405,7 @@ void CEnemy::Update(void)
 	// モデルとの当たり判定
 	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
 
-	
+
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
 

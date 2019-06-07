@@ -46,6 +46,13 @@ public:
 		DOHYO_HAZI,
 	}DOHYO;
 
+	//土俵端左右状態
+	typedef enum
+	{
+		HAZI_NORMAL = 0,
+		HAZI_LEFT,
+		HAZI_RIGHT,
+	}HAZI_LR;
 	//向き
 	typedef enum
 	{
@@ -81,6 +88,12 @@ public:
 	CTuppari GetTuppari(void) { return *m_pTuppari; }
 	DOHYO GetDohyo(void) { return m_DohyoState; }
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }
+	bool GetCounter(void) { return m_bCounter; }
+	void SetCounter(bool bCounter) { m_bCounter = bCounter; }
+	int GetCounterTime(void) { return m_nCounterTime; }
+	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }
+	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }
+	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;		// テクスチャへのポインタ
@@ -96,7 +109,8 @@ private:
 	bool					m_bLand;		// モデルに乗っているかどうか
 	bool					m_bHit;			// 敵に当たっているかどうか
 	bool					m_bRecovery;	// 硬直フラグ
-	
+	bool					m_bCounter;		// カウンターフラグ
+	int						m_nCounterTime;	// カウンター時間
 	int						m_nRecoveryTime;// 硬直時間
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
@@ -105,5 +119,6 @@ private:
 
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
+	HAZI_LR					m_DohyoHaziLR;
 };
 #endif
