@@ -52,6 +52,9 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_pTuppari = NULL;
 	m_DohyoState = DOHYO_NORMAL;
 	m_fLength = 0.0f;
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
 }
 
 //=============================================================================
@@ -110,7 +113,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_DohyoState = DOHYO_NORMAL;
 	//m_Touzai = HIGASHI;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
-	
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
 	CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
 	return S_OK;
@@ -214,7 +219,19 @@ void CPlayer::Update(void)
 					m_nRecoveryTime = 0;
 				}
 			}
+			//カウンターしているとき
+			if (m_bCounter == true)
+			{
+				m_bRecovery = true;
 
+				m_nCounterTime--;
+				if (m_nCounterTime <= 0)
+				{
+					m_bCounter = false;
+					m_nCounterTime = 0;
+					m_nRecoveryTime = 30;
+				}
+			}
 			// 目的の角度
 			m_fDestAngle = atan2f((pEnemy->GetPosition().x - sinf(rot.y)) - pos.x, (pEnemy->GetPosition().z - cosf(rot.y)) - pos.z);
 			// 差分
@@ -308,10 +325,20 @@ void CPlayer::Update(void)
 			if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
 			{
 				m_DohyoState = DOHYO_HAZI;
+
+				if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX)
+				{	//左端
+					m_DohyoHaziLR = HAZI_LEFT;
+				}
+				else if (pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+				{	//右端
+					m_DohyoHaziLR = HAZI_RIGHT;
+				}
 			}
 			else
 			{
 				m_DohyoState = DOHYO_NORMAL;
+				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 		}
 	}
@@ -424,6 +451,14 @@ void CPlayer::Update(void)
 	else
 	{
 		CDebugProc::Print("c", " プレイヤーリカバリー　OFF ");
+	}
+	if (m_bCounter == true)
+	{
+		CDebugProc::Print("c", " プレイヤーカウンター　ON ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " プレイヤーカウンター　OFF ");
 	}
 	if (m_DohyoState == DOHYO_NORMAL)
 	{

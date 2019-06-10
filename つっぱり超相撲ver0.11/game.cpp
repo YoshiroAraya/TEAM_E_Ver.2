@@ -24,6 +24,7 @@
 #include "dohyocircle.h"
 #include <time.h>
 #include "gauge.h"
+#include "SansoGauge.h"
 #include "effect.h"
 #include "jankenUI.h"
 #include "field.h"
@@ -49,6 +50,7 @@ CShadow *CGame::m_pShadow = NULL;
 CMeshField *CGame::m_pMeshField = NULL;
 CBattleSys *CGame::m_pBatlteSys = NULL;
 CGauge *CGame::m_pGauge = NULL;
+CSansoGauge *CGame::m_pSansoGauge = NULL;
 
 bool CGame::m_bHit = false;
 CGame::STATE CGame::m_State = CGame::STATE_START;
@@ -85,7 +87,8 @@ void CGame::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
+	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
 
 	int nCntZ;
 	int nCnt;

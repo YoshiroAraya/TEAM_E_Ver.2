@@ -17,6 +17,7 @@ class CMeshField;
 class CShadow;
 class CBattleSys;
 class CGauge;
+class CSansoGauge;
 
 //クラス（シーン2Dの派生クラス）
 class CGame
@@ -53,6 +54,7 @@ public:
 	static bool GetHit(void) { return m_bHit; };
 	static void SetHit(bool bHit) { m_bHit = bHit; };
 	static CGauge *GetGauge(void);
+	static CSansoGauge *GetSansoGauge(void) { return m_pSansoGauge; };
 	static STATE GetState(void) { return m_State; };
 	static void SetState(STATE state) { m_State = state; };
 	static WINNER GetWinner(void) { return m_Winner; };
@@ -67,6 +69,7 @@ private:
 	static CBattleSys *m_pBatlteSys;
 	static bool m_bHit;
 	static CGauge *m_pGauge;
+	static CSansoGauge *m_pSansoGauge;
 	static STATE m_State;
 	static WINNER m_Winner;
 	bool m_bUI;
