@@ -135,7 +135,21 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 
-	CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode != NULL)
+	{
+		if (mode == CManager::MODE_GAME)
+		{
+			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		}
+		else
+		{
+			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+		}
+	}
+	
 
 	//モーション用変数
 	m_nKey = 0;			//現在のキー
