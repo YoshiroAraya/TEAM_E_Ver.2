@@ -29,13 +29,15 @@
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
+CPlayer *CTitle::m_pPlayer = NULL;
+CEnemy *CTitle::m_pEnemy = NULL;
 
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
 CTitle::CTitle()
 {
-
+	m_nCntTurn = 0;
 }
 
 //=============================================================================
@@ -53,6 +55,8 @@ void CTitle::Init(void)
 {
 	m_state = STATE_NEWS;
 	m_bSetDohyo = true;
+	m_bTurn = false;
+	m_nCntTurn = 0;
 
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
@@ -68,6 +72,8 @@ void CTitle::Init(void)
 //=============================================================================
 void CTitle::Uninit(void)
 {
+	m_pPlayer = NULL;
+	m_pEnemy = NULL;
 	CNewsCaster::UnloadMat();
 	CDohyo::UnloadMat();
 
@@ -104,8 +110,15 @@ void CTitle::Update(void)
 			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0.0f), SCREEN_WIDTH / 2, 300.0f, CLoad::TEXTURE_TITLE);
 			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
-			CPlayer::Create(D3DXVECTOR3(-20.0f, 50.0f, 0.0f));
-			CEnemy::Create(D3DXVECTOR3(20.0f, 50.0f, 0.0f));
+			if (m_pPlayer == NULL)
+			{
+				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f));
+			}
+			if (m_pEnemy == NULL)
+			{
+				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f));
+			}
+
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
 			m_bSetDohyo = false;
 		}
@@ -113,11 +126,16 @@ void CTitle::Update(void)
 		{
 			m_state = STATE_CHARASELECT;
 		}
-		
+
 	}
 	else if (m_state == CTitle::STATE_CHARASELECT && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+	}
+
+	if (m_state == STATE_CHARASELECT && pInputKeyboard->GetTrigger(DIK_RIGHT) == true && m_bTurn == false)
+	{
+		m_bTurn = true;
 	}
 
 #ifdef _DEBUG

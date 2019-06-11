@@ -9,6 +9,10 @@
 
 #include "scene.h"
 
+//前方宣言
+class CPlayer;
+class CEnemy;
+
 //クラス（シーン2Dの派生クラス）
 class CTitle
 {
@@ -30,9 +34,15 @@ public:
 	static CTitle *Create(void);
 	STATE GetState(void) { return m_state; }
 	void SetState(STATE state) { m_state = state; }
+	bool GetTurn(void) { return m_bTurn; }
+	void SetTurn(bool turn) { m_bTurn = turn; }
 
 private:
 	STATE m_state;
 	bool m_bSetDohyo;
+	bool m_bTurn;		// 回転するかしないか
+	int m_nCntTurn;
+	static CPlayer *m_pPlayer;
+	static CEnemy *m_pEnemy;
 };
 #endif
