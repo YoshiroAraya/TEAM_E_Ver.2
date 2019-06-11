@@ -263,7 +263,7 @@ void CEnemy::Update(void)
 			}
 		}
 		// ñ⁄ìIÇÃäpìx
-		m_fDestAngle = atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
+		m_fDestAngle = -atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
 		// ç∑ï™
 		m_fDiffAngle = m_fDestAngle - rot.y;
 
