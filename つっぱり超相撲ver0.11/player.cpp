@@ -352,11 +352,6 @@ void CPlayer::Update(void)
 		{
 			if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
 			{
-				if (rot.y < -1.5f)
-				{
-					pTitle->SetTurn(false);
-					rot.y = -1.5f;
-				}
 				rot.y -= 0.1f;
 
 				if (rot.y < -D3DX_PI)
