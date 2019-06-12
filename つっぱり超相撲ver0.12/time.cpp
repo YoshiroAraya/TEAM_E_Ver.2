@@ -141,7 +141,7 @@ void CTime::Update(void)
 			pVtx[2].tex = D3DXVECTOR2(0.0f, 0.5f);
 			pVtx[3].tex = D3DXVECTOR2(1.0f, 0.5f);
 		}
-		else if(pTitle->GetState() == CTitle::STATE_TITLE)
+		else if (pTitle->GetState() == CTitle::STATE_TITLE)
 		{
 			// テクスチャ座標の設定
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.5f);
@@ -153,10 +153,12 @@ void CTime::Update(void)
 
 	CScene2D::SetBuff(pVtxBuff);
 	CScene2D::SetPos(pos, 0.0f, m_fScale, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
-	if (CCamera::GetState() == CCamera::STATE_NORMAL)
+	if (pTitle != NULL)
 	{
-		Uninit();
+		if (pTitle->GetState() == CTitle::STATE_CHARASELECT)
+		{
+			Uninit();
+		}
 	}
 }
 

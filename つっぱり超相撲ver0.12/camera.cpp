@@ -172,7 +172,7 @@ void CCamera::Update(void)
 		}
 	}
 
-#if 1
+#if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// ¶•ûŒü‚ÉˆÚ“®
 		if (pInputKeyboard->GetPress(DIK_W) == true)

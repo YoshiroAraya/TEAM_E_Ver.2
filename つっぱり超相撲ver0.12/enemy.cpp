@@ -407,7 +407,7 @@ void CEnemy::Update(void)
 		{
 			if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
 			{
-				rot.y -= 0.01f;
+				rot.y -= 0.1f;
 
 				if (rot.y < -D3DX_PI)
 				{
@@ -421,10 +421,6 @@ void CEnemy::Update(void)
 				pos.z = 0.0f + cosf(D3DX_PI + rot.y) * m_fLength;
 			}
 		}
-#ifdef _DEBUG
-		CDebugProc::Print("cf", "fData1 : ", fData1);
-		CDebugProc::Print("cf", "fData2 : ", fData2);
-#endif
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)

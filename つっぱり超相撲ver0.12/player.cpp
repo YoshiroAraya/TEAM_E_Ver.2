@@ -66,6 +66,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_nCountFlame = 0;	//現在のフレーム
 	m_nMotionType = 0;	//現在のモーションタイプ
 	m_nOldMotion = 0;	//前のモーション
+	m_fRot = 0.0f;
 
 	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
 	{
@@ -136,7 +137,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
-
+	m_fRot = 0.0f;
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -170,8 +171,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CPlayer::Uninit(void)
 {
-
-
 	// モデルの破棄
 	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
 	{
@@ -405,30 +404,37 @@ void CPlayer::Update(void)
 		CTitle *pTitle;
 		pTitle = CManager::GetTitle();
 
-		float fData1 = 0.0f;
-		float fData2 = 0.0f;
-
 		if (pTitle != NULL)
 		{
 			if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
 			{
-				rot.y -= 0.01f;
-
 				if (rot.y < -D3DX_PI)
 				{
 					rot.y += D3DX_PI * 2.0f;
 				}
 
-				fData1 = sinf(D3DX_PI + rot.y);
-				fData2 = cosf(D3DX_PI + rot.y);
+				if (m_fRot >= 0.999f && m_fRot < 1.0f)
+				{
+					pTitle->SetTurn(false);
+					m_fRot = 1.0f;
+				}
+				else if (m_fRot <= -0.999f && m_fRot > -1.0f)
+				{
+					pTitle->SetTurn(false);
+					m_fRot = -1.0f;
+				}
+				else
+				{
+					rot.y -= 0.1f;
+					m_fRot = sinf(D3DX_PI + rot.y);
+				}
 
-				pos.x = 0.0f + sinf(D3DX_PI + rot.y) * m_fLength;
+				pos.x = 0.0f + m_fRot * m_fLength;
 				pos.z = 0.0f + cosf(D3DX_PI + rot.y) * m_fLength;
 			}
 		}
 #ifdef _DEBUG
-		CDebugProc::Print("cf", "fData1 : ", fData1);
-		CDebugProc::Print("cf", "fData2 : ", fData2);
+		CDebugProc::Print("cf", "fData1 : ", m_fRot);
 #endif
 	}
 
