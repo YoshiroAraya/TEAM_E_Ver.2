@@ -165,26 +165,29 @@ void CJankenUI::Update(void)
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 
-	if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA)
+	if (pPlayer != NULL && pEnemy != NULL)
 	{
-		for (int nCntUI = 0; nCntUI < MAX_JANKENUI; nCntUI++)
+		if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA)
 		{
-			m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+			for (int nCntUI = 0; nCntUI < MAX_JANKENUI; nCntUI++)
+			{
+				m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+			}
 		}
-	}
 
-	if (pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
-	{
-		for (int nCntUI = 3; nCntUI < MAX_JANKENUI_TEXTURE; nCntUI++)
+		if (pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
 		{
-			m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+			for (int nCntUI = 3; nCntUI < MAX_JANKENUI_TEXTURE; nCntUI++)
+			{
+				m_apScene2D[nCntUI]->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+			}
 		}
-	}
 
-	if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && pEnemy->GetState() == CEnemy::STATE_NEUTRAL
-		|| pPlayer->GetState() == CPlayer::STATE_KUMI && pEnemy->GetState() == CEnemy::STATE_KUMI)
-	{
-		Uninit();
+		if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && pEnemy->GetState() == CEnemy::STATE_NEUTRAL
+			|| pPlayer->GetState() == CPlayer::STATE_KUMI && pEnemy->GetState() == CEnemy::STATE_KUMI)
+		{
+			Uninit();
+		}
 	}
 }
 

@@ -142,7 +142,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bJanken = false;
 	m_nLife = 100;
 	m_bDying = false;
-	m_pTuppari = CTuppari::Create(pos);
 	m_DohyoState = DOHYO_NORMAL;
 	//m_Touzai = HIGASHI;
 	m_nCounterTime = 0;
@@ -152,7 +151,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	m_bSelect = false;
-
+	m_pTuppari = CTuppari::Create(pos);
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -214,6 +213,12 @@ void CPlayer::Uninit(void)
 		}
 	}
 
+	if (m_pTuppari != NULL)
+	{
+		m_pTuppari->Uninit();
+		//delete m_pTuppari;
+		//m_pTuppari = NULL;
+	}
 	// 3Dオブジェクト終了処理
 	CSceneX::Uninit();
 }
@@ -321,7 +326,10 @@ void CPlayer::Update(void)
 				}
 			}
 			// 目的の角度
-			m_fDestAngle = -atan2f((pEnemy->GetPosition().x - sinf(rot.y)) - pos.x, (pEnemy->GetPosition().z - cosf(rot.y)) - pos.z);
+			if (pEnemy != NULL)
+			{
+				m_fDestAngle = -atan2f((pEnemy->GetPosition().x - sinf(rot.y)) - pos.x, (pEnemy->GetPosition().z - cosf(rot.y)) - pos.z);
+			}
 			// 差分
 			m_fDiffAngle = m_fDestAngle - rot.y;
 
@@ -394,18 +402,20 @@ void CPlayer::Update(void)
 				m_State = STATE_NEUTRAL;
 			}
 
-			// つっぱりとの当たり判定
-			if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
+			if (pEnemy != NULL)
 			{
-				bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
-				//つっぱりにあたった
-				if (bHit == true)
+				// つっぱりとの当たり判定
+				if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
 				{
-					m_State = STATE_DAMAGE;
-					CGame::SetHit(false);
+					bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+					//つっぱりにあたった
+					if (bHit == true)
+					{
+						m_State = STATE_DAMAGE;
+						CGame::SetHit(false);
+					}
 				}
 			}
-
 			//つっぱり位置更新
 			m_pTuppari->SetPosition(pos);
 

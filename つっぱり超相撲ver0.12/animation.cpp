@@ -35,7 +35,7 @@ CAnimation::CAnimation() : CScene3D(7,CScene3D::OBJTYPE_EFFECT)
 //=============================================================================
 //デストラクタ
 //=============================================================================
-CAnimation::~CAnimation() 
+CAnimation::~CAnimation()
 {
 
 }
@@ -49,7 +49,7 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 	//色を代入
 	m_col = col;
 
-	
+
 
 	CScene3D::SetSize(fHeight, fWidth);
 	CScene3D::SetRot(rot);
@@ -100,8 +100,12 @@ void CAnimation::Update(void)
 {
 	CGame *pGame = NULL;
 	CPlayer *pPlayer = pGame->GetPlayer();
-	D3DXVECTOR3 pos = pPlayer->GetPosition();
+	D3DXVECTOR3 pos;
 
+	if (pPlayer != NULL)
+	{
+		pos = pPlayer->GetPosition();
+	}
 	//テクスチャの破棄フラグ
 	bool bDestroy = false;
 
@@ -144,7 +148,7 @@ void CAnimation::Update(void)
 	if (bDestroy == true)
 	{
 		//テクスチャを破棄
-		Uninit();	
+		Uninit();
 	}
 
 	CScene3D::SetPos(D3DXVECTOR3(pos.x,pos.y + 45.0f,pos.z - 10.0f));
@@ -185,7 +189,7 @@ void CAnimation::Draw(void)
 		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 		pDevice->SetRenderState(D3DRS_ALPHAREF, 500);
 		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-		
+
 		// αブレンディングを加算合成に設定
 		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
