@@ -32,7 +32,7 @@
 #include "touzai.h"
 #include "animation.h"
 #include "load.h"
-
+#include "effect3D.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -263,9 +263,9 @@ void CGame::Update(void)
 	}
 
 	//エフェクト用関数
-	D3DXVECTOR3 RotRand;
+	D3DXVECTOR3 moveRand;
 	D3DXVECTOR3 PosRand;
-	D3DXVECTOR3 effectmove =D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 effectmove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//任意のキー←
 	if (pInputKeyboard->GetTrigger(DIK_J) == true)
@@ -274,23 +274,35 @@ void CGame::Update(void)
 		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 
-		CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);
+		//	CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		//	100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);
 
-		for (int nCnt = 0; nCnt < 10; nCnt++)
+		////オーラ
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
+
+		for (int nCnt = 0; nCnt < 20; nCnt++)
 		{
-			PosRand.x = (float)(rand() % 100 - 50);
-			PosRand.y = (float)(rand() % 100 - 50);
 
+			//お金
+			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
+			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+			////moveRand.x = rand() % 2 - 2;
+			//PosRand.x = rand() % 300 - 300;
 
-			effectmove.x = sinf(RotRand.y + 1) * 5.5f;
-			effectmove.y = sinf(RotRand.y + 1) * 0.1f;
-			effectmove.z = RotRand.x * -0.05f;
+			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+			//	20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-			//m_effectCol = D3DXCOLOR(1, 1, 1, 1);
+			//塩
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
+			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
+			moveRand.z = ((rand() % 7 + 3));
+			//moveRand.x = rand() % 2 - 2;
+			PosRand.x = rand() % 300 - 300;
 
-			CEffect::Create(D3DXVECTOR3(0 + PosRand.x, 100.0f, 0.0f), effectmove, D3DXCOLOR(1, 1, 1, 1),
-				10, 10, 1, 50, CLoad::TEXTURE_EFFECT_NORMAL000);
+			CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+				6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
 		}
 	}
 

@@ -44,6 +44,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot);
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 	void SetColor(D3DXCOLOR col);
+	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ

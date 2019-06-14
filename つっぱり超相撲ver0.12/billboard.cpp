@@ -78,7 +78,7 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 	}
 
 	//テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture);
+	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture);
 
 
 	// 頂点情報の作成
@@ -93,11 +93,11 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 	//頂点バッファをロック
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	//頂点座標
-	pVtx[0].pos = D3DXVECTOR3(-5.0f, 10.0f, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(5.0f, 10.0f, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(-5.0f, 0.0f, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(5.0f, 0.0f, 0.0f);
+	// 頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(-m_fWidth, m_fHeight,0.0f );
+	pVtx[1].pos = D3DXVECTOR3(m_fWidth, m_fHeight, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(-m_fWidth, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_fWidth, 0.0f, 0.0f);
 
 	//法線の設定
 	pVtx[0].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
@@ -180,9 +180,9 @@ void CBillboard::Draw(void)
 	m_mtxWorld._11 = mtxView._11;
 	m_mtxWorld._12 = mtxView._21;
 	m_mtxWorld._13 = mtxView._31;
-	m_mtxWorld._21 = mtxView._12;
+	/*m_mtxWorld._21 = mtxView._12;
 	m_mtxWorld._22 = mtxView._22;
-	m_mtxWorld._23 = mtxView._32;
+	m_mtxWorld._23 = mtxView._32;*/
 	m_mtxWorld._31 = mtxView._13;
 	m_mtxWorld._32 = mtxView._23;
 	m_mtxWorld._33 = mtxView._33;
@@ -292,4 +292,42 @@ void CBillboard::SetCol(D3DXCOLOR col)
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+// アニメーションの設定処理
+//=============================================================================
+void CBillboard::SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V)
+{
+	VERTEX_3D*pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//テクスチャの座標
+	pVtx[0].tex = D3DXVECTOR2(fUV_U * m_PatternAnim, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(fUV_U * m_PatternAnim + fUV_U, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(fUV_U * m_PatternAnim, fUV_V);
+	pVtx[3].tex = D3DXVECTOR2(fUV_U * m_PatternAnim + fUV_U, fUV_V);
+
+	////テクスチャの座標
+	//pVtx[0].tex = D3DXVECTOR2(EXPLOSION_UV_U, EXPLOSION_UV_V * m_PatternAnim);
+	//pVtx[1].tex = D3DXVECTOR2(0.0f, EXPLOSION_UV_V * m_PatternAnim);
+	//pVtx[2].tex = D3DXVECTOR2(EXPLOSION_UV_U, EXPLOSION_UV_V * m_PatternAnim + EXPLOSION_UV_V);
+	//pVtx[3].tex = D3DXVECTOR2(0.0f, EXPLOSION_UV_V * m_PatternAnim + EXPLOSION_UV_V);
+
+	m_PatternAnim = 0;
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+// サイズの設定
+//=============================================================================
+void CBillboard::SetSize(float fHeight, float fWidth)
+{
+	//取得したサイズを代入
+	m_fHeight = fHeight;
+	m_fWidth = fWidth;
 }
