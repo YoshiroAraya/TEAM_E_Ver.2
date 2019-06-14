@@ -38,7 +38,7 @@ public:
 
 	D3DXVECTOR3 MoveLeft(D3DXVECTOR3 move, float fSpeed);	// âEÇ…êiÇﬁ
 	D3DXVECTOR3 MoveRight(D3DXVECTOR3 move, float fSpeed);	// ç∂Ç…êiÇﬁ
-	void CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, float fLength);
+	bool CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, float fLength);
 
 private:
 	D3DXVECTOR3				m_move;			// à⁄ìÆó 

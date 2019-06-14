@@ -143,7 +143,8 @@ public:
 	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }
 	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }
 	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }
-
+	bool GetSelect(void) { return m_bSelect; }
+	void SetSelect(bool bSelect) { m_bSelect = bSelect; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -173,6 +174,7 @@ private:
 	bool					m_bRecovery;	// 硬直フラグ
 	bool					m_bCounter;		// カウンターフラグ
 	bool					m_bJanken;		// じゃんけん
+	bool					m_bSelect;		// 選ばれているかどうか
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
@@ -212,6 +214,8 @@ private:
 
 	char						m_aFileNameModel[MAX_PARTS][256];
 
-
+#ifdef _DEBUG
+	bool						m_bColBlockDraw;
+#endif
 };
 #endif

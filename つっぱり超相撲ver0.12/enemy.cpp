@@ -24,19 +24,19 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define ENEMY_COLLISION			(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
 #define DOHYO_HAZI_MAX			(135.0f)
 #define DOHYO_HAZI_MIN			(110.0f)
 #define DASH_MOVE				(0.9f)
-#define FILE_NAME				("data\\TEXT\\Motion.txt")
+#define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
+#define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS] = {};
-LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS] = {};
-LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS] = {};
-DWORD						CEnemy::m_nNumMatModel[MAX_PARTS] = {};
+LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
+LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
+LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
+DWORD						CEnemy::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
 
 
 //=============================================================================
@@ -67,19 +67,25 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 
-	m_nKey = 0;			//現在のキー
-	m_nCountFlame = 0;	//現在のフレーム
-	m_nMotionType = 0;	//現在のモーションタイプ
-	m_nOldMotion = 0;	//前のモーション
-
-	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
-		m_pMeshModel[nCnt] = NULL;
-		m_pBuffMatModel[nCnt] = NULL;
-		m_pTextureModel[nCnt] = NULL;
-		m_nNumMatModel[nCnt] = NULL;
-		m_apModel[nCnt] = NULL;
+		for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
+		{
+			m_pMeshModel[nCnt][nCntParent] = NULL;
+			m_pBuffMatModel[nCnt][nCntParent] = NULL;
+			m_pTextureModel[nCnt][nCntParent] = NULL;
+			m_nNumMatModel[nCnt][nCntParent] = NULL;
+			m_apModel[nCnt][nCntParent] = NULL;
+		}
+		m_nMotionType[nCntParent] = 0;	//現在のモーションタイプ
+		m_nNumParts[nCntParent] = 0;
+		m_nKey[nCntParent] = 0;			//現在のキー
+		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
 	}
+
+#ifdef _DEBUG
+	m_bColBlockDraw = false;
+#endif
 }
 
 //=============================================================================
@@ -140,6 +146,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
+	m_bSelect = false;
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -157,12 +164,20 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	}
 
 	//モーション用変数
-	m_nKey = 0;			//現在のキー
-	m_nCountFlame = 0;	//現在のフレーム
-	m_nMotionType = 0;	//現在のモーションタイプ
-	m_nOldMotion = 0;	//前のモーション
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
+	{
+		m_nKey[nCntParent] = 0;			//現在のキー
+		m_nCountFlame[nCntParent] = 0;		//現在のフレーム
+		m_nMotionType[nCntParent] = 0;	//現在のモーションタイプ
+	}
 
-	FileLoad();			//プレイヤー情報の読み込み
+	m_nOldMotion = 0;	//前のモーション
+						//プレイヤー情報の読み込み
+	FileLoad(FILE_NAME_0, 0);
+	FileLoad(FILE_NAME_1, 1);
+
+	//モデルの親を指定
+	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
@@ -178,14 +193,16 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CEnemy::Uninit(void)
 {
-	// モデルの破棄
-	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
-		if (m_apModel[nCnt] != NULL)
+		for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
 		{
-			m_apModel[nCnt]->Uninit();
-			delete m_apModel[nCnt];
-			m_apModel[nCnt] = NULL;
+			if (m_apModel[nCnt][nCntParent] != NULL)
+			{
+				m_apModel[nCnt][nCntParent]->Uninit();
+				delete m_apModel[nCnt][nCntParent];
+				m_apModel[nCnt][nCntParent] = NULL;
+			}
 		}
 	}
 
@@ -342,11 +359,11 @@ void CEnemy::Update(void)
 				rot.y += D3DX_PI* 2.0f;
 			}
 
-			if (rot.y > 0.0f)
+			if (rot.y < 0.0f)
 			{
 				m_Direction = DIRECTION_RIGHT;
 			}
-			else if (rot.y < 0.0f)
+			else if (rot.y > 0.0f)
 			{
 				m_Direction = DIRECTION_LEFT;
 			}
@@ -408,7 +425,7 @@ void CEnemy::Update(void)
 	{
 		m_fRot = sinf(D3DX_PI + rot.y);
 
-		pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
@@ -467,7 +484,8 @@ void CEnemy::Update(void)
 	}
 
 	//モーション更新
-	UpdateMotion();
+	UpdateMotion(0);
+	UpdateMotion(1);
 
 #ifdef _DEBUG
 
@@ -503,6 +521,35 @@ void CEnemy::Update(void)
 	{
 		CDebugProc::Print("c", " 土俵端　ON ");
 	}
+
+	if (pInputKeyboard->GetTrigger(DIK_Q) == true)
+	{
+		m_nMotionType[0]--;
+		m_nMotionType[1]--;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_E) == true)
+	{
+		m_nMotionType[0]++;
+		m_nMotionType[1]++;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_1) == true)
+	{
+		//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
+		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
+	}
+
+	CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
+	CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
+	CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
+	CDebugProc::Print("cn", " フレーム数1 : ", m_nCountFlame[1]);
 #endif
 }
 
@@ -511,14 +558,47 @@ void CEnemy::Update(void)
 //=============================================================================
 void CEnemy::Draw(void)
 {
-	// 2Dオブジェクト描画処理
-	CSceneX::Draw();
+	//デバイスを取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	for (int nCnt = 0; nCnt < m_nNumParts; nCnt++)
+	// 計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale;
+
+#ifdef _DEBUG
+	if (m_bColBlockDraw == true)
+	{	// 2Dオブジェクト描画処理
+		CSceneX::Draw();
+	}
+#endif
+
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	// 位置取得
+	D3DXVECTOR3 pos;
+	pos = CSceneX::GetPosition();
+	D3DXVECTOR3 rot;
+	rot = CSceneX::GetRot();
+
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+	// 位置を反映
+	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+	// ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
-		if (m_apModel[nCnt] != NULL)
+		for (int nCnt = 0; nCnt < m_nNumParts[nCntParent]; nCnt++)
 		{
-			m_apModel[nCnt]->Draw();
+			if (m_apModel[nCnt][nCntParent] != NULL)
+			{
+				//m_apModel[nCnt]->m_bShadow = false;
+				m_apModel[nCnt][nCntParent]->Draw();
+			}
 		}
 	}
 }
@@ -590,7 +670,7 @@ void CEnemy::SetMove(D3DXVECTOR3 move)
 //=============================================================================
 // プレイヤーのモーション
 //=============================================================================
-void CEnemy::UpdateMotion(void)
+void CEnemy::UpdateMotion(int nParent)
 {
 	//サウンド情報を取得
 	//CSound *pSound = CManager::GetSound();
@@ -602,205 +682,151 @@ void CEnemy::UpdateMotion(void)
 	float fDiffMotion;
 	float fPlusData;
 	float fMinusData;
-	float fPlusPos;
-	float fMinusPos;
+	//float fPlusPos;
+	//float fMinusPos;
 
 	D3DXVECTOR3 rotmotion;
 	D3DXVECTOR3 posmotion;
 	D3DXVECTOR3 BodyRot;
-
-	//エフェクト用関数
-	D3DXVECTOR3 RotRand;
-	D3DXVECTOR3 PosRand;
-	D3DXVECTOR3 effectmove;
+	KEY			NowKey;
 
 	//モーション更新
-	for (int nCntParts = 0; nCntParts < m_nNumParts; nCntParts++)
+	for (int nCntParts = 0; nCntParts < m_nNumParts[nParent]; nCntParts++)
 	{
-		if (m_apModel[nCntParts] != NULL)
+		if (m_apModel[nCntParts][nParent] != NULL)
 		{
 			//現在のキーを取得
-			pKey = &m_pKeyInfo[m_nMotionType][m_nKey].aKey[nCntParts];
+			pKey = &m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].aKey[nCntParts];
+
+			NowKey = *pKey;
+
 			//次のキーを取得
-			pNextKey = &m_pKeyInfo[m_nMotionType][(m_nKey + 1) % m_aMotionInfo[m_nMotionType].nNumKey].aKey[nCntParts];
+			pNextKey = &m_pKeyInfo[m_nMotionType[nParent]][nParent][(m_nKey[nParent] + 1) % m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey].aKey[nCntParts];
 			//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
-			fRateMotion = (float)m_nCountFlame / (float)m_pKeyInfo[m_nMotionType][m_nKey].nFrame;
+			fRateMotion = (float)m_nCountFlame[nParent] / (float)m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame;
 
-			//ROT
-
-			if (nCntParts == 0)
-			{
-				fPlusData = pNextKey->frotX + pKey->frotX;
-				fMinusData = pNextKey->frotX - pKey->frotX;
-				fPlusPos;
-				fMinusPos;
-
-				//値を出す(絶対値)
-				fPlusData = abs(fPlusData);
-				fMinusData = abs(fMinusData);
-				//差分小さいほう
-				if (fPlusData < fMinusData)
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotX + pKey->frotX;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.x = pKey->frotX + (fDiffMotion * fRateMotion);
-				}
-				else
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotX - pKey->frotX;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.x = pKey->frotX + (fDiffMotion * fRateMotion);
-				}
-
-				fPlusData = pNextKey->frotY + pKey->frotY;
-				fMinusData = pNextKey->frotY - pKey->frotY;
-				//値を出す(絶対値)
-				fPlusData = abs(fPlusData);
-				fMinusData = abs(fMinusData);
-				//差分小さいほう
-				if (fPlusData < fMinusData)
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotY + pKey->frotY;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.y = pKey->frotY + (fDiffMotion * fRateMotion);
-				}
-				else
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotY - pKey->frotY;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.y = pKey->frotY + (fDiffMotion * fRateMotion);
-				}
-
-				fPlusData = pNextKey->frotZ + pKey->frotZ;
-				fMinusData = pNextKey->frotZ - pKey->frotZ;
-				//値を出す(絶対値)
-				fPlusData = abs(fPlusData);
-				fMinusData = abs(fMinusData);
-				//差分小さいほう
-				if (fPlusData < fMinusData)
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotZ + pKey->frotZ;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.z = pKey->frotZ + (fDiffMotion * fRateMotion);
-				}
-				else
-				{	//現在のキーと次のキーの各要素の差分を算出
-					fDiffMotion = pNextKey->frotZ - pKey->frotZ;
-					//相対値を差分を使って各要素の値を算出
-					rotmotion.z = pKey->frotZ + (fDiffMotion * fRateMotion);
-				}
-
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposX - pKey->fposX;
+#if 1
+			fPlusData = pNextKey->frotX + NowKey.frotX;
+			fMinusData = pNextKey->frotX - NowKey.frotX;
+			//値を出す(絶対値)
+			fPlusData = abs(fPlusData);
+			fMinusData = abs(fMinusData);
+			//差分小さいほう
+			if (fPlusData < fMinusData)
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotX - NowKey.frotX;
 				//相対値を差分を使って各要素の値を算出
-				posmotion.x = pKey->fposX + (fDiffMotion * fRateMotion);
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposY - pKey->fposY;
-				//相対値を差分を使って各要素の値を算出
-				posmotion.y = pKey->fposY + (fDiffMotion * fRateMotion);
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposZ - pKey->fposZ;
-				//相対値を差分を使って各要素の値を算出
-				posmotion.z = pKey->fposZ + (fDiffMotion * fRateMotion);
+				rotmotion.x = NowKey.frotX + (fDiffMotion * fRateMotion);
 			}
 			else
-			{
-				//ROT
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->frotX - pKey->frotX;
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotX - NowKey.frotX;
 				//相対値を差分を使って各要素の値を算出
-				rotmotion.x = pKey->frotX + (fDiffMotion * fRateMotion);
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposX - pKey->fposX;
-				//相対値を差分を使って各要素の値を算出
-				posmotion.x = pKey->fposX + (fDiffMotion * fRateMotion);
-
-				//ROT
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->frotY - pKey->frotY;
-				//相対値を差分を使って各要素の値を算出
-				rotmotion.y = pKey->frotY + (fDiffMotion * fRateMotion);
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposY - pKey->fposY;
-				//相対値を差分を使って各要素の値を算出
-				posmotion.y = pKey->fposY + (fDiffMotion * fRateMotion);
-
-				//ROT
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->frotZ - pKey->frotZ;
-				//相対値を差分を使って各要素の値を算出
-				rotmotion.z = pKey->frotZ + (fDiffMotion * fRateMotion);
-				//POS
-				//現在のキーと次のキーの各要素の差分を算出
-				fDiffMotion = pNextKey->fposZ - pKey->fposZ;
-				//相対値を差分を使って各要素の値を算出
-				posmotion.z = pKey->fposZ + (fDiffMotion * fRateMotion);
+				rotmotion.x = NowKey.frotX + (fDiffMotion * fRateMotion);
 			}
+
+			fPlusData = pNextKey->frotY + NowKey.frotY;
+			fMinusData = pNextKey->frotY - NowKey.frotY;
+			//値を出す(絶対値)
+			fPlusData = abs(fPlusData);
+			fMinusData = abs(fMinusData);
+			//差分小さいほう
+			if (fPlusData < fMinusData)
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotY - NowKey.frotY;
+				//相対値を差分を使って各要素の値を算出
+				rotmotion.y = NowKey.frotY + (fDiffMotion * fRateMotion);
+			}
+			else
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotY - NowKey.frotY;
+				//相対値を差分を使って各要素の値を算出
+				rotmotion.y = NowKey.frotY + (fDiffMotion * fRateMotion);
+			}
+
+			fPlusData = pNextKey->frotZ + NowKey.frotZ;
+			fMinusData = pNextKey->frotZ - NowKey.frotZ;
+			//値を出す(絶対値)
+			fPlusData = abs(fPlusData);
+			fMinusData = abs(fMinusData);
+			//差分小さいほう
+			if (fPlusData < fMinusData)
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotZ - NowKey.frotZ;
+				//相対値を差分を使って各要素の値を算出
+				rotmotion.z = NowKey.frotZ + (fDiffMotion * fRateMotion);
+			}
+			else
+			{	//現在のキーと次のキーの各要素の差分を算出
+				fDiffMotion = pNextKey->frotZ - NowKey.frotZ;
+				//相対値を差分を使って各要素の値を算出
+				rotmotion.z = NowKey.frotZ + (fDiffMotion * fRateMotion);
+			}
+
+			//POS
+			//現在のキーと次のキーの各要素の差分を算出
+			fDiffMotion = pNextKey->fposX - NowKey.fposX;
+			//相対値を差分を使って各要素の値を算出
+			posmotion.x = NowKey.fposX + (fDiffMotion * fRateMotion);
+			//現在のキーと次のキーの各要素の差分を算出
+			fDiffMotion = pNextKey->fposY - NowKey.fposY;
+			//相対値を差分を使って各要素の値を算出
+			posmotion.y = NowKey.fposY + (fDiffMotion * fRateMotion);
+			//現在のキーと次のキーの各要素の差分を算出
+			fDiffMotion = pNextKey->fposZ - NowKey.fposZ;
+			//相対値を差分を使って各要素の値を算出
+			posmotion.z = NowKey.fposZ + (fDiffMotion * fRateMotion);
+
+#endif
 			//パーツを動かす
-			m_apModel[nCntParts]->Setrot(rotmotion);
+			m_apModel[nCntParts][nParent]->Setrot(rotmotion);
 			//オフセットの位置を設定
-			m_apModel[nCntParts]->Setpos(D3DXVECTOR3(m_OffSetPos[nCntParts].x + posmotion.x,
-				m_OffSetPos[nCntParts].y + posmotion.y,
-				m_OffSetPos[nCntParts].z + posmotion.z));
+			m_apModel[nCntParts][nParent]->Setpos(D3DXVECTOR3(m_OffSetPos[nCntParts][nParent].x + posmotion.x,
+				m_OffSetPos[nCntParts][nParent].y + posmotion.y,
+				m_OffSetPos[nCntParts][nParent].z + posmotion.z));
 		}
 	}
 
 	//ループの判定
-	switch (m_aMotionInfo[m_nMotionType].bLoop)
+	switch (m_aMotionInfo[m_nMotionType[nParent]][nParent].bLoop)
 	{
 	case true:
 		//ループする
 		//フレームを進める
-		m_nCountFlame++;
-
-		RotRand.x = (float)(rand() % 100);
-		RotRand.y = (float)(rand() % 100);
-		effectmove.x = sinf(RotRand.y + 1) * 0.5f;
-		effectmove.y = sinf(RotRand.y + 1) * 0.1f;
-		effectmove.z = RotRand.x * -0.05f;
-
-		m_effectCol = D3DXCOLOR(1, 1, 1, 1);
-
+		m_nCountFlame[nParent]++;
 		//キーの更新
-		if (m_nCountFlame >= m_pKeyInfo[m_nMotionType][m_nKey].nFrame)
+		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)
 		{
-			if (m_aMotionInfo[m_nMotionType].nNumKey - 1 == m_nKey)
-			{
-				//キーの初期化
-				m_nKey = 0;
+			if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
+			{//キーの初期化
+				m_nKey[nParent] = 0;
 			}
 			else
-			{
-				//キーの更新
-				m_nKey += 1;
+			{//キーの更新
+				m_nKey[nParent] += 1;
 			}
-			m_nCountFlame = 0;
+			m_nCountFlame[nParent] = 0;
 		}
 
 		break;
 	case false:
 		//ループしない
-		if (m_aMotionInfo[m_nMotionType].nNumKey - 1 > m_nKey)
+		if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 > m_nKey[nParent])
 		{//フレームを進める
-			m_nCountFlame++;
+			m_nCountFlame[nParent]++;
 		}
-		else if (m_aMotionInfo[m_nMotionType].nNumKey - 1 == m_nKey)
+		else if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 		{
 			m_bMotionEnd = true;
 		}
 		//キーの更新
-		if (m_nCountFlame >= m_pKeyInfo[m_nMotionType][m_nKey].nFrame)
+		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)
 		{
-			if (m_aMotionInfo[m_nMotionType].nNumKey > m_nKey)
+			if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey > m_nKey[nParent])
 			{
-				m_nKey += 1;
+				m_nKey[nParent] += 1;
 			}
-			m_nCountFlame = 0;
+			m_nCountFlame[nParent] = 0;
 		}
 
 		break;
@@ -811,7 +837,7 @@ void CEnemy::UpdateMotion(void)
 //=============================================================================
 // ファイル読み込み
 //=============================================================================
-void CEnemy::FileLoad(void)
+void CEnemy::FileLoad(char FileName[256], int nParent)
 {
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
@@ -833,408 +859,417 @@ void CEnemy::FileLoad(void)
 	int nWord = 0;		//ポップで返された値を保持
 
 	D3DXVECTOR3 ParentPos;	//親の位置情報を取得
+
+	char aTestname[256];
+	strcpy(aTestname, FileName);
+
 #if 1
-							//ファイルを開く 読み込み
-	pFile = fopen(FILE_NAME, "r");
+	//ファイルを開く 読み込み
+	pFile = fopen(FileName, "r");
 	//NULLチェック
 	if (pFile != NULL)
 	{
-		for (int nCntMotion = 0; nCntMotion < MAX_MOTION; nCntMotion++)
+		//文字列の先頭を設定
+		pStrcur = ReadLine(pFile, &aLine[0]);
+		if (memcmp(pStrcur, "SCRIPT", strlen("SCRIPT")) == 0)
 		{
-			//文字列の先頭を設定
-			pStrcur = ReadLine(pFile, &aLine[0]);
-			//文字列を取り出す
-			strcpy(aStr, pStrcur);
-
-			//文字列のデータ 比較する文字列 比較する文字数
-			if (memcmp(pStrcur, "NUM_MODEL = ", strlen("NUM_MODEL = ")) == 0)
+			for (int nCntMotion = 0; nCntMotion < MAX_MOTION; nCntMotion++)
 			{
-				//頭出し
-				pStrcur += strlen("NUM_MODEL = ");
-				//文字列の先頭を設定
-				strcpy(aStr, pStrcur);
-				//文字列抜き出し
-				int nNumModel = atoi(pStrcur);
-
-				for (int nCntModel = 0; nCntModel < nNumModel; nCntModel++)
-				{
-					//文字列の先頭を設定
-					pStrcur = ReadLine(pFile, &aLine[0]);
-					//文字列を取り戻す
-					strcpy(aStr, pStrcur);
-					if (memcmp(pStrcur, "MODEL_FILENAME = ", strlen("MODEL_FILENAME = ")) == 0)
-					{
-						//頭出し
-						pStrcur += strlen("MODEL_FILENAME = ");
-
-						//文字列を設定
-						strcpy(aStr, pStrcur);
-
-						//必要な文字列の最後の文字までの文字数を数える
-						int nNullNum = PopString(pStrcur, &aStr[0]);
-
-						//文字列を取り戻す
-						strcpy(aStr, pStrcur);
-
-						//最後の文字にNULL文字を入れる
-						aStr[nNullNum - 1] = '\0';
-
-						//対象の文字列から抜き出し
-						strcpy(&m_aFileNameModel[nCntModel][0], aStr);
-
-						// Xファイルの読み込み
-						D3DXLoadMeshFromX(&m_aFileNameModel[nCntModel][0],
-							D3DXMESH_SYSTEMMEM,
-							pDevice,
-							NULL,
-							&m_pBuffMatModel[nCntModel],
-							NULL,
-							&m_nNumMatModel[nCntModel],
-							&m_pMeshModel[nCntModel]);
-					}
-				}
 				//文字列の先頭を設定
 				pStrcur = ReadLine(pFile, &aLine[0]);
 				//文字列を取り出す
 				strcpy(aStr, pStrcur);
-			}
 
-
-			//文字列のデータ 比較する文字列 比較する文字数
-			if (memcmp(pStrcur, "CHARACTERSET", 12) == 0)
-			{
-				while (1)
+				//文字列のデータ 比較する文字列 比較する文字数
+				if (memcmp(pStrcur, "NUM_MODEL = ", strlen("NUM_MODEL = ")) == 0)
 				{
+					//頭出し
+					pStrcur += strlen("NUM_MODEL = ");
 					//文字列の先頭を設定
-					pStrcur = ReadLine(pFile, &aLine[0]);
-					//文字列を取り出す
 					strcpy(aStr, pStrcur);
-					if (memcmp(pStrcur, "NUM_PARTS = ", strlen("NUM_PARTS = ")) == 0)
+					//文字列抜き出し
+					int nNumModel = atoi(pStrcur);
+
+					for (int nCntModel = 0; nCntModel < nNumModel; nCntModel++)
 					{
-						//頭出し
-						pStrcur += strlen("NUM_PARTS = ");
-						//文字列の先頭を設定
-						strcpy(aStr, pStrcur);
-						//文字列抜き出し
-						m_nNumParts = atoi(pStrcur);
-					}
-					if (memcmp(pStrcur, "PARTSSET", strlen("PARTSSET")) == 0)
-					{
-						while (1)
-						{
-							//文字列の先頭を設定
-							pStrcur = ReadLine(pFile, &aLine[0]);
-
-							//INDEXを読み込み
-							if (memcmp(pStrcur, "INDEX = ", strlen("INDEX = ")) == 0)
-							{
-								//頭出し
-								pStrcur += strlen("INDEX = ");
-								//文字列の先頭を設定
-								strcpy(aStr, pStrcur);
-								//文字列抜き出し
-								nIndex = atoi(pStrcur);
-							}
-							//PARENTを読み込み
-							if (memcmp(pStrcur, "PARENT = ", strlen("PARENT = ")) == 0)
-							{
-								//頭出し
-								pStrcur += strlen("PARENT = ");
-								//文字列の先頭を設定
-								strcpy(aStr, pStrcur);
-								//文字列抜き出し
-								m_aIndexParent[nIndex] = atoi(pStrcur);
-							}
-							//POSを読み込み
-							if (memcmp(pStrcur, "POS = ", strlen("POS = ")) == 0)
-							{
-								//頭出し
-								pStrcur += strlen("POS = ");
-								//文字列の先頭を設定
-								strcpy(aStr, pStrcur);
-
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								m_aKayOffset[nIndex].fposX = (float)atof(pStrcur);
-								//文字数分進める
-								pStrcur += nWord;
-
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								m_aKayOffset[nIndex].fposY = (float)atof(pStrcur);
-								//文字数分進める
-								pStrcur += nWord;
-
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								m_aKayOffset[nIndex].fposZ = (float)atof(pStrcur);
-
-							}
-							//ROTを読み込み
-							if (memcmp(pStrcur, "ROT = ", strlen("ROT = ")) == 0)
-							{
-								//頭出し
-								pStrcur += strlen("ROT = ");
-								//文字列の先頭を設定
-								strcpy(aStr, pStrcur);
-
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								m_aKayOffset[nIndex].frotX = (float)atof(pStrcur);
-
-								//文字数分進める
-								pStrcur += nWord;
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								m_aKayOffset[nIndex].frotY = (float)atof(pStrcur);
-
-								//文字数分進める
-								pStrcur += nWord;
-								//文字数を返してもらう
-								nWord = PopString(pStrcur, &aStr[0]);
-								//文字列変換
-								//rotFile[nIndex].z = (float)atof(pStrcur);
-								m_aKayOffset[nIndex].frotZ = (float)atof(pStrcur);
-
-
-							}
-							//パーツセット終了
-							else if (memcmp(pStrcur, "END_PARTSSET", strlen("END_PARTSSET")) == 0)
-							{
-
-								//モデルを生成	オフセット設定
-								m_apModel[nIndex] = CModel::Create(
-									D3DXVECTOR3(m_aKayOffset[nIndex].fposX,
-										m_aKayOffset[nIndex].fposY,
-										m_aKayOffset[nIndex].fposZ),
-									D3DXVECTOR3(m_aKayOffset[nIndex].frotX,
-										m_aKayOffset[nIndex].frotY,
-										m_aKayOffset[nIndex].frotZ));
-
-								//posを代入
-								m_OffSetPos[nIndex] = m_apModel[nIndex]->GetPos();
-
-								//モデルを割り当て
-								m_apModel[nIndex]->BindModel(m_nNumMatModel[nIndex], m_pMeshModel[nIndex], m_pBuffMatModel[nIndex]);
-
-								if (m_aIndexParent[nIndex] == -1)
-								{
-									//モデルの親を指定
-									m_apModel[nIndex]->SetParent(NULL);
-								}
-								else
-								{
-									//モデルの親を指定
-									m_apModel[nIndex]->SetParent(m_apModel[m_aIndexParent[nIndex]]);
-								}
-
-								break;
-							}
-						}
-					}
-					//キャラクターセット終了
-					else if (memcmp(pStrcur, "END_CHARACTERSET", strlen("END_CHARACTERSET")) == 0)
-					{
-						break;
-					}
-				}
-				//文字列の先頭を設定
-				pStrcur = ReadLine(pFile, &aLine[0]);
-				//文字列を取り出す
-				strcpy(aStr, pStrcur);
-			}
-
-			//モーション読み込み
-			if (memcmp(pStrcur, "MOTIONSET", strlen("MOTIONSET")) == 0)
-			{
-				//頭出し
-				pStrcur += strlen("MOTIONSET");
-
-				while (1)
-				{
-					//文字列の先頭を設定
-					pStrcur = ReadLine(pFile, &aLine[0]);
-					//文字列を取り出す
-					strcpy(aStr, pStrcur);
-
-					if (memcmp(pStrcur, "LOOP = ", strlen("LOOP = ")) == 0)
-					{
-						//頭出し
-						pStrcur += strlen("LOOP = ");
-						//文字列の先頭を設定
-						strcpy(aStr, pStrcur);
-
-						switch (atoi(pStrcur))
-						{
-						case 0:
-							//文字列抜き出し
-							m_aMotionInfo[nCntMotion].bLoop = false;
-							break;
-						case 1:
-							//文字列抜き出し
-							m_aMotionInfo[nCntMotion].bLoop = true;
-							break;
-						}
 						//文字列の先頭を設定
 						pStrcur = ReadLine(pFile, &aLine[0]);
-					}
-
-					if (memcmp(pStrcur, "NUM_KEY = ", strlen("NUM_KEY = ")) == 0)
-					{
-						//頭出し
-						pStrcur += strlen("NUM_KEY = ");
-						//文字列の先頭を設定
+						//文字列を取り戻す
 						strcpy(aStr, pStrcur);
-						//文字列抜き出し
-						m_aMotionInfo[nCntMotion].nNumKey = atoi(pStrcur);
+						if (memcmp(pStrcur, "MODEL_FILENAME = ", strlen("MODEL_FILENAME = ")) == 0)
+						{
+							//頭出し
+							pStrcur += strlen("MODEL_FILENAME = ");
 
+							//文字列を設定
+							strcpy(aStr, pStrcur);
+
+							//必要な文字列の最後の文字までの文字数を数える
+							int nNullNum = PopString(pStrcur, &aStr[0]);
+
+							//文字列を取り戻す
+							strcpy(aStr, pStrcur);
+
+							//最後の文字にNULL文字を入れる
+							aStr[nNullNum - 1] = '\0';
+
+							//対象の文字列から抜き出し
+							strcpy(&m_aFileNameModel[nCntModel][0], aStr);
+
+							// Xファイルの読み込み
+							D3DXLoadMeshFromX(&m_aFileNameModel[nCntModel][0],
+								D3DXMESH_SYSTEMMEM,
+								pDevice,
+								NULL,
+								&m_pBuffMatModel[nCntModel][nParent],
+								NULL,
+								&m_nNumMatModel[nCntModel][nParent],
+								&m_pMeshModel[nCntModel][nParent]);
+						}
+					}
+					//文字列の先頭を設定
+					pStrcur = ReadLine(pFile, &aLine[0]);
+					//文字列を取り出す
+					strcpy(aStr, pStrcur);
+				}
+
+
+				//文字列のデータ 比較する文字列 比較する文字数
+				if (memcmp(pStrcur, "CHARACTERSET", 12) == 0)
+				{
+					while (1)
+					{
 						//文字列の先頭を設定
 						pStrcur = ReadLine(pFile, &aLine[0]);
 						//文字列を取り出す
 						strcpy(aStr, pStrcur);
-					}
-
-					//キーの設定
-					for (int nCntKey = 0; nCntKey < m_aMotionInfo[nCntMotion].nNumKey;)
-					{
-						if (memcmp(pStrcur, "KEYSET", strlen("KEYSET")) == 0)
+						if (memcmp(pStrcur, "NUM_PARTS = ", strlen("NUM_PARTS = ")) == 0)
 						{
 							//頭出し
-							pStrcur += strlen("KEYSET");
+							pStrcur += strlen("NUM_PARTS = ");
 							//文字列の先頭を設定
 							strcpy(aStr, pStrcur);
+							//文字列抜き出し
+							m_nNumParts[nParent] = atoi(pStrcur);
+						}
+						if (memcmp(pStrcur, "PARTSSET", strlen("PARTSSET")) == 0)
+						{
+							while (1)
+							{
+								//文字列の先頭を設定
+								pStrcur = ReadLine(pFile, &aLine[0]);
+
+								//INDEXを読み込み
+								if (memcmp(pStrcur, "INDEX = ", strlen("INDEX = ")) == 0)
+								{
+									//頭出し
+									pStrcur += strlen("INDEX = ");
+									//文字列の先頭を設定
+									strcpy(aStr, pStrcur);
+									//文字列抜き出し
+									nIndex = atoi(pStrcur);
+								}
+								//PARENTを読み込み
+								if (memcmp(pStrcur, "PARENT = ", strlen("PARENT = ")) == 0)
+								{
+									//頭出し
+									pStrcur += strlen("PARENT = ");
+									//文字列の先頭を設定
+									strcpy(aStr, pStrcur);
+									//文字列抜き出し
+									m_aIndexParent[nIndex][nParent] = atoi(pStrcur);
+								}
+								//POSを読み込み
+								if (memcmp(pStrcur, "POS = ", strlen("POS = ")) == 0)
+								{
+									//頭出し
+									pStrcur += strlen("POS = ");
+									//文字列の先頭を設定
+									strcpy(aStr, pStrcur);
+
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									m_aKayOffset[nIndex][nParent].fposX = (float)atof(pStrcur);
+									//文字数分進める
+									pStrcur += nWord;
+
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									m_aKayOffset[nIndex][nParent].fposY = (float)atof(pStrcur);
+									//文字数分進める
+									pStrcur += nWord;
+
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									m_aKayOffset[nIndex][nParent].fposZ = (float)atof(pStrcur);
+
+								}
+								//ROTを読み込み
+								if (memcmp(pStrcur, "ROT = ", strlen("ROT = ")) == 0)
+								{
+									//頭出し
+									pStrcur += strlen("ROT = ");
+									//文字列の先頭を設定
+									strcpy(aStr, pStrcur);
+
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									m_aKayOffset[nIndex][nParent].frotX = (float)atof(pStrcur);
+
+									//文字数分進める
+									pStrcur += nWord;
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									m_aKayOffset[nIndex][nParent].frotY = (float)atof(pStrcur);
+
+									//文字数分進める
+									pStrcur += nWord;
+									//文字数を返してもらう
+									nWord = PopString(pStrcur, &aStr[0]);
+									//文字列変換
+									//rotFile[nIndex].z = (float)atof(pStrcur);
+									m_aKayOffset[nIndex][nParent].frotZ = (float)atof(pStrcur);
+
+
+								}
+								//パーツセット終了
+								else if (memcmp(pStrcur, "END_PARTSSET", strlen("END_PARTSSET")) == 0)
+								{
+
+									//モデルを生成	オフセット設定
+									m_apModel[nIndex][nParent] = CModel::Create(
+										D3DXVECTOR3(m_aKayOffset[nIndex][nParent].fposX,
+											m_aKayOffset[nIndex][nParent].fposY,
+											m_aKayOffset[nIndex][nParent].fposZ),
+										D3DXVECTOR3(m_aKayOffset[nIndex][nParent].frotX,
+											m_aKayOffset[nIndex][nParent].frotY,
+											m_aKayOffset[nIndex][nParent].frotZ));
+
+									//posを代入
+									m_OffSetPos[nIndex][nParent] = m_apModel[nIndex][nParent]->GetPos();
+
+									//モデルを割り当て
+									m_apModel[nIndex][nParent]->BindModel(m_nNumMatModel[nIndex][nParent], m_pMeshModel[nIndex][nParent], m_pBuffMatModel[nIndex][nParent]);
+
+									if (m_aIndexParent[nIndex][nParent] == -1)
+									{
+										//モデルの親を指定
+										m_apModel[nIndex][nParent]->SetParent(NULL);
+									}
+									else
+									{
+										//モデルの親を指定
+										m_apModel[nIndex][nParent]->SetParent(m_apModel[m_aIndexParent[nIndex][nParent]][nParent]);
+									}
+
+									break;
+								}
+							}
+						}
+						//キャラクターセット終了
+						else if (memcmp(pStrcur, "END_CHARACTERSET", strlen("END_CHARACTERSET")) == 0)
+						{
+							break;
+						}
+					}
+					//文字列の先頭を設定
+					pStrcur = ReadLine(pFile, &aLine[0]);
+					//文字列を取り出す
+					strcpy(aStr, pStrcur);
+				}
+
+				//モーション読み込み
+				if (memcmp(pStrcur, "MOTIONSET", strlen("MOTIONSET")) == 0)
+				{
+					//頭出し
+					pStrcur += strlen("MOTIONSET");
+
+					while (1)
+					{
+						//文字列の先頭を設定
+						pStrcur = ReadLine(pFile, &aLine[0]);
+						//文字列を取り出す
+						strcpy(aStr, pStrcur);
+
+						if (memcmp(pStrcur, "LOOP = ", strlen("LOOP = ")) == 0)
+						{
+							//頭出し
+							pStrcur += strlen("LOOP = ");
+							//文字列の先頭を設定
+							strcpy(aStr, pStrcur);
+
+							switch (atoi(pStrcur))
+							{
+							case 0:
+								//文字列抜き出し
+								m_aMotionInfo[nCntMotion][nParent].bLoop = false;
+								break;
+							case 1:
+								//文字列抜き出し
+								m_aMotionInfo[nCntMotion][nParent].bLoop = true;
+								break;
+							}
 							//文字列の先頭を設定
 							pStrcur = ReadLine(pFile, &aLine[0]);
+						}
 
-							if (memcmp(pStrcur, "FRAME = ", strlen("FRAME = ")) == 0)
+						if (memcmp(pStrcur, "NUM_KEY = ", strlen("NUM_KEY = ")) == 0)
+						{
+							//頭出し
+							pStrcur += strlen("NUM_KEY = ");
+							//文字列の先頭を設定
+							strcpy(aStr, pStrcur);
+							//文字列抜き出し
+							m_aMotionInfo[nCntMotion][nParent].nNumKey = atoi(pStrcur);
+
+							//文字列の先頭を設定
+							pStrcur = ReadLine(pFile, &aLine[0]);
+							//文字列を取り出す
+							strcpy(aStr, pStrcur);
+						}
+
+						//キーの設定
+						for (int nCntKey = 0; nCntKey < m_aMotionInfo[nCntMotion][nParent].nNumKey;)
+						{
+							if (memcmp(pStrcur, "KEYSET", strlen("KEYSET")) == 0)
 							{
 								//頭出し
-								pStrcur += strlen("FRAME = ");
-
-								m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].nFrame = atoi(pStrcur);
-
+								pStrcur += strlen("KEYSET");
 								//文字列の先頭を設定
 								strcpy(aStr, pStrcur);
 								//文字列の先頭を設定
 								pStrcur = ReadLine(pFile, &aLine[0]);
-							}
 
-							//パーツ分回す
-							for (int nCntParts = 0; nCntParts < m_nNumParts;)
-							{
-								if (memcmp(pStrcur, "KEY", strlen("KEY")) == 0)
+								if (memcmp(pStrcur, "FRAME = ", strlen("FRAME = ")) == 0)
 								{
+									//頭出し
+									pStrcur += strlen("FRAME = ");
+
+									m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].nFrame = atoi(pStrcur);
+
 									//文字列の先頭を設定
-									pStrcur = ReadLine(pFile, &aLine[0]);
-
-									if (memcmp(pStrcur, "POS = ", strlen("POS = ")) == 0)
-									{
-										//頭出し
-										pStrcur += strlen("POS = ");
-										//文字列の先頭を設定
-										strcpy(aStr, pStrcur);
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//POS.X代入
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].fposX = (float)atof(pStrcur);
-										//文字数分進める
-										pStrcur += nWord;
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//POS.Y代入
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].fposY = (float)atof(pStrcur);
-										//文字数分進める
-										pStrcur += nWord;
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//POS.Z代入
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].fposZ = (float)atof(pStrcur);
-										//文字列の先頭を設定
-										pStrcur = ReadLine(pFile, &aLine[0]);
-									}
-									//ROTを読み込み
-									if (memcmp(pStrcur, "ROT = ", strlen("ROT = ")) == 0)
-									{
-										//頭出し
-										pStrcur += strlen("ROT = ");
-										//文字列の先頭を設定
-										strcpy(aStr, pStrcur);
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//RotX
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].frotX = (float)atof(pStrcur);
-										//文字数分進める
-										pStrcur += nWord;
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//RotY
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].frotY = (float)atof(pStrcur);
-										//文字数分進める
-										pStrcur += nWord;
-
-										//文字数を返してもらう
-										nWord = PopString(pStrcur, &aStr[0]);
-										//RotZ
-										m_aMotionInfo[nCntMotion].aKayInfo[nCntKey].aKey[nCntParts].frotZ = (float)atof(pStrcur);
-
-										//文字列の先頭を設定
-										pStrcur = ReadLine(pFile, &aLine[0]);
-									}
-									if (memcmp(pStrcur, "END_KEY", strlen("END_KEY")) == 0)
-									{
-										//頭出し
-										pStrcur += strlen("END_KEY");
-										//文字列の先頭を設定
-										strcpy(aStr, pStrcur);
-										//文字列の先頭を設定
-										pStrcur = ReadLine(pFile, &aLine[0]);
-										//パーツのカウントを進める
-										nCntParts++;
-									}
-								}
-								else
-								{
+									strcpy(aStr, pStrcur);
 									//文字列の先頭を設定
 									pStrcur = ReadLine(pFile, &aLine[0]);
 								}
+
+								//パーツ分回す
+								for (int nCntParts = 0; nCntParts < m_nNumParts[nParent];)
+								{
+									if (memcmp(pStrcur, "KEY", strlen("KEY")) == 0)
+									{
+										//文字列の先頭を設定
+										pStrcur = ReadLine(pFile, &aLine[0]);
+
+										if (memcmp(pStrcur, "POS = ", strlen("POS = ")) == 0)
+										{
+											//頭出し
+											pStrcur += strlen("POS = ");
+											//文字列の先頭を設定
+											strcpy(aStr, pStrcur);
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//POS.X代入
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].fposX = (float)atof(pStrcur);
+											//文字数分進める
+											pStrcur += nWord;
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//POS.Y代入
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].fposY = (float)atof(pStrcur);
+											//文字数分進める
+											pStrcur += nWord;
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//POS.Z代入
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].fposZ = (float)atof(pStrcur);
+											//文字列の先頭を設定
+											pStrcur = ReadLine(pFile, &aLine[0]);
+										}
+										//ROTを読み込み
+										if (memcmp(pStrcur, "ROT = ", strlen("ROT = ")) == 0)
+										{
+											//頭出し
+											pStrcur += strlen("ROT = ");
+											//文字列の先頭を設定
+											strcpy(aStr, pStrcur);
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//RotX
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].frotX = (float)atof(pStrcur);
+											//文字数分進める
+											pStrcur += nWord;
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//RotY
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].frotY = (float)atof(pStrcur);
+											//文字数分進める
+											pStrcur += nWord;
+
+											//文字数を返してもらう
+											nWord = PopString(pStrcur, &aStr[0]);
+											//RotZ
+											m_aMotionInfo[nCntMotion][nParent].aKayInfo[nCntKey].aKey[nCntParts].frotZ = (float)atof(pStrcur);
+
+											//文字列の先頭を設定
+											pStrcur = ReadLine(pFile, &aLine[0]);
+										}
+										if (memcmp(pStrcur, "END_KEY", strlen("END_KEY")) == 0)
+										{
+											//頭出し
+											pStrcur += strlen("END_KEY");
+											//文字列の先頭を設定
+											strcpy(aStr, pStrcur);
+											//文字列の先頭を設定
+											pStrcur = ReadLine(pFile, &aLine[0]);
+											//パーツのカウントを進める
+											nCntParts++;
+										}
+									}
+									else
+									{
+										//文字列の先頭を設定
+										pStrcur = ReadLine(pFile, &aLine[0]);
+									}
+								}
+								if (memcmp(pStrcur, "END_KEYSET", strlen("END_KEYSET")) == 0)
+								{
+									//文字列の先頭を設定
+									pStrcur = ReadLine(pFile, &aLine[0]);
+									//カウントを進める
+									nCntKey++;
+								}
 							}
-							if (memcmp(pStrcur, "END_KEYSET", strlen("END_KEYSET")) == 0)
+							else
 							{
 								//文字列の先頭を設定
 								pStrcur = ReadLine(pFile, &aLine[0]);
-								//カウントを進める
-								nCntKey++;
 							}
-						}
-						else
-						{
-							//文字列の先頭を設定
-							pStrcur = ReadLine(pFile, &aLine[0]);
-						}
 
-					}
-					if (memcmp(pStrcur, "END_MOTIONSET", strlen("END_MOTIONSET")) == 0)
-					{
-						//モーションの情報をセット
-						m_pKeyInfo[nCntMotion] = &m_aMotionInfo[nCntMotion].aKayInfo[0];
-						break;
+						}
+						if (memcmp(pStrcur, "END_MOTIONSET", strlen("END_MOTIONSET")) == 0)
+						{
+							//モーションの情報をセット
+							m_pKeyInfo[nCntMotion][nParent] = &m_aMotionInfo[nCntMotion][nParent].aKayInfo[0];
+							break;
+						}
 					}
 				}
-			}
-			//スクリプトの終わり
-			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
-			{
-				break;
+				//スクリプトの終わり
+				if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
+				{
+					break;
+				}
 			}
 		}
 	}
