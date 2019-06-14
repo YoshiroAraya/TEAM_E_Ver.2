@@ -24,6 +24,12 @@ public:
 		STATE_CHARASELECT,
 	}STATE;
 
+	typedef enum
+	{
+		CHARACTER_PLAYER = 0,
+		CHARACTER_ENEMY,
+	}CHARACTER;
+
 	CTitle();
 	~CTitle();
 
@@ -39,6 +45,7 @@ public:
 
 private:
 	STATE m_state;
+	CHARACTER m_Character;
 	bool m_bSetDohyo;
 	bool m_bTurn;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
