@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="Banimation.cpp" />
     <ClCompile Include="BattleSystem.cpp" />
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="dohyo.cpp" />
     <ClCompile Include="dohyocircle.cpp" />
     <ClCompile Include="effect.cpp" />
+    <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="field.cpp" />
@@ -197,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="Banimation.h" />
     <ClInclude Include="BattleSystem.h" />
     <ClInclude Include="billboard.h" />
     <ClInclude Include="camera.h" />
@@ -206,6 +209,7 @@
     <ClInclude Include="dohyo.h" />
     <ClInclude Include="dohyocircle.h" />
     <ClInclude Include="effect.h" />
+    <ClInclude Include="effect3D.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="field.h" />
