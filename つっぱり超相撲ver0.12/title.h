@@ -8,6 +8,7 @@
 #define _TITLE_H_
 
 #include "scene.h"
+#include "numPlayer.h"
 
 //‘O•ûéŒ¾
 class CPlayer;
@@ -42,10 +43,11 @@ public:
 	void SetState(STATE state) { m_state = state; }
 	bool GetTurn(void) { return m_bTurn; }
 	void SetTurn(bool turn) { m_bTurn = turn; }
+	void SaveCharacter(void);
 
 private:
 	STATE m_state;
-	CHARACTER m_Character;
+	CHARACTER m_Character[MAX_NUMPLAYER];
 	bool m_bSetDohyo;
 	bool m_bTurn;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
