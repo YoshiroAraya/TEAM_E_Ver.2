@@ -46,11 +46,11 @@ DWORD						CPlayer::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
 CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 {
 	// 値をクリア
-	m_pTexture = NULL;						// テクスチャへのポインタ
-	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
-	m_bLand = false;					// 右にいるかどうか
-	m_bHit = false;					// 右にいるかどうか
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
+	m_pTexture = NULL;								// テクスチャへのポインタ
+	m_pVtxBuff = NULL;								// 頂点バッファへのポインタ
+	m_bLand = false;								// 右にいるかどうか
+	m_bHit = false;									// 右にいるかどうか
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_State = STATE_NEUTRAL;
 	m_Direction = DIRECTION_RIGHT;
@@ -82,8 +82,12 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 		m_nNumParts[nCntParent] = 0;
 		m_nKey[nCntParent] = 0;			//現在のキー
 		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
-
 	}
+
+#ifdef _DEBUG
+	m_bColBlockDraw = false;
+#endif
+
 }
 
 //=============================================================================
@@ -363,11 +367,11 @@ void CPlayer::Update(void)
 				rot.y += D3DX_PI* 2.0f;
 			}
 
-			if (rot.y > 0.0f)
+			if (rot.y < 0.0f)
 			{
 				m_Direction = DIRECTION_RIGHT;
 			}
-			else if (rot.y < 0.0f)
+			else if (rot.y > 0.0f)
 			{
 				m_Direction = DIRECTION_LEFT;
 			}
@@ -430,35 +434,17 @@ void CPlayer::Update(void)
 		pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}
 
-	//if (m_Touzai == HIGASHI)
-	//{
-		if (CCamera::GetState() == CCamera::STATE_HIGASHI)
+	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
+	{
+		// 右に進む
+		if (pos.x >= -20.0f)
 		{
-			// 右に進む
-			if (pos.x >= -20.0f)
-			{
-				fMovePlayer = 0.0f;
-				pos.x = -20.0f;
-			}
-
-			m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
+			fMovePlayer = 0.0f;
+			pos.x = -20.0f;
 		}
-	//}
-	//else if(m_Touzai == NISHI)
-	//{
-	//	if (CCamera::GetState() == CCamera::STATE_NISHI)
-	//	{
-	//		// 左に進む
-	//		if (pos.x <= 20.0f)
-	//		{
-	//			fMovePlayer = 0.0f;
-	//			pos.x = 20.0f;
-	//		}
 
-	//		m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer * 0.7f);
-	//	}
-	//}
-
+		m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
+	}
 
 	if (pInputKeyboard->GetPress(DIK_I) == true)
 	{
@@ -565,6 +551,12 @@ void CPlayer::Update(void)
 		m_nCountFlame[0] = 0;
 		m_nCountFlame[1] = 0;
 	}
+
+	if (pInputKeyboard->GetTrigger(DIK_1) == true)
+	{
+		//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
+		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
+	}
 	CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
 	CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
 	CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
@@ -580,11 +572,15 @@ void CPlayer::Draw(void)
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	// 計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale;
 
-	D3DXMATRIX mtxRot, mtxTrans, mtxScale;				// 計算用マトリックス
-
-	// 2Dオブジェクト描画処理
-	//CSceneX::Draw();
+#ifdef _DEBUG
+	if (m_bColBlockDraw == true)
+	{	// 2Dオブジェクト描画処理
+		CSceneX::Draw();
+	}
+#endif
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);

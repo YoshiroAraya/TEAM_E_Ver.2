@@ -212,6 +212,8 @@ private:
 
 	char						m_aFileNameModel[MAX_PARTS][256];
 
-
+#ifdef _DEBUG
+	bool						m_bColBlockDraw;
+#endif
 };
 #endif

@@ -18,6 +18,7 @@
 #define ENEMY_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
 #define MAX_PARTS		(30)
 #define MAX_MOTION		(30)
+#define MODEL_PARENT	(2)
 
 //*****************************************************************************
 //　前方宣言
@@ -134,9 +135,9 @@ public:
 
 
 	//モーションの更新関数
-	void UpdateMotion(void);
+	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
-	void FileLoad(void);						//ファイル読み込み
+	void FileLoad(char FileName[256], int nParent);					//ファイル読み込み
 	char *ReadLine(FILE *pFile, char *pDst);	//1行読み込み
 	char *GetLineTop(char *pStr);				//行の先頭を取得
 	int  PopString(char *pStr, char *pDest);	//行の最後を切り捨て
@@ -173,28 +174,32 @@ private:
 
 
 	// モーション関数
-	static LPD3DXMESH			m_pMeshModel[MAX_PARTS];		//メッシュ情報へのポインタ
-	static LPD3DXBUFFER			m_pBuffMatModel[MAX_PARTS];		//マテリアル情報へのポインタ
-	static LPDIRECT3DTEXTURE9	m_pTextureModel[MAX_PARTS];		//テクスチャへのポインタ
-	static DWORD				m_nNumMatModel[MAX_PARTS];		//マテリアル情報の数
+	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ
+	static LPD3DXBUFFER			m_pBuffMatModel[MAX_PARTS][MODEL_PARENT];	//マテリアル情報へのポインタ
+	static LPDIRECT3DTEXTURE9	m_pTextureModel[MAX_PARTS][MODEL_PARENT];	//テクスチャへのポインタ
+	static DWORD				m_nNumMatModel[MAX_PARTS][MODEL_PARENT];	//マテリアル情報の数
 
-	KEY_INFO					*m_pKeyInfo[MAX_MOTION];		//キー情報へのポインタ
-	int							m_nKey;							//現在のキーナンバー
-	int							m_nCountFlame;					//フレーム数
+	KEY_INFO					*m_pKeyInfo[MAX_MOTION][MODEL_PARENT];		//キー情報へのポインタ
+	int							m_nKey[MODEL_PARENT];						//現在のキーナンバー
+	int							m_nCountFlame[MODEL_PARENT];				//フレーム数
 
-	int							m_nNumParts;					//パーツ数
-	int							m_aIndexParent[MAX_PARTS];		//親のインデックス
-	KEY							m_aKayOffset[MAX_PARTS];		//オフセット情報
-	MOTION_INFO					m_aMotionInfo[MAX_MOTION];		//モーション情報
-	int							m_nMotionType;					//モーションのタイプ(int型)
-	bool						m_bMotionEnd;					//モーションの終わり
-	int							m_nOldMotion;					//前回のモーション
-	D3DXVECTOR3					m_OffSetPos[MAX_PARTS];			//オフセット情報(モーション)
-																//MOTIONSTATE				m_MotionState;
-																//DASHSTATE					m_DashState;
+	int							m_nNumParts[MODEL_PARENT];					//パーツ数
+	int							m_aIndexParent[MAX_PARTS][MODEL_PARENT];	//親のインデックス
+	KEY							m_aKayOffset[MAX_PARTS][MODEL_PARENT];		//オフセット情報
+	MOTION_INFO					m_aMotionInfo[MAX_MOTION][MODEL_PARENT];	//モーション情報
+	int							m_nMotionType[MODEL_PARENT];				//モーションのタイプ(int型)
+	bool						m_bMotionEnd;								//モーションの終わり
+	int							m_nOldMotion;								//前回のモーション
+	D3DXVECTOR3					m_OffSetPos[MAX_PARTS][MODEL_PARENT];		//オフセット情報(モーション)
+																			//MOTIONSTATE				m_MotionState;
+																			//DASHSTATE					m_DashState;
 	D3DXCOLOR					m_effectCol;
-	CModel						*m_apModel[MAX_PARTS];			//パーツ情報
+	CModel						*m_apModel[MAX_PARTS][MODEL_PARENT];			//パーツ情報
 
 	char						m_aFileNameModel[MAX_PARTS][256];
+
+#ifdef _DEBUG
+	bool						m_bColBlockDraw;
+#endif
 };
 #endif
