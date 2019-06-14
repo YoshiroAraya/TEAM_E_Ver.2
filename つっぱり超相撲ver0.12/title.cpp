@@ -59,6 +59,7 @@ void CTitle::Init(void)
 	m_bTurn = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
+	m_Character = CHARACTER_PLAYER;
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
 
@@ -164,6 +165,15 @@ void CTitle::Update(void)
 		else if (mode == CNumPlayer::MODE_2P)
 		{
 			CDebugProc::Print("c", "2P");
+		}
+
+		if (m_pPlayer->GetSelect() == true)
+		{
+			CDebugProc::Print("c", "プレイヤー");
+		}
+		if (m_pEnemy->GetSelect() == true)
+		{
+			CDebugProc::Print("c", "エネミー");
 		}
 #endif
 	}

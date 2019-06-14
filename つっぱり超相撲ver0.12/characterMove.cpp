@@ -111,17 +111,19 @@ D3DXVECTOR3 CCharacterMove::MoveLeft(D3DXVECTOR3 move, float fSpeed)
 //=============================================================================
 // キャラ回転
 //=============================================================================
-void CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, float fLength)
+bool CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, float fLength)
 {
 	// タイトル取得
 	CTitle *pTitle;
 	pTitle = CManager::GetTitle();
 
+	bool bSelect = false;
+
 	if (pTitle != NULL)
 	{
 		if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
 		{
-			fRot = sinf(D3DX_PI + rot->y);
+			//fRot = sinf(D3DX_PI + rot->y);
 			rot->y -= 0.1f;
 
 			if (rot->y > D3DX_PI)
@@ -139,7 +141,7 @@ void CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, f
 				fRot = 1.0f;
 				rot->y = D3DX_PI * -0.5f;
 			}
-			if (fRot <= -0.999f && fRot > -1.0f)
+			else if (fRot <= -0.999f && fRot > -1.0f)
 			{
 				pTitle->SetTurn(false);
 				fRot = -1.0f;
@@ -151,21 +153,26 @@ void CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, f
 		}
 		else if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == false)
 		{
-			if (fRot >= 0.999f && fRot < 1.0f)
+			if (fRot >= 0.999f && fRot <= 1.0f)
 			{
 				pTitle->SetTurn(false);
 				fRot = 1.0f;
 				rot->y = D3DX_PI * -0.5f;
+				bSelect = false;
 			}
-			if (fRot <= -0.999f && fRot > -1.0f)
+			else if (fRot <= -0.999f && fRot >= -1.0f)
 			{
 				pTitle->SetTurn(false);
 				fRot = -1.0f;
 				rot->y = D3DX_PI * 0.5f;
+
+				bSelect = true;
 			}
 
 			pos->x = 0.0f + fRot * fLength;
 			pos->z = 0.0f + cosf(D3DX_PI + rot->y) * fLength;
 		}
 	}
+
+	return bSelect;
 }

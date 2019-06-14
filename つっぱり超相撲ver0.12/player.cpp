@@ -147,6 +147,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
+	m_bSelect = false;
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -427,7 +429,7 @@ void CPlayer::Update(void)
 	else if (mode == CManager::MODE_TITLE)
 	{
 		m_fRot = sinf(D3DX_PI + rot.y);
-		pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}
 
 	//if (m_Touzai == HIGASHI)
