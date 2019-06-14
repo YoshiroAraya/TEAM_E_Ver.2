@@ -183,8 +183,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
 	//オーラ
-		CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
-			50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
+		//CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+			//50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
 	}
 
 	return S_OK;

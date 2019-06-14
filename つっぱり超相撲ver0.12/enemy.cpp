@@ -167,8 +167,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
 	//オーラ
-		CBAnimation::Create(D3DXVECTOR3(pos), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+		//CBAnimation::Create(D3DXVECTOR3(pos), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			//50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 	}
 	return S_OK;
 }
