@@ -155,6 +155,7 @@ private:
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分
 	float					m_fLength;		// 回転するときの半径
+	float					m_fRot;
 	bool					m_bLand;		// モデルに乗っているかどうか
 	bool					m_bHit;			// 敵に当たっているかどうか
 	bool					m_bRecovery;	// 硬直フラグ

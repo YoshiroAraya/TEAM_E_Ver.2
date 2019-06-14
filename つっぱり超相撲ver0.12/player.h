@@ -152,9 +152,6 @@ public:
 	char *GetLineTop(char *pStr);				//行の先頭を取得
 	int  PopString(char *pStr, char *pDest);	//行の最後を切り捨て
 
-
-
-
 private:
 	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
 	static LPD3DXBUFFER		m_pBuffMat;		// マテリアル情報へのポインタ

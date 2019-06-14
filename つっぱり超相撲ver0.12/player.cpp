@@ -66,6 +66,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_nCountFlame = 0;	//現在のフレーム
 	m_nMotionType = 0;	//現在のモーションタイプ
 	m_nOldMotion = 0;	//前のモーション
+	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 
 	for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
@@ -137,6 +138,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
+	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -400,42 +402,8 @@ void CPlayer::Update(void)
 	}
 	else if (mode == CManager::MODE_TITLE)
 	{
-		// タイトル取得
-		CTitle *pTitle;
-		pTitle = CManager::GetTitle();
-
-		if (pTitle != NULL)
-		{
-			if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
-			{
-				if (rot.y < -D3DX_PI)
-				{
-					rot.y += D3DX_PI * 2.0f;
-				}
-
-				if (m_fRot >= 0.999f && m_fRot < 1.0f)
-				{
-					pTitle->SetTurn(false);
-					m_fRot = 1.0f;
-				}
-				else if (m_fRot <= -0.999f && m_fRot > -1.0f)
-				{
-					pTitle->SetTurn(false);
-					m_fRot = -1.0f;
-				}
-				else
-				{
-					rot.y -= 0.1f;
-					m_fRot = sinf(D3DX_PI + rot.y);
-				}
-
-				pos.x = 0.0f + m_fRot * m_fLength;
-				pos.z = 0.0f + cosf(D3DX_PI + rot.y) * m_fLength;
-			}
-		}
-#ifdef _DEBUG
-		CDebugProc::Print("cf", "fData1 : ", m_fRot);
-#endif
+		m_fRot = sinf(D3DX_PI + rot.y);
+		pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}
 
 	//if (m_Touzai == HIGASHI)

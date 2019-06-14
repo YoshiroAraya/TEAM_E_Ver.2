@@ -64,6 +64,8 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = 0.0f;
+	//m_turnRot = D3DXVECTOR3(0, 0, 0);
+	m_fRot = 0.0f;
 
 	m_nKey = 0;			//現在のキー
 	m_nCountFlame = 0;	//現在のフレーム
@@ -123,6 +125,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_move = D3DXVECTOR3(0, 0, 0);
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
+	//m_turnRot = D3DXVECTOR3(0, 0, 0);
+	m_fRot = 0.0f;
 	m_bLand = false;					// 右にいるかどうか
 	m_Direction = DIRECTION_LEFT;
 	m_State = STATE_JANKEN;
@@ -396,31 +400,9 @@ void CEnemy::Update(void)
 	}
 	else if (mode == CManager::MODE_TITLE)
 	{
-		// タイトル取得
-		CTitle *pTitle;
-		pTitle = CManager::GetTitle();
+		m_fRot = sinf(D3DX_PI + rot.y);
 
-		float fData1 = 0.0f;
-		float fData2 = 0.0f;
-
-		if (pTitle != NULL)
-		{
-			if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
-			{
-				rot.y -= 0.1f;
-
-				if (rot.y < -D3DX_PI)
-				{
-					rot.y += D3DX_PI * 2.0f;
-				}
-
-				fData1 = sinf(D3DX_PI + rot.y);
-				fData2 = cosf(D3DX_PI + rot.y);
-
-				pos.x = 0.0f + sinf(D3DX_PI + rot.y) * m_fLength;
-				pos.z = 0.0f + cosf(D3DX_PI + rot.y) * m_fLength;
-			}
-		}
+		pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
@@ -467,7 +449,6 @@ void CEnemy::Update(void)
 
 	// モデルとの当たり判定
 	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
-
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
