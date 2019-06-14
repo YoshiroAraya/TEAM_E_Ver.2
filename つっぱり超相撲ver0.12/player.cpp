@@ -111,7 +111,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 
 		if (pPlayer != NULL)
 		{
-			pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			//pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			pPlayer->Init(pos);
 		}
 	}
@@ -124,6 +124,31 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 //=============================================================================
 HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 {
+	// タイトル取得
+	CGame *pGame;
+	pGame = CManager::GetGame();
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TITLE)
+	{
+		BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		if (pGame != NULL)
+		{
+			if (pGame->Get1P() == 0)
+			{
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			}
+			else if (pGame->Get1P() == 1)
+			{
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			}
+		}
+	}
+
 	// 2Dオブジェクト初期化処理
 	CSceneX::Init(pos);
 

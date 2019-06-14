@@ -59,7 +59,8 @@ void CTitle::Init(void)
 	m_bTurn = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
-	m_Character = CHARACTER_PLAYER;
+	m_Character[0] = CHARACTER_PLAYER;
+	m_Character[1] = CHARACTER_PLAYER;
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
 
@@ -137,23 +138,60 @@ void CTitle::Update(void)
 	{
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
-			m_nCntReturn++;
+			if (m_pPlayer->GetSelect() == true || m_pEnemy->GetSelect() == true)
+			{
+				m_nCntReturn++;
+			}
 		}
 
 		if (mode == CNumPlayer::MODE_1P)
 		{
 			if (m_nCntReturn == 1)
 			{
+				if (m_pPlayer->GetSelect() == true)
+				{
+					m_Character[0] = CHARACTER_PLAYER;
+				}
+				if (m_pEnemy->GetSelect() == true)
+				{
+					m_Character[0] = CHARACTER_ENEMY;
+				}
+
+				m_Character[1] = CHARACTER_ENEMY;
+
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;
+
+				SaveCharacter();
 			}
 		}
 		else if (mode == CNumPlayer::MODE_2P)
 		{
-			if (m_nCntReturn == 2)
+			if (m_nCntReturn == 1)
 			{
+				if (m_pPlayer->GetSelect() == true)
+				{
+					m_Character[0] = CHARACTER_PLAYER;
+				}
+				if (m_pEnemy->GetSelect() == true)
+				{
+					m_Character[0] = CHARACTER_ENEMY;
+				}
+			}
+			else if (m_nCntReturn == 2)
+			{
+				if (m_pPlayer->GetSelect() == true)
+				{
+					m_Character[1] = CHARACTER_PLAYER;
+				}
+				if (m_pEnemy->GetSelect() == true)
+				{
+					m_Character[1] = CHARACTER_ENEMY;
+				}
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;
+
+				SaveCharacter();
 			}
 		}
 
@@ -194,4 +232,30 @@ void CTitle::Update(void)
 void CTitle::Draw(void)
 {
 
+}
+
+//=============================================================================
+// ポリゴンの描画処理
+//=============================================================================
+void CTitle::SaveCharacter(void)
+{
+	FILE *pFile;
+
+	// ファイルを開く
+	pFile = fopen("data\\TEXT\\charaSave.txt", "w");
+
+	if (pFile != NULL)
+	{// ファイルが開けたら
+	
+		// モデルの総数
+		fprintf(pFile, "%d\n", m_Character[0]);
+		fprintf(pFile, "%d\n", m_Character[1]);
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{// ファイルが開けなかったら
+		printf("開けませんでした\n");
+	}
 }

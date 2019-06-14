@@ -43,6 +43,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void LoadChara(void);
 	static CGame *Create(void);
 
 	static CScene3D *GetScene3D(void);
@@ -59,6 +60,8 @@ public:
 	static void SetState(STATE state) { m_State = state; };
 	static WINNER GetWinner(void) { return m_Winner; };
 	static void SetWinner(WINNER Winner) { m_Winner = Winner; };
+	int Get1P(void) { return m_n1P; };
+	int Get2P(void) { return m_n2P; };
 
 private:
 	static CScene3D *m_pScene3D;
@@ -73,7 +76,8 @@ private:
 	static STATE m_State;
 	static WINNER m_Winner;
 	bool m_bUI;
-
+	int m_n1P;
+	int m_n2P;
 	int m_nTime = 0;
 };
 #endif

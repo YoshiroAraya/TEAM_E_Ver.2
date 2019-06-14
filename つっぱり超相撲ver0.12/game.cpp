@@ -61,7 +61,8 @@ CGame::WINNER CGame::m_Winner = CGame::WINNER_NONE;
 //=============================================================================
 CGame::CGame()
 {
-
+	m_n1P = 0;
+	m_n2P = 0;
 }
 
 //=============================================================================
@@ -83,6 +84,8 @@ void CGame::Init(void)
 	m_Winner = WINNER_NONE;
 	//インスタンス
 	CManager *pManager = NULL;
+
+	LoadChara();
 
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -229,16 +232,16 @@ void CGame::Update(void)
 	CDebugProc::Print("c", "ゲームモード");
 
 	m_nTime++;
-	if (m_nTime >= 2)
-	{
+	/*if (m_nTime >= 2)
+	{*/
 
 		//任意のキー←
-		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 		}
-	}
+	/*}*/
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -316,7 +319,6 @@ void CGame::Update(void)
 				6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
 		}
 	}
-
 #endif
 }
 
@@ -397,4 +399,25 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 	return bHit;	// ブロックに当たっているかどうかを返す
 }
 
+//=============================================================================
+// 文字に使われているモデルの位置情報のロード
+//=============================================================================
+void CGame::LoadChara(void)
+{
+	FILE *pFile = NULL;
 
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	int nCharType = 0;
+
+	pFile = fopen("data\\TEXT\\charaSave.txt", "r");
+
+	if (pFile != NULL)
+	{
+		fscanf(pFile, "%d", &m_n1P);
+		fscanf(pFile, "%d", &m_n2P);
+
+		fclose(pFile);
+	}
+}
