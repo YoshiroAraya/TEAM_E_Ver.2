@@ -45,13 +45,15 @@ public:
 	D3DXVECTOR3 GetPosition(void);						// 位置を取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
 	void SetCol(D3DXCOLOR col);
-
 	void BindTexture(LPDIRECT3DTEXTURE9	Texture);	// 共有テクスチャを割り当てる
+	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
 	static CBillboard *Create(D3DXVECTOR3 pos,float fWidth, float fHeight);		// オブジェクトの生成
+	void CBillboard::SetSize(float fHeight, float fWidth);
 
 private:
 	D3DXVECTOR3 m_pos;					// 位置
+	D3DXVECTOR3 m_rot;
 	D3DXMATRIX	m_mtxWorld;				// ワールドマトリックス
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DTEXTURE9	m_pTexture;		//テクスチャへのポインタ

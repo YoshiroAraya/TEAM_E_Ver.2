@@ -11,6 +11,8 @@
 #include "renderer.h"
 #include "debugProc.h"
 #include "load.h"
+#include "player.h"
+#include "game.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -25,7 +27,7 @@ CAnimation::CAnimation() : CScene3D(7,CScene3D::OBJTYPE_EFFECT)
 	m_nLife = 0;
 	m_nDrawType = 0;
 	m_nCounterAnim = 0;
-	m_nCntSpeed = 0;
+	m_fCntSpeed = 0.0f;
 	m_nPatternAnim = 0;
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -41,7 +43,7 @@ CAnimation::~CAnimation()
 //=============================================================================
 // アニメーションの初期化処理
 //=============================================================================
-HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, int nCntSpeed, int nTotalAnim,int nRoop,
+HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,int nRoop,
 	int nDrawType)
 {
 	//色を代入
@@ -66,7 +68,7 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 	SetAnimation(0, m_fUV_U, m_fUV_V);
 
 	//アニメーションの速さ
-	m_nCntSpeed = nCntSpeed;
+	m_fCntSpeed = fCntSpeed;
 
 	//アニメーションの合計枚数
 	m_nTotalAnim = nTotalAnim;
@@ -76,6 +78,7 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 
 	//描画タイプ
 	m_nDrawType = nDrawType;
+
 
 	m_bUse = true;
 	return S_OK;
@@ -95,6 +98,10 @@ void CAnimation::Uninit(void)
 //=============================================================================
 void CAnimation::Update(void)
 {
+	CGame *pGame = NULL;
+	CPlayer *pPlayer = pGame->GetPlayer();
+	D3DXVECTOR3 pos = pPlayer->GetPosition();
+
 	//テクスチャの破棄フラグ
 	bool bDestroy = false;
 
@@ -127,7 +134,7 @@ void CAnimation::Update(void)
 		SetColor(m_col);
 	}
 
-
+	//色が0.0fになったら
 	if (m_col.a <= 0.0f)
 	{
 		//破棄フラグがたった
@@ -139,6 +146,8 @@ void CAnimation::Update(void)
 		//テクスチャを破棄
 		Uninit();	
 	}
+
+	CScene3D::SetPos(D3DXVECTOR3(pos.x,pos.y + 45.0f,pos.z - 10.0f));
 }
 
 //=============================================================================
@@ -149,7 +158,7 @@ void CAnimation::UpdateAnim(void)
 	//アニメーションのカウンターを進める
 	m_nCounterAnim++;
 
-	if ((m_nCounterAnim % m_nCntSpeed) == 0)
+	if ((m_nCounterAnim % (int)m_fCntSpeed) == 0)
 	{
 		//パターン更新
 		m_nPatternAnim = (m_nPatternAnim + 1) % m_nTotalAnim;
@@ -203,7 +212,7 @@ void CAnimation::Draw(void)
 //=============================================================================
 // アニメーションの生成処理
 //=============================================================================
-CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,float fHeight,float fWidth, float fUV_U, float fUV_V, int nCntSpeed, int nTotalAnim,int nRoop,
+CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,float fHeight,float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,int nRoop,
 	int nDrawType)
 {
 	CAnimation *pAnimation = {};
@@ -217,7 +226,7 @@ CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,fl
 		if (pAnimation != NULL)
 		{
 			// ポリゴンの初期化処理
-			pAnimation->Init(pos,rot, col,fWidth,fHeight,fUV_U,fUV_V,nCntSpeed,nTotalAnim,nRoop,nDrawType);
+			pAnimation->Init(pos,rot, col,fWidth,fHeight,fUV_U,fUV_V,fCntSpeed,nTotalAnim,nRoop,nDrawType);
 		}
 		else
 		{
