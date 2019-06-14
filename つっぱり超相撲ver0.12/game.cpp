@@ -229,16 +229,16 @@ void CGame::Update(void)
 	CDebugProc::Print("c", "ゲームモード");
 
 	m_nTime++;
-	if (m_nTime >= 2)
-	{
+	/*if (m_nTime >= 2)
+	{*/
 
 		//任意のキー←
-		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 		}
-	}
+	/*}*/
 
 	if (m_pBatlteSys != NULL)
 	{

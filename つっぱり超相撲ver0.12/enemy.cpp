@@ -109,7 +109,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 
 		if (pEnemy != NULL)
 		{
-			pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			//pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			pEnemy->Init(pos);
 		}
 	}
@@ -122,6 +122,31 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 //=============================================================================
 HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 {
+	// タイトル取得
+	CGame *pGame;
+	pGame = CManager::GetGame();
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TITLE)
+	{
+		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		if (pGame != NULL)
+		{
+			if (pGame->Get1P() == 0)
+			{
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			}
+			else if (pGame->Get1P() == 1)
+			{
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			}
+		}
+	}
+
 	// 2Dオブジェクト初期化処理
 	CSceneX::Init(pos);
 
@@ -147,9 +172,6 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
 	m_bSelect = false;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
 
 	if (mode != NULL)
 	{
