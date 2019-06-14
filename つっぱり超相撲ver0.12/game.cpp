@@ -180,6 +180,8 @@ void CGame::Init(void)
 	{
 		pCamera->Init();
 	}
+	m_nTime = 0;
+
 }
 
 //=============================================================================
@@ -226,10 +228,16 @@ void CGame::Update(void)
 
 	CDebugProc::Print("c", "ゲームモード");
 
-	//任意のキー←
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	m_nTime++;
+	if (m_nTime >= 2)
 	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+
+		//任意のキー←
+		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		{
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+
+		}
 	}
 
 	if (m_pBatlteSys != NULL)
@@ -300,9 +308,9 @@ void CGame::Update(void)
 			//塩
 			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
 			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
-			moveRand.z = ((rand() % 7 + 3));
+			moveRand.z = (float)((rand() % 7 + 3));
 			//moveRand.x = rand() % 2 - 2;
-			PosRand.x = rand() % 300 - 300;
+			PosRand.x = (float)(rand() % 300 - 300);
 
 			CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 				6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);

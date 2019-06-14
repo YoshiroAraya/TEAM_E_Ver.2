@@ -78,5 +78,6 @@ private:
 	bool m_bUI;
 	int m_n1P;
 	int m_n2P;
+	int m_nTime = 0;
 };
 #endif
