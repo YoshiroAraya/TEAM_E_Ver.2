@@ -42,6 +42,7 @@ private:
 	bool m_bSetDohyo;
 	bool m_bTurn;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
+	int m_nCntReturn;
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
 };

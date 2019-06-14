@@ -38,6 +38,7 @@ CEnemy *CTitle::m_pEnemy = NULL;
 CTitle::CTitle()
 {
 	m_nCntTurn = 0;
+	m_nCntReturn = 0;
 }
 
 //=============================================================================
@@ -57,7 +58,7 @@ void CTitle::Init(void)
 	m_bSetDohyo = true;
 	m_bTurn = false;
 	m_nCntTurn = 0;
-
+	m_nCntReturn = 0;
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
 
@@ -92,6 +93,9 @@ void CTitle::Update(void)
 
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
+
+	CNumPlayer::MODE mode;
+	mode = CNumPlayer::GetMode();
 
 	if (m_state == CTitle::STATE_NEWS && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
@@ -128,9 +132,40 @@ void CTitle::Update(void)
 		}
 
 	}
-	else if (m_state == CTitle::STATE_CHARASELECT && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	else if (m_state == CTitle::STATE_CHARASELECT)
 	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		{
+			m_nCntReturn++;
+		}
+
+		if (mode == CNumPlayer::MODE_1P)
+		{
+			if (m_nCntReturn == 1)
+			{
+				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+				m_nCntReturn = 0;
+			}
+		}
+		else if (mode == CNumPlayer::MODE_2P)
+		{
+			if (m_nCntReturn == 2)
+			{
+				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+				m_nCntReturn = 0;
+			}
+		}
+
+#ifdef _DEBUG
+		if (mode == CNumPlayer::MODE_1P)
+		{
+			CDebugProc::Print("c", "1P");
+		}
+		else if (mode == CNumPlayer::MODE_2P)
+		{
+			CDebugProc::Print("c", "2P");
+		}
+#endif
 	}
 
 	if (m_state == STATE_CHARASELECT && pInputKeyboard->GetTrigger(DIK_RIGHT) == true && m_bTurn == false)

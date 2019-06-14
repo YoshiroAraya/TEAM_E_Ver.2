@@ -45,7 +45,7 @@ public:
 
 	static CNumPlayer *Create(D3DXVECTOR3 pos);								// 人数選択を生成
 
-	HRESULT Init(D3DXVECTOR3 pos);	// ポーズ初期化処理
+	HRESULT Init(D3DXVECTOR3 pos);	// 人数選択初期化処理
 	void Uninit(void);											// 人数選択終了処理
 	void Update(void);											// 人数選択更新処理
 	void Draw(void);											// 人数選択描画処理

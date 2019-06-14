@@ -195,6 +195,15 @@ void CNumPlayer::Update(void)
 	if (pTitle->GetState() == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
 		m_bDecision = true;
+
+		if (m_aSelect[0] == SELECT_SELECT)
+		{
+			m_Mode = MODE_1P;
+		}
+		else if (m_aSelect[1] == SELECT_SELECT)
+		{
+			m_Mode = MODE_2P;
+		}
 	}
 
 	if (pTitle->GetState() == CTitle::STATE_CHARASELECT)
