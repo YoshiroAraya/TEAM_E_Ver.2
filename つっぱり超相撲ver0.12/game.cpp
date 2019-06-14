@@ -224,7 +224,10 @@ void CGame::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-	m_bHit = Collision(&m_pPlayer->GetPosition(), COLISIONSIZE, &m_pEnemy->GetPosition(), COLISIONSIZE);
+	if (m_pPlayer != NULL && m_pEnemy != NULL)
+	{
+		m_bHit = Collision(&m_pPlayer->GetPosition(), COLISIONSIZE, &m_pEnemy->GetPosition(), COLISIONSIZE);
+	}
 
 	CDebugProc::Print("c", "ÉQÅ[ÉÄÉÇÅ[Éh");
 

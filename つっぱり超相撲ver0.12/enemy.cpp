@@ -228,6 +228,11 @@ void CEnemy::Uninit(void)
 		}
 	}
 
+	if (m_pTuppari != NULL)
+	{
+		m_pTuppari->Uninit();
+	}
+
 	// 2Dオブジェクト終了処理
 	CSceneX::Uninit();
 }
@@ -333,7 +338,10 @@ void CEnemy::Update(void)
 				}
 			}
 			// 目的の角度
-			m_fDestAngle = -atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
+			if (pPlayer != NULL)
+			{
+				m_fDestAngle = -atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
+			}
 			// 差分
 			m_fDiffAngle = m_fDestAngle - rot.y;
 
@@ -408,14 +416,17 @@ void CEnemy::Update(void)
 			}
 
 			// つっぱりとの当たり判定
-			if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
+			if (pPlayer != NULL)
 			{
-				bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
-				//つっぱりにあたった
-				if (bHit == true)
+				if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
 				{
-					m_State = STATE_DAMAGE;
-					CGame::SetHit(false);
+					bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+					//つっぱりにあたった
+					if (bHit == true)
+					{
+						m_State = STATE_DAMAGE;
+						CGame::SetHit(false);
+					}
 				}
 			}
 			//つっぱり位置更新

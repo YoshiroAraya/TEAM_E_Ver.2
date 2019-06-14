@@ -109,10 +109,18 @@ void CBAnimation::Update(void)
 
 		CGame *pGame = NULL;
 		CPlayer *pPlayer = pGame->GetPlayer();
-		D3DXVECTOR3 pos = pPlayer->GetPosition();
+		D3DXVECTOR3 pos;
+		if (pPlayer != NULL)
+		{
+			pos = pPlayer->GetPosition();
+		}
 
 		CEnemy *pEnemy = pGame->GetEnemy();
-		D3DXVECTOR3 posEnemy = pEnemy->GetPosition();
+		D3DXVECTOR3 posEnemy;
+		if (pEnemy != NULL)
+		{
+			posEnemy = pEnemy->GetPosition();
+		}
 
 		//テクスチャの破棄フラグ
 		bool bDestroy = false;
