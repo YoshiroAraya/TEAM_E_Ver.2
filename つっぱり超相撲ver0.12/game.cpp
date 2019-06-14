@@ -177,6 +177,8 @@ void CGame::Init(void)
 	{
 		pCamera->Init();
 	}
+	m_nTime = 0;
+
 }
 
 //=============================================================================
@@ -223,10 +225,16 @@ void CGame::Update(void)
 
 	CDebugProc::Print("c", "ゲームモード");
 
-	//任意のキー←
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	m_nTime++;
+	if (m_nTime >= 2)
 	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+
+		//任意のキー←
+		//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		{
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+
+		}
 	}
 
 	if (m_pBatlteSys != NULL)

@@ -73,5 +73,7 @@ private:
 	static STATE m_State;
 	static WINNER m_Winner;
 	bool m_bUI;
+
+	int m_nTime = 0;
 };
 #endif
