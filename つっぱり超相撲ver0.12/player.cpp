@@ -177,8 +177,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_fRot = 0.0f;
 	m_bSelect = false;
 	m_pTuppari = CTuppari::Create(pos);
-	CManager::MODE mode;
-	mode = CManager::GetMode();
 
 	if (mode != NULL)
 	{
