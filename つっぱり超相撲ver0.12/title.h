@@ -41,15 +41,18 @@ public:
 	static CTitle *Create(void);
 	STATE GetState(void) { return m_state; }
 	void SetState(STATE state) { m_state = state; }
-	bool GetTurn(void) { return m_bTurn; }
-	void SetTurn(bool turn) { m_bTurn = turn; }
+	bool GetTurnR(void) { return m_bTurnRight; }
+	void SetTurnR(bool turn) { m_bTurnRight = turn; }
+	bool GetTurnL(void) { return m_bTurnLeft; }
+	void SetTurnL(bool turn) { m_bTurnLeft = turn; }
 	void SaveCharacter(void);
 
 private:
 	STATE m_state;
 	CHARACTER m_Character[MAX_NUMPLAYER];
 	bool m_bSetDohyo;
-	bool m_bTurn;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
+	bool m_bTurnRight;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
+	bool m_bTurnLeft;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
 	int m_nCntReturn;
 	static CPlayer *m_pPlayer;

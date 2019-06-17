@@ -121,10 +121,16 @@ bool CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, f
 
 	if (pTitle != NULL)
 	{
-		if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == true)
+		if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurnR() == true || pTitle->GetTurnL() == true)
 		{
-			//fRot = sinf(D3DX_PI + rot->y);
-			rot->y -= 0.1f;
+			if (pTitle->GetTurnR() == true)
+			{// ‰E‚É‰ñ“]
+				rot->y -= 0.1f;
+			}
+			else if (pTitle->GetTurnL() == true)
+			{// ¶‚É‰ñ“]
+				rot->y += 0.1f;
+			}
 
 			if (rot->y > D3DX_PI)
 			{
@@ -136,36 +142,58 @@ bool CCharacterMove::CharaTurn(D3DXVECTOR3 *pos, D3DXVECTOR3 *rot, float fRot, f
 			}
 
 			if (fRot >= 0.999f && fRot < 1.0f)
-			{
-				pTitle->SetTurn(false);
+			{// ‰œ‚Ì”»’è
+				if (pTitle->GetTurnR() == true)
+				{// ‰ñ“]‚ðŽ~‚ß‚é
+					pTitle->SetTurnR(false);
+				}
+				else if (pTitle->GetTurnL() == true)
+				{// ‰ñ“]‚ðŽ~‚ß‚é
+					pTitle->SetTurnL(false);
+				}
+
+				// ‚¸‚ê‚ðC³
 				fRot = 1.0f;
 				rot->y = D3DX_PI * -0.5f;
 			}
 			else if (fRot <= -0.999f && fRot > -1.0f)
-			{
-				pTitle->SetTurn(false);
+			{// Žè‘O‚Ì”»’è
+				if (pTitle->GetTurnR() == true)
+				{// ‰ñ“]‚ðŽ~‚ß‚é
+					pTitle->SetTurnR(false);
+				}
+				else if (pTitle->GetTurnL() == true)
+				{// ‰ñ“]‚ðŽ~‚ß‚é
+					pTitle->SetTurnL(false);
+				}
+
+				// ‚¸‚ê‚ðC³
 				fRot = -1.0f;
 				rot->y = D3DX_PI * 0.5f;
 			}
 
+			// ‰~‚É‰ˆ‚Á‚ÄˆÊ’u‚ð“®‚©‚·
 			pos->x = 0.0f + fRot * fLength;
 			pos->z = 0.0f + cosf(D3DX_PI + rot->y) * fLength;
 		}
-		else if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurn() == false)
-		{
+		else if (pTitle->GetState() == CTitle::STATE_CHARASELECT && pTitle->GetTurnR() == false || pTitle->GetTurnL() == false)
+		{// ‰ñ“]‚µ‚Ä‚¢‚È‚¢‚Æ‚«
 			if (fRot >= 0.999f && fRot <= 1.0f)
-			{
-				pTitle->SetTurn(false);
+			{// ‰œ‚Ì”»’è
+				// ‚¸‚ê‚ðC³
 				fRot = 1.0f;
 				rot->y = D3DX_PI * -0.5f;
+
+				// ‘I‘ð‚³‚Ä‚¢‚È‚¢
 				bSelect = false;
 			}
 			else if (fRot <= -0.999f && fRot >= -1.0f)
-			{
-				pTitle->SetTurn(false);
+			{// Žè‘O‚Ì”»’è
+				// ‚¸‚ê‚ðC³
 				fRot = -1.0f;
 				rot->y = D3DX_PI * 0.5f;
 
+				// ‘I‘ð‚³‚ê‚Ä‚¢‚é
 				bSelect = true;
 			}
 
