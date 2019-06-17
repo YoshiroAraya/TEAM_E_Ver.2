@@ -51,7 +51,7 @@
 #define DAMAGE				(30)
 #define HEEL				(20)
 #define START_SECOND		(2)			// ‘Îí‚ªn‚Ü‚é‚Ü‚Å‚Ì•b”
-#define DOHYO_HAZI_NUM		(133.0f)
+#define DOHYO_HAZI_NUM		(173.0f)
 
 #define SANSO_NEUTRAL		(1.5f)		//‘g‚ñ‚Å‚¢‚È‚¢‚Æ‚«‚Ì‰ñ•œ—Ê
 #define SANSO_KUMI			(0.3f)		//‘g‚ñ‚Å‚¢‚é‚Æ‚«‚Ì‰ñ•œ—Ê

@@ -24,11 +24,13 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define DOHYO_HAZI_MAX			(135.0f)
-#define DOHYO_HAZI_MIN			(110.0f)
+#define DOHYO_HAZI_MAX			(175.0f)
+#define DOHYO_HAZI_MIN			(150.0f)
 #define DASH_MOVE				(0.9f)
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
+
+#define DOHYO_COLLISION			(20.0f)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -37,11 +39,6 @@ LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
 LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
 LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
 DWORD						CEnemy::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
-
-
-//=============================================================================
-// 静的メンバ変数宣言
-//=============================================================================
 
 //=============================================================================
 // エネミークラスのコンストラクタ
@@ -52,11 +49,14 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_pTexture = NULL;							// テクスチャへのポインタ
 	m_pVtxBuff = NULL;							// 頂点バッファへのポインタ
 	m_bLand = false;							// 右にいるかどうか
+	m_bHit = false;									// 右にいるかどうか
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_State = STATE_NEUTRAL;
 	m_Direction = DIRECTION_LEFT;
+	m_bRecovery = false;	// 硬直フラグ
+	m_nRecoveryTime = 0;	// 硬直時間
 	m_nLife = 0;
-	m_nLife = 100;
 	m_bDying = false;
 	m_pTuppari = NULL;
 	m_DohyoState = DOHYO_NORMAL;
@@ -64,6 +64,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_bCounter = false;
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = 0.0f;
+	m_nOldMotion = 0;	//前のモーション
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 
@@ -159,6 +160,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	m_bLand = false;					// 右にいるかどうか
+	m_bHit = false;					// 右にいるかどうか
 	m_Direction = DIRECTION_LEFT;
 	m_State = STATE_JANKEN;
 	m_bDying = false;
@@ -305,6 +307,8 @@ void CEnemy::Update(void)
 				{
 					// 左に進む
 					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
 				}
 
 				//任意のキー→
@@ -313,7 +317,15 @@ void CEnemy::Update(void)
 				{
 					// 右に進む
 					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
 				}
+				else
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				}
+
 			}
 			//硬直しているとき
 			if (m_bRecovery == true)
@@ -403,6 +415,9 @@ void CEnemy::Update(void)
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 				{
 					m_State = STATE_KUMI;
+					m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+					m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+
 				}
 				/*else if (m_State == STATE_KUMI)
 				{
@@ -420,7 +435,7 @@ void CEnemy::Update(void)
 			{
 				if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
 				{
-					bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+					bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 					//つっぱりにあたった
 					if (bHit == true)
 					{
@@ -722,6 +737,12 @@ void CEnemy::UpdateMotion(int nParent)
 	D3DXVECTOR3 posmotion;
 	D3DXVECTOR3 BodyRot;
 	KEY			NowKey;
+
+	//キーが最大数を上回らないように
+	if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey <= m_nKey[nParent])
+	{
+		m_nKey[nParent] = 0;
+	}
 
 	//モーション更新
 	for (int nCntParts = 0; nCntParts < m_nNumParts[nParent]; nCntParts++)

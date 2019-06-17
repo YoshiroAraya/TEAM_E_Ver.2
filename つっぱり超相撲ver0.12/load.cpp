@@ -21,7 +21,7 @@ DWORD *CLoad::m_nNumMat = 0;				// マテリアル情報の数
 
 const char *CLoad::m_apModelFilename[] =
 {// モデル
-	"data\\MODEL\\dohyo.x",
+	"data\\MODEL\\dohyo2.x",
 	"data\\MODEL\\rikisi.x",
 	"data\\MODEL\\rikisi2.x",
 	"data\\MODEL\\customer.x",

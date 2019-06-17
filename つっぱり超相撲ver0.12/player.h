@@ -25,6 +25,7 @@ class CModel;
 #define MAX_PARTS		(30)
 #define MAX_MOTION		(30)
 #define MODEL_PARENT	(2)
+#define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
 
 //========================================
 // クラスの定義
@@ -49,6 +50,27 @@ public:
 		STATE_DOWN,
 	}STATE;
 
+	typedef enum
+	{
+		MOTION_NEUTRAL = 0,
+		MOTION_WALK,
+		MOTION_SIOMAKI,
+		MOTION_SYAGAMI,
+		MOTION_BATTLE_NEUTRAL,
+		MOTION_TSUPPARI,
+		MOTION_BUTIKAMASI,
+		MOTION_TUKAMI,
+		MOTION_TUKAMI_NEUTRAL,
+		MOTION_TUKAMI_AGERU,
+		MOTION_TUKAMI_AGERARERU,
+		MOTION_MAWASI,
+		MOTION_NAGE,
+		MOTION_KAWASI,
+		MOTION_SURIASI,
+		MOTION_ULTIMATE,
+	}MOTION_TYPE;
+
+
 	//土俵端状態
 	typedef enum
 	{
@@ -70,13 +92,6 @@ public:
 		DIRECTION_RIGHT = 0,
 		DIRECTION_LEFT,
 	}DIRECTION;
-
-	/*typedef enum
-	{
-	HIGASHI = 0,
-	NISHI
-	} TOUZAI;*/
-
 
 	//キー要素
 	typedef struct

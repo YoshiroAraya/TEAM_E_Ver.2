@@ -23,14 +23,14 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//プレイヤーの当たり判定
-#define DOHYO_HAZI_MAX			(135.0f)
-#define DOHYO_HAZI_MIN			(110.0f)
+#define PLAYER_COLLISION		(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//プレイヤーの当たり判定
+#define DOHYO_HAZI_MAX			(175.0f)
+#define DOHYO_HAZI_MIN			(150.0f)
 #define DASH_MOVE				(0.9f)
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
-
-
+#define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
+#define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -87,7 +87,6 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
 #endif
-
 }
 
 //=============================================================================
@@ -314,6 +313,8 @@ void CPlayer::Update(void)
 				{
 					// 左に進む
 					m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
 				}
 
 				//任意のキー→
@@ -322,6 +323,13 @@ void CPlayer::Update(void)
 				{
 					// 右に進む
 					m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
+				}
+				else
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 				}
 			}
 
@@ -414,6 +422,8 @@ void CPlayer::Update(void)
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 				{
 					m_State = STATE_KUMI;
+					m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+					m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
 				}
 				/*else if (m_State == STATE_KUMI)
 				{
@@ -430,7 +440,7 @@ void CPlayer::Update(void)
 				// つっぱりとの当たり判定
 				if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
 				{
-					bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+					bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 					//つっぱりにあたった
 					if (bHit == true)
 					{
@@ -508,7 +518,7 @@ void CPlayer::Update(void)
 	}
 
 	// モデルとの当たり判定
-	CollisonDohyo(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, PLAYER_COLLISION);
+	CollisonDohyo(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, DOHYO_COLLISION);
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
@@ -735,6 +745,12 @@ void CPlayer::UpdateMotion(int nParent)
 	D3DXVECTOR3 posmotion;
 	D3DXVECTOR3 BodyRot;
 	KEY			NowKey;
+
+	//キーが最大数を上回らないように
+	if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey <= m_nKey[nParent])
+	{
+		m_nKey[nParent] = 0;
+	}
 
 	//モーション更新
 	for (int nCntParts = 0; nCntParts < m_nNumParts[nParent]; nCntParts++)

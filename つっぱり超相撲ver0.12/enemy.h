@@ -14,8 +14,8 @@
 //========================================
 // マクロ定義
 //========================================
-#define MOVE_ENEMY			(0.5f)							//エネミー移動量
-#define ENEMY_COLLISION		(D3DXVECTOR3(7.0f, 60.0f, 7.0f))		//エネミーの当たり判定
+#define MOVE_ENEMY			(0.5f)									//エネミー移動量
+#define ENEMY_COLLISION		(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//エネミーの当たり判定
 #define MAX_PARTS		(30)
 #define MAX_MOTION		(30)
 #define MODEL_PARENT	(2)
@@ -47,6 +47,26 @@ public:
 		STATE_NOKOTTA,
 		STATE_DOWN,
 	}STATE;
+
+	typedef enum
+	{
+		MOTION_NEUTRAL = 0,
+		MOTION_WALK,
+		MOTION_SIOMAKI,
+		MOTION_SYAGAMI,
+		MOTION_BATTLE_NEUTRAL,
+		MOTION_TSUPPARI,
+		MOTION_BUTIKAMASI,
+		MOTION_TUKAMI,
+		MOTION_TUKAMI_NEUTRAL,
+		MOTION_TUKAMI_AGERU,
+		MOTION_TUKAMI_AGERARERU,
+		MOTION_MAWASI,
+		MOTION_NAGE,
+		MOTION_KAWASI,
+		MOTION_SURIASI,
+		MOTION_ULTIMATE,
+	}MOTION_TYPE;
 
 	//土俵端状態
 	typedef enum
