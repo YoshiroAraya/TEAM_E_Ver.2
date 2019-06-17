@@ -148,13 +148,15 @@ void CTitle::Update(void)
 		{
 			if (m_nCntReturn == 1)
 			{
-				if (m_pPlayer->GetSelect() == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[0] = CHARACTER_PLAYER;
+					m_pPlayer->SetSelect(false);
 				}
-				if (m_pEnemy->GetSelect() == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[0] = CHARACTER_ENEMY;
+					m_pEnemy->SetSelect(false);
 				}
 
 				m_Character[1] = CHARACTER_ENEMY;
@@ -169,22 +171,24 @@ void CTitle::Update(void)
 		{
 			if (m_nCntReturn == 1)
 			{
-				if (m_pPlayer->GetSelect() == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[0] = CHARACTER_PLAYER;
+
 				}
-				if (m_pEnemy->GetSelect() == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[0] = CHARACTER_ENEMY;
 				}
 			}
 			else if (m_nCntReturn == 2)
 			{
-				if (m_pPlayer->GetSelect() == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[1] = CHARACTER_PLAYER;
+					m_pPlayer->SetSelect(false);
 				}
-				if (m_pEnemy->GetSelect() == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{
 					m_Character[1] = CHARACTER_ENEMY;
 				}
@@ -207,12 +211,24 @@ void CTitle::Update(void)
 
 		if (m_pPlayer->GetSelect() == true)
 		{
-			CDebugProc::Print("c", "プレイヤー");
+			CDebugProc::Print("c", "プレイヤー：true");
 		}
+		else if (m_pPlayer->GetSelect() == false)
+		{
+			CDebugProc::Print("c", "プレイヤー：false");
+		}
+
 		if (m_pEnemy->GetSelect() == true)
 		{
-			CDebugProc::Print("c", "エネミー");
+			CDebugProc::Print("c", "エネミー：true");
 		}
+		else if (m_pEnemy->GetSelect() == false)
+		{
+			CDebugProc::Print("c", "エネミー：false");
+		}
+
+		CDebugProc::Print("cn", "m_Character[0] = ", m_Character[0]);
+		CDebugProc::Print("cn", "m_Character[1] = ", m_Character[1]);
 #endif
 	}
 
