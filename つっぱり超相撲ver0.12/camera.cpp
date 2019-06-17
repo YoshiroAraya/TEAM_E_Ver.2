@@ -56,6 +56,16 @@ void CCamera::Init(void)
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));
 	m_nStartCounter = 0;
 	m_State = STATE_NONE;
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_RESULT)
+	{
+		m_posV = D3DXVECTOR3(0.0f, 100.0f, -180.0f);	// éãì_
+		m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// íçéãì_
+		m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	}
 }
 
 //=============================================================================

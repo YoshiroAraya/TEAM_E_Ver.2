@@ -184,6 +184,7 @@
     <ClCompile Include="numPlayer.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="result.cpp" />
     <ClCompile Include="SansoGauge.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="scene2D.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="numPlayer.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="result.h" />
     <ClInclude Include="SansoGauge.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="scene2D.h" />

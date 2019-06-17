@@ -224,6 +224,7 @@ void CGame::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
+
 	if (m_pPlayer != NULL && m_pEnemy != NULL)
 	{
 		m_bHit = Collision(&m_pPlayer->GetPosition(), COLISIONSIZE, &m_pEnemy->GetPosition(), COLISIONSIZE);
@@ -238,7 +239,7 @@ void CGame::Update(void)
 		//”CˆÓ‚ÌƒL[©
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
-			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
 
 		}
 	/*}*/
@@ -254,6 +255,14 @@ void CGame::Update(void)
 		{// ‚¶‚á‚ñ‚¯‚ñ‚ÌUI‚ðo‚·
 			CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
 			m_bUI = false;
+		}
+	}
+
+	if (m_Winner != WINNER_NONE)
+	{
+		if (pFade->GetFade() == CFade::FADE_NONE)
+		{
+			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
 		}
 	}
 
