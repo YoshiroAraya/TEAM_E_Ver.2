@@ -131,19 +131,20 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	mode = CManager::GetMode();
 
 	if (mode == CManager::MODE_TITLE)
-	{
+	{// タイトル画面時のモデルの割り当て
 		BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
 		if (pGame != NULL)
 		{
+			// 選ばれたキャラクターのモデルを割り当て
 			if (pGame->Get1P() == 0)
-			{
+			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			}
 			else if (pGame->Get1P() == 1)
-			{
+			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
 		}
@@ -465,6 +466,7 @@ void CPlayer::Update(void)
 	}
 	else if (mode == CManager::MODE_TITLE)
 	{
+		// 回転処理
 		m_fRot = sinf(D3DX_PI + rot.y);
 		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 	}

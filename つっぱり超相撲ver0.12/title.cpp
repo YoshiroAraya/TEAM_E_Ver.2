@@ -56,7 +56,8 @@ void CTitle::Init(void)
 {
 	m_state = STATE_NEWS;
 	m_bSetDohyo = true;
-	m_bTurn = false;
+	m_bTurnRight = false;
+	m_bTurnLeft = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
 	m_Character[0] = CHARACTER_PLAYER;
@@ -100,13 +101,14 @@ void CTitle::Update(void)
 	mode = CNumPlayer::GetMode();
 
 	if (m_state == CTitle::STATE_NEWS && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-	{
+	{// ニュースの画面からタイトル画面へ
 		m_state = CTitle::STATE_TITLE;
 	}
 	else if (m_state == CTitle::STATE_TITLE)
-	{
+	{// タイトル画面
 		if (m_bSetDohyo == true)
 		{
+			// タイトルで使うオブジェクトを設置
 			CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
 			CField::Create(D3DXVECTOR3(0, -10.0f, 0), 700.0f);
@@ -129,72 +131,87 @@ void CTitle::Update(void)
 			m_bSetDohyo = false;
 		}
 		if (CNumPlayer::GetDecision() == true)
-		{
+		{// 人数選択したらキャラクター選択へ
 			m_state = STATE_CHARASELECT;
 		}
 
 	}
 	else if (m_state == CTitle::STATE_CHARASELECT)
-	{
+	{// キャラクター選択
+		if (m_state == STATE_CHARASELECT && m_bTurnRight == false && m_bTurnLeft == false)
+		{
+			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
+			{// 右に回転
+				m_bTurnRight = true;
+			}
+			else if(pInputKeyboard->GetTrigger(DIK_LEFT) == true)
+			{// 左に回転
+				m_bTurnLeft = true;
+			}
+		}
+
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
 			if (m_pPlayer->GetSelect() == true || m_pEnemy->GetSelect() == true)
-			{
+			{// エンターを押した回数をカウント
 				m_nCntReturn++;
 			}
 		}
 
 		if (mode == CNumPlayer::MODE_1P)
-		{
+		{// 1Pモードの時
 			if (m_nCntReturn == 1)
 			{
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_PLAYER;
 					m_pPlayer->SetSelect(false);
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// エネミーを選択
 					m_Character[0] = CHARACTER_ENEMY;
 					m_pEnemy->SetSelect(false);
 				}
 
+				// 敵のキャラ選択
 				m_Character[1] = CHARACTER_ENEMY;
 
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;
 
+				// 選んだキャラを保存
 				SaveCharacter();
 			}
 		}
 		else if (mode == CNumPlayer::MODE_2P)
-		{
+		{// 2Pモードの時
 			if (m_nCntReturn == 1)
-			{
+			{// 1P選択
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_PLAYER;
 
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// エネミーを選択
 					m_Character[0] = CHARACTER_ENEMY;
 				}
 			}
 			else if (m_nCntReturn == 2)
-			{
+			{// 2P選択
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// プレイヤーを選択
 					m_Character[1] = CHARACTER_PLAYER;
 					m_pPlayer->SetSelect(false);
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-				{
+				{// エネミーを選択
 					m_Character[1] = CHARACTER_ENEMY;
 				}
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;
 
+				// 選んだキャラを保存
 				SaveCharacter();
 			}
 		}
@@ -230,11 +247,6 @@ void CTitle::Update(void)
 		CDebugProc::Print("cn", "m_Character[0] = ", m_Character[0]);
 		CDebugProc::Print("cn", "m_Character[1] = ", m_Character[1]);
 #endif
-	}
-
-	if (m_state == STATE_CHARASELECT && pInputKeyboard->GetTrigger(DIK_RIGHT) == true && m_bTurn == false)
-	{
-		m_bTurn = true;
 	}
 
 #ifdef _DEBUG
