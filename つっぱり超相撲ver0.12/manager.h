@@ -22,6 +22,7 @@ class CMask;
 class CFade;
 class CGame;
 class CTitle;
+class CResult;
 class CCharacterMove;
 class CXInputJoyPad;
 class CSound;
@@ -93,6 +94,7 @@ public:
 	static void SetMode(MODE mode);
 	static CGame *GetGame(void) { return m_pGame; }
 	static CTitle *GetTitle(void) { return m_pTitle; }
+	static CResult *GetResult(void) { return m_pResult; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
 	static CSound *GetSound(int nNum);
 
@@ -107,6 +109,8 @@ private:
 	static CCharacterMove *m_pCharacterMove;
 	static CGame *m_pGame;
 	static CTitle *m_pTitle;
+	static CResult *m_pResult;
+
 	static CXInputJoyPad *m_pXInput;
 	float m_fData;
 	static MODE m_mode;

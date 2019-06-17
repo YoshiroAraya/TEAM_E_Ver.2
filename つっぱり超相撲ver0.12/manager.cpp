@@ -27,6 +27,7 @@
 #include "characterMove.h"
 #include "sound.h"
 #include "title.h"
+#include "result.h"
 #include "load.h"
 //=============================================================================
 // 静的メンバ変数宣言
@@ -39,6 +40,7 @@ CDebugProc *CManager::m_pDebugProc = NULL;
 CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CTitle *CManager::m_pTitle = NULL;
+CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
@@ -284,17 +286,17 @@ void CManager::Uninit(void)
 
 	switch (m_mode)
 	{
-			//タイトルモードの更新処理
-		case CManager::MODE_TITLE:
-			if (m_pTitle != NULL)
-			{
-				m_pTitle->Uninit();
-				delete m_pTitle;
-				m_pTitle = NULL;
-			}
-			break;
+		//タイトルモードの終了処理
+	case CManager::MODE_TITLE:
+		if (m_pTitle != NULL)
+		{
+			m_pTitle->Uninit();
+			delete m_pTitle;
+			m_pTitle = NULL;
+		}
+		break;
 
-		//	//チュートリアルモードの更新処理
+		//	//チュートリアルモードの終了処理
 		//case CManager::MODE_TUTORIAL:
 		//	if (m_pTutorial != NULL)
 		//	{
@@ -302,7 +304,7 @@ void CManager::Uninit(void)
 		//	}
 		//	break;
 
-		//ゲームモードの更新処理
+		//ゲームモードの終了処理
 	case CManager::MODE_GAME:
 		if (m_pGame != NULL)
 		{
@@ -312,13 +314,15 @@ void CManager::Uninit(void)
 		}
 		break;
 
-		//	//リザルトモードの更新処理
-		//case CManager::MODE_RESULT:
-		//	if (m_pResult != NULL)
-		//	{
-		//		m_pResult->Update();
-		//	}
-		//	break;
+		//リザルトモードの終了処理
+	case CManager::MODE_RESULT:
+		if (m_pResult != NULL)
+		{
+			m_pResult->Uninit();
+			delete m_pResult;
+			m_pResult = NULL;
+		}
+		break;
 	}
 
 	CLoad::UnloadModel();
@@ -390,13 +394,13 @@ void CManager::Update(void)
 
 	switch (m_mode)
 	{
-			//タイトルモードの更新処理
-		case CManager::MODE_TITLE:
-			if (m_pTitle != NULL)
-			{
-				m_pTitle->Update();
-			}
-			break;
+		//タイトルモードの更新処理
+	case CManager::MODE_TITLE:
+		if (m_pTitle != NULL)
+		{
+			m_pTitle->Update();
+		}
+		break;
 
 		//	//チュートリアルモードの更新処理
 		//case CManager::MODE_TUTORIAL:
@@ -414,13 +418,13 @@ void CManager::Update(void)
 		}
 		break;
 
-		//	//リザルトモードの更新処理
-		//case CManager::MODE_RESULT:
-		//	if (m_pResult != NULL)
-		//	{
-		//		m_pResult->Update();
-		//	}
-		//	break;
+		//リザルトモードの更新処理
+	case CManager::MODE_RESULT:
+		if (m_pResult != NULL)
+		{
+			m_pResult->Update();
+		}
+		break;
 	}
 }
 
@@ -495,20 +499,20 @@ void CManager::SetMode(MODE mode)
 {
 	switch (m_mode)
 	{
-		case CManager::MODE_TITLE:
-			//タイトルクラスの破棄
-			if (m_pTitle != NULL)
-			{
-				// 終了処理
-				m_pTitle->Uninit();
+	case CManager::MODE_TITLE:
+		//タイトルクラスの破棄
+		if (m_pTitle != NULL)
+		{
+			// 終了処理
+			m_pTitle->Uninit();
 
-				//メモリの開放
-				delete m_pTitle;
+			//メモリの開放
+			delete m_pTitle;
 
-				//NULLにする
-				m_pTitle = NULL;
-			}
-			break;
+			//NULLにする
+			m_pTitle = NULL;
+		}
+		break;
 
 		//case CManager::MODE_TUTORIAL:
 		//	//リザルトクラスの破棄
@@ -541,48 +545,48 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 
-		//case CManager::MODE_RESULT:
-		//	//リザルトクラスの破棄
-		//	if (m_pResult != NULL)
-		//	{
-		//		// 終了処理
-		//		m_pResult->Uninit();
+	case CManager::MODE_RESULT:
+		//リザルトクラスの破棄
+		if (m_pResult != NULL)
+		{
+			// 終了処理
+			m_pResult->Uninit();
 
-		//		//メモリの開放
-		//		delete m_pResult;
+			//メモリの開放
+			delete m_pResult;
 
-		//		//NULLにする
-		//		m_pResult = NULL;
-		//	}
-		//	break;
+			//NULLにする
+			m_pResult = NULL;
+		}
+		break;
 	}
 	m_mode = mode;
 
 	switch (mode)
 	{
-		case CManager::MODE_TITLE:
-			//タイトルの初期化
-			if (m_pTitle == NULL)
-			{
-				//キーボードのメモリを動的確保
-				m_pTitle = new CTitle;
+	case CManager::MODE_TITLE:
+		//タイトルの初期化
+		if (m_pTitle == NULL)
+		{
+			//キーボードのメモリを動的確保
+			m_pTitle = new CTitle;
 
-				if (m_pTitle != NULL)
-				{
-					// 初期化処理
-					m_pTitle->Init();
-				}
-				else
-				{
-					MessageBox(0, "NULLじゃないです", "警告", MB_OK);
-				}
+			if (m_pTitle != NULL)
+			{
+				// 初期化処理
+				m_pTitle->Init();
 			}
 			else
 			{
-				MessageBox(0, "aaaNULLでした", "警告", MB_OK);
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
 			}
+		}
+		else
+		{
+			MessageBox(0, "aaaNULLでした", "警告", MB_OK);
+		}
 
-			break;
+		break;
 
 	case CManager::MODE_GAME:
 		//ゲームの初期化
@@ -608,28 +612,28 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 
-		//case CManager::MODE_RESULT:
-		//	//リザルトの初期化
-		//	if (m_pResult == NULL)
-		//	{
-		//		//リザルトのメモリを動的確保
-		//		m_pResult = new CResult;
+	case CManager::MODE_RESULT:
+		//リザルトの初期化
+		if (m_pResult == NULL)
+		{
+			//リザルトのメモリを動的確保
+			m_pResult = new CResult;
 
-		//		if (m_pResult != NULL)
-		//		{
-		//			// 初期化処理
-		//			m_pResult->Init();
-		//		}
-		//		else
-		//		{
-		//			MessageBox(0, "NULLじゃないです", "警告", MB_OK);
-		//		}
-		//	}
-		//	else
-		//	{
-		//		MessageBox(0, "NULLでした", "警告", MB_OK);
-		//	}
-		//	break;
+			if (m_pResult != NULL)
+			{
+				// 初期化処理
+				m_pResult->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
 
 		//case CManager::MODE_TUTORIAL:
 		//	//チュートーリアルの初期化
