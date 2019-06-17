@@ -181,8 +181,8 @@ void CCamera::Update(void)
 			}
 			else if(pTitle->GetState() == CTitle::STATE_CHARASELECT)
 			{
-				m_posV = D3DXVECTOR3(-80.0f, 50.0f, 15.0f);	// 視点
-				m_posR = D3DXVECTOR3(0.0f, 40.0f, 15.0f);		// 注視点
+				m_posV = D3DXVECTOR3(-150.0f, 130.0f, 30.0f);	// 視点
+				m_posR = D3DXVECTOR3(0.0f, 70.0f, 0.0f);		// 注視点
 			}
 		}
 	}
