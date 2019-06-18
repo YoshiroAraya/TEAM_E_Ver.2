@@ -501,6 +501,53 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 					}
 				}
+
+
+				if (m_aJanken[0] == JANKEN_GU)
+				{
+					pPlayer->SetMotionType(0, CPlayer::MOTION_BUTIKAMASI);
+					pPlayer->SetbMotionEnd(0, true);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_BUTIKAMASI);
+					pPlayer->SetbMotionEnd(1, true);
+				}
+				else if (m_aJanken[0] == JANKEN_CHOKI)
+				{
+					pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
+					pPlayer->SetbMotionEnd(0, true);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_TSUPPARI);
+					pPlayer->SetbMotionEnd(1, true);
+				}
+				else if (m_aJanken[0] == JANKEN_PA)
+				{
+					pPlayer->SetMotionType(0, CPlayer::MOTION_KAWASI);
+					pPlayer->SetbMotionEnd(0, true);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_KAWASI);
+					pPlayer->SetbMotionEnd(1, true);
+				}
+
+				if (m_aJanken[1] == JANKEN_GU)
+				{
+					pEnemy->SetMotionType(0, CEnemy::MOTION_BUTIKAMASI);
+					pEnemy->SetbMotionEnd(0, true);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_BUTIKAMASI);
+					pEnemy->SetbMotionEnd(1, true);
+				}
+				else if (m_aJanken[1] == JANKEN_CHOKI)
+				{
+					pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+					pEnemy->SetbMotionEnd(0, true);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+					pEnemy->SetbMotionEnd(1, true);
+				}
+				else if (m_aJanken[1] == JANKEN_PA)
+				{
+					pEnemy->SetMotionType(0, CEnemy::MOTION_KAWASI);
+					pEnemy->SetbMotionEnd(0, true);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_KAWASI);
+					pEnemy->SetbMotionEnd(1, true);
+				}
+
+
 			}
 		}
 
@@ -551,6 +598,8 @@ void CBattleSys::Operation(void)
 			if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true && pPlayer->GetRecovery() == false ||
 				pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
 			{
+				pPlayer->SetMotionType(1, CPlayer::MOTION_TSUPPARI);
+				pPlayer->SetbMotionEnd(1, true);
 				//向いてる方向 プレイヤー
 				switch (pPlayer->GetDirection())
 				{
@@ -575,6 +624,8 @@ void CBattleSys::Operation(void)
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
 			{
+				pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+
 				//向いてる方向 エネミー
 				switch (pEnemy->GetDirection())
 				{
@@ -690,8 +741,8 @@ void CBattleSys::Operation(void)
 		if (pInputKeyboard->GetTrigger(DIK_R) == true ||
 			pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
 		{
-			pPlayer->SetPosition(D3DXVECTOR3(-20.0f, 50.0f, 0.0f));
-			pEnemy->SetPosition(D3DXVECTOR3(20.0f, 50.0f, 0.0f));
+			pPlayer->SetPosition(D3DXVECTOR3(-50.0f, 50.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			m_bAttack = false;

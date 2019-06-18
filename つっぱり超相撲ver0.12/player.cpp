@@ -329,8 +329,14 @@ void CPlayer::Update(void)
 				}
 				else
 				{
-					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					if (m_bMotionEnd[0] == false)
+					{
+						m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+					}
+					if (m_bMotionEnd[1] == false)
+					{
+						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					}
 				}
 			}
 
@@ -483,12 +489,27 @@ void CPlayer::Update(void)
 
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
 	{
-		// 右に進む
-		if (pos.x >= -20.0f)
+		if (m_nMotionType[0] != MOTION_SYAGAMI
+			&& m_nMotionType[1] != MOTION_SYAGAMI)
 		{
-			fMovePlayer = 0.0f;
-			pos.x = -20.0f;
+			m_nMotionType[0] = MOTION_WALK;
+			m_nMotionType[1] = MOTION_WALK;
 		}
+		// 右に進む
+		if (pos.x >= -80.0f)
+		{
+			if (m_nMotionType[0] != MOTION_SYAGAMI
+				&& m_nMotionType[1] != MOTION_SYAGAMI)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_SYAGAMI;
+				m_nMotionType[1] = MOTION_SYAGAMI;
+			}
+			fMovePlayer = 0.0f;
+			pos.x = -80.0f;
+		}
+
 
 		m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
 	}
@@ -881,7 +902,7 @@ void CPlayer::UpdateMotion(int nParent)
 		}
 		else if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 		{
-			m_bMotionEnd = true;
+			m_bMotionEnd[nParent] = false;
 		}
 		//キーの更新
 		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)

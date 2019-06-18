@@ -155,6 +155,10 @@ public:
 	bool GetSelect(void) { return m_bSelect; }
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }
 
+	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }
+	void SetMotionType(int nParent, MOTION_TYPE MotionType) { m_MotionType[nParent] = MotionType; }
+	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }
+
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
@@ -210,7 +214,7 @@ private:
 	KEY							m_aKayOffset[MAX_PARTS][MODEL_PARENT];		//オフセット情報
 	MOTION_INFO					m_aMotionInfo[MAX_MOTION][MODEL_PARENT];	//モーション情報
 	int							m_nMotionType[MODEL_PARENT];				//モーションのタイプ(int型)
-	bool						m_bMotionEnd;								//モーションの終わり
+	bool						m_bMotionEnd[MODEL_PARENT];					//モーションの終わり
 	int							m_nOldMotion;								//前回のモーション
 	D3DXVECTOR3					m_OffSetPos[MAX_PARTS][MODEL_PARENT];		//オフセット情報(モーション)
 																			//MOTIONSTATE				m_MotionState;
@@ -219,6 +223,7 @@ private:
 	CModel						*m_apModel[MAX_PARTS][MODEL_PARENT];			//パーツ情報
 
 	char						m_aFileNameModel[MAX_PARTS][256];
+	MOTION_TYPE					m_MotionType[MODEL_PARENT];
 
 #ifdef _DEBUG
 	bool						m_bColBlockDraw;
