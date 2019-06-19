@@ -66,7 +66,7 @@ void CTitle::Init(void)
 	CDohyo::LoadMat();
 
 	CNewsBG::Create(D3DXVECTOR3(0.0f, 25.0f, 40.0f), D3DXVECTOR3(-D3DX_PI * 0.5f, 0.0f, 0.0f), 100.0f, 180.0f);
-	CNewsCaster::Create(D3DXVECTOR3(0.0f, 0.0f, -130.0f));
+	CNewsCaster::Create(D3DXVECTOR3(0.0f, -20.0f, -50.0f));
 
 	CTime::Create(D3DXVECTOR3(100.0f, 55.0f, 0.0f));
 }
@@ -274,7 +274,7 @@ void CTitle::SaveCharacter(void)
 
 	if (pFile != NULL)
 	{// ファイルが開けたら
-	
+
 		// モデルの総数
 		fprintf(pFile, "%d\n", m_Character[0]);
 		fprintf(pFile, "%d\n", m_Character[1]);

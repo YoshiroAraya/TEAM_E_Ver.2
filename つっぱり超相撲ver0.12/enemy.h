@@ -126,39 +126,43 @@ public:
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
 
-	bool GetLand(void);
-	STATE GetState(void);
-	void SetState(STATE state);
-	DIRECTION GetDirection(void) { return m_Direction; }
-	void SetDirection(DIRECTION direction) { m_Direction = direction; }
-	bool GetRecovery(void) { return m_bRecovery; }
-	void SetRecovery(bool bReco) { m_bRecovery = bReco; }
-	int GetRecoveryTime(void) { return m_nRecoveryTime; }
-	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }
-	bool GetDying(void) { return m_bDying; }
-	void SetDying(bool bDying) { m_bDying = bDying; }
-	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }
+	bool GetLand(void);				//着地しているかどうか
+	STATE GetState(void);			//現在の状態
+	void SetState(STATE state);		//状態を設定
+	DIRECTION GetDirection(void) { return m_Direction; }				//向きを取得
+	void SetDirection(DIRECTION direction) { m_Direction = direction; }	//向きを設定
+	bool GetRecovery(void) { return m_bRecovery; }					//硬直状態を取得
+	void SetRecovery(bool bReco) { m_bRecovery = bReco; }			//硬直を設定
+	int GetRecoveryTime(void) { return m_nRecoveryTime; }			//硬直時間を取得
+	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }	//硬直時間を設定
+	bool GetDying(void) { return m_bDying; }				//死んでいるかどうか
+	void SetDying(bool bDying) { m_bDying = bDying; }		//死を設定
+	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }		//過去の位置を取得
 
 	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
 
 	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
-	void SetMove(D3DXVECTOR3 move);
-	CTuppari GetTuppari(void) { return *m_pTuppari; }
-	DOHYO GetDohyo(void) { return m_DohyoState; }
-	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }
-	bool GetCounter(void) { return m_bCounter; }
-	void SetCounter(bool bCounter) { m_bCounter = bCounter; }
-	int GetCounterTime(void) { return m_nCounterTime; }
-	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }
-	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }
-	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }
-	bool GetSelect(void) { return m_bSelect; }
-	void SetSelect(bool bSelect) { m_bSelect = bSelect; }
+	void SetMove(D3DXVECTOR3 move);							//移動を設定
+	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
+	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
+	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }				//土俵端を設定
+	bool GetCounter(void) { return m_bCounter; }								//カウンター状態を取得
+	void SetCounter(bool bCounter) { m_bCounter = bCounter; }					//カウンター状態を設定
+	int GetCounterTime(void) { return m_nCounterTime; }							//カウンターの時間を取得
+	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }			//カウンターの時間を設定
+	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }						//右左どちらの土俵端にいるか
+	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }	//土俵端を設定
+	bool GetSelect(void) { return m_bSelect; }				//キャラ選択を取得
+	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
 
-	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }
-	void SetMotionType(int nParent, MOTION_TYPE MotionType) { m_MotionType[nParent] = MotionType; }
-	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }
-
+	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	//モーション情報を取得
+	void SetMotionType(int nParent, MOTION_TYPE MotionType)						//モーションを設定
+	{
+		m_MotionType[nParent] = MotionType;
+		m_nMotionType[nParent] = m_MotionType[nParent];
+		m_nKey[nParent] = 0;
+	}
+	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
@@ -220,10 +224,10 @@ private:
 																			//MOTIONSTATE				m_MotionState;
 																			//DASHSTATE					m_DashState;
 	D3DXCOLOR					m_effectCol;
-	CModel						*m_apModel[MAX_PARTS][MODEL_PARENT];			//パーツ情報
+	CModel						*m_apModel[MAX_PARTS][MODEL_PARENT];		//パーツ情報
 
-	char						m_aFileNameModel[MAX_PARTS][256];
-	MOTION_TYPE					m_MotionType[MODEL_PARENT];
+	char						m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
+	MOTION_TYPE					m_MotionType[MODEL_PARENT];					//モーションの種類を設定
 
 #ifdef _DEBUG
 	bool						m_bColBlockDraw;

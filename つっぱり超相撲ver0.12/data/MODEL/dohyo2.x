@@ -177,7 +177,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "TEXTURE\\sand2.jpg";
+    "data\\TEXTURE\\sand2.jpg";
    }
   }
   Material {
@@ -186,7 +186,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "TEXTURE\\sand2.jpg";
+    "data\\TEXTURE\\sand2.jpg";
    }
   }
  }

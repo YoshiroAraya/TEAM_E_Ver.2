@@ -130,12 +130,12 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 50.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 20.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 20.0f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
 	{
@@ -194,6 +194,7 @@ void CGame::Uninit(void)
 	m_pEnemy = NULL;
 	m_pMeshField = NULL;
 	m_pShadow = NULL;
+	m_pGauge = NULL;
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -201,14 +202,9 @@ void CGame::Uninit(void)
 		delete m_pBatlteSys;
 		m_pBatlteSys = NULL;
 	}
-	if (m_pBatlteSys != NULL)
-	{
-		//メモリの開放
-		delete m_pGauge;
-		m_pGauge = NULL;
-	}
 
-		//全ての終了処理
+
+	//全ての終了処理
 	CScene::ReleseAll();
 }
 

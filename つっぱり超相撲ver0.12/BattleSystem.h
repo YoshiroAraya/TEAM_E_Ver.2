@@ -26,9 +26,9 @@ public:
 	//3Ç∑Ç≠Ç›
 	typedef enum
 	{
-		JANKEN_GU = 0,
-		JANKEN_CHOKI,
-		JANKEN_PA,
+		JANKEN_GU_BUTI = 0,
+		JANKEN_CHOKI_TUPPA,
+		JANKEN_PA_KAWASI,
 	}JANKEN;
 
 	//çUåÇÇÃéÌóﬁ

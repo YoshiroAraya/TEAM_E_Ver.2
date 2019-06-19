@@ -429,8 +429,12 @@ void CPlayer::Update(void)
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 				{
 					m_State = STATE_KUMI;
-					m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-					m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					if (MOTION_NAGE != m_nMotionType[0]
+						&& MOTION_NAGE != m_nMotionType[1])
+					{
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
 				}
 				/*else if (m_State == STATE_KUMI)
 				{
