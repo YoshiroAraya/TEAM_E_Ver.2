@@ -196,6 +196,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="touzai.cpp" />
     <ClCompile Include="tuppari.cpp" />
+    <ClCompile Include="ultimate.cpp" />
     <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +244,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="touzai.h" />
     <ClInclude Include="tuppari.h" />
+    <ClInclude Include="ultimate.h" />
     <ClInclude Include="wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

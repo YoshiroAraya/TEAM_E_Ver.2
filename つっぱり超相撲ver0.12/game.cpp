@@ -247,6 +247,11 @@ void CGame::Update(void)
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 		}
+		if (pInputKeyboard->GetTrigger(DIK_9) == true)
+		{
+			pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
+
+		}
 	/*}*/
 
 	if (m_pBatlteSys != NULL)
@@ -414,7 +419,7 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 }
 
 //=============================================================================
-// 文字に使われているモデルの位置情報のロード
+// 使われているモデルのロード
 //=============================================================================
 void CGame::LoadChara(void)
 {

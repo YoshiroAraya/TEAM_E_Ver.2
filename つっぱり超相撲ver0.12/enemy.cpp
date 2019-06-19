@@ -21,6 +21,7 @@
 #include "model.h"
 #include "title.h"
 #include "Banimation.h"
+#include "ultimate.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -126,14 +127,12 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	// タイトル取得
 	CGame *pGame;
 	pGame = CManager::GetGame();
+	CUltimate *pUltimate;
+	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
-	if (mode == CManager::MODE_TITLE)
-	{// タイトル画面時のモデルの割り当て
-		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-	}
-	else if (mode == CManager::MODE_GAME)
+	if (mode == CManager::MODE_GAME)
 	{
 		if (pGame != NULL)
 		{
@@ -147,6 +146,25 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
 		}
+	}
+	else if (mode == CManager::MODE_ULTIMATE)
+	{
+		if (pUltimate != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pUltimate->Get1P() == 0)
+			{// プレイヤー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			}
+			else if (pUltimate->Get1P() == 1)
+			{// エネミー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			}
+		}
+	}
+	else
+	{
+		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -178,7 +196,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 
 	if (mode != NULL)
 	{
-		if (mode == CManager::MODE_GAME)
+		if (mode == CManager::MODE_GAME || mode == CManager::MODE_ULTIMATE)
 		{
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 		}
