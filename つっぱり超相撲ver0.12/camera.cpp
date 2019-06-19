@@ -104,12 +104,14 @@ void CCamera::Update(void)
 			if (nTime < 3 && pPlayer != NULL)
 			{
 				m_State = STATE_HIGASHI;
+
 				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= 3 && nTime < 6 && pEnemy != NULL)
 			{
 				m_State = STATE_NISHI;
+
 				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 			}
