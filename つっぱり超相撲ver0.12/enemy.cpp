@@ -479,11 +479,25 @@ void CEnemy::Update(void)
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
 	{
-		// 左に進む
-		if (pos.x <= 20.0f)
+		if (m_nMotionType[0] != MOTION_SYAGAMI
+			&& m_nMotionType[1] != MOTION_SYAGAMI)
 		{
+			m_nMotionType[0] = MOTION_WALK;
+			m_nMotionType[1] = MOTION_WALK;
+		}
+		// 左に進む
+		if (pos.x <= 80.0f)
+		{
+			if (m_nMotionType[0] != MOTION_SYAGAMI
+				&& m_nMotionType[1] != MOTION_SYAGAMI)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_SYAGAMI;
+				m_nMotionType[1] = MOTION_SYAGAMI;
+			}
 			fMoveEnemy = 0.0f;
-			pos.x = 20.0f;
+			pos.x = 80.0f;
 		}
 
 		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
@@ -872,7 +886,7 @@ void CEnemy::UpdateMotion(int nParent)
 		}
 		else if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 		{
-			m_bMotionEnd = true;
+			m_bMotionEnd[nParent] = true;
 		}
 		//キーの更新
 		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)

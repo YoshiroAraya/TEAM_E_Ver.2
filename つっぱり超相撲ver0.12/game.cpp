@@ -130,12 +130,12 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-100.0f, 50.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 50.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 50.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
 	{
@@ -240,6 +240,11 @@ void CGame::Update(void)
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
 			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+
+		}
+		if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+		{
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 		}
 	/*}*/
