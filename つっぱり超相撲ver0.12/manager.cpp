@@ -28,6 +28,7 @@
 #include "sound.h"
 #include "title.h"
 #include "result.h"
+#include "ultimate.h"
 #include "load.h"
 //=============================================================================
 // 静的メンバ変数宣言
@@ -41,6 +42,7 @@ CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CTitle *CManager::m_pTitle = NULL;
 CResult *CManager::m_pResult = NULL;
+CUltimate *CManager::m_pUltimate = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
@@ -323,6 +325,16 @@ void CManager::Uninit(void)
 			m_pResult = NULL;
 		}
 		break;
+
+		//必殺技モードの終了処理
+	case CManager::MODE_ULTIMATE:
+		if (m_pUltimate != NULL)
+		{
+			m_pUltimate->Uninit();
+			delete m_pUltimate;
+			m_pUltimate = NULL;
+		}
+		break;
 	}
 
 	CLoad::UnloadModel();
@@ -423,6 +435,14 @@ void CManager::Update(void)
 		if (m_pResult != NULL)
 		{
 			m_pResult->Update();
+		}
+		break;
+
+		//必殺技モードの更新処理
+	case CManager::MODE_ULTIMATE:
+		if (m_pUltimate != NULL)
+		{
+			m_pUltimate->Update();
 		}
 		break;
 	}
@@ -559,6 +579,21 @@ void CManager::SetMode(MODE mode)
 			m_pResult = NULL;
 		}
 		break;
+
+	case CManager::MODE_ULTIMATE:
+		//リザルトクラスの破棄
+		if (m_pUltimate != NULL)
+		{
+			// 終了処理
+			m_pUltimate->Uninit();
+
+			//メモリの開放
+			delete m_pUltimate;
+
+			//NULLにする
+			m_pUltimate = NULL;
+		}
+		break;
 	}
 	m_mode = mode;
 
@@ -623,6 +658,29 @@ void CManager::SetMode(MODE mode)
 			{
 				// 初期化処理
 				m_pResult->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
+
+	case CManager::MODE_ULTIMATE:
+		//リザルトの初期化
+		if (m_pUltimate == NULL)
+		{
+			//リザルトのメモリを動的確保
+			m_pUltimate = new CUltimate;
+
+			if (m_pUltimate != NULL)
+			{
+				// 初期化処理
+				m_pUltimate->Init();
 			}
 			else
 			{
