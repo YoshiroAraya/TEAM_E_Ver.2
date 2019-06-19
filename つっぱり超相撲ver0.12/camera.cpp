@@ -155,6 +155,15 @@ void CCamera::Update(void)
 				{
 					pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
 					pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+
+					pPlayer->SetMotionType(0, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetbMotionEnd(0, true);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetbMotionEnd(1, true);
+					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetbMotionEnd(0, true);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetbMotionEnd(1, true);
 				}
 
 				CGame::SetState(CGame::STATE_GAME);
