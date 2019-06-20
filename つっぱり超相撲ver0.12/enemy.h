@@ -118,7 +118,7 @@ public:
 	CEnemy();	// コンストラクタ
 	~CEnemy();	// デストラクタ
 
-	HRESULT Init(D3DXVECTOR3 pos);	// エネミー初期化処理
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// エネミー初期化処理
 	void Uninit(void);	// エネミー終了処理
 	void Update(void);	// エネミー更新処理
 	void Draw(void);	// エネミー描画処理
@@ -139,7 +139,7 @@ public:
 	void SetDying(bool bDying) { m_bDying = bDying; }		//死を設定
 	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }		//過去の位置を取得
 
-	static CEnemy *Create(D3DXVECTOR3 pos);	// オブジェクトの生成
+	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// オブジェクトの生成
 
 	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
 	void SetMove(D3DXVECTOR3 move);							//移動を設定
