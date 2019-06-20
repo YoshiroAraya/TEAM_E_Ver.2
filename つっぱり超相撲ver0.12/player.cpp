@@ -312,8 +312,9 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-	if (mode == CManager::MODE_GAME)
+	switch (mode)
 	{
+	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
 			//ダッシュ設定
@@ -501,12 +502,13 @@ void CPlayer::Update(void)
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 		}
-	}
-	else if (mode == CManager::MODE_TITLE)
-	{
-		// 回転処理
-		m_fRot = sinf(D3DX_PI + rot.y);
-		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		break;
+
+		case CManager::MODE_TITLE:
+			// 回転処理
+			m_fRot = sinf(D3DX_PI + rot.y);
+			m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+			break;
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)

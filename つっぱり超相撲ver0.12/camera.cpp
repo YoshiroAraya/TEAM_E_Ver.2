@@ -198,8 +198,13 @@ void CCamera::Update(void)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_ULTIMATE)
+	{
+		m_posV = D3DXVECTOR3(-25.0f, 130.0f, -120.0f);	// Ž‹“_
+		m_posR = D3DXVECTOR3(200.0f, 70.0f, 30.0f);		// ’Ž‹“_
+	}
 
-#if 0
+#if 1
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// ¶•ûŒü‚ÉˆÚ“®
 		if (pInputKeyboard->GetPress(DIK_W) == true)
@@ -346,6 +351,7 @@ void CCamera::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
+	CDebugProc::Print("cfccfccfc", "posR     : x", m_posR.x, "f", "   y", m_posR.y, "f", " z", m_posR.z, "f");
 #endif
 }
 

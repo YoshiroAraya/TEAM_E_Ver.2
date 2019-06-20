@@ -182,6 +182,7 @@
     <ClCompile Include="newsBG.cpp" />
     <ClCompile Include="newsCaster.cpp" />
     <ClCompile Include="numPlayer.cpp" />
+    <ClCompile Include="particleX.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="newsBG.h" />
     <ClInclude Include="newsCaster.h" />
     <ClInclude Include="numPlayer.h" />
+    <ClInclude Include="particleX.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />

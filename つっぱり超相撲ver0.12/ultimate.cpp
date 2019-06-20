@@ -33,6 +33,7 @@
 #include "animation.h"
 #include "load.h"
 #include "effect3D.h"
+#include "particleX.h"
 
 //============================================================================
 //	マクロ定義
@@ -69,6 +70,7 @@ void CUltimate::Init(void)
 	LoadChara();
 
 	CDohyo::LoadMat();
+	CParticleX::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	int nCntZ;
@@ -103,12 +105,12 @@ void CUltimate::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 50.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 40.0f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 30.0f, 0.0f));
 	}
 
 	CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
@@ -137,6 +139,7 @@ void CUltimate::Uninit(void)
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
 	CDohyo::UnloadMat();
+	CParticleX::UnloadMat();
 
 	//全ての終了処理
 	CScene::ReleseAll();

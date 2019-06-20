@@ -22,12 +22,16 @@
 #include "title.h"
 #include "Banimation.h"
 #include "ultimate.h"
+#include "particleX.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
 #define DASH_MOVE				(0.9f)
+#define PARTICLE_ROT			((rand() % 628) / 100.0f)		//全方向
+#define PARTICLE_NUM			(20)							// 壁に激突したときのパーティクルの数
+#define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 
@@ -306,8 +310,9 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
-	if (mode == CManager::MODE_GAME)
+	switch (mode)
 	{
+	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
 			//ダッシュ設定
@@ -490,12 +495,35 @@ void CEnemy::Update(void)
 			}
 
 		}
-	}
-	else if (mode == CManager::MODE_TITLE)
-	{
-		// 回転処理
-		m_fRot = sinf(D3DX_PI + rot.y);
-		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		break;
+
+		case CManager::MODE_TITLE:
+			// 回転処理
+			m_fRot = sinf(D3DX_PI + rot.y);
+			m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+			break;
+
+		case CManager::MODE_ULTIMATE:
+			if (pos.x < 550.0f)
+			{
+				m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy * 15.0f);
+			}
+			else if (pos.x > 550.0f)
+			{
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+
+				for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
+				{
+					CParticleX::Create(D3DXVECTOR3(pos.x, pos.y + 30.0f, pos.z),
+						D3DXVECTOR3(sinf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT)),
+						D3DXVECTOR3(sinf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1))),
+						PARTICLE_TIME,
+						CParticleX::TYPE_NORMAL);
+				}
+			}
+
+			break;
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
@@ -538,7 +566,10 @@ void CEnemy::Update(void)
 	pos += m_move;
 
 	// 重力加算
-	m_move.y -= cosf(D3DX_PI * 0.0f) * 0.5f;
+	if (mode != CManager::MODE_ULTIMATE)
+	{
+		m_move.y -= cosf(D3DX_PI * 0.0f) * 0.5f;
+	}
 
 	//減速
 	m_move.x += (0.0f - m_move.x) * 0.5f;
