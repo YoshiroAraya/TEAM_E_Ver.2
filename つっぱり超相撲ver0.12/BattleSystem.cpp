@@ -26,7 +26,7 @@
 //=============================================================================
 #define YORI_MOVE		(5.0f)
 #define NAGE_MOVE		(45.5f)
-#define OSI_MOVE		(10.0f)
+#define OSI_MOVE		(20.0f)
 #define COUNTER_MOVE	(20.0f)
 #define TUPARI_MOVE		(8.6f)
 #define KNOCKUP_MOVE	(3.0f)
@@ -35,6 +35,10 @@
 #define OSI_RECOIL		(4.0f)
 #define TUPPARI_RECOIL	(4.0f)
 #define HINSI_MOVE		(2.0f)
+
+#define JANKEN_TUPARI_MOVE		(5.0f)
+
+
 
 #define BATTLE_FLAME		(20)
 
@@ -378,7 +382,7 @@ void CBattleSys::Operation(void)
 				{// チョキとグー
 					if (CGame::GetHit() == true)
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE * 3, 5.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE * 3, 5.0f, 0.0f));
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
@@ -400,9 +404,15 @@ void CBattleSys::Operation(void)
 				{// チョキとチョキ
 					m_aCHOKICounter[0]++;
 
+					if (m_aCHOKICounter[0] < CHOKI_COUNTER)
+					{
+						pEnemy->SetMove(D3DXVECTOR3(-5.0f, 0.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(5.0f, 0.0f, 0.0f));
+					}
+
 					if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
 					{
-						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
 					{
@@ -414,7 +424,7 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
 					{
@@ -428,7 +438,7 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
 					{
-						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE, 3.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
 					{
@@ -476,7 +486,7 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-OSI_MOVE, 3.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
 					{
@@ -503,14 +513,14 @@ void CBattleSys::Operation(void)
 				}
 
 				//モーションの変化
-				if (m_aJanken[0] == JANKEN_GU_BUTI)
+				if (m_aJanken[0] == JANKEN_GU_BUTI && pPlayer->GetMotionType(0) != CPlayer::MOTION_BUTIKAMASI)
 				{
 					pPlayer->SetMotionType(0, CPlayer::MOTION_BUTIKAMASI);
 					pPlayer->SetbMotionEnd(0, true);
 					pPlayer->SetMotionType(1, CPlayer::MOTION_BUTIKAMASI);
 					pPlayer->SetbMotionEnd(1, true);
 				}
-				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA)
+				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && pPlayer->GetMotionType(0) != CPlayer::MOTION_TSUPPARI)
 				{
 					if (pEnemy->GetMotionType(1) != CEnemy::MOTION_TSUPPARI)
 					{
@@ -520,7 +530,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetbMotionEnd(1, true);
 					}
 				}
-				else if (m_aJanken[0] == JANKEN_PA_KAWASI)
+				else if (m_aJanken[0] == JANKEN_PA_KAWASI && pPlayer->GetMotionType(0) != CPlayer::MOTION_KAWASI)
 				{
 					pPlayer->SetMotionType(0, CPlayer::MOTION_KAWASI);
 					pPlayer->SetbMotionEnd(0, true);
@@ -528,14 +538,14 @@ void CBattleSys::Operation(void)
 					pPlayer->SetbMotionEnd(1, true);
 				}
 
-				if (m_aJanken[1] == JANKEN_GU_BUTI)
+				if (m_aJanken[1] == JANKEN_GU_BUTI && pEnemy->GetMotionType(0) != CEnemy::MOTION_BUTIKAMASI)
 				{
 					pEnemy->SetMotionType(0, CEnemy::MOTION_BUTIKAMASI);
 					pEnemy->SetbMotionEnd(0, true);
 					pEnemy->SetMotionType(1, CEnemy::MOTION_BUTIKAMASI);
 					pEnemy->SetbMotionEnd(1, true);
 				}
-				else if (m_aJanken[1] == JANKEN_CHOKI_TUPPA)
+				else if (m_aJanken[1] == JANKEN_CHOKI_TUPPA && pEnemy->GetMotionType(0) != CEnemy::MOTION_TSUPPARI)
 				{
 					if (pEnemy->GetMotionType(1) != CEnemy::MOTION_TSUPPARI)
 					{
@@ -545,7 +555,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetbMotionEnd(1, true);
 					}
 				}
-				else if (m_aJanken[1] == JANKEN_PA_KAWASI)
+				else if (m_aJanken[1] == JANKEN_PA_KAWASI && pEnemy->GetMotionType(0) != CEnemy::MOTION_KAWASI)
 				{
 					pEnemy->SetMotionType(0, CEnemy::MOTION_KAWASI);
 					pEnemy->SetbMotionEnd(0, true);

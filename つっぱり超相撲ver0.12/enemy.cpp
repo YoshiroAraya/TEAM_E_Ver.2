@@ -104,7 +104,7 @@ CEnemy::~CEnemy()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
+CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	CEnemy *pEnemy = NULL;
 
@@ -116,7 +116,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 		if (pEnemy != NULL)
 		{
 			//pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-			pEnemy->Init(pos);
+			pEnemy->Init(pos, rot);
 		}
 	}
 
@@ -126,7 +126,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 //=============================================================================
 // エネミー初期化処理
 //=============================================================================
-HRESULT CEnemy::Init(D3DXVECTOR3 pos)
+HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// タイトル取得
 	CGame *pGame;
@@ -209,6 +209,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 		}
 	}
+
+	CSceneX::SetRot(rot);
 
 	//モーション用変数
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)

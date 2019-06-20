@@ -100,7 +100,7 @@ CPlayer::~CPlayer()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
+CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	CPlayer *pPlayer = NULL;
 
@@ -112,7 +112,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 		if (pPlayer != NULL)
 		{
 			//pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
-			pPlayer->Init(pos);
+			pPlayer->Init(pos,rot);
 		}
 	}
 
@@ -122,7 +122,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 //=============================================================================
 // プレイヤー初期化処理
 //=============================================================================
-HRESULT CPlayer::Init(D3DXVECTOR3 pos)
+HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// タイトル取得
 	CGame *pGame;
@@ -207,6 +207,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 		}
 	}
+
+	CSceneX::SetRot(rot);
 
 
 	//モーション用変数

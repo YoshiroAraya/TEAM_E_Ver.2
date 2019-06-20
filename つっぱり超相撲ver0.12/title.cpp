@@ -120,11 +120,11 @@ void CTitle::Update(void)
 			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
 			if (m_pPlayer == NULL)
 			{
-				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f));
+				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 			}
 			if (m_pEnemy == NULL)
 			{
-				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f));
+				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 			}
 
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);

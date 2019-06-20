@@ -124,7 +124,7 @@ public:
 	CPlayer();	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
-	HRESULT Init(D3DXVECTOR3 pos);	// プレイヤー初期化処理
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// プレイヤー初期化処理
 	void Uninit(void);	// プレイヤー終了処理
 	void Update(void);	// プレイヤー更新処理
 	void Draw(void);	// プレイヤー描画処理
@@ -151,7 +151,7 @@ public:
 	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
 	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }		//土俵端を設定
-	static CPlayer *Create(D3DXVECTOR3 pos);							// オブジェクトの生成
+	static CPlayer *Create(D3DXVECTOR3 pos , D3DXVECTOR3 rot);							// オブジェクトの生成
 	bool GetCounter(void) { return m_bCounter; }								//カウンター状態を取得
 	void SetCounter(bool bCounter) { m_bCounter = bCounter; }					//カウンター状態を設定
 	int GetCounterTime(void) { return m_nCounterTime; }							//カウンターの時間を取得
