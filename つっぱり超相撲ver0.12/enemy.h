@@ -154,15 +154,11 @@ public:
 	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }	//土俵端を設定
 	bool GetSelect(void) { return m_bSelect; }				//キャラ選択を取得
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
+	bool GetbDash(void) { return m_bDash; }					//ダッシュ状態を取得
+	void SetbDash(bool bDash) { m_bDash = bDash; }			//ダッシュ状態を取得
 	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
-
 	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	//モーション情報を取得
-	void SetMotionType(int nParent, MOTION_TYPE MotionType)						//モーションを設定
-	{
-		m_MotionType[nParent] = MotionType;
-		m_nMotionType[nParent] = m_MotionType[nParent];
-		m_nKey[nParent] = 0;
-	}
+	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -198,6 +194,8 @@ private:
 	DIRECTION				m_Direction;	// 向き(左右)
 	int						m_nLife;		// 体力
 	bool					m_bDying;		// 瀕死かどうか
+	int						m_nSiomakiCnt;	// 塩まきカウンター
+	bool					m_bDash;		// 走っているかどうか
 	bool					m_bWallHit;		// 壁に激突したかどうか
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;

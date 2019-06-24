@@ -28,7 +28,7 @@
 //=============================================================================
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
-#define DASH_MOVE				(0.9f)
+#define DASH_MOVE				(1.2f)
 #define PARTICLE_ROT			((rand() % 628) / 100.0f)		//全方向
 #define PARTICLE_NUM			(20)							// 壁に激突したときのパーティクルの数
 #define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
@@ -72,6 +72,8 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_nOldMotion = 0;	//前のモーション
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -197,6 +199,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
 	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
 	m_bWallHit = false;
 
 	if (mode != NULL)
@@ -318,13 +322,6 @@ void CEnemy::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-			{
-				fMoveEnemy = DASH_MOVE;
-			}
-
 			//通常状態で硬直していない
 			if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 			{
@@ -332,6 +329,17 @@ void CEnemy::Update(void)
 				if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					{
+						fMoveEnemy = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 左に進む
 					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -342,6 +350,17 @@ void CEnemy::Update(void)
 				else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					{
+						fMoveEnemy = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 右に進む
 					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -349,8 +368,14 @@ void CEnemy::Update(void)
 				}
 				else
 				{
-					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					if (m_bMotionEnd[0] == true)
+					{
+						m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+					}
+					if (m_bMotionEnd[1] == true)
+					{
+						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					}
 				}
 
 			}
@@ -449,11 +474,25 @@ void CEnemy::Update(void)
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
 					}
 				}
-				/*else if (m_State == STATE_KUMI)
+
+				if (m_State == STATE_KUMI)
 				{
-				m_State = STATE_NEUTRAL;
-				}*/
+					if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true
+						|| MOTION_TUKAMI_AGERARERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true)
+					{
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
+				}
 			}
+
+
 
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
@@ -533,26 +572,46 @@ void CEnemy::Update(void)
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
 	{
 		if (m_nMotionType[0] != MOTION_SYAGAMI
-			&& m_nMotionType[1] != MOTION_SYAGAMI)
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
 		{
-			m_nMotionType[0] = MOTION_WALK;
-			m_nMotionType[1] = MOTION_WALK;
+			if (m_nSiomakiCnt < 10)
+			{
+				m_nMotionType[0] = MOTION_WALK;
+				m_nMotionType[1] = MOTION_WALK;
+			}
 		}
 		// 左に進む
 		if (pos.x <= 80.0f)
 		{
-			if (m_nMotionType[0] != MOTION_SYAGAMI
-				&& m_nMotionType[1] != MOTION_SYAGAMI)
+			m_nSiomakiCnt++;
+
+			if (m_nSiomakiCnt > 60)
 			{
-				m_nKey[0] = 0;
-				m_nKey[1] = 0;
-				m_nMotionType[0] = MOTION_SYAGAMI;
-				m_nMotionType[1] = MOTION_SYAGAMI;
+				if (m_nMotionType[0] != MOTION_NEUTRAL
+					&& m_nMotionType[1] != MOTION_NEUTRAL)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_NEUTRAL;
+					m_nMotionType[1] = MOTION_NEUTRAL;
+				}
+			}
+			else
+			{
+				if (m_nMotionType[0] != MOTION_SIOMAKI
+					&& m_nMotionType[1] != MOTION_SIOMAKI)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_SIOMAKI;
+					m_nMotionType[1] = MOTION_SIOMAKI;
+				}
 			}
 			fMoveEnemy = 0.0f;
 			pos.x = 80.0f;
 		}
-
 		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
 	}
 
@@ -784,6 +843,18 @@ void CEnemy::SetState(STATE state)
 void CEnemy::SetMove(D3DXVECTOR3 move)
 {
 	m_move = move;
+}
+
+//=============================================================================
+// モーションを設定
+//=============================================================================
+void CEnemy::SetMotionType(int nParent, CEnemy::MOTION_TYPE MotionType)
+{
+	m_MotionType[nParent] = MotionType;
+	m_nMotionType[nParent] = m_MotionType[nParent];
+	m_nKey[nParent] = 0;
+	m_nCountFlame[nParent] = 0;
+	m_bDash = false;
 }
 
 //=============================================================================

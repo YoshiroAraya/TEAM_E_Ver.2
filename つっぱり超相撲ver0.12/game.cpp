@@ -130,12 +130,12 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
 	{
