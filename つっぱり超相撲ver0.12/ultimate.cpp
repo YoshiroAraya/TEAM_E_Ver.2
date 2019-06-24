@@ -81,7 +81,7 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
 		}
 	}
 
@@ -90,7 +90,7 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
 		}
 	}
 
@@ -99,7 +99,7 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
 		}
 	}
 

@@ -197,6 +197,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
 	m_bSelect = false;
+	m_bWallHit = false;
 
 	if (mode != NULL)
 	{
@@ -512,17 +513,18 @@ void CEnemy::Update(void)
 			}
 			else if (pos.x > 550.0f)
 			{
+				m_bWallHit = true;
 				pos.x = 550.0f;
 				m_move.x = 0.0f;
 
-				for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
+				/*for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
 				{
 					CParticleX::Create(D3DXVECTOR3(pos.x, pos.y + 30.0f, pos.z),
 						D3DXVECTOR3(sinf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT)),
 						D3DXVECTOR3(sinf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1))),
 						PARTICLE_TIME,
 						CParticleX::TYPE_NORMAL);
-				}
+				}*/
 			}
 
 			break;

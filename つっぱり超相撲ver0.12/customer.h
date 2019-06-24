@@ -32,6 +32,12 @@ public:
 		CUSTOMERTYPE_03,
 	}CUSTOMER;
 
+	typedef enum
+	{//客の種類
+		POSITION = 0,
+		POSITION_RIGHT,
+	}CUSTOMER_POS;
+
 	CCustomer();	// コンストラクタ
 	~CCustomer();	// デストラクタ
 
@@ -40,7 +46,7 @@ public:
 	void Update(void);				// 客更新処理
 	void Draw(void);				// 客描画処理
 
-	static CCustomer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType);	// オブジェクトの生成
+	static CCustomer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType, CUSTOMER_POS customerpos);	// オブジェクトの生成
 
 private:
 	static LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
@@ -48,5 +54,9 @@ private:
 
 	D3DXMATRIX				m_mtxWorld;		// ワールドマトリックス
 	CUSTOMER m_nType;
+	CUSTOMER_POS m_CustomerPos;
+	D3DXVECTOR3 m_move;
+	D3DXVECTOR3 m_rot;
+	int m_nLife;
 };
 #endif
