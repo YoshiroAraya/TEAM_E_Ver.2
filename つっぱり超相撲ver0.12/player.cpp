@@ -20,6 +20,7 @@
 #include "model.h"
 #include "title.h"
 #include "Banimation.h"
+#include "ultimate.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -99,7 +100,7 @@ CPlayer::~CPlayer()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
+CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	CPlayer *pPlayer = NULL;
 
@@ -111,7 +112,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 		if (pPlayer != NULL)
 		{
 			//pPlayer->BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
-			pPlayer->Init(pos);
+			pPlayer->Init(pos,rot);
 		}
 	}
 
@@ -121,19 +122,17 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos)
 //=============================================================================
 // プレイヤー初期化処理
 //=============================================================================
-HRESULT CPlayer::Init(D3DXVECTOR3 pos)
+HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// タイトル取得
 	CGame *pGame;
 	pGame = CManager::GetGame();
+	CUltimate *pUltimate;
+	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
-	if (mode == CManager::MODE_TITLE)
-	{// タイトル画面時のモデルの割り当て
-		BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
-	}
-	else if (mode == CManager::MODE_GAME)
+	if (mode == CManager::MODE_GAME)
 	{
 		if (pGame != NULL)
 		{
@@ -147,6 +146,25 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
 		}
+	}
+	else if (mode == CManager::MODE_ULTIMATE)
+	{
+		if (pUltimate != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pUltimate->Get1P() == 0)
+			{// プレイヤー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			}
+			else if (pUltimate->Get1P() == 1)
+			{// エネミー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			}
+		}
+	}
+	else
+	{
+		BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -180,7 +198,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 
 	if (mode != NULL)
 	{
-		if (mode == CManager::MODE_GAME)
+		if (mode == CManager::MODE_GAME || mode == CManager::MODE_ULTIMATE)
 		{
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 		}
@@ -189,6 +207,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 		}
 	}
+
+	CSceneX::SetRot(rot);
 
 
 	//モーション用変数
@@ -294,8 +314,9 @@ void CPlayer::Update(void)
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
-	if (mode == CManager::MODE_GAME)
+	switch (mode)
 	{
+	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
 			//ダッシュ設定
@@ -429,8 +450,12 @@ void CPlayer::Update(void)
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 				{
 					m_State = STATE_KUMI;
-					m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-					m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					if (MOTION_NAGE != m_nMotionType[0]
+						&& MOTION_NAGE != m_nMotionType[1])
+					{
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
 				}
 				/*else if (m_State == STATE_KUMI)
 				{
@@ -479,12 +504,13 @@ void CPlayer::Update(void)
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 		}
-	}
-	else if (mode == CManager::MODE_TITLE)
-	{
-		// 回転処理
-		m_fRot = sinf(D3DX_PI + rot.y);
-		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		break;
+
+		case CManager::MODE_TITLE:
+			// 回転処理
+			m_fRot = sinf(D3DX_PI + rot.y);
+			m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+			break;
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)

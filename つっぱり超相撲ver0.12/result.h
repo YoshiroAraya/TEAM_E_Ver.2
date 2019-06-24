@@ -27,6 +27,7 @@ public:
 	static CResult *Create(void);
 	bool GetTurn(void) { return m_bTurn; }
 	void SetTurn(bool turn) { m_bTurn = turn; }
+	void LoadWinner(void);
 
 private:
 	bool m_bSetDohyo;
@@ -35,5 +36,6 @@ private:
 	int m_nCntReturn;
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
+	int m_nWinner;
 };
 #endif

@@ -130,12 +130,12 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 50.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 50.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(150.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 	}
 	if (m_pMeshField == NULL)
 	{
@@ -194,6 +194,7 @@ void CGame::Uninit(void)
 	m_pEnemy = NULL;
 	m_pMeshField = NULL;
 	m_pShadow = NULL;
+	m_pGauge = NULL;
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -201,14 +202,9 @@ void CGame::Uninit(void)
 		delete m_pBatlteSys;
 		m_pBatlteSys = NULL;
 	}
-	if (m_pBatlteSys != NULL)
-	{
-		//メモリの開放
-		delete m_pGauge;
-		m_pGauge = NULL;
-	}
 
-		//全ての終了処理
+
+	//全ての終了処理
 	CScene::ReleseAll();
 }
 
@@ -247,6 +243,11 @@ void CGame::Update(void)
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 		}
+		if (pInputKeyboard->GetTrigger(DIK_9) == true)
+		{
+			pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
+
+		}
 	/*}*/
 
 	if (m_pBatlteSys != NULL)
@@ -267,6 +268,7 @@ void CGame::Update(void)
 	{
 		if (pFade->GetFade() == CFade::FADE_NONE)
 		{
+			SaveWinner();
 			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
 		}
 	}
@@ -393,6 +395,29 @@ CGauge *CGame::GetGauge(void)
 }
 
 //=============================================================================
+// 勝者をセーブ
+//=============================================================================
+void CGame::SaveWinner(void)
+{
+	FILE *pFileW;
+
+	// ファイルを開く
+	pFileW = fopen("data\\TEXT\\Winner.txt", "w");
+
+	if (pFileW != NULL)
+	{// ファイルが開けたら
+		//モデルの総数
+		fprintf(pFileW, "%d\n", m_Winner);
+		//ファイルを閉じる
+		fclose(pFileW);
+	}
+	else
+	{// ファイルが開けなかったら
+		printf("開けませんでした\n");
+	}
+}
+
+//=============================================================================
 // ブロックとの当たり判定処理
 //=============================================================================
 bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1)
@@ -414,7 +439,7 @@ bool CGame::Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, floa
 }
 
 //=============================================================================
-// 文字に使われているモデルの位置情報のロード
+// 使われているモデルのロード
 //=============================================================================
 void CGame::LoadChara(void)
 {
@@ -435,3 +460,4 @@ void CGame::LoadChara(void)
 		fclose(pFile);
 	}
 }
+

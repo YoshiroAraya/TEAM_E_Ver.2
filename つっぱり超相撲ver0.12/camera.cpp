@@ -62,8 +62,8 @@ void CCamera::Init(void)
 
 	if (mode == CManager::MODE_RESULT)
 	{
-		m_posV = D3DXVECTOR3(0.0f, 100.0f, -180.0f);	// 視点
-		m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 注視点
+		m_posV = D3DXVECTOR3(0.0f, 100.0f, -200.0f);	// 視点
+		m_posR = D3DXVECTOR3(0.0f, 80.0f, 0.0f);		// 注視点
 		m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	}
 }
@@ -97,26 +97,27 @@ void CCamera::Update(void)
 	{
 		if (CGame::GetState() == CGame::STATE_START)
 		{
+			// 秒数
 			int nTime = m_nStartCounter / 60;
 
 			m_nStartCounter++;
 
 			if (nTime < 3 && pPlayer != NULL)
-			{
+			{// 東側の入場
 				m_State = STATE_HIGASHI;
 
 				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= 3 && nTime < 6 && pEnemy != NULL)
-			{
+			{// 西側の入場
 				m_State = STATE_NISHI;
 
 				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= 6)
-			{
+			{// カメラの引き
 				m_State = STATE_NORMAL;
 				m_posV.x = 0.0f;
 				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
@@ -157,6 +158,15 @@ void CCamera::Update(void)
 				{
 					pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
 					pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+
+					pPlayer->SetMotionType(0, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetbMotionEnd(0, true);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetbMotionEnd(1, true);
+					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetbMotionEnd(0, true);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetbMotionEnd(1, true);
 				}
 
 				CGame::SetState(CGame::STATE_GAME);
@@ -188,8 +198,13 @@ void CCamera::Update(void)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_ULTIMATE)
+	{
+		m_posV = D3DXVECTOR3(-25.0f, 130.0f, -120.0f);	// 視点
+		m_posR = D3DXVECTOR3(200.0f, 70.0f, 30.0f);		// 注視点
+	}
 
-#if 0
+#if 1
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// 左方向に移動
 		if (pInputKeyboard->GetPress(DIK_W) == true)
@@ -336,6 +351,7 @@ void CCamera::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
+	CDebugProc::Print("cfccfccfc", "posR     : x", m_posR.x, "f", "   y", m_posR.y, "f", " z", m_posR.z, "f");
 #endif
 }
 

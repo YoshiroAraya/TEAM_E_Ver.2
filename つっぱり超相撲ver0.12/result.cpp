@@ -68,6 +68,8 @@ void CResult::Init(void)
 	CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 
+	LoadWinner();
+
 	CManager::GetCamera()->Init();
 }
 
@@ -118,4 +120,36 @@ void CResult::Update(void)
 void CResult::Draw(void)
 {
 
+}
+
+//=============================================================================
+// 勝者の読み込み処理
+//=============================================================================
+void CResult::LoadWinner(void)
+{
+	FILE *pFile = NULL;
+
+	pFile = fopen("data\\TEXT\\Winner.txt", "r");
+
+	if (pFile != NULL)
+	{
+		fscanf(pFile, "%d", &m_nWinner);
+
+		fclose(pFile);
+	}
+
+	if (m_nWinner == 1)
+	{
+		if (m_pPlayer == NULL)
+		{// プレイヤー
+			m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
+		}
+	}
+	else if(m_nWinner == 2)
+	{
+		if (m_pEnemy == NULL)
+		{// エネミー
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f));
+		}
+	}
 }

@@ -62,6 +62,7 @@ public:
 	static void SetWinner(WINNER Winner) { m_Winner = Winner; };
 	int Get1P(void) { return m_n1P; };
 	int Get2P(void) { return m_n2P; };
+	void SaveWinner(void);
 
 private:
 	static CScene3D *m_pScene3D;

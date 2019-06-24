@@ -21,12 +21,17 @@
 #include "model.h"
 #include "title.h"
 #include "Banimation.h"
+#include "ultimate.h"
+#include "particleX.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
 #define DASH_MOVE				(0.9f)
+#define PARTICLE_ROT			((rand() % 628) / 100.0f)		//全方向
+#define PARTICLE_NUM			(20)							// 壁に激突したときのパーティクルの数
+#define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 
@@ -99,7 +104,7 @@ CEnemy::~CEnemy()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
+CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	CEnemy *pEnemy = NULL;
 
@@ -111,7 +116,7 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 		if (pEnemy != NULL)
 		{
 			//pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-			pEnemy->Init(pos);
+			pEnemy->Init(pos, rot);
 		}
 	}
 
@@ -121,19 +126,17 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos)
 //=============================================================================
 // エネミー初期化処理
 //=============================================================================
-HRESULT CEnemy::Init(D3DXVECTOR3 pos)
+HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// タイトル取得
 	CGame *pGame;
 	pGame = CManager::GetGame();
+	CUltimate *pUltimate;
+	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
-	if (mode == CManager::MODE_TITLE)
-	{// タイトル画面時のモデルの割り当て
-		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-	}
-	else if (mode == CManager::MODE_GAME)
+	if (mode == CManager::MODE_GAME)
 	{
 		if (pGame != NULL)
 		{
@@ -147,6 +150,25 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
 		}
+	}
+	else if (mode == CManager::MODE_ULTIMATE)
+	{
+		if (pUltimate != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pUltimate->Get1P() == 0)
+			{// プレイヤー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+			}
+			else if (pUltimate->Get1P() == 1)
+			{// エネミー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+			}
+		}
+	}
+	else
+	{
+		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -178,7 +200,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 
 	if (mode != NULL)
 	{
-		if (mode == CManager::MODE_GAME)
+		if (mode == CManager::MODE_GAME || mode == CManager::MODE_ULTIMATE)
 		{
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 		}
@@ -187,6 +209,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 			CSceneX::SetRot(D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 		}
 	}
+
+	CSceneX::SetRot(rot);
 
 	//モーション用変数
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
@@ -288,8 +312,9 @@ void CEnemy::Update(void)
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
-	if (mode == CManager::MODE_GAME)
+	switch (mode)
 	{
+	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
 			//ダッシュ設定
@@ -416,9 +441,12 @@ void CEnemy::Update(void)
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
 				{
 					m_State = STATE_KUMI;
-					m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-					m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
-
+					if (MOTION_NAGE != m_nMotionType[0]
+						&& MOTION_NAGE != m_nMotionType[1])
+					{
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
 				}
 				/*else if (m_State == STATE_KUMI)
 				{
@@ -469,12 +497,35 @@ void CEnemy::Update(void)
 			}
 
 		}
-	}
-	else if (mode == CManager::MODE_TITLE)
-	{
-		// 回転処理
-		m_fRot = sinf(D3DX_PI + rot.y);
-		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+		break;
+
+		case CManager::MODE_TITLE:
+			// 回転処理
+			m_fRot = sinf(D3DX_PI + rot.y);
+			m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
+			break;
+
+		case CManager::MODE_ULTIMATE:
+			if (pos.x < 550.0f)
+			{
+				m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy * 15.0f);
+			}
+			else if (pos.x > 550.0f)
+			{
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+
+				for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
+				{
+					CParticleX::Create(D3DXVECTOR3(pos.x, pos.y + 30.0f, pos.z),
+						D3DXVECTOR3(sinf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT)),
+						D3DXVECTOR3(sinf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1))),
+						PARTICLE_TIME,
+						CParticleX::TYPE_NORMAL);
+				}
+			}
+
+			break;
 	}
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
@@ -517,7 +568,10 @@ void CEnemy::Update(void)
 	pos += m_move;
 
 	// 重力加算
-	m_move.y -= cosf(D3DX_PI * 0.0f) * 0.5f;
+	if (mode != CManager::MODE_ULTIMATE)
+	{
+		m_move.y -= cosf(D3DX_PI * 0.0f) * 0.5f;
+	}
 
 	//減速
 	m_move.x += (0.0f - m_move.x) * 0.5f;
