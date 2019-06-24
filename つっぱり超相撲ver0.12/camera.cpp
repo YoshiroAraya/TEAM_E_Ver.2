@@ -19,6 +19,9 @@
 //*****************************************************************************
 #define CAMERA_SPEED	(2.0f)
 
+#define HIGASI_TIME	(6)
+#define NISI_TIME	(12)
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -102,21 +105,21 @@ void CCamera::Update(void)
 
 			m_nStartCounter++;
 
-			if (nTime < 3 && pPlayer != NULL)
+			if (nTime < HIGASI_TIME && pPlayer != NULL)
 			{// 東側の入場
 				m_State = STATE_HIGASHI;
 
 				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
 			}
-			else if (nTime >= 3 && nTime < 6 && pEnemy != NULL)
+			else if (nTime >= HIGASI_TIME && nTime < NISI_TIME && pEnemy != NULL)
 			{// 西側の入場
 				m_State = STATE_NISHI;
 
 				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 			}
-			else if (nTime >= 6)
+			else if (nTime >= NISI_TIME)
 			{// カメラの引き
 				m_State = STATE_NORMAL;
 				m_posV.x = 0.0f;
@@ -159,13 +162,13 @@ void CCamera::Update(void)
 					pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
 					pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
 
-					pPlayer->SetMotionType(0, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
 					pPlayer->SetbMotionEnd(0, true);
-					pPlayer->SetMotionType(1, CPlayer::MOTION_SYAGAMI);
+					pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
 					pPlayer->SetbMotionEnd(1, true);
-					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
 					pEnemy->SetbMotionEnd(0, true);
-					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+					pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
 					pEnemy->SetbMotionEnd(1, true);
 				}
 
@@ -204,7 +207,7 @@ void CCamera::Update(void)
 		m_posR = D3DXVECTOR3(200.0f, 70.0f, 30.0f);		// 注視点
 	}
 
-#if 1
+#if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// 左方向に移動
 		if (pInputKeyboard->GetPress(DIK_W) == true)

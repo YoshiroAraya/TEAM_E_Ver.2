@@ -65,6 +65,8 @@ public:
 	void P2Attack(void);
 	void CounterAttack(void);
 
+	void MotionSetYORI(int nAttack);
+
 	static CBattleSys *Create();	// オブジェクトの生成
 
 	void Operation(void);
