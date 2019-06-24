@@ -32,8 +32,10 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CUltimate *Create(void);
-	int Get1P(void) { return m_n1P; };
-	int Get2P(void) { return m_n2P; };
+	int Get1P(void) { return m_n1P; }
+	int Get2P(void) { return m_n2P; }
+	static CPlayer *GetPlayer(void) { return m_pPlayer; }
+	static CEnemy *GetEnemy(void) { return m_pEnemy; }
 	void LoadChara(void);
 
 private:

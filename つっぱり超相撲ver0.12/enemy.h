@@ -156,7 +156,7 @@ public:
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
 	bool GetbDash(void) { return m_bDash; }					//ダッシュ状態を取得
 	void SetbDash(bool bDash) { m_bDash = bDash; }			//ダッシュ状態を取得
-
+	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
 	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	//モーション情報を取得
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
@@ -196,7 +196,7 @@ private:
 	bool					m_bDying;		// 瀕死かどうか
 	int						m_nSiomakiCnt;	// 塩まきカウンター
 	bool					m_bDash;		// 走っているかどうか
-
+	bool					m_bWallHit;		// 壁に激突したかどうか
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
