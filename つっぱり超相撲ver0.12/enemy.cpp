@@ -466,19 +466,22 @@ void CEnemy::Update(void)
 			if (CGame::GetHit() == true)
 			{
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
-				{
+				{	//組み状態へ
 					m_State = STATE_KUMI;
-					if (MOTION_NAGE != m_nMotionType[0]
-						&& MOTION_NAGE != m_nMotionType[1])
-					{
-						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					if (MOTION_BUTIKAMASI == m_nMotionType[0]
+						&& MOTION_BUTIKAMASI == m_nMotionType[1])
+					{//ぶちかましモーションの時は止める
 						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
+					if (MOTION_NAGE != m_nMotionType[0]
+						&& MOTION_NAGE != m_nMotionType[1])
+					{//投げモーション以外はニュートラル
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
 				}
-
 				if (m_State == STATE_KUMI)
-				{
+				{ //組み状態なら
 					if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
 						&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
 						&& m_bMotionEnd[0] == true
@@ -487,15 +490,12 @@ void CEnemy::Update(void)
 						&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
 						&& m_bMotionEnd[0] == true
 						&& m_bMotionEnd[1] == true)
-					{
+					{//つかみ上げ、上げられモーションが終わったときニュートラル
 						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
 					}
 				}
 			}
-
-
-
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
 				m_State = STATE_NEUTRAL;

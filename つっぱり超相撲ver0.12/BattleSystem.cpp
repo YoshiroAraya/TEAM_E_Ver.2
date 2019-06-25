@@ -30,15 +30,19 @@
 #define COUNTER_MOVE	(20.0f)
 #define TUPARI_MOVE		(10.0f)
 #define KNOCKUP_MOVE	(3.0f)
-#define NAGE_DIVIDED	(2.0f)
+#define NAGE_DIVIDED	(4.0f)
 #define NAGE_HINSI		(2.0f)
 #define OSI_RECOIL		(1.0f)
-#define TUPPARI_RECOIL	(1.0f)
-#define HINSI_MOVE		(2.0f)
+#define TUPPARI_RECOIL	(0.5f)
+#define HINSI_T_MOVE	(2.2f)
+#define HINSI_N_MOVE	(1.4f)
+#define HINSI_O_MOVE	(1.9f)
 
 #define JANKEN_TUPARI_MOVE		(5.0f)
 #define JANKEN_BUTI_MOVE		(5.0f)
 #define JANKEN_KAWASI_MOVE		(30.0f)
+#define J_TUPARI_KNOCKUP_MOVE	(15.0f)
+#define J_BUTI_KNOCKUP_MOVE		(20.0f)
 
 
 
@@ -380,11 +384,11 @@ void CBattleSys::Operation(void)
 					}
 					if (CGame::GetHit() == true)
 					{
-						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * 3, 5.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(J_BUTI_KNOCKUP_MOVE * 3, 5.0f, 0.0f));
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
-						//酸素ゲージ消費
+						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
 
@@ -408,16 +412,21 @@ void CBattleSys::Operation(void)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
+						//ライフゲージ消費
+						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_GU_BUTI)
 				{// チョキとグー
 					if (CGame::GetHit() == true)
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE * 3, 5.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-J_BUTI_KNOCKUP_MOVE * 3, 5.0f, 0.0f));
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
+						//ライフゲージ消費
+						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+
 					}
 
 					m_aCHOKICounter[0]++;
@@ -425,19 +434,13 @@ void CBattleSys::Operation(void)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_TUPARI_MOVE, 0.0f, 0.0f));
 					}
-
-
 					m_aGUCounter[1]++;
 
 					if (m_aGUCounter[1] < GU_COUNTER)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_BUTI_MOVE, 0.0f, 0.0f));
 					}
-					else if (m_aGUCounter[1] >= GU_COUNTER)
-					{
-						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-						m_aGUCounter[1] = 0;
-					}
+
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_CHOKI_TUPPA)
 				{// チョキとチョキ
@@ -451,7 +454,7 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
 					{
-						pEnemy->SetMove(D3DXVECTOR3(JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(J_TUPARI_KNOCKUP_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
 					{
@@ -463,7 +466,7 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-J_TUPARI_KNOCKUP_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
 					{
@@ -481,14 +484,14 @@ void CBattleSys::Operation(void)
 					}
 					if (m_aCHOKICounter[0] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[0])
 					{
-						pEnemy->SetMove(D3DXVECTOR3(JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
+						pEnemy->SetMove(D3DXVECTOR3(J_TUPARI_KNOCKUP_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[0] > CHOKI_COUNTER + 5)
 					{
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						m_aCHOKICounter[0] = 0;
-						//酸素ゲージ消費
+						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
 
@@ -505,7 +508,7 @@ void CBattleSys::Operation(void)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
-						//酸素ゲージ消費
+						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
 
@@ -540,13 +543,15 @@ void CBattleSys::Operation(void)
 
 					if (m_aCHOKICounter[1] > CHOKI_COUNTER && CHOKI_COUNTER + 5 >= m_aCHOKICounter[1])
 					{
-						pPlayer->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 3.0f, 0.0f));
+						pPlayer->SetMove(D3DXVECTOR3(-J_TUPARI_KNOCKUP_MOVE, 3.0f, 0.0f));
 					}
 					else if (m_aCHOKICounter[1] > CHOKI_COUNTER + 5)
 					{
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aCHOKICounter[1] = 0;
+						//ライフゲージ消費
+						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_PA_KAWASI)
@@ -622,7 +627,7 @@ void CBattleSys::Operation(void)
 		//瀕死時
 		if (pPlayer->GetDying() == true)
 		{
-			m_fMoveDying[0] = HINSI_MOVE;
+			m_fMoveDying[0] = HINSI_T_MOVE;
 		}
 		else if (pPlayer->GetDying() == false)
 		{
@@ -631,7 +636,7 @@ void CBattleSys::Operation(void)
 
 		if (pEnemy->GetDying() == true)
 		{
-			m_fMoveDying[1] = HINSI_MOVE;
+			m_fMoveDying[1] = HINSI_T_MOVE;
 		}
 		else if (pEnemy->GetDying() == false)
 		{
@@ -1264,12 +1269,19 @@ void CBattleSys::P1Attack(void)
 	pEnemy = CGame::GetEnemy();
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
+	//瀕死時の移動量
+	float fHinshiOshi = 1.0f;
+	float fHinshiNage = 1.0f;
 
 	if (pEnemy != NULL)
 	{
-		if (pEnemy->GetCounter() == false)
+		if (pEnemy->GetDying() == true)
 		{
-			//向いてる方向 プレイヤー
+			fHinshiNage = HINSI_N_MOVE;
+			fHinshiOshi = HINSI_O_MOVE;
+		}
+		if (pEnemy->GetCounter() == false)
+		{	//向いてる方向 プレイヤー
 			switch (pPlayer->GetDirection())
 			{
 			case CPlayer::DIRECTION_LEFT:
@@ -1288,7 +1300,7 @@ void CBattleSys::P1Attack(void)
 						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(-OSI_MOVE * m_fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(-OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f));
 						pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
 						pPlayer->SetbMotionEnd(0, true);
 						pPlayer->SetMotionType(1, CPlayer::MOTION_TSUPPARI);
@@ -1303,7 +1315,7 @@ void CBattleSys::P1Attack(void)
 						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((NAGE_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
+						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((NAGE_MOVE * fHinshiNage), KNOCKUP_MOVE, 0.0f));
 						pPlayer->SetMotionType(0, CPlayer::MOTION_NAGE);
 						//pPlayer->SetbMotionEnd(0, true);
 						pPlayer->SetMotionType(1, CPlayer::MOTION_NAGE);
@@ -1327,7 +1339,7 @@ void CBattleSys::P1Attack(void)
 						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(OSI_MOVE * m_fMoveDying[1], KNOCKUP_MOVE, 0.0f));
+						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f));
 						pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
 						pPlayer->SetbMotionEnd(0, true);
 						pPlayer->SetMotionType(1, CPlayer::MOTION_TSUPPARI);
@@ -1342,7 +1354,7 @@ void CBattleSys::P1Attack(void)
 						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-NAGE_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
+						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-NAGE_MOVE * fHinshiNage), KNOCKUP_MOVE, 0.0f));
 						pPlayer->SetMotionType(0, CPlayer::MOTION_NAGE);
 						pPlayer->SetbMotionEnd(0, true);
 						pPlayer->SetMotionType(1, CPlayer::MOTION_NAGE);
@@ -1403,11 +1415,21 @@ void CBattleSys::P2Attack(void)
 	// プレイヤーの取得
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
-
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
+
+	//瀕死時の移動量
+	float fHinshiOshi = 1.0f;
+	float fHinshiNage = 1.0f;
+
 	if (pPlayer != NULL)
 	{
+		if (pPlayer->GetDying() == true)
+		{
+			fHinshiNage = HINSI_N_MOVE;
+			fHinshiOshi = HINSI_O_MOVE;
+		}
+
 		if (pPlayer->GetCounter() == false)
 		{
 			//向いてる方向 エネミー
@@ -1428,7 +1450,7 @@ void CBattleSys::P2Attack(void)
 						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(-OSI_MOVE * m_fMoveDying[0], KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(-OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 						pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
 						pEnemy->SetbMotionEnd(0, true);
 						pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
@@ -1443,7 +1465,7 @@ void CBattleSys::P2Attack(void)
 						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(NAGE_MOVE * m_fMoveDying[0], KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 						pEnemy->SetMotionType(0, CEnemy::MOTION_NAGE);
 						pEnemy->SetbMotionEnd(0, true);
 						pEnemy->SetMotionType(1, CEnemy::MOTION_NAGE);
@@ -1466,7 +1488,7 @@ void CBattleSys::P2Attack(void)
 						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(OSI_MOVE * m_fMoveDying[0], KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 						pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
 						pEnemy->SetbMotionEnd(0, true);
 						pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
@@ -1481,7 +1503,7 @@ void CBattleSys::P2Attack(void)
 						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(-NAGE_MOVE * m_fMoveDying[0], KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(-NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 						pEnemy->SetMotionType(0, CEnemy::MOTION_NAGE);
 						pEnemy->SetbMotionEnd(0, true);
 						pEnemy->SetMotionType(1, CEnemy::MOTION_NAGE);
