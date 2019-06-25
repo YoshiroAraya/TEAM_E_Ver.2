@@ -356,7 +356,6 @@ void CBattleSys::Operation(void)
 			{
 				if (m_aJanken[0] == JANKEN_GU_BUTI && m_aJanken[1] == JANKEN_GU_BUTI)
 				{// グーとグー
-					//if (CGame::GetHit() == false)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_BUTI_MOVE, 0.0f, 0.0f));
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_BUTI_MOVE, 0.0f, 0.0f));
@@ -365,7 +364,6 @@ void CBattleSys::Operation(void)
 				else if (m_aJanken[0] == JANKEN_GU_BUTI && m_aJanken[1] == JANKEN_CHOKI_TUPPA)
 				{// グーとチョキ
 					m_aGUCounter[0]++;
-
 					if (m_aGUCounter[0] < GU_COUNTER)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_BUTI_MOVE, 0.0f, 0.0f));
@@ -375,22 +373,21 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aGUCounter[0] = 0;
 					}
-
-
 					m_aCHOKICounter[1]++;
 					if (m_aCHOKICounter[1] < CHOKI_COUNTER)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 0.0f, 0.0f));
 					}
-
-
 					if (CGame::GetHit() == true)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(OSI_MOVE * 3, 5.0f, 0.0f));
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
+						//酸素ゲージ消費
+						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
+
 				}
 				else if (m_aJanken[0] == JANKEN_GU_BUTI && m_aJanken[1] == JANKEN_PA_KAWASI)
 				{// グーとパー
@@ -491,6 +488,8 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						m_aCHOKICounter[0] = 0;
+						//酸素ゲージ消費
+						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
 
 					if (m_abPA[1] == true)
@@ -498,6 +497,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
 					}
+
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_GU_BUTI)
 				{// パーとグー
@@ -505,6 +505,8 @@ void CBattleSys::Operation(void)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
+						//酸素ゲージ消費
+						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
 					}
 
 					m_aGUCounter[1]++;
@@ -519,6 +521,8 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aGUCounter[1] = 0;
 					}
+
+
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_CHOKI_TUPPA)
 				{// パーとチョキ
@@ -614,7 +618,6 @@ void CBattleSys::Operation(void)
 				}
 			}
 		}
-
 
 		//瀕死時
 		if (pPlayer->GetDying() == true)

@@ -477,6 +477,7 @@ void CPlayer::Update(void)
 					{
 						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
 				}
 

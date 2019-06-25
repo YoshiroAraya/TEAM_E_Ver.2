@@ -330,8 +330,8 @@ void CEnemy::Update(void)
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
 					//ダッシュ設定
-					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
 					{
 						fMoveEnemy = DASH_MOVE;
 						m_bDash = true;
@@ -351,8 +351,8 @@ void CEnemy::Update(void)
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
 					//ダッシュ設定
-					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
 					{
 						fMoveEnemy = DASH_MOVE;
 						m_bDash = true;
@@ -401,6 +401,7 @@ void CEnemy::Update(void)
 					m_nRecoveryTime = 20;
 				}
 			}
+
 			// 目的の角度
 			if (pPlayer != NULL)
 			{
@@ -472,6 +473,7 @@ void CEnemy::Update(void)
 					{
 						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
 				}
 
@@ -874,16 +876,21 @@ void CEnemy::UpdateMotion(int nParent)
 	float fMinusData;
 	//float fPlusPos;
 	//float fMinusPos;
-
 	D3DXVECTOR3 rotmotion;
 	D3DXVECTOR3 posmotion;
 	D3DXVECTOR3 BodyRot;
 	KEY			NowKey;
+	float fDivideMotion = 1;
 
 	//キーが最大数を上回らないように
 	if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey <= m_nKey[nParent])
 	{
 		m_nKey[nParent] = 0;
+	}
+
+	if (m_bDash == true)
+	{
+		fDivideMotion = 2.0f;
 	}
 
 	//モーション更新
@@ -899,7 +906,7 @@ void CEnemy::UpdateMotion(int nParent)
 			//次のキーを取得
 			pNextKey = &m_pKeyInfo[m_nMotionType[nParent]][nParent][(m_nKey[nParent] + 1) % m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey].aKey[nCntParts];
 			//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
-			fRateMotion = (float)m_nCountFlame[nParent] / (float)m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame;
+			fRateMotion = (float)m_nCountFlame[nParent] / (float)(m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion);
 
 #if 1
 			fPlusData = pNextKey->frotX + NowKey.frotX;
@@ -991,7 +998,7 @@ void CEnemy::UpdateMotion(int nParent)
 		//フレームを進める
 		m_nCountFlame[nParent]++;
 		//キーの更新
-		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)
+		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion)
 		{
 			if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 			{//キーの初期化
