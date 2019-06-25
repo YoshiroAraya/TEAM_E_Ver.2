@@ -121,7 +121,7 @@ void CCustomer::Update(void)
 			{
 				if (pEnemy->GetWallHit() == true)
 				{
-					pos -= m_move * 5.0f;
+					pos -= m_move * 5.5f;
 
 					CSceneX::SetRot(m_rot);
 				}
