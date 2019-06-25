@@ -158,11 +158,11 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		if (pUltimate != NULL)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
-			if (pUltimate->Get1P() == 0)
+			if (pUltimate->Get2P() == 0)
 			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			}
-			else if (pUltimate->Get1P() == 1)
+			else if (pUltimate->Get2P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
