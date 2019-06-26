@@ -22,10 +22,10 @@ class CModel;
 // マクロ定義
 //========================================
 #define MOVE_PLAYER			(0.5f)							//プレイヤー移動量
-#define MAX_PARTS		(30)
-#define MAX_MOTION		(30)
-#define MODEL_PARENT	(2)
-#define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
+#define MAX_PARTS			(30)
+#define MAX_MOTION			(30)
+#define MODEL_PARENT		(2)
+#define TSUPPARI_COLLISION	(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
 
 //========================================
 // クラスの定義
@@ -167,6 +167,7 @@ public:
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					 //モーションを設定
 
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; } //モーションの終わりを設定
+	void InitStatus(void);
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);

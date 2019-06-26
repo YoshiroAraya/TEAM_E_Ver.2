@@ -236,7 +236,6 @@ void CGame::Update(void)
 		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 		{
 			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-
 		}
 		if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
 		{

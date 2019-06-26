@@ -34,13 +34,13 @@
 #define NAGE_HINSI		(2.0f)
 #define OSI_RECOIL		(1.0f)
 #define TUPPARI_RECOIL	(0.5f)
-#define HINSI_T_MOVE	(2.2f)
+#define HINSI_T_MOVE	(2.8f)
 #define HINSI_N_MOVE	(1.4f)
 #define HINSI_O_MOVE	(1.9f)
 
 #define JANKEN_TUPARI_MOVE		(5.0f)
 #define JANKEN_BUTI_MOVE		(5.0f)
-#define JANKEN_KAWASI_MOVE		(30.0f)
+#define JANKEN_KAWASI_MOVE		(30.1f)
 #define J_TUPARI_KNOCKUP_MOVE	(15.0f)
 #define J_BUTI_KNOCKUP_MOVE		(20.0f)
 
@@ -76,6 +76,8 @@ CBattleSys::CBattleSys()
 	m_nCntAttackFlame = 0;
 	m_nImpossibleFlame = 0;
 	m_bAttack = false;
+	m_aJanken[0] = JANKEN_GU_BUTI;
+	m_aJanken[1] = JANKEN_GU_BUTI;
 	m_nStartCounter = 0;
 	m_nCntPushP1 = 0;
 	m_nCntPushP2 = 0;
@@ -267,7 +269,6 @@ void CBattleSys::Operation(void)
 	{
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-
 			if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
 			{
 #ifdef _DEBUG
@@ -819,15 +820,33 @@ void CBattleSys::Operation(void)
 		if (pInputKeyboard->GetTrigger(DIK_R) == true ||
 			pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
 		{
-			pPlayer->SetPosition(D3DXVECTOR3(-50.0f, 50.0f, 0.0f));
-			pEnemy->SetPosition(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
-			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			pPlayer->InitStatus();
+			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+			pPlayer->SetState(CPlayer::STATE_JANKEN);
+			pEnemy->SetState(CEnemy::STATE_JANKEN);
 			m_bAttack = false;
 			m_nCntAttackFlame = 0;
+			m_nStartCounter = 0;
+			pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
+			pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
+			pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
+			m_aJanken[0] = JANKEN_GU_BUTI;
+			m_aJanken[1] = JANKEN_GU_BUTI;
+
+			for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
+			{
+				m_aGUCounter[nCntPlayer] = 0;
+				m_aCHOKICounter[nCntPlayer] = 0;
+				m_abPA[nCntPlayer] = false;
+			}
+
 			pGauge->SetGaugeRightLeft(600, 600);
 			CGame::SetWinner(CGame::WINNER_NONE);
-			CGame::SetHit(false);
+			CGame::SetHit(true);
+
+			CManager::GetGame()->SetbUI(true);
 		}
 	}
 #ifdef _DEBUG

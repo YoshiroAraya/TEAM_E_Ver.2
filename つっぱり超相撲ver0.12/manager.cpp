@@ -46,7 +46,7 @@ CUltimate *CManager::m_pUltimate = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
-CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
+CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
 //=============================================================================

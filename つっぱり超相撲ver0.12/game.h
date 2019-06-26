@@ -54,6 +54,8 @@ public:
 	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);	// “–‚½‚è”»’è
 	static bool GetHit(void) { return m_bHit; };
 	static void SetHit(bool bHit) { m_bHit = bHit; };
+	bool GetbUI(void) { return m_bUI; };
+	void SetbUI(bool bUI) { m_bUI = bUI; };
 	static CGauge *GetGauge(void);
 	static CSansoGauge *GetSansoGauge(void) { return m_pSansoGauge; };
 	static STATE GetState(void) { return m_State; };

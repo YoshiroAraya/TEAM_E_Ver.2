@@ -181,8 +181,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_move = D3DXVECTOR3(0, 0, 0);
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
-	m_bLand = false;					// 右にいるかどうか
-	m_bHit = false;					// 右にいるかどうか
+	m_bLand = false;				// のっているかどうか
+	m_bHit = false;					// 当たっているかどうか
 	m_State = STATE_JANKEN;
 	m_Direction = DIRECTION_RIGHT;
 	m_bRecovery = false;	// 硬直フラグ
@@ -473,7 +473,9 @@ void CPlayer::Update(void)
 				{	//組み状態へ
 					m_State = STATE_KUMI;
 					if (MOTION_BUTIKAMASI == m_nMotionType[0]
-						&& MOTION_BUTIKAMASI == m_nMotionType[1])
+						&& MOTION_BUTIKAMASI == m_nMotionType[1]
+						|| MOTION_KAWASI == m_nMotionType[0]
+						&& MOTION_KAWASI == m_nMotionType[1])
 					{//ぶちかましモーションの時は止める
 						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 					}
@@ -828,6 +830,42 @@ void CPlayer::SetMotionType(int nParent, CPlayer::MOTION_TYPE MotionType)
 	m_nKey[nParent] = 0;
 	m_nCountFlame[nParent] = 0;
 	m_bDash = false;
+}
+
+//=============================================================================
+// プレイヤーのステータスを初期化
+//=============================================================================
+void CPlayer::InitStatus(void)
+{
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fDestAngle = 0;
+	m_fDiffAngle = 0;
+	m_bLand = false;				// のっているかどうか
+	m_bHit = false;					// 当たっているかどうか
+	m_State = STATE_JANKEN;
+	m_Direction = DIRECTION_RIGHT;
+	m_bRecovery = false;			// 硬直フラグ
+	m_nRecoveryTime = 0;			// 硬直時間
+	m_bJanken = false;
+	m_nLife = 100;
+	m_bDying = false;
+	m_DohyoState = DOHYO_NORMAL;
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
+	m_fRot = 0.0f;
+	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
+
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
+	{
+		m_nKey[nCntParent] = 0;			//現在のキー
+		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
+		m_bMotionEnd[nCntParent] = false;
+	}
+
 }
 
 //=============================================================================
