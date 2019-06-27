@@ -24,6 +24,7 @@
 //　前方宣言
 //*****************************************************************************
 class CModel;
+class CBAnimation;
 
 //========================================
 // クラスの定義
@@ -188,6 +189,7 @@ private:
 	bool					m_bRecovery;	// 硬直フラグ
 	bool					m_bCounter;		// カウンターフラグ
 	bool					m_bSelect;		// 選ばれているかどうか
+	bool					m_bUltDis;		// 必殺の演出表示
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
@@ -227,6 +229,8 @@ private:
 
 	char						m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
 	MOTION_TYPE					m_MotionType[MODEL_PARENT];					//モーションの種類を設定
+
+	static CBAnimation *m_pAnimation;
 
 #ifdef _DEBUG
 	bool						m_bColBlockDraw;

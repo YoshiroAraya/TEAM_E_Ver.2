@@ -16,6 +16,7 @@
 //*****************************************************************************
 #define MAX_TEX_TYPE	(2)								// テクスチャの種類
 #define MAX_GAUGE (2)
+#define NUM_PLAYER (2)
 
 //========================================
 // クラスの定義
@@ -37,6 +38,8 @@ public:
 	D3DXVECTOR3 GetPosition(void);						// 位置を取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
 
+	bool GetUlt(int nPlayer) { return m_bUlt[nPlayer]; }	// 必殺フラグを取得
+
 	static CGauge *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
 
 	void SetGaugeRightLeft(float fRight, float fLeft);
@@ -46,6 +49,7 @@ private:
 
 	D3DXVECTOR3						m_Pos;						// ポリゴンの位置
 	float							m_fRight, m_fLeft;			// 左右の値
+	bool					m_bUlt[NUM_PLAYER];			// 必殺フラグ
 };
 
 #endif

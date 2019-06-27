@@ -16,7 +16,7 @@
 //　前方宣言
 //*****************************************************************************
 class CModel;
-
+class CBAnimation;
 
 //========================================
 // マクロ定義
@@ -205,12 +205,12 @@ private:
 	int						m_nLife;		// 体力
 	int						m_nSiomakiCnt;	// 塩まきカウンター
 	bool					m_bDash;		// 走っているかどうか
-
+	bool					m_bUltDis;		// 必殺の演出表示
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
 	//TOUZAI					m_Touzai;
-
+	static CBAnimation *m_pAnimation;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ
