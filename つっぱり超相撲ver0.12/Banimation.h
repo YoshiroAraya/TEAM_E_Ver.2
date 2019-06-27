@@ -37,6 +37,8 @@ public:
 
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
+	void SetDestroy(bool bDestroy) { m_bDestroy = bDestroy; }			//ダッシュ状態を取得
+
 private:
 	//	D3DXVECTOR3 m_pos;							//位置
 	D3DXCOLOR m_col;								//色
@@ -54,6 +56,7 @@ private:
 	int m_nLife;									//テクスチャの寿命
 	int m_nDrawType;								//描画タイプ
 	int m_nTypePlayer;								//プレイヤーか敵かの区別
+	bool m_bDestroy;
 
 };
 #endif

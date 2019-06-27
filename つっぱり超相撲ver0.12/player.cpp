@@ -21,6 +21,7 @@
 #include "title.h"
 #include "Banimation.h"
 #include "ultimate.h"
+#include "gauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -40,6 +41,7 @@ LPD3DXMESH					CPlayer::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
 LPD3DXBUFFER				CPlayer::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
 LPDIRECT3DTEXTURE9			CPlayer::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
 DWORD						CPlayer::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
+CBAnimation *CPlayer::m_pAnimation = NULL;
 
 //=============================================================================
 // プレイヤークラスのコンストラクタ
@@ -202,6 +204,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
 	m_pTuppari = CTuppari::Create(pos);
+	m_bUltDis = false;
 
 	if (mode != NULL)
 	{
@@ -312,6 +315,10 @@ void CPlayer::Update(void)
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
+
+	//ゲージの取得
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -543,6 +550,27 @@ void CPlayer::Update(void)
 				m_DohyoState = DOHYO_NORMAL;
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
+
+			if (pGauge->GetUlt(0) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
+				}
+
+				m_bUltDis = true;
+			}
+			else if (pGauge->GetUlt(0) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+
 		}
 		break;
 

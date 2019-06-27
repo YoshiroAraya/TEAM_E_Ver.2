@@ -23,6 +23,7 @@
 #include "Banimation.h"
 #include "ultimate.h"
 #include "particleX.h"
+#include "gauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -44,6 +45,7 @@ LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
 LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
 LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
 DWORD						CEnemy::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
+CBAnimation *CEnemy::m_pAnimation = NULL;
 
 //=============================================================================
 // エネミークラスのコンストラクタ
@@ -202,6 +204,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
 	m_bWallHit = false;
+	m_bUltDis = false;
 
 	if (mode != NULL)
 	{
@@ -265,6 +268,8 @@ void CEnemy::Uninit(void)
 		m_pTuppari->Uninit();
 	}
 
+	m_pAnimation = NULL;
+
 	// 2Dオブジェクト終了処理
 	CSceneX::Uninit();
 }
@@ -308,6 +313,10 @@ void CEnemy::Update(void)
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
+
+	//ゲージの取得
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -538,6 +547,26 @@ void CEnemy::Update(void)
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 
+			if (pGauge->GetUlt(1) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+				}
+
+				m_bUltDis = true;
+			}
+			else if(pGauge->GetUlt(1) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+			
 		}
 		break;
 
