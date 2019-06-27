@@ -218,7 +218,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		}
 	}
 
-	//CSceneX::SetRot(rot);
+	CSceneX::SetRot(rot);
 
 	//ƒ‚[ƒVƒ‡ƒ“—p•Ï”
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
