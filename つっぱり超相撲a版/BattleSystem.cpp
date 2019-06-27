@@ -390,7 +390,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -100.0f);
 					}
 
 				}
@@ -414,7 +414,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-100.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_GU_BUTI)
@@ -426,7 +426,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-100.0f, 0.0f);
 
 					}
 
@@ -493,7 +493,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						m_aCHOKICounter[0] = 0;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -100.0f);
 					}
 
 					if (m_abPA[1] == true)
@@ -552,7 +552,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aCHOKICounter[1] = 0;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-100.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_PA_KAWASI)

@@ -150,6 +150,16 @@ void CUltimate::Uninit(void)
 //=============================================================================
 void CUltimate::Update(void)
 {
+	// “ü—Íî•ñ‚ðŽæ“¾
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+	CManager *pManager = NULL;
+	CFade *pFade = pManager->GetFade();
+
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
 }
 
 //=============================================================================
