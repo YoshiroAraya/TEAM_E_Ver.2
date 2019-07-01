@@ -22,6 +22,7 @@
 #include "Banimation.h"
 #include "ultimate.h"
 #include "gauge.h"
+#include "SansoGauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -319,7 +320,10 @@ void CPlayer::Update(void)
 	//ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
-
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
+	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -390,12 +394,21 @@ void CPlayer::Update(void)
 				}
 			}
 
-			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
-				pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
+			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 			{
-
+				//ガード状態
+				if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
+					pXInput->GetPress(XPLAYER_X_BUTTON, 1) == true)
+				{
+					m_State = STATE_GUARD;
+					pSansoGauge->SetSansoGaugeRightLeft(-3, 0);
+				}
+				if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
+					pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+				{
+					m_State = STATE_NEUTRAL;
+				}
 			}
-
 
 			//硬直しているとき
 			if (m_bRecovery == true)
@@ -518,7 +531,7 @@ void CPlayer::Update(void)
 			}
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
-				m_State = STATE_NEUTRAL;
+				//m_State = STATE_NEUTRAL;
 			}
 
 			if (pEnemy != NULL)

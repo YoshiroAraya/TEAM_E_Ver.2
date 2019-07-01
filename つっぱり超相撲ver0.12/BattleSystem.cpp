@@ -1144,8 +1144,8 @@ void CBattleSys::PushJudge(void)
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 	// ƒQ[ƒW‚ÌŽæ“¾
-	CSansoGauge *pGauge;
-	pGauge = CGame::GetSansoGauge();
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	float fPushCntP1 = 0, fPushCntP2 = 0;
 
@@ -1173,13 +1173,13 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
+					pSansoGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
+				pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
 			}
 
 			if (pEnemy->GetRecovery() == false)
@@ -1199,20 +1199,20 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
+					pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
+				pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
 			}
 
 			m_nFlamePush++;
 			//Ž_‘fÁ”ï
 			fPushCntP1 *= SANSO_SIKAKE;
 			fPushCntP2 *= SANSO_SIKAKE;
-			pGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
+			pSansoGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
 		}
 		else
 		{
@@ -1220,7 +1220,7 @@ void CBattleSys::PushJudge(void)
 			m_nCntPushP1 = 0;
 			m_nCntPushP2 = 0;
 			//Ž_‘f‰ñ•œ
-			pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
+			pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
 		}
 	}
 
