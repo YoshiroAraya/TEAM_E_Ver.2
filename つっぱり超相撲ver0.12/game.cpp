@@ -307,11 +307,11 @@ void CGame::Update(void)
 
 	if (pInputKeyboard->GetTrigger(DIK_7) == true)
 	{
-		m_nWin1P++;
+		m_Winner = WINNER_PLAYER1;
 	}
 	if (pInputKeyboard->GetTrigger(DIK_8) == true)
 	{
-		m_nWin2P++;
+		m_Winner = WINNER_PLAYER2;
 	}
 
 	if (m_bHit == true)
