@@ -47,6 +47,9 @@ const char *CLoad::m_apTexFilename[] =
 	"data\\TEXTURE\\EFFECT\\particle000.jpg",
 	"data\\TEXTURE\\EFFECT\\money.png",
 	"data/TEXTURE/EFFECT/16.png",
+	"data/TEXTURE/EFFECT/somke.png",
+	"data/TEXTURE/circle.png",
+
 };
 
 //=============================================================================
