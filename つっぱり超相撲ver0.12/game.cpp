@@ -33,6 +33,7 @@
 #include "animation.h"
 #include "load.h"
 #include "effect3D.h"
+#include "winnerUI.h"
 //============================================================================
 //	É}ÉNÉçíËã`
 //============================================================================
@@ -92,6 +93,7 @@ void CGame::Init(void)
 
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
+	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0),0);
 
 	int nCntZ;
 	int nCnt;
@@ -311,28 +313,31 @@ void CGame::Update(void)
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
 
-		for (int nCnt = 0; nCnt < 20; nCnt++)
+		for (int nCnt = 0; nCnt < 3; nCnt++)
 		{
 
 			//Ç®ã‡
-			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
-			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
-			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
-			////moveRand.x = rand() % 2 - 2;
-			//PosRand.x = rand() % 300 - 300;
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
+			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			//moveRand.x = rand() % 2 - 2;
 
 			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-			//	20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+				//20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-			//âñ
-			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
-			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
-			moveRand.z = (float)((rand() % 7 + 3));
-			//moveRand.x = rand() % 2 - 2;
-			PosRand.x = (float)(rand() % 300 - 300);
+			//âå
+			CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+				10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 
-			CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
+			////âñ
+			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
+			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
+			//moveRand.z = (float)((rand() % 7 + 3));
+			////moveRand.x = rand() % 2 - 2;
+			//PosRand.x = (float)(rand() % 300 - 300);
+
+			//CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+			//	6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
 		}
 	}
 #endif

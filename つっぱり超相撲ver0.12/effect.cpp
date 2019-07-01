@@ -84,32 +84,11 @@ CEffect *CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 //=============================================================================
 HRESULT CEffect::Init(void)
 {
-	//デバイスを取得
-	//CRenderer *pRenderer = CManager::GetRenderer();
-	//LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	/*m_pBillBoard = CBillboard::Create(m_pos, m_fWidth, m_fHeight);
-	m_pBillBoard->BindTexture(m_pTexture[0]);
-	m_pBillBoard->SetPosition(m_pos);
-	m_pBillBoard->SetCol(m_Col);*/
-
-	//CBillboard::SetPosition(m_pos);
 	CBillboard::BindTexture(CLoad::GetTexture(m_nTexType));
 	CBillboard::Init(m_pos);
 	CBillboard::SetCol(m_Col);
-
-
-	//オブジェクト種類の設定
-	//if (m_TexType == EFFECTTEX_NORMAL000 || m_TexType == EFFECTTEX_SMOKE)
-	//{
-	//	CScene::SetObjType(CScene::OBJTYPE_EFFECTADD);
-	//	m_pBillBoard->SetObjType(CScene::OBJTYPE_EFFECTADD);
-	//}
-	//else
-	//{
-	//	CScene::SetObjType(CScene::OBJTYPE_EFFECT);
-	//	m_pBillBoard->SetObjType(CScene::OBJTYPE_EFFECT);
-	//}
+	CBillboard::SetBillboard(m_pos, m_fHeight, m_fWidth);
 
 	m_fAlpha = 1.0f / (float)m_nLife;
 	//m_fAlpha = m_fAlpha / 60;
@@ -130,6 +109,15 @@ void CEffect::Uninit(void)
 //=============================================================================
 void CEffect::Update(void)
 {
+	//煙のエフェクト
+	UpdateSmoke();
+}
+
+//=============================================================================
+// 更新処理
+//=============================================================================
+void CEffect::UpdateSmoke(void)
+{
 	//自分用の死亡フラグ変数
 	bool bDestroy = false;
 
@@ -140,26 +128,23 @@ void CEffect::Update(void)
 		m_nLife--;
 
 		//重力
-		//m_move.y -= cosf(D3DX_PI * 0) * 0.3f;
-		//位置を更新
-		//m_pos = m_pBillBoard->GetPosition();
-		m_pos.y += m_move.y;
-		//地面ではねる
-		if (m_pos.y < 0.0f)
-		{
-		//	m_move *= -1;
-		}
+		m_move.y += cosf(D3DX_PI * 0) * 0.05f;
 
+		//位置を更新
+		m_pos += m_move;
+		
 		//徐々に透明にしていく
-		m_Col.a = m_Col.a - m_fAlpha;
+		m_Col.a -= 0.009f;
 		//一定以下になったら0に
 		if (m_Col.a < 0.01f)
 		{
 			m_Col.a = 0;
 		}
+
 		//色を設定
 		CBillboard::SetCol(m_Col);
-
+		m_fHeight += 1.5f;
+		m_fWidth += 1.5f;
 		//設定処理
 		CBillboard::SetBillboard(m_pos, m_fHeight, m_fWidth);
 	}
@@ -178,6 +163,7 @@ void CEffect::Update(void)
 		bDestroy = false;
 	}
 }
+
 
 //=============================================================================
 // 描画処理
