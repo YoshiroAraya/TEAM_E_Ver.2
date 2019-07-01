@@ -51,6 +51,8 @@ public:
 		TEXTURE_EFFECT_NORMAL000,	// エフェクト000
 		TEXTURE_EFFECT_NORMAL001,	// エフェクト001
 		TEXTURE_ANIMATION,			// アニメーション
+		TEXTURE_EFFECT_NORMAL002,	// エフェクト002
+		TEXTURE_WINNER_UI,			// 勝利持のUI
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

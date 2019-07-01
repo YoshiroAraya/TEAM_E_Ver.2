@@ -64,6 +64,7 @@ public:
 	void P1Attack(void);
 	void P2Attack(void);
 	void CounterAttack(void);
+	void ResetBattle(void);
 
 	void MotionSetYORI(int nAttack);
 

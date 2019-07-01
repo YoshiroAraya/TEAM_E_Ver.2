@@ -161,6 +161,7 @@ public:
 	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	//モーション情報を取得
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
+	void InitStatus(void);
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
