@@ -89,12 +89,14 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	m_pScene2D[0]->SetWidthHeight(300.0f, 30.0f);
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 	m_pScene2D[0]->BindTexture(NULL);
+	m_bUlt[0] = false;
 
 	//2p‘¤
 	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(980.0f, pos.y, 0.0f));
 	m_pScene2D[1]->SetWidthHeight(300.0f, 30.0f);
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 	m_pScene2D[1]->BindTexture(NULL);
+	m_bUlt[1] = false;
 
 	return S_OK;
 }
@@ -147,6 +149,14 @@ void CGauge::Update(void)
 	{
 		m_fLeft = -600;
 	}
+	if (m_fLeft < -480)
+	{
+		m_bUlt[1] = true;
+	}
+	else if (m_fLeft >= -480)
+	{
+		m_bUlt[1] = false;
+	}
 
 	if (m_fRight > 0)
 	{
@@ -156,12 +166,21 @@ void CGauge::Update(void)
 	{
 		m_fRight = -600;
 	}
+	if (m_fRight < -480)
+	{
+		m_bUlt[0] = true;
+	}
+	else if (m_fRight >= -480)
+	{
+		m_bUlt[0] = false;
+	}
+
 	//ƒQ[ƒW‚Ì¶‰E‚ð’²®
 	m_pScene2D[0]->SetRIghtLeft(m_fRight, 0.0f);
 	m_pScene2D[1]->SetRIghtLeft(0.0f, m_fLeft);
 
 #endif
-	//CDebugProc::Print("cfccfccfc", "2DPos    : x", m_Pos.x, "f", " y", m_Pos.y, "f", " z", m_Pos.z, "f");
+	CDebugProc::Print("cf", "m_fRight    : ", m_fRight);
 #endif
 }
 

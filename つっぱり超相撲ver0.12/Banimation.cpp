@@ -83,6 +83,7 @@ HRESULT CBAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float
 	m_nTypePlayer = nTypePlayer;
 
 	m_bUse = true;
+	m_bDestroy = false;
 
 	return S_OK;
 }
@@ -122,9 +123,6 @@ void CBAnimation::Update(void)
 			posEnemy = pEnemy->GetPosition();
 		}
 
-		//テクスチャの破棄フラグ
-		bool bDestroy = false;
-
 		if (m_nRoop == 0)
 		{//ループする
 
@@ -158,10 +156,10 @@ void CBAnimation::Update(void)
 		if (m_col.a <= 0.0f)
 		{
 			//破棄フラグがたった
-			bDestroy = true;
+			m_bDestroy = true;
 		}
 
-		if (bDestroy == true)
+		if (m_bDestroy == true)
 		{
 			//テクスチャを破棄
 			Uninit();
@@ -175,6 +173,9 @@ void CBAnimation::Update(void)
 		{
 			CBillboard::SetPosition(D3DXVECTOR3(posEnemy.x, posEnemy.y, posEnemy.z - 15.0f));
 		}
+
+		//テクスチャの破棄フラグ
+		m_bDestroy = false;
 	}
 }
 

@@ -81,7 +81,7 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
 		}
 	}
 
@@ -90,7 +90,7 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
 		}
 	}
 
@@ -99,18 +99,18 @@ void CUltimate::Init(void)
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3);
+			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
 		}
 	}
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-150.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(100.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 	}
 
 	CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);

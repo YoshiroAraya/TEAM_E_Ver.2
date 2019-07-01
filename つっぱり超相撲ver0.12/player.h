@@ -16,16 +16,16 @@
 //　前方宣言
 //*****************************************************************************
 class CModel;
-
+class CBAnimation;
 
 //========================================
 // マクロ定義
 //========================================
 #define MOVE_PLAYER			(0.5f)							//プレイヤー移動量
-#define MAX_PARTS		(30)
-#define MAX_MOTION		(30)
-#define MODEL_PARENT	(2)
-#define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
+#define MAX_PARTS			(30)
+#define MAX_MOTION			(30)
+#define MODEL_PARENT		(2)
+#define TSUPPARI_COLLISION	(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
 
 //========================================
 // クラスの定義
@@ -130,7 +130,7 @@ public:
 	void Draw(void);	// プレイヤー描画処理
 
 	void CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
-	void SetMove(D3DXVECTOR3 move);	//　移動
+	void SetMove(D3DXVECTOR3 move);	// 移動
 
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
@@ -151,7 +151,7 @@ public:
 	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
 	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }		//土俵端を設定
-	static CPlayer *Create(D3DXVECTOR3 pos , D3DXVECTOR3 rot);							// オブジェクトの生成
+	static CPlayer *Create(D3DXVECTOR3 pos , D3DXVECTOR3 rot);					// オブジェクトの生成
 	bool GetCounter(void) { return m_bCounter; }								//カウンター状態を取得
 	void SetCounter(bool bCounter) { m_bCounter = bCounter; }					//カウンター状態を設定
 	int GetCounterTime(void) { return m_nCounterTime; }							//カウンターの時間を取得
@@ -160,14 +160,14 @@ public:
 	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }	//土俵端を設定
 	bool GetSelect(void) { return m_bSelect; }				//キャラ選択を取得
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
-	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	//モーション情報を取得
-	void SetMotionType(int nParent, MOTION_TYPE MotionType)						//モーションを設定
-	{
-		m_MotionType[nParent] = MotionType;
-		m_nMotionType[nParent] = m_MotionType[nParent];
-		m_nKey[nParent] = 0;
-	}
-	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
+	bool GetbDash(void) { return m_bDash; }					//ダッシュ状態を取得
+	void SetbDash(bool bDash) { m_bDash = bDash; }			//ダッシュ状態を取得
+
+	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	 //モーション情報を取得
+	void SetMotionType(int nParent, MOTION_TYPE MotionType);					 //モーションを設定
+
+	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; } //モーションの終わりを設定
+	void InitStatus(void);
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -203,14 +203,15 @@ private:
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
 	bool					m_bDying;		// 瀕死かどうか
-
 	int						m_nLife;		// 体力
-
+	int						m_nSiomakiCnt;	// 塩まきカウンター
+	bool					m_bDash;		// 走っているかどうか
+	bool					m_bUltDis;		// 必殺の演出表示
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
 	//TOUZAI					m_Touzai;
-
+	static CBAnimation *m_pAnimation;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ

@@ -21,13 +21,14 @@
 #include "title.h"
 #include "Banimation.h"
 #include "ultimate.h"
+#include "gauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define PLAYER_COLLISION		(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//プレイヤーの当たり判定
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
-#define DASH_MOVE				(0.9f)
+#define DASH_MOVE				(1.2f)
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 #define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
@@ -40,6 +41,7 @@ LPD3DXMESH					CPlayer::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
 LPD3DXBUFFER				CPlayer::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
 LPDIRECT3DTEXTURE9			CPlayer::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
 DWORD						CPlayer::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
+CBAnimation *CPlayer::m_pAnimation = NULL;
 
 //=============================================================================
 // プレイヤークラスのコンストラクタ
@@ -69,6 +71,10 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
+
+
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
 		for (int nCnt = 0; nCnt < MAX_PARTS; nCnt++)
@@ -83,6 +89,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 		m_nNumParts[nCntParent] = 0;
 		m_nKey[nCntParent] = 0;			//現在のキー
 		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
+		m_bMotionEnd[nCntParent] = false;
 	}
 
 #ifdef _DEBUG
@@ -176,8 +183,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_move = D3DXVECTOR3(0, 0, 0);
 	m_fDestAngle = 0;
 	m_fDiffAngle = 0;
-	m_bLand = false;					// 右にいるかどうか
-	m_bHit = false;					// 右にいるかどうか
+	m_bLand = false;				// のっているかどうか
+	m_bHit = false;					// 当たっているかどうか
 	m_State = STATE_JANKEN;
 	m_Direction = DIRECTION_RIGHT;
 	m_bRecovery = false;	// 硬直フラグ
@@ -194,7 +201,10 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
 	m_pTuppari = CTuppari::Create(pos);
+	m_bUltDis = false;
 
 	if (mode != NULL)
 	{
@@ -306,6 +316,10 @@ void CPlayer::Update(void)
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
 
+	//ゲージの取得
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -319,13 +333,6 @@ void CPlayer::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-				pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
-			{
-				fMovePlayer = DASH_MOVE;
-			}
-
 			//通常状態で硬直していない
 			if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 			{
@@ -333,6 +340,17 @@ void CPlayer::Update(void)
 				if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
 					pXInput->GetPress(XPLAYER_LEFT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					{
+						fMovePlayer = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 左に進む
 					m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -343,6 +361,17 @@ void CPlayer::Update(void)
 				else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
 					pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+						pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					{
+						fMovePlayer = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 右に進む
 					m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -350,11 +379,11 @@ void CPlayer::Update(void)
 				}
 				else
 				{
-					if (m_bMotionEnd[0] == false)
+					if (m_bMotionEnd[0] == true)
 					{
 						m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
 					}
-					if (m_bMotionEnd[1] == false)
+					if (m_bMotionEnd[1] == true)
 					{
 						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 					}
@@ -448,19 +477,37 @@ void CPlayer::Update(void)
 			if (CGame::GetHit() == true)
 			{
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
-				{
+				{	//組み状態へ
 					m_State = STATE_KUMI;
+					if (MOTION_BUTIKAMASI == m_nMotionType[0]
+						&& MOTION_BUTIKAMASI == m_nMotionType[1]
+						|| MOTION_KAWASI == m_nMotionType[0]
+						&& MOTION_KAWASI == m_nMotionType[1])
+					{//ぶちかましモーションの時は止める
+						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					}
 					if (MOTION_NAGE != m_nMotionType[0]
 						&& MOTION_NAGE != m_nMotionType[1])
-					{
+					{//投げモーション以外はニュートラル
 						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
 					}
 				}
-				/*else if (m_State == STATE_KUMI)
-				{
-				m_State = STATE_NEUTRAL;
-				}*/
+				if (m_State == STATE_KUMI)
+				{ //組み状態なら
+					if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true
+						|| MOTION_TUKAMI_AGERARERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true)
+					{//つかみ上げ、上げられモーションが終わったときニュートラル
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
+				}
 			}
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
@@ -503,6 +550,27 @@ void CPlayer::Update(void)
 				m_DohyoState = DOHYO_NORMAL;
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
+
+			if (pGauge->GetUlt(0) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
+				}
+
+				m_bUltDis = true;
+			}
+			else if (pGauge->GetUlt(0) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+
 		}
 		break;
 
@@ -516,39 +584,48 @@ void CPlayer::Update(void)
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
 	{
 		if (m_nMotionType[0] != MOTION_SYAGAMI
-			&& m_nMotionType[1] != MOTION_SYAGAMI)
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
 		{
-			m_nMotionType[0] = MOTION_WALK;
-			m_nMotionType[1] = MOTION_WALK;
+			if (m_nSiomakiCnt < 10)
+			{
+				m_nMotionType[0] = MOTION_WALK;
+				m_nMotionType[1] = MOTION_WALK;
+			}
 		}
 		// 右に進む
 		if (pos.x >= -80.0f)
 		{
-			if (m_nMotionType[0] != MOTION_SYAGAMI
-				&& m_nMotionType[1] != MOTION_SYAGAMI)
+			m_nSiomakiCnt++;
+
+			if (m_nSiomakiCnt > 60)
 			{
-				m_nKey[0] = 0;
-				m_nKey[1] = 0;
-				m_nMotionType[0] = MOTION_SYAGAMI;
-				m_nMotionType[1] = MOTION_SYAGAMI;
+				if (m_nMotionType[0] != MOTION_NEUTRAL
+					&& m_nMotionType[1] != MOTION_NEUTRAL)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_NEUTRAL;
+					m_nMotionType[1] = MOTION_NEUTRAL;
+				}
 			}
+			else
+			{
+				if (m_nMotionType[0] != MOTION_SIOMAKI
+					&& m_nMotionType[1] != MOTION_SIOMAKI)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_SIOMAKI;
+					m_nMotionType[1] = MOTION_SIOMAKI;
+				}
+			}
+
 			fMovePlayer = 0.0f;
 			pos.x = -80.0f;
 		}
-
-
 		m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
-	}
-
-	if (pInputKeyboard->GetPress(DIK_I) == true)
-	{
-		// ジャンプ力
-		pos.y += 1.0f;
-	}
-	if (pInputKeyboard->GetPress(DIK_K) == true)
-	{
-		// ジャンプ力
-		pos.y -= 1.0f;
 	}
 
 	pos += m_move;
@@ -771,6 +848,53 @@ void CPlayer::SetMove(D3DXVECTOR3 move)
 	m_move = move;
 }
 
+//=============================================================================
+// モーションを設定
+//=============================================================================
+void CPlayer::SetMotionType(int nParent, CPlayer::MOTION_TYPE MotionType)
+{
+	m_MotionType[nParent] = MotionType;
+	m_nMotionType[nParent] = m_MotionType[nParent];
+	m_nKey[nParent] = 0;
+	m_nCountFlame[nParent] = 0;
+	m_bDash = false;
+}
+
+//=============================================================================
+// プレイヤーのステータスを初期化
+//=============================================================================
+void CPlayer::InitStatus(void)
+{
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fDestAngle = 0;
+	m_fDiffAngle = 0;
+	m_bLand = false;				// のっているかどうか
+	m_bHit = false;					// 当たっているかどうか
+	m_State = STATE_JANKEN;
+	m_Direction = DIRECTION_RIGHT;
+	m_bRecovery = false;			// 硬直フラグ
+	m_nRecoveryTime = 0;			// 硬直時間
+	m_bJanken = false;
+	m_nLife = 100;
+	m_bDying = false;
+	m_DohyoState = DOHYO_NORMAL;
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
+	m_fRot = 0.0f;
+	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
+
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
+	{
+		m_nKey[nCntParent] = 0;			//現在のキー
+		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
+		m_bMotionEnd[nCntParent] = false;
+	}
+
+}
 
 //=============================================================================
 // プレイヤーのモーション
@@ -795,12 +919,18 @@ void CPlayer::UpdateMotion(int nParent)
 	D3DXVECTOR3 BodyRot;
 	KEY			NowKey;
 
+	float fDivideMotion = 1;
+
 	//キーが最大数を上回らないように
 	if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey <= m_nKey[nParent])
 	{
 		m_nKey[nParent] = 0;
 	}
 
+	if (m_bDash == true)
+	{
+		fDivideMotion = 2.0f;
+	}
 	//モーション更新
 	for (int nCntParts = 0; nCntParts < m_nNumParts[nParent]; nCntParts++)
 	{
@@ -814,7 +944,7 @@ void CPlayer::UpdateMotion(int nParent)
 			//次のキーを取得
 			pNextKey = &m_pKeyInfo[m_nMotionType[nParent]][nParent][(m_nKey[nParent] + 1) % m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey].aKey[nCntParts];
 			//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
-			fRateMotion = (float)m_nCountFlame[nParent] / (float)m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame;
+			fRateMotion = (float)m_nCountFlame[nParent] / (float)(m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion);
 
 #if 1
 			fPlusData = pNextKey->frotX + NowKey.frotX;
@@ -906,7 +1036,7 @@ void CPlayer::UpdateMotion(int nParent)
 		//フレームを進める
 		m_nCountFlame[nParent]++;
 		//キーの更新
-		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)
+		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion)
 		{
 			if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 			{//キーの初期化
@@ -928,7 +1058,7 @@ void CPlayer::UpdateMotion(int nParent)
 		}
 		else if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 		{
-			m_bMotionEnd[nParent] = false;
+			m_bMotionEnd[nParent] = true;
 		}
 		//キーの更新
 		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)

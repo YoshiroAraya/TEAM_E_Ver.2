@@ -23,12 +23,13 @@
 #include "Banimation.h"
 #include "ultimate.h"
 #include "particleX.h"
+#include "gauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
-#define DASH_MOVE				(0.9f)
+#define DASH_MOVE				(1.2f)
 #define PARTICLE_ROT			((rand() % 628) / 100.0f)		//全方向
 #define PARTICLE_NUM			(20)							// 壁に激突したときのパーティクルの数
 #define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
@@ -44,6 +45,7 @@ LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
 LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
 LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
 DWORD						CEnemy::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
+CBAnimation *CEnemy::m_pAnimation = NULL;
 
 //=============================================================================
 // エネミークラスのコンストラクタ
@@ -72,6 +74,8 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_nOldMotion = 0;	//前のモーション
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -156,11 +160,11 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		if (pUltimate != NULL)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
-			if (pUltimate->Get1P() == 0)
+			if (pUltimate->Get2P() == 0)
 			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			}
-			else if (pUltimate->Get1P() == 1)
+			else if (pUltimate->Get2P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
@@ -197,6 +201,10 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_DohyoHaziLR = HAZI_NORMAL;
 	m_fLength = sqrtf((pos.x - 0.0f) * (pos.x - 0.0f) + (pos.z - 0.0f) * (pos.z - 0.0f));
 	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
+	m_bWallHit = false;
+	m_bUltDis = false;
 
 	if (mode != NULL)
 	{
@@ -260,6 +268,8 @@ void CEnemy::Uninit(void)
 		m_pTuppari->Uninit();
 	}
 
+	m_pAnimation = NULL;
+
 	// 2Dオブジェクト終了処理
 	CSceneX::Uninit();
 }
@@ -304,6 +314,10 @@ void CEnemy::Update(void)
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
 
+	//ゲージの取得
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -317,13 +331,6 @@ void CEnemy::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-			{
-				fMoveEnemy = DASH_MOVE;
-			}
-
 			//通常状態で硬直していない
 			if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 			{
@@ -331,6 +338,17 @@ void CEnemy::Update(void)
 				if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+					{
+						fMoveEnemy = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 左に進む
 					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -341,6 +359,17 @@ void CEnemy::Update(void)
 				else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
+					//ダッシュ設定
+					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+					{
+						fMoveEnemy = DASH_MOVE;
+						m_bDash = true;
+					}
+					else
+					{
+						m_bDash = false;
+					}
 					// 右に進む
 					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
 					m_nMotionType[0] = MOTION_SURIASI;
@@ -348,8 +377,14 @@ void CEnemy::Update(void)
 				}
 				else
 				{
-					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					if (m_bMotionEnd[0] == true)
+					{
+						m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+					}
+					if (m_bMotionEnd[1] == true)
+					{
+						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+					}
 				}
 
 			}
@@ -375,6 +410,7 @@ void CEnemy::Update(void)
 					m_nRecoveryTime = 20;
 				}
 			}
+
 			// 目的の角度
 			if (pPlayer != NULL)
 			{
@@ -439,21 +475,36 @@ void CEnemy::Update(void)
 			if (CGame::GetHit() == true)
 			{
 				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA)
-				{
+				{	//組み状態へ
 					m_State = STATE_KUMI;
+					if (MOTION_BUTIKAMASI == m_nMotionType[0]
+						&& MOTION_BUTIKAMASI == m_nMotionType[1])
+					{//ぶちかましモーションの時は止める
+						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					}
 					if (MOTION_NAGE != m_nMotionType[0]
 						&& MOTION_NAGE != m_nMotionType[1])
-					{
+					{//投げモーション以外はニュートラル
 						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
 						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
 					}
 				}
-				/*else if (m_State == STATE_KUMI)
-				{
-				m_State = STATE_NEUTRAL;
-				}*/
+				if (m_State == STATE_KUMI)
+				{ //組み状態なら
+					if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true
+						|| MOTION_TUKAMI_AGERARERU == m_nMotionType[0]
+						&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
+						&& m_bMotionEnd[0] == true
+						&& m_bMotionEnd[1] == true)
+					{//つかみ上げ、上げられモーションが終わったときニュートラル
+						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+					}
+				}
 			}
-
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
 				m_State = STATE_NEUTRAL;
@@ -496,6 +547,26 @@ void CEnemy::Update(void)
 				m_DohyoHaziLR = HAZI_NORMAL;
 			}
 
+			if (pGauge->GetUlt(1) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+				}
+
+				m_bUltDis = true;
+			}
+			else if(pGauge->GetUlt(1) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+			
 		}
 		break;
 
@@ -512,17 +583,18 @@ void CEnemy::Update(void)
 			}
 			else if (pos.x > 550.0f)
 			{
+				m_bWallHit = true;
 				pos.x = 550.0f;
 				m_move.x = 0.0f;
 
-				for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
+				/*for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
 				{
 					CParticleX::Create(D3DXVECTOR3(pos.x, pos.y + 30.0f, pos.z),
 						D3DXVECTOR3(sinf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT)),
 						D3DXVECTOR3(sinf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1))),
 						PARTICLE_TIME,
 						CParticleX::TYPE_NORMAL);
-				}
+				}*/
 			}
 
 			break;
@@ -531,26 +603,46 @@ void CEnemy::Update(void)
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
 	{
 		if (m_nMotionType[0] != MOTION_SYAGAMI
-			&& m_nMotionType[1] != MOTION_SYAGAMI)
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
 		{
-			m_nMotionType[0] = MOTION_WALK;
-			m_nMotionType[1] = MOTION_WALK;
+			if (m_nSiomakiCnt < 10)
+			{
+				m_nMotionType[0] = MOTION_WALK;
+				m_nMotionType[1] = MOTION_WALK;
+			}
 		}
 		// 左に進む
 		if (pos.x <= 80.0f)
 		{
-			if (m_nMotionType[0] != MOTION_SYAGAMI
-				&& m_nMotionType[1] != MOTION_SYAGAMI)
+			m_nSiomakiCnt++;
+
+			if (m_nSiomakiCnt > 60)
 			{
-				m_nKey[0] = 0;
-				m_nKey[1] = 0;
-				m_nMotionType[0] = MOTION_SYAGAMI;
-				m_nMotionType[1] = MOTION_SYAGAMI;
+				if (m_nMotionType[0] != MOTION_NEUTRAL
+					&& m_nMotionType[1] != MOTION_NEUTRAL)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_NEUTRAL;
+					m_nMotionType[1] = MOTION_NEUTRAL;
+				}
+			}
+			else
+			{
+				if (m_nMotionType[0] != MOTION_SIOMAKI
+					&& m_nMotionType[1] != MOTION_SIOMAKI)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_SIOMAKI;
+					m_nMotionType[1] = MOTION_SIOMAKI;
+				}
 			}
 			fMoveEnemy = 0.0f;
 			pos.x = 80.0f;
 		}
-
 		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
 	}
 
@@ -785,6 +877,18 @@ void CEnemy::SetMove(D3DXVECTOR3 move)
 }
 
 //=============================================================================
+// モーションを設定
+//=============================================================================
+void CEnemy::SetMotionType(int nParent, CEnemy::MOTION_TYPE MotionType)
+{
+	m_MotionType[nParent] = MotionType;
+	m_nMotionType[nParent] = m_MotionType[nParent];
+	m_nKey[nParent] = 0;
+	m_nCountFlame[nParent] = 0;
+	m_bDash = false;
+}
+
+//=============================================================================
 // プレイヤーのモーション
 //=============================================================================
 void CEnemy::UpdateMotion(int nParent)
@@ -801,16 +905,21 @@ void CEnemy::UpdateMotion(int nParent)
 	float fMinusData;
 	//float fPlusPos;
 	//float fMinusPos;
-
 	D3DXVECTOR3 rotmotion;
 	D3DXVECTOR3 posmotion;
 	D3DXVECTOR3 BodyRot;
 	KEY			NowKey;
+	float fDivideMotion = 1;
 
 	//キーが最大数を上回らないように
 	if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey <= m_nKey[nParent])
 	{
 		m_nKey[nParent] = 0;
+	}
+
+	if (m_bDash == true)
+	{
+		fDivideMotion = 2.0f;
 	}
 
 	//モーション更新
@@ -826,7 +935,7 @@ void CEnemy::UpdateMotion(int nParent)
 			//次のキーを取得
 			pNextKey = &m_pKeyInfo[m_nMotionType[nParent]][nParent][(m_nKey[nParent] + 1) % m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey].aKey[nCntParts];
 			//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
-			fRateMotion = (float)m_nCountFlame[nParent] / (float)m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame;
+			fRateMotion = (float)m_nCountFlame[nParent] / (float)(m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion);
 
 #if 1
 			fPlusData = pNextKey->frotX + NowKey.frotX;
@@ -918,7 +1027,7 @@ void CEnemy::UpdateMotion(int nParent)
 		//フレームを進める
 		m_nCountFlame[nParent]++;
 		//キーの更新
-		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame)
+		if (m_nCountFlame[nParent] >= m_pKeyInfo[m_nMotionType[nParent]][nParent][m_nKey[nParent]].nFrame / fDivideMotion)
 		{
 			if (m_aMotionInfo[m_nMotionType[nParent]][nParent].nNumKey - 1 == m_nKey[nParent])
 			{//キーの初期化
