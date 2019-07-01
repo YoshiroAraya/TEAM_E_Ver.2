@@ -78,9 +78,12 @@ private:
 	static CSansoGauge *m_pSansoGauge;
 	static STATE m_State;
 	static WINNER m_Winner;
-	bool m_bUI;
-	int m_n1P;
-	int m_n2P;
+	bool m_bUI;				//
+	int m_n1P;				//選んだモデルNo
+	int m_n2P;				//選んだモデルNo
+	int m_nWin1P;			//勝った数を記憶
+	int m_nWin2P;			//勝った数を記憶
+	int m_WinerNum;			//勝ったのはどちらか
 	int m_nTime = 0;
 };
 #endif

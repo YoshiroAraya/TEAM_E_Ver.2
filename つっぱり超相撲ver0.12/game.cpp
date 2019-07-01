@@ -63,6 +63,9 @@ CGame::CGame()
 {
 	m_n1P = 0;
 	m_n2P = 0;
+	m_nWin1P = 0;
+	m_nWin2P = 0;
+	m_WinerNum = 0;
 }
 
 //=============================================================================
@@ -180,8 +183,11 @@ void CGame::Init(void)
 	{
 		pCamera->Init();
 	}
-	m_nTime = 0;
 
+	m_nTime = 0;
+	m_nWin1P = 0;
+	m_nWin2P = 0;
+	m_WinerNum = 0;
 }
 
 //=============================================================================
@@ -229,25 +235,22 @@ void CGame::Update(void)
 	CDebugProc::Print("c", "ゲームモード");
 
 	m_nTime++;
-	/*if (m_nTime >= 2)
-	{*/
 
-		//任意のキー←
-		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-		{
-			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-		}
-		if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
-		{
-			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+	//任意のキー←
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
+	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+	{
+		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
-		}
-		if (pInputKeyboard->GetTrigger(DIK_9) == true)
-		{
-			pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
+	}
+	if (pInputKeyboard->GetTrigger(DIK_9) == true)
+	{
+		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
 
-		}
-	/*}*/
+	}
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -265,14 +268,50 @@ void CGame::Update(void)
 
 	if (m_Winner != WINNER_NONE)
 	{
-		if (pFade->GetFade() == CFade::FADE_NONE)
+		/*if (pFade->GetFade() == CFade::FADE_NONE)
 		{
 			SaveWinner();
 			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-		}
+		}*/
 	}
 
+	if (m_Winner == WINNER_PLAYER1)
+	{
+		m_nWin1P++;
+		m_Winner = WINNER_NONE;
+		m_pBatlteSys->ResetBattle();
+	}
+	else if (m_Winner == WINNER_PLAYER2)
+	{
+		m_nWin2P++;
+		m_Winner = WINNER_NONE;
+		m_pBatlteSys->ResetBattle();
+	}
+
+	if (m_nWin1P == 3 || m_nWin2P == 3)
+	{
+		if (m_nWin1P == 3)
+		{
+			m_WinerNum = 1;
+		}
+		else if (m_nWin2P == 3)
+		{
+			m_WinerNum = 2;
+		}
+		SaveWinner();
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
 #ifdef _DEBUG
+
+	if (pInputKeyboard->GetTrigger(DIK_7) == true)
+	{
+		m_nWin1P++;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_8) == true)
+	{
+		m_nWin2P++;
+	}
+
 	if (m_bHit == true)
 	{
 		CDebugProc::Print("c", "当たっている");
@@ -282,14 +321,9 @@ void CGame::Update(void)
 		CDebugProc::Print("c", "当たっていない");
 	}
 
-	if (m_Winner == WINNER_PLAYER1)
-	{
-		CDebugProc::Print("c", "プレイヤー1の勝利");
-	}
-	else if(m_Winner == WINNER_PLAYER2)
-	{
-		CDebugProc::Print("c", "プレイヤー2の勝利");
-	}
+
+	CDebugProc::Print("cn", " プレイヤーの勝ち数  : ", m_nWin1P);
+	CDebugProc::Print("cn", " エネミーの勝ち数  : ", m_nWin2P);
 
 	//エフェクト用関数
 	D3DXVECTOR3 moveRand;
@@ -406,7 +440,7 @@ void CGame::SaveWinner(void)
 	if (pFileW != NULL)
 	{// ファイルが開けたら
 		//モデルの総数
-		fprintf(pFileW, "%d\n", m_Winner);
+		fprintf(pFileW, "%d\n", m_WinerNum);
 		//ファイルを閉じる
 		fclose(pFileW);
 	}

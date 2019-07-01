@@ -893,7 +893,6 @@ void CPlayer::InitStatus(void)
 		m_nCountFlame[nCntParent] = 0;	//Œ»İ‚ÌƒtƒŒ[ƒ€
 		m_bMotionEnd[nCntParent] = false;
 	}
-
 }
 
 //=============================================================================
