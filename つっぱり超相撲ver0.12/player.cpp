@@ -390,6 +390,13 @@ void CPlayer::Update(void)
 				}
 			}
 
+			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
+				pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
+			{
+
+			}
+
+
 			//d’¼‚µ‚Ä‚¢‚é‚Æ‚«
 			if (m_bRecovery == true)
 			{
