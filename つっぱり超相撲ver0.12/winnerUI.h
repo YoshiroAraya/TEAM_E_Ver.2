@@ -15,7 +15,7 @@
 // マクロ定義
 //*****************************************************************************
 #define MAX_TEX_TYPE	(2)								// テクスチャの種類
-#define MAX_UI (4)
+#define MAX_UI (6)
 
 //========================================
 // クラスの定義
@@ -37,16 +37,17 @@ public:
 	D3DXVECTOR3 GetPosition(void);						// 位置を取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
 
-	static CWinnerUI *Create(D3DXVECTOR3 pos,int nType);			// オブジェクトの生成
-
-	void SetGaugeRightLeft(float fRight, float fLeft);
+	static CWinnerUI *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
 
 private:
 	CScene2D						*m_pScene2D[MAX_UI];		// 2dへのポインタ
 
 	D3DXVECTOR3						m_Pos;						// ポリゴンの位置
 	float							m_fRight, m_fLeft;			// 左右の値
-	int								m_nType;
+
+	int								m_n1player;
+	int								m_n2player;
+	bool							m_bWinner;
 };
 
 #endif
