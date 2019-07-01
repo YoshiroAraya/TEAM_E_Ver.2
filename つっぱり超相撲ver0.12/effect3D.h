@@ -18,8 +18,8 @@ class CEffect3D : public CScene3D //îhê∂ÉNÉâÉX
 public:
 	typedef enum
 	{
-		EFFECTTYPE_00 = 0,
-		EFFECTTYPE_01,
+		EFFECTTYPE_SALT = 0,
+		EFFECTTYPE_MONEY,
 		EFFECTTYPE_MAX
 	}EFFECTTYPE;
 
