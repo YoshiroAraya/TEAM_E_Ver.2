@@ -175,6 +175,14 @@ void CCamera::Update(void)
 				CGame::SetState(CGame::STATE_GAME);
 			}
 		}
+		else if (CGame::GetState() == CGame::STATE_GAME)
+		{
+			if (pPlayer->GetState() == CPlayer::STATE_ULT)
+			{
+				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// ‹“_
+				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// ’‹“_
+			}
+		}
 	}
 	else if (mode == CManager::MODE_TITLE)
 	{

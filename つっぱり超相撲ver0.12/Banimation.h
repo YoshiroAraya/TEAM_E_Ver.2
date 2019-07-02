@@ -25,7 +25,7 @@ public:
 	CBAnimation();
 	~CBAnimation();
 
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, 
+	HRESULT Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, 
 		int nRoop, int nDrawType, int nTypePlayer);
 	void Uninit(void);
 	void Update(void);
@@ -33,7 +33,7 @@ public:
 	void UpdateAnim();
 
 	//ê√ìIÉÅÉìÉoä÷êî
-	static CBAnimation *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType,int nTypePlayer);
+	static CBAnimation *Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType,int nTypePlayer);
 
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 

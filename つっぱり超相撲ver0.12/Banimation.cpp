@@ -46,7 +46,7 @@ CBAnimation::~CBAnimation()
 //=============================================================================
 // アニメーションの初期化処理
 //=============================================================================
-HRESULT CBAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,
+HRESULT CBAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,
 	int nRoop,int nDrawType,int nTypePlayer)
 {
 	//色を代入
@@ -241,7 +241,7 @@ void CBAnimation::Draw(void)
 //=============================================================================
 // アニメーションの生成処理
 //=============================================================================
-CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,int nDrawType,int nTypePlayer)
+CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,int nDrawType,int nTypePlayer)
 {
 	CBAnimation *pBAnimation = {};
 
@@ -254,7 +254,7 @@ CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col
 		if (pBAnimation != NULL)
 		{
 			// ポリゴンの初期化処理
-			pBAnimation->Init(pos, rot, col, fWidth, fHeight, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType,nTypePlayer);
+			pBAnimation->Init(pos, col, fWidth, fHeight, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType,nTypePlayer);
 		}
 		else
 		{

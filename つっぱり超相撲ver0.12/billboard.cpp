@@ -80,7 +80,6 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 	//テクスチャの読み込み
 	//D3DXCreateTextureFromFile(pDevice, TEXTURENAME000, &m_pTexture);
 
-
 	// 頂点情報の作成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
 		D3DUSAGE_WRITEONLY,
@@ -170,6 +169,10 @@ void CBillboard::Draw(void)
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 150);
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
+	// 深度バッファを有効にする
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -186,6 +189,19 @@ void CBillboard::Draw(void)
 	m_mtxWorld._31 = mtxView._13;
 	m_mtxWorld._32 = mtxView._23;
 	m_mtxWorld._33 = mtxView._33;
+
+	VERTEX_3D *pVtx;
+	//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//法線の設定
+	pVtx[0].nor = D3DXVECTOR3(m_mtxWorld._31, m_mtxWorld._32, m_mtxWorld._33);
+	pVtx[1].nor = D3DXVECTOR3(m_mtxWorld._31, m_mtxWorld._32, m_mtxWorld._33);
+	pVtx[2].nor = D3DXVECTOR3(m_mtxWorld._31, m_mtxWorld._32, m_mtxWorld._33);
+	pVtx[3].nor = D3DXVECTOR3(m_mtxWorld._31, m_mtxWorld._32, m_mtxWorld._33);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 
 	// 位置を反映
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
@@ -211,6 +227,10 @@ void CBillboard::Draw(void)
 
 	//レンダーステートの設定を元に戻す
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	// 深度バッファを無効にする
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
 }
 
 //=============================================================================

@@ -392,6 +392,16 @@ void CPlayer::Update(void)
 						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 					}
 				}
+
+				if (pInputKeyboard->GetPress(DIK_0) == true && m_bUltDis == true)
+				{
+					m_State = STATE_ULT;
+
+					if (m_pAnimation != NULL)
+					{
+						m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
+					}
+				}
 			}
 
 			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
@@ -529,7 +539,7 @@ void CPlayer::Update(void)
 					}
 				}
 			}
-			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
+			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
 			{
 				//m_State = STATE_NEUTRAL;
 			}
@@ -583,7 +593,7 @@ void CPlayer::Update(void)
 			{
 				if (m_pAnimation == NULL)
 				{
-					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
 				}
 
