@@ -31,7 +31,7 @@ public:
 	void Draw(void);
 	static CEffect *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move,D3DXCOLOR col,
 							float fWidth, float fHeight,int nNumMax,int nLife, int TexType);
-	
+	void UpdateSmoke(void);
 private:
 	//ƒƒ“ƒo•Ï”
 	D3DXVECTOR3					m_pos;						// ˆÊ’u

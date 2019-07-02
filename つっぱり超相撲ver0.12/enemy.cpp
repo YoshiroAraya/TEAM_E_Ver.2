@@ -24,6 +24,7 @@
 #include "ultimate.h"
 #include "particleX.h"
 #include "gauge.h"
+#include "SansoGauge.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -317,7 +318,10 @@ void CEnemy::Update(void)
 	//ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
-
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
+	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -386,8 +390,24 @@ void CEnemy::Update(void)
 						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 					}
 				}
-
 			}
+
+			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
+			{
+				//ガード状態
+				if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
+					pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+				{
+					m_State = STATE_GUARD;
+					pSansoGauge->SetSansoGaugeRightLeft(0, -3);
+				}
+				if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
+					pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+				{
+					m_State = STATE_NEUTRAL;
+				}
+			}
+
 			//硬直しているとき
 			if (m_bRecovery == true)
 			{
@@ -507,7 +527,7 @@ void CEnemy::Update(void)
 			}
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
 			{
-				m_State = STATE_NEUTRAL;
+			//	m_State = STATE_NEUTRAL;
 			}
 
 			// つっぱりとの当たり判定
@@ -566,7 +586,7 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = false;
 			}
-			
+
 		}
 		break;
 
@@ -887,6 +907,41 @@ void CEnemy::SetMotionType(int nParent, CEnemy::MOTION_TYPE MotionType)
 	m_nCountFlame[nParent] = 0;
 	m_bDash = false;
 }
+
+//=============================================================================
+// エネミーのステータスを初期化
+//=============================================================================
+void CEnemy::InitStatus(void)
+{
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fDestAngle = 0;
+	m_fDiffAngle = 0;
+	m_bLand = false;				// のっているかどうか
+	m_bHit = false;					// 当たっているかどうか
+	m_State = STATE_JANKEN;
+	m_Direction = DIRECTION_RIGHT;
+	m_bRecovery = false;			// 硬直フラグ
+	m_nRecoveryTime = 0;			// 硬直時間
+	m_nLife = 100;
+	m_bDying = false;
+	m_DohyoState = DOHYO_NORMAL;
+	m_nCounterTime = 0;
+	m_bCounter = false;
+	m_DohyoHaziLR = HAZI_NORMAL;
+	m_fRot = 0.0f;
+	m_bSelect = false;
+	m_nSiomakiCnt = 0;
+	m_bDash = false;
+
+	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
+	{
+		m_nKey[nCntParent] = 0;			//現在のキー
+		m_nCountFlame[nCntParent] = 0;	//現在のフレーム
+		m_bMotionEnd[nCntParent] = false;
+	}
+}
+
 
 //=============================================================================
 // プレイヤーのモーション

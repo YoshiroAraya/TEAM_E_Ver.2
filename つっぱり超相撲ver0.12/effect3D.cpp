@@ -66,7 +66,6 @@ CEffect3D *CEffect3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 			pEffect->m_nNumMax = nNumMax;
 			pEffect->m_nLife = nLife;
 			pEffect->m_nTexType = TexType;
-
 			pEffect->Init();
 		}
 	}
@@ -107,11 +106,17 @@ void CEffect3D::Uninit(void)
 //=============================================================================
 void CEffect3D::Update(void)
 {
-	//お金パーティクル
-	//UpdateMoney();
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL001)
+	{
+		//お金パーティクル
+		UpdateMoney();
+	}
 
-	//塩パーティクル
-	UpdateSalt();
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
+	{
+		//塩パーティクル
+		UpdateSalt();
+	}
 }
 
 //=============================================================================

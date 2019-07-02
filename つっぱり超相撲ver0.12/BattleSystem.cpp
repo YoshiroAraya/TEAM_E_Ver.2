@@ -43,7 +43,7 @@
 #define JANKEN_KAWASI_MOVE		(30.1f)
 #define J_TUPARI_KNOCKUP_MOVE	(15.0f)
 #define J_BUTI_KNOCKUP_MOVE		(20.0f)
-
+#define JANKEN_DAMAGE			(100.0f)
 
 
 #define BATTLE_FLAME		(20)
@@ -390,7 +390,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
 					}
 
 				}
@@ -414,7 +414,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_GU_BUTI)
@@ -426,7 +426,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
 
 					}
 
@@ -493,7 +493,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						m_aCHOKICounter[0] = 0;
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
 					}
 
 					if (m_abPA[1] == true)
@@ -510,7 +510,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(0.0f, -200.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
 					}
 
 					m_aGUCounter[1]++;
@@ -552,7 +552,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aCHOKICounter[1] = 0;
 						//ƒ‰ƒCƒtƒQ[ƒWÁ”ï
-						pGauge->SetGaugeRightLeft(-200.0f, 0.0f);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_PA_KAWASI)
@@ -821,6 +821,7 @@ void CBattleSys::Operation(void)
 			pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
 		{
 			pPlayer->InitStatus();
+			pEnemy->InitStatus();
 			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
 			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
 			pPlayer->SetState(CPlayer::STATE_JANKEN);
@@ -1143,8 +1144,8 @@ void CBattleSys::PushJudge(void)
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 	// ƒQ[ƒW‚ÌŽæ“¾
-	CSansoGauge *pGauge;
-	pGauge = CGame::GetSansoGauge();
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	float fPushCntP1 = 0, fPushCntP2 = 0;
 
@@ -1172,13 +1173,13 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
+					pSansoGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
+				pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
 			}
 
 			if (pEnemy->GetRecovery() == false)
@@ -1198,20 +1199,20 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
+					pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
+				pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
 			}
 
 			m_nFlamePush++;
 			//Ž_‘fÁ”ï
 			fPushCntP1 *= SANSO_SIKAKE;
 			fPushCntP2 *= SANSO_SIKAKE;
-			pGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
+			pSansoGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
 		}
 		else
 		{
@@ -1219,7 +1220,7 @@ void CBattleSys::PushJudge(void)
 			m_nCntPushP1 = 0;
 			m_nCntPushP2 = 0;
 			//Ž_‘f‰ñ•œ
-			pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
+			pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
 		}
 	}
 
@@ -1649,6 +1650,51 @@ void CBattleSys::CounterAttack(void)
 			}
 		}
 	}
+}
+
+//=============================================================================
+// ƒoƒgƒ‹‚ÌƒŠƒZƒbƒgˆ—
+//=============================================================================
+void CBattleSys::ResetBattle(void)
+{
+	// ƒvƒŒƒCƒ„[‚ÌŽæ“¾
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// ƒGƒlƒ~[‚ÌŽæ“¾
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+	// ƒQ[ƒW‚ÌŽæ“¾
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
+
+	pPlayer->InitStatus();
+	pEnemy->InitStatus();
+	pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
+	pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+	pPlayer->SetState(CPlayer::STATE_JANKEN);
+	pEnemy->SetState(CEnemy::STATE_JANKEN);
+	m_bAttack = false;
+	m_nCntAttackFlame = 0;
+	m_nStartCounter = 0;
+	pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
+	pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
+	pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
+	pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
+	m_aJanken[0] = JANKEN_GU_BUTI;
+	m_aJanken[1] = JANKEN_GU_BUTI;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
+	{
+		m_aGUCounter[nCntPlayer] = 0;
+		m_aCHOKICounter[nCntPlayer] = 0;
+		m_abPA[nCntPlayer] = false;
+	}
+
+	pGauge->SetGaugeRightLeft(600, 600);
+	CGame::SetWinner(CGame::WINNER_NONE);
+	CGame::SetHit(true);
+
+	CManager::GetGame()->SetbUI(true);
 }
 
 //=============================================================================

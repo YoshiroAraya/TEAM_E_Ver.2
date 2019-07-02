@@ -39,7 +39,7 @@ HRESULT CInput::Init(HINSTANCE hInstance, HWND hWnd)
 			return E_FAIL;
 		}
 	}
-	
+
 	return S_OK;
 }
 
@@ -136,6 +136,7 @@ void CInputKeyboard::Update(void)
 	{
 		for (nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 		{
+			m_aKeyStateRelease[nCntKey] = (m_aKeyState[nCntKey] ^ aKeyState[nCntKey]) & m_aKeyState[nCntKey];
 			m_aKeyStateTrigger[nCntKey] = (m_aKeyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey];
 			m_aKeyState[nCntKey] = aKeyState[nCntKey];	// キーボード入力情報保存
 		}
@@ -144,6 +145,7 @@ void CInputKeyboard::Update(void)
 	{
 		m_pDevice->Acquire();	// キーボードへのアクセス権を獲得
 	}
+
 }
 
 //=============================================================================
@@ -154,6 +156,13 @@ bool CInputKeyboard::GetPress(int nKey)
 	return(m_aKeyState[nKey] & 0x80) ? true : false;
 }
 
+//=============================================================================
+// キーボードの入力情報(リリース情報)を取得
+//=============================================================================
+bool CInputKeyboard::GetRelese(int nKey)
+{
+	return(m_aKeyStateRelease[nKey] & 0x80) ? true : false;
+}
 //=============================================================================
 // キーボードの入力情報(トリガー情報)を取得
 //=============================================================================
@@ -190,7 +199,7 @@ HRESULT CXInputJoyPad::Init()
 //=============================================================================
 void CXInputJoyPad::Update(void)
 {
-	// 
+	//
 	UpdateControllerState();
 
 	WORD xijs;
@@ -234,7 +243,7 @@ void CXInputJoyPad::Update(void)
 	}
 }
 //=============================================================================
-// 
+//
 //=============================================================================
 HRESULT CXInputJoyPad::UpdateControllerState(void)
 {

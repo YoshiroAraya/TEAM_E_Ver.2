@@ -33,6 +33,7 @@
 #include "animation.h"
 #include "load.h"
 #include "effect3D.h"
+#include "winnerUI.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -63,6 +64,9 @@ CGame::CGame()
 {
 	m_n1P = 0;
 	m_n2P = 0;
+	m_nWin1P = 0;
+	m_nWin2P = 0;
+	m_WinerNum = 0;
 }
 
 //=============================================================================
@@ -92,6 +96,7 @@ void CGame::Init(void)
 
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
+	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
 
 	int nCntZ;
 	int nCnt;
@@ -180,8 +185,11 @@ void CGame::Init(void)
 	{
 		pCamera->Init();
 	}
-	m_nTime = 0;
 
+	m_nTime = 0;
+	m_nWin1P = 0;
+	m_nWin2P = 0;
+	m_WinerNum = 0;
 }
 
 //=============================================================================
@@ -229,25 +237,22 @@ void CGame::Update(void)
 	CDebugProc::Print("c", "ゲームモード");
 
 	m_nTime++;
-	/*if (m_nTime >= 2)
-	{*/
 
-		//任意のキー←
-		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-		{
-			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-		}
-		if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
-		{
-			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+	//任意のキー←
+	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	{
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
+	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+	{
+		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
-		}
-		if (pInputKeyboard->GetTrigger(DIK_9) == true)
-		{
-			pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
+	}
+	if (pInputKeyboard->GetTrigger(DIK_9) == true)
+	{
+		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
 
-		}
-	/*}*/
+	}
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -265,14 +270,50 @@ void CGame::Update(void)
 
 	if (m_Winner != WINNER_NONE)
 	{
-		if (pFade->GetFade() == CFade::FADE_NONE)
+		/*if (pFade->GetFade() == CFade::FADE_NONE)
 		{
 			SaveWinner();
 			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-		}
+		}*/
 	}
 
+	if (m_Winner == WINNER_PLAYER1)
+	{
+		m_nWin1P++;
+		m_Winner = WINNER_NONE;
+		m_pBatlteSys->ResetBattle();
+	}
+	else if (m_Winner == WINNER_PLAYER2)
+	{
+		m_nWin2P++;
+		m_Winner = WINNER_NONE;
+		m_pBatlteSys->ResetBattle();
+	}
+
+	if (m_nWin1P == 3 || m_nWin2P == 3)
+	{
+		if (m_nWin1P == 3)
+		{
+			m_WinerNum = 1;
+		}
+		else if (m_nWin2P == 3)
+		{
+			m_WinerNum = 2;
+		}
+		SaveWinner();
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
 #ifdef _DEBUG
+
+	if (pInputKeyboard->GetTrigger(DIK_7) == true)
+	{
+		m_Winner = WINNER_PLAYER1;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_8) == true)
+	{
+		m_Winner = WINNER_PLAYER2;
+	}
+
 	if (m_bHit == true)
 	{
 		CDebugProc::Print("c", "当たっている");
@@ -282,14 +323,9 @@ void CGame::Update(void)
 		CDebugProc::Print("c", "当たっていない");
 	}
 
-	if (m_Winner == WINNER_PLAYER1)
-	{
-		CDebugProc::Print("c", "プレイヤー1の勝利");
-	}
-	else if(m_Winner == WINNER_PLAYER2)
-	{
-		CDebugProc::Print("c", "プレイヤー2の勝利");
-	}
+
+	CDebugProc::Print("cn", " プレイヤーの勝ち数  : ", m_nWin1P);
+	CDebugProc::Print("cn", " エネミーの勝ち数  : ", m_nWin2P);
 
 	//エフェクト用関数
 	D3DXVECTOR3 moveRand;
@@ -310,28 +346,31 @@ void CGame::Update(void)
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
 
-		for (int nCnt = 0; nCnt < 20; nCnt++)
+		for (int nCnt = 0; nCnt < 3; nCnt++)
 		{
 
 			//お金
-			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
-			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
-			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
-			////moveRand.x = rand() % 2 - 2;
-			//PosRand.x = rand() % 300 - 300;
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
+			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			//moveRand.x = rand() % 2 - 2;
 
 			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-			//	20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+				//20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-			//塩
-			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
-			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
-			moveRand.z = (float)((rand() % 7 + 3));
-			//moveRand.x = rand() % 2 - 2;
-			PosRand.x = (float)(rand() % 300 - 300);
+			//煙
+			CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+				10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 
-			CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
+			////塩
+			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
+			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
+			//moveRand.z = (float)((rand() % 7 + 3));
+			////moveRand.x = rand() % 2 - 2;
+			//PosRand.x = (float)(rand() % 300 - 300);
+
+			//CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+			//	6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
 		}
 	}
 #endif
@@ -406,7 +445,7 @@ void CGame::SaveWinner(void)
 	if (pFileW != NULL)
 	{// ファイルが開けたら
 		//モデルの総数
-		fprintf(pFileW, "%d\n", m_Winner);
+		fprintf(pFileW, "%d\n", m_WinerNum);
 		//ファイルを閉じる
 		fclose(pFileW);
 	}

@@ -34,11 +34,14 @@ class CSound;
 #define PLAYER_LEFT			(DIK_A)
 #define PLAYER_A_BUTTON		(DIK_F)
 #define PLAYER_B_BUTTON		(DIK_G)
+#define PLAYER_C_BUTTON		(DIK_S)
 
 #define ENEMY_RIGHT			(DIK_NUMPAD6)
 #define ENEMY_LEFT			(DIK_NUMPAD4)
 #define ENEMY_A_BUTTON		(DIK_ADD)
 #define ENEMY_B_BUTTON		(DIK_NUMPADENTER)
+#define ENEMY_C_BUTTON		(DIK_NUMPAD5)
+#define PLAYER_C_BUTTON		(DIK_S)
 #define MAX_SOUND			(3)
 
 //=============================================================================
@@ -56,6 +59,7 @@ class CSound;
 #define XENEMY_A_BUTTON			(XINPUT_GAMEPAD_A) //グー
 #define XENEMY_Y_BUTTON			(XINPUT_GAMEPAD_Y) //チョキ
 #define XENEMY_X_BUTTON			(XINPUT_GAMEPAD_X) //パー
+#define XENEMY_B_BUTTON			(XINPUT_GAMEPAD_B)
 #define XENEMY_B_BUTTON			(XINPUT_GAMEPAD_B)
 
 //=============================================================================
