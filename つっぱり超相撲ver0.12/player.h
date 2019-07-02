@@ -48,6 +48,7 @@ public:
 		STATE_JANKEN,
 		STATE_NOKOTTA,
 		STATE_DOWN,
+		STATE_ULT,
 	}STATE;
 
 	typedef enum
