@@ -393,8 +393,8 @@ void CPlayer::Update(void)
 					}
 				}
 
-				if (pInputKeyboard->GetPress(DIK_0) == true && m_bUltDis == true)
-				{
+				if (pInputKeyboard->GetPress(DIK_5) == true && m_bUltDis == true)
+				{// •KŽE
 					m_State = STATE_ULT;
 
 					if (m_pAnimation != NULL)
