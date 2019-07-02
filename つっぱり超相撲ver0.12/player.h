@@ -168,6 +168,8 @@ public:
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
 	void EntryPlayer(D3DXVECTOR3 pos,float fMovePlayer);
 	void DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
+
+
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数

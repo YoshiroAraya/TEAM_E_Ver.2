@@ -303,7 +303,7 @@ void CEnemy::Update(void)
 	// カメラの向きを取得
 	D3DXVECTOR3 cameraRot;
 	cameraRot = pCamera->GetRot();
-	// 敵取得
+	// プレイヤー取得
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
 	// 移動処理取得
@@ -312,9 +312,6 @@ void CEnemy::Update(void)
 	//ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
-	// ゲージの取得
-	CSansoGauge *pSansoGauge;
-	pSansoGauge = CGame::GetSansoGauge();
 	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -329,255 +326,27 @@ void CEnemy::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-			//通常状態で硬直していない
-			if (m_State == STATE_NEUTRAL && m_bRecovery == false)
-			{
-				//任意のキー←
-				if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-					pXInput->GetPress(XENEMY_LEFT, 1) == true)
-				{
-					//ダッシュ設定
-					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-					{
-						fMoveEnemy = DASH_MOVE;
-						m_bDash = true;
-					}
-					else
-					{
-						m_bDash = false;
-					}
-					// 左に進む
-					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-					m_nMotionType[0] = MOTION_SURIASI;
-					m_nMotionType[1] = MOTION_SURIASI;
-				}
+			//プレイヤーの動作
+			fMoveEnemy = EnemyOperation(pos, fMoveEnemy);
 
-				//任意のキー→
-				else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
-				{
-					//ダッシュ設定
-					if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-					{
-						fMoveEnemy = DASH_MOVE;
-						m_bDash = true;
-					}
-					else
-					{
-						m_bDash = false;
-					}
-					// 右に進む
-					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
-					m_nMotionType[0] = MOTION_SURIASI;
-					m_nMotionType[1] = MOTION_SURIASI;
-				}
-				else
-				{
-					if (m_bMotionEnd[0] == true)
-					{
-						m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-					}
-					if (m_bMotionEnd[1] == true)
-					{
-						m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
-					}
-				}
-
-				if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
-				{// 必殺
-					m_State = STATE_ULT;
-
-					if (m_pAnimation != NULL)
-					{
-						m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
-					}
-				}
-			}
-
-			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
-			{
-				//ガード状態
-				if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
-					pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
-				{
-					m_State = STATE_GUARD;
-					pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_SANSO);
-				}
-				if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
-					pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
-				{
-					m_State = STATE_NEUTRAL;
-				}
-			}
-
-			//硬直しているとき
-			if (m_bRecovery == true)
-			{
-				m_nRecoveryTime--;
-				if (m_nRecoveryTime <= 0)
-				{
-					m_bRecovery = false;
-					m_nRecoveryTime = 0;
-				}
-			}
-			//カウンターしているとき
-			if (m_bCounter == true)
-			{
-				m_bRecovery = true;
-				m_nCounterTime--;
-				if (m_nCounterTime <= 0)
-				{
-					m_bCounter = false;
-					m_nCounterTime = 0;
-					m_nRecoveryTime = 20;
-				}
-			}
-
-			// 目的の角度
-			if (pPlayer != NULL)
-			{
-				m_fDestAngle = -atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
-			}
-			// 差分
-			m_fDiffAngle = m_fDestAngle - rot.y;
-
-			if (m_fDiffAngle > D3DX_PI)
-			{
-				m_fDiffAngle -= D3DX_PI * 2.0f;
-			}
-			if (m_fDiffAngle < -D3DX_PI)
-			{
-				m_fDiffAngle += D3DX_PI * 2.0f;
-			}
-
-			rot.y += m_fDiffAngle * 0.1f;
-
-			if (rot.y > D3DX_PI)
-			{
-				rot.y -= D3DX_PI * 2.0f;
-			}
-			if (rot.y < -D3DX_PI)
-			{
-				rot.y += D3DX_PI * 2.0f;
-			}
-
-			//向きの慣性
-			m_fDiffAngle = m_fDestAngle - rot.y;
+			//タイマーの更新
+			TimerUpdate();
 
 			//角度の設定
-			if (m_fDiffAngle > D3DX_PI)
-			{
-				m_fDiffAngle -= D3DX_PI* 2.0f;
-			}
-			if (m_fDiffAngle < -D3DX_PI)
-			{
-				m_fDiffAngle += D3DX_PI* 2.0f;
-			}
+			DirectionEnemy(pos, rot);
 
-			rot.y += m_fDiffAngle * 0.1f;
-
-			if (rot.y > D3DX_PI)
-			{
-				rot.y -= D3DX_PI* 2.0f;
-			}
-			if (rot.y < -D3DX_PI)
-			{
-				rot.y += D3DX_PI* 2.0f;
-			}
-
-			if (rot.y < 0.0f)
-			{
-				m_Direction = DIRECTION_RIGHT;
-			}
-			else if (rot.y > 0.0f)
-			{
-				m_Direction = DIRECTION_LEFT;
-			}
-
-			if (CGame::GetHit() == true)
-			{
-				if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA || m_State == STATE_GUARD)
-				{	//組み状態へ
-					m_State = STATE_KUMI;
-					if (MOTION_BUTIKAMASI == m_nMotionType[0]
-						&& MOTION_BUTIKAMASI == m_nMotionType[1])
-					{//ぶちかましモーションの時は止める
-						m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-					}
-					if (MOTION_NAGE != m_nMotionType[0]
-						&& MOTION_NAGE != m_nMotionType[1])
-					{//投げモーション以外はニュートラル
-						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
-					}
-				}
-				if (m_State == STATE_KUMI)
-				{ //組み状態なら
-					if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
-						&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
-						&& m_bMotionEnd[0] == true
-						&& m_bMotionEnd[1] == true
-						|| MOTION_TUKAMI_AGERARERU == m_nMotionType[0]
-						&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
-						&& m_bMotionEnd[0] == true
-						&& m_bMotionEnd[1] == true)
-					{//つかみ上げ、上げられモーションが終わったときニュートラル
-						m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
-						m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
-					}
-				}
-			}
-			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
-			{
-				//m_State = STATE_NEUTRAL;
-			}
+			//敵と当たったとき
+			CollisionPlayerAction();
 
 			if (pPlayer != NULL)
 			{
-				// つっぱりとの当たり判定
-				if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
-				{
-					bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
-					//つっぱりにあたった
-					if (bHit == true)
-					{
-						if (m_State != STATE_GUARD)
-						{
-							m_State = STATE_DAMAGE;
-						}
-						else
-						{
-							CGame::GetBatlteSys()->GuardKnockBack(1);
-							m_State = STATE_GUARD;
-						}
-						CGame::SetHit(false);
-					}
-				}
+				TsuppariCollision(pos);
 			}
 			//つっぱり位置更新
 			m_pTuppari->SetPosition(pos);
 
 			//土俵際判定
-			if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
-			{
-				m_DohyoState = DOHYO_HAZI;
-
-				if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX)
-				{	//左端
-					m_DohyoHaziLR = HAZI_LEFT;
-				}
-				else if (pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
-				{	//右端
-					m_DohyoHaziLR = HAZI_RIGHT;
-				}
-			}
-			else
-			{
-				m_DohyoState = DOHYO_NORMAL;
-				m_DohyoHaziLR = HAZI_NORMAL;
-			}
+			DohyoHaziWhether(pos);
 
 			if (pGauge->GetUlt(1) == true && m_bUltDis == false)
 			{
@@ -586,7 +355,6 @@ void CEnemy::Update(void)
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 				}
-
 				m_bUltDis = true;
 			}
 			else if (pGauge->GetUlt(1) == false)
@@ -598,7 +366,6 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = false;
 			}
-
 		}
 		break;
 
@@ -607,7 +374,6 @@ void CEnemy::Update(void)
 		m_fRot = sinf(D3DX_PI + rot.y);
 		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 		break;
-
 	case CManager::MODE_ULTIMATE:
 		if (pos.x < 550.0f)
 		{
@@ -619,63 +385,13 @@ void CEnemy::Update(void)
 			pos.x = 550.0f;
 			m_move.x = 0.0f;
 
-			/*for (int nCntParticle = 0; nCntParticle < PARTICLE_NUM; nCntParticle++)
-			{
-				CParticleX::Create(D3DXVECTOR3(pos.x, pos.y + 30.0f, pos.z),
-					D3DXVECTOR3(sinf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT), cosf(D3DX_PI * PARTICLE_ROT)),
-					D3DXVECTOR3(sinf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1)), cosf(PARTICLE_ROT) * ((rand() % 7 + 1))),
-					PARTICLE_TIME,
-					CParticleX::TYPE_NORMAL);
-			}*/
 		}
 		break;
 	}
 
-	if (CCamera::GetState() == CCamera::STATE_NISHI)
-	{
-		if (m_nMotionType[0] != MOTION_SYAGAMI
-			&& m_nMotionType[1] != MOTION_SYAGAMI
-			&& m_nMotionType[0] != MOTION_SIOMAKI
-			&& m_nMotionType[1] != MOTION_SIOMAKI)
-		{
-			if (m_nSiomakiCnt < 10)
-			{
-				m_nMotionType[0] = MOTION_WALK;
-				m_nMotionType[1] = MOTION_WALK;
-			}
-		}
-		// 左に進む
-		if (pos.x <= 80.0f)
-		{
-			m_nSiomakiCnt++;
+	//キャラ入場
+	EntryEnemy(pos, fMoveEnemy);
 
-			if (m_nSiomakiCnt > 60)
-			{
-				if (m_nMotionType[0] != MOTION_NEUTRAL
-					&& m_nMotionType[1] != MOTION_NEUTRAL)
-				{
-					m_nKey[0] = 0;
-					m_nKey[1] = 0;
-					m_nMotionType[0] = MOTION_NEUTRAL;
-					m_nMotionType[1] = MOTION_NEUTRAL;
-				}
-			}
-			else
-			{
-				if (m_nMotionType[0] != MOTION_SIOMAKI
-					&& m_nMotionType[1] != MOTION_SIOMAKI)
-				{
-					m_nKey[0] = 0;
-					m_nKey[1] = 0;
-					m_nMotionType[0] = MOTION_SIOMAKI;
-					m_nMotionType[1] = MOTION_SIOMAKI;
-				}
-			}
-			fMoveEnemy = 0.0f;
-			pos.x = 80.0f;
-		}
-		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
-	}
 
 	pos += m_move;
 
@@ -938,9 +654,372 @@ void CEnemy::InitStatus(void)
 	}
 }
 
+//=============================================================================
+// エネミーの操作
+//=============================================================================
+float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
+{
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
+
+	//通常状態で硬直していない
+	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	{
+		//任意のキー←
+		if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
+			pXInput->GetPress(XENEMY_LEFT, 1) == true)
+		{
+			//ダッシュ設定
+			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+			{
+				fMoveEnemy = DASH_MOVE;
+				m_bDash = true;
+			}
+			else
+			{
+				m_bDash = false;
+			}
+			// 左に進む
+			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+			m_nMotionType[0] = MOTION_SURIASI;
+			m_nMotionType[1] = MOTION_SURIASI;
+		}
+
+		//任意のキー→
+		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
+			pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+		{
+			//ダッシュ設定
+			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+			{
+				fMoveEnemy = DASH_MOVE;
+				m_bDash = true;
+			}
+			else
+			{
+				m_bDash = false;
+			}
+			// 右に進む
+			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+			m_nMotionType[0] = MOTION_SURIASI;
+			m_nMotionType[1] = MOTION_SURIASI;
+		}
+		else
+		{
+			if (m_bMotionEnd[0] == true)
+			{
+				m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+			}
+			if (m_bMotionEnd[1] == true)
+			{
+				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+			}
+		}
+
+		if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
+		{// 必殺
+			m_State = STATE_ULT;
+
+			if (m_pAnimation != NULL)
+			{
+				m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
+			}
+		}
+	}
+
+	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
+	{
+		//ガード状態
+		if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
+			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+		{
+			m_State = STATE_GUARD;
+			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_SANSO);
+		}
+		if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
+			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+		{
+			m_State = STATE_NEUTRAL;
+		}
+	}
+
+	return fMoveEnemy;
+}
 
 //=============================================================================
-// プレイヤーのモーション
+// 敵との衝突
+//=============================================================================
+void CEnemy::CollisionPlayerAction(void)
+{
+	if (CGame::GetHit() == true)
+	{
+		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA || m_State == STATE_GUARD)
+		{	//組み状態へ
+			m_State = STATE_KUMI;
+			if (MOTION_BUTIKAMASI == m_nMotionType[0]
+				&& MOTION_BUTIKAMASI == m_nMotionType[1])
+			{//ぶちかましモーションの時は止める
+				m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+			if (MOTION_NAGE != m_nMotionType[0]
+				&& MOTION_NAGE != m_nMotionType[1])
+			{//投げモーション以外はニュートラル
+				m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+				m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+			}
+		}
+		if (m_State == STATE_KUMI)
+		{ //組み状態なら
+			if (MOTION_TUKAMI_AGERU == m_nMotionType[0]
+				&& MOTION_TUKAMI_AGERU == m_nMotionType[1]
+				&& m_bMotionEnd[0] == true
+				&& m_bMotionEnd[1] == true
+				|| MOTION_TUKAMI_AGERARERU == m_nMotionType[0]
+				&& MOTION_TUKAMI_AGERARERU == m_nMotionType[1]
+				&& m_bMotionEnd[0] == true
+				&& m_bMotionEnd[1] == true)
+			{//つかみ上げ、上げられモーションが終わったときニュートラル
+				m_nMotionType[0] = MOTION_TUKAMI_NEUTRAL;
+				m_nMotionType[1] = MOTION_TUKAMI_NEUTRAL;
+			}
+		}
+	}
+	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
+	{
+		//m_State = STATE_NEUTRAL;
+	}
+
+}
+
+//=============================================================================
+// タイマーの更新
+//=============================================================================
+void CEnemy::TimerUpdate(void)
+{
+	//硬直しているとき
+	if (m_bRecovery == true)
+	{
+		m_nRecoveryTime--;
+		if (m_nRecoveryTime <= 0)
+		{
+			m_bRecovery = false;
+			m_nRecoveryTime = 0;
+		}
+	}
+	//カウンターしているとき
+	if (m_bCounter == true)
+	{
+		m_bRecovery = true;
+		m_nCounterTime--;
+		if (m_nCounterTime <= 0)
+		{
+			m_bCounter = false;
+			m_nCounterTime = 0;
+			m_nRecoveryTime = 20;
+		}
+	}
+}
+
+
+//=============================================================================
+// つっぱりとの当たり判定
+//============================================================================
+void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
+{
+	// プレイヤー取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+
+	// つっぱりとの当たり判定
+	if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
+	{
+		bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
+		//つっぱりにあたった
+		if (bHit == true)
+		{
+			if (m_State != STATE_GUARD)
+			{
+				m_State = STATE_DAMAGE;
+			}
+			else
+			{
+				CGame::GetBatlteSys()->GuardKnockBack(1);
+				m_State = STATE_GUARD;
+			}
+			CGame::SetHit(false);
+		}
+	}
+
+}
+
+//=============================================================================
+// 土俵端かどうか
+//============================================================================
+void CEnemy::DohyoHaziWhether(D3DXVECTOR3 pos)
+{
+	if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+	{
+		m_DohyoState = DOHYO_HAZI;
+
+		if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX)
+		{	//左端
+			m_DohyoHaziLR = HAZI_LEFT;
+		}
+		else if (pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
+		{	//右端
+			m_DohyoHaziLR = HAZI_RIGHT;
+		}
+	}
+	else
+	{
+		m_DohyoState = DOHYO_NORMAL;
+		m_DohyoHaziLR = HAZI_NORMAL;
+	}
+
+}
+
+//=============================================================================
+// エネミーの入場シーン
+//=============================================================================
+void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
+{
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+
+	if (CCamera::GetState() == CCamera::STATE_NISHI)
+	{
+		if (m_nMotionType[0] != MOTION_SYAGAMI
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
+		{
+			if (m_nSiomakiCnt < 10)
+			{
+				m_nMotionType[0] = MOTION_WALK;
+				m_nMotionType[1] = MOTION_WALK;
+			}
+		}
+		// 左に進む
+		if (pos.x <= 80.0f)
+		{
+			m_nSiomakiCnt++;
+
+			if (m_nSiomakiCnt > 60)
+			{
+				if (m_nMotionType[0] != MOTION_NEUTRAL
+					&& m_nMotionType[1] != MOTION_NEUTRAL)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_NEUTRAL;
+					m_nMotionType[1] = MOTION_NEUTRAL;
+				}
+			}
+			else
+			{
+				if (m_nMotionType[0] != MOTION_SIOMAKI
+					&& m_nMotionType[1] != MOTION_SIOMAKI)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_SIOMAKI;
+					m_nMotionType[1] = MOTION_SIOMAKI;
+				}
+			}
+			fMoveEnemy = 0.0f;
+			pos.x = 80.0f;
+		}
+		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
+	}
+}
+
+//=============================================================================
+// エネミーの向き
+//=============================================================================
+void CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+{
+	// プレイヤー取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+
+	// 目的の角度
+	if (pPlayer != NULL)
+	{
+		m_fDestAngle = -atan2f((pPlayer->GetPosition().x - sinf(rot.y)) - pos.x, (pPlayer->GetPosition().z - cosf(rot.y)) - pos.z);
+	}
+	// 差分
+	m_fDiffAngle = m_fDestAngle - rot.y;
+
+	if (m_fDiffAngle > D3DX_PI)
+	{
+		m_fDiffAngle -= D3DX_PI * 2.0f;
+	}
+	if (m_fDiffAngle < -D3DX_PI)
+	{
+		m_fDiffAngle += D3DX_PI * 2.0f;
+	}
+
+	rot.y += m_fDiffAngle * 0.1f;
+
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI * 2.0f;
+	}
+	if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2.0f;
+	}
+
+	//向きの慣性
+	m_fDiffAngle = m_fDestAngle - rot.y;
+
+	//角度の設定
+	if (m_fDiffAngle > D3DX_PI)
+	{
+		m_fDiffAngle -= D3DX_PI* 2.0f;
+	}
+	if (m_fDiffAngle < -D3DX_PI)
+	{
+		m_fDiffAngle += D3DX_PI* 2.0f;
+	}
+
+	rot.y += m_fDiffAngle * 0.1f;
+
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI* 2.0f;
+	}
+	if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI* 2.0f;
+	}
+
+	if (rot.y < 0.0f)
+	{
+		m_Direction = DIRECTION_RIGHT;
+	}
+	else if (rot.y > 0.0f)
+	{
+		m_Direction = DIRECTION_LEFT;
+	}
+}
+
+
+
+//=============================================================================
+// エネミーのモーション
 //=============================================================================
 void CEnemy::UpdateMotion(int nParent)
 {

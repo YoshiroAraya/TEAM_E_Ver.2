@@ -162,7 +162,13 @@ public:
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
 	void InitStatus(void);
-
+	float EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy);
+	void CollisionPlayerAction(void);
+	void TimerUpdate(void);
+	void TsuppariCollision(D3DXVECTOR3 pos);
+	void DohyoHaziWhether(D3DXVECTOR3 pos);
+	void EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy);
+	void DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);

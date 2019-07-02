@@ -295,14 +295,14 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 rot;
 	rot = CSceneX::GetRot();
 	// カメラ取得
-	CCamera *pCamera;
-	pCamera = CManager::GetCamera();
+	//CCamera *pCamera;
+	//pCamera = CManager::GetCamera();
 	// 影の取得
 	CShadow *pShadow;
 	pShadow = CGame::GetShadow();
 	// カメラの向きを取得
-	D3DXVECTOR3 cameraRot;
-	cameraRot = pCamera->GetRot();
+	//D3DXVECTOR3 cameraRot;
+	//cameraRot = pCamera->GetRot();
 	// 敵取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
@@ -312,7 +312,6 @@ void CPlayer::Update(void)
 	//ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
-
 	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -375,6 +374,19 @@ void CPlayer::Update(void)
 		m_fRot = sinf(D3DX_PI + rot.y);
 		m_bSelect = pCharacterMove->CharaTurn(&pos, &rot, m_fRot, m_fLength);
 		break;
+	//case CManager::MODE_ULTIMATE:
+	//	if (pos.x < 550.0f)
+	//	{
+	//		m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy * 15.0f);
+	//	}
+	//	else if (pos.x > 550.0f)
+	//	{
+	//		m_bWallHit = true;
+	//		pos.x = 550.0f;
+	//		m_move.x = 0.0f;
+
+	//	}
+	//	break;
 	}
 
 	//キャラ入場
@@ -1012,7 +1024,6 @@ void CPlayer::DirectionPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	{
 		m_Direction = DIRECTION_LEFT;
 	}
-
 }
 
 //=============================================================================
