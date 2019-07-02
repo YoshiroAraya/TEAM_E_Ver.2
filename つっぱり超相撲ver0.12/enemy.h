@@ -15,7 +15,6 @@
 // マクロ定義
 //========================================
 #define MOVE_ENEMY			(0.5f)									//エネミー移動量
-#define ENEMY_COLLISION		(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//エネミーの当たり判定
 #define MAX_PARTS		(30)
 #define MAX_MOTION		(30)
 #define MODEL_PARENT	(2)
