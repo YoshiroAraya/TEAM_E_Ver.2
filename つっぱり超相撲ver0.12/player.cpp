@@ -543,7 +543,15 @@ void CPlayer::Update(void)
 					//‚Â‚Á‚Ï‚è‚É‚ ‚½‚Á‚½
 					if (bHit == true)
 					{
-						m_State = STATE_DAMAGE;
+						if (m_State != STATE_GUARD)
+						{
+							m_State = STATE_DAMAGE;
+						}
+						else
+						{
+							m_State = STATE_DAMAGE;
+						}
+
 						CGame::SetHit(false);
 					}
 				}
