@@ -385,15 +385,6 @@ void CEnemy::Update(void)
 					}
 				}
 
-				//if (pInputKeyboard->GetPress(DIK_0) == true && m_bUltDis == true)
-				//{
-				//	m_State = STATE_ULT;
-
-				//	if (m_pAnimation != NULL)
-				//	{
-				//		m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
-				//	}
-				//}
 				if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
 				{// •KŽE
 					m_State = STATE_ULT;

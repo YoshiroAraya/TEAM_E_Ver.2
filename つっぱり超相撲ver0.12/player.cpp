@@ -719,71 +719,71 @@ void CPlayer::Update(void)
 	//CDebugProc::Print("cfccfccfc", "プレイヤーの位置 : x", pos.x, "f", "   y", pos.y, "f", "  z", pos.z, "f");
 	//CDebugProc::Print("cfccfccfc", "VtxMax : x", CSceneX::GetVtxMax().x, "f", "   y", CSceneX::GetVtxMax().y, "f", "  z", CSceneX::GetVtxMax().z, "f");
 	//CDebugProc::Print("cfccfccfc", "VtxMin : x", CSceneX::GetVtxMin().x, "f", "   y", CSceneX::GetVtxMin().y, "f", "  z", CSceneX::GetVtxMin().z, "f");
-	//CDebugProc::Print("cn", "プレイヤーの状態 : ", m_State);
-	//CDebugProc::Print("cn", "プレイヤーの向き : ", m_Direction);
-	//CDebugProc::Print("cf", "プレイヤーの向き : ", rot.y);
-	//if (m_bRecovery == true)
-	//{
-	//	CDebugProc::Print("c", " プレイヤーリカバリー　ON ");
-	//}
-	//else
-	//{
-	//	CDebugProc::Print("c", " プレイヤーリカバリー　OFF ");
-	//}
-	//if (m_bCounter == true)
-	//{
-	//	CDebugProc::Print("c", " プレイヤーカウンター　ON ");
-	//}
-	//else
-	//{
-	//	CDebugProc::Print("c", " プレイヤーカウンター　OFF ");
-	//}
-	//if (m_DohyoState == DOHYO_NORMAL)
-	//{
-	//	CDebugProc::Print("c", " 土俵端　OFF ");
-	//}
-	//else
-	//{
-	//	CDebugProc::Print("c", " 土俵端　ON ");
-	//}
+	CDebugProc::Print("cn", "プレイヤーの状態 : ", m_State);
+	CDebugProc::Print("cn", "プレイヤーの向き : ", m_Direction);
+	CDebugProc::Print("cf", "プレイヤーの向き : ", rot.y);
+	if (m_bRecovery == true)
+	{
+		CDebugProc::Print("c", " プレイヤーリカバリー　ON ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " プレイヤーリカバリー　OFF ");
+	}
+	if (m_bCounter == true)
+	{
+		CDebugProc::Print("c", " プレイヤーカウンター　ON ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " プレイヤーカウンター　OFF ");
+	}
+	if (m_DohyoState == DOHYO_NORMAL)
+	{
+		CDebugProc::Print("c", " 土俵端　OFF ");
+	}
+	else
+	{
+		CDebugProc::Print("c", " 土俵端　ON ");
+	}
 
-	//if (m_bDying == true)
-	//{
-	//	CDebugProc::Print("c", "プレイヤー 瀕死 ");
-	//}
-	//else
-	//{
-	//	CDebugProc::Print("c", "プレイヤー 生存 ");
-	//}
+	if (m_bDying == true)
+	{
+		CDebugProc::Print("c", "プレイヤー 瀕死 ");
+	}
+	else
+	{
+		CDebugProc::Print("c", "プレイヤー 生存 ");
+	}
 
-	//if (pInputKeyboard->GetTrigger(DIK_Q) == true)
-	//{
-	//	m_nMotionType[0]--;
-	//	m_nMotionType[1]--;
-	//	m_nKey[0] = 0;
-	//	m_nKey[1] = 0;
-	//	m_nCountFlame[0] = 0;
-	//	m_nCountFlame[1] = 0;
-	//}
-	//if (pInputKeyboard->GetTrigger(DIK_E) == true)
-	//{
-	//	m_nMotionType[0]++;
-	//	m_nMotionType[1]++;
-	//	m_nKey[0] = 0;
-	//	m_nKey[1] = 0;
-	//	m_nCountFlame[0] = 0;
-	//	m_nCountFlame[1] = 0;
-	//}
+	if (pInputKeyboard->GetTrigger(DIK_Q) == true)
+	{
+		m_nMotionType[0]--;
+		m_nMotionType[1]--;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_E) == true)
+	{
+		m_nMotionType[0]++;
+		m_nMotionType[1]++;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
 
-	//if (pInputKeyboard->GetTrigger(DIK_1) == true)
-	//{
-	//	//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
-	//	m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
-	//}
-	//CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
-	//CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
-	//CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
-	//CDebugProc::Print("cn", " フレーム数1 : ", m_nCountFlame[1]);
+	if (pInputKeyboard->GetTrigger(DIK_1) == true)
+	{
+		//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
+		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
+	}
+	CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
+	CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
+	CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
+	CDebugProc::Print("cn", " フレーム数1 : ", m_nCountFlame[1]);
 #endif
 }
 

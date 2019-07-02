@@ -11,7 +11,6 @@
 #include "sceneX.h"
 #include "tuppari.h"
 
-
 //*****************************************************************************
 //　前方宣言
 //*****************************************************************************
@@ -72,7 +71,6 @@ public:
 		MOTION_ULTIMATE,
 	}MOTION_TYPE;
 
-
 	//土俵端状態
 	typedef enum
 	{
@@ -120,9 +118,6 @@ public:
 		KEY_INFO aKayInfo[MAX_MOTION];
 	}MOTION_INFO;
 
-
-
-
 	CPlayer();	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
@@ -130,12 +125,12 @@ public:
 	void Uninit(void);	// プレイヤー終了処理
 	void Update(void);	// プレイヤー更新処理
 	void Draw(void);	// プレイヤー描画処理
+	static CPlayer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);					// オブジェクトの生成
+	static HRESULT LoadModel(void);	// モデル読み込み
+	static void UnloadModel(void);	// モデルテクスチャ解放
 
 	void CollisonDohyo(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
 	void SetMove(D3DXVECTOR3 move);	// 移動
-
-	static HRESULT LoadModel(void);	// モデル読み込み
-	static void UnloadModel(void);	// モデルテクスチャ解放
 
 	bool GetLand(void);				//着地しているかどうか
 	STATE GetState(void);			//現在の状態
@@ -148,17 +143,17 @@ public:
 	void SetRecoveryTime(int nReco) { m_nRecoveryTime = nReco; }	//硬直時間を設定
 	bool GetDying(void) { return m_bDying; }				//死んでいるかどうか
 	void SetDying(bool bDying) { m_bDying = bDying; }		//死を設定
-	bool GetJanken(void) { return m_bJanken; }				//じゃんけんを取得
 	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }		//過去の位置を取得
+
 	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
 	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
-	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }		//土俵端を設定
-	static CPlayer *Create(D3DXVECTOR3 pos , D3DXVECTOR3 rot);					// オブジェクトの生成
+	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }				//土俵端を設定
 	bool GetCounter(void) { return m_bCounter; }								//カウンター状態を取得
 	void SetCounter(bool bCounter) { m_bCounter = bCounter; }					//カウンター状態を設定
 	int GetCounterTime(void) { return m_nCounterTime; }							//カウンターの時間を取得
 	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }			//カウンターの時間を設定
 	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }						//右左どちらの土俵端にいるか
+
 	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }	//土俵端を設定
 	bool GetSelect(void) { return m_bSelect; }				//キャラ選択を取得
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
@@ -167,9 +162,9 @@ public:
 
 	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	 //モーション情報を取得
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					 //モーションを設定
-
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; } //モーションの終わりを設定
 	void InitStatus(void);
+
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -198,21 +193,20 @@ private:
 	bool					m_bHit;			// 敵に当たっているかどうか
 	bool					m_bRecovery;	// 硬直フラグ
 	bool					m_bCounter;		// カウンターフラグ
-	bool					m_bJanken;		// じゃんけん
 	bool					m_bSelect;		// 選ばれているかどうか
+	bool					m_bUltDis;		// 必殺の演出表示
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
 	DIRECTION				m_Direction;	// 向き(左右)
-	bool					m_bDying;		// 瀕死かどうか
 	int						m_nLife;		// 体力
+	bool					m_bDying;		// 瀕死かどうか
 	int						m_nSiomakiCnt;	// 塩まきカウンター
 	bool					m_bDash;		// 走っているかどうか
-	bool					m_bUltDis;		// 必殺の演出表示
+	bool					m_bJanken;		// じゃんけん
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
-	//TOUZAI					m_Touzai;
 	static CBAnimation *m_pAnimation;
 
 	// モーション関数
@@ -230,7 +224,7 @@ private:
 	KEY							m_aKayOffset[MAX_PARTS][MODEL_PARENT];		//オフセット情報
 	MOTION_INFO					m_aMotionInfo[MAX_MOTION][MODEL_PARENT];	//モーション情報
 	int							m_nMotionType[MODEL_PARENT];				//モーションのタイプ(int型)
-	bool						m_bMotionEnd[MODEL_PARENT];								//モーションの終わり
+	bool						m_bMotionEnd[MODEL_PARENT];					//モーションの終わり
 	int							m_nOldMotion;								//前回のモーション
 	D3DXVECTOR3					m_OffSetPos[MAX_PARTS][MODEL_PARENT];		//オフセット情報(モーション)
 																			//MOTIONSTATE				m_MotionState;
