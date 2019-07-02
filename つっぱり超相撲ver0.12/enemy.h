@@ -47,6 +47,7 @@ public:
 		STATE_NOKOTTA,
 		STATE_GUARD,
 		STATE_DOWN,
+		STATE_ULT,
 	}STATE;
 
 	typedef enum

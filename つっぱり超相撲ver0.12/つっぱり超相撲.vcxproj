@@ -199,6 +199,7 @@
     <ClCompile Include="tuppari.cpp" />
     <ClCompile Include="ultimate.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="winnerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
@@ -248,6 +249,7 @@
     <ClInclude Include="tuppari.h" />
     <ClInclude Include="ultimate.h" />
     <ClInclude Include="wall.h" />
+    <ClInclude Include="winnerUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

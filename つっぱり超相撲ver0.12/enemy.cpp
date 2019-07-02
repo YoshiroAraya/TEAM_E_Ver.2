@@ -394,6 +394,15 @@ void CEnemy::Update(void)
 				//		m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
 				//	}
 				//}
+				if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
+				{// •KŽE
+					m_State = STATE_ULT;
+
+					if (m_pAnimation != NULL)
+					{
+						m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
+					}
+				}
 			}
 
 			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
@@ -529,7 +538,7 @@ void CEnemy::Update(void)
 					}
 				}
 			}
-			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI)
+			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
 			{
 				//	m_State = STATE_NEUTRAL;
 			}
