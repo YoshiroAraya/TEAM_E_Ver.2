@@ -664,9 +664,7 @@ void CBattleSys::Operation(void)
 		}
 
 		//つっぱり
-		else if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL
-			&& pEnemy->GetState() == CEnemy::STATE_NEUTRAL
-			&& m_bAttack == false)
+		else if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && m_bAttack == false)
 		{
 			if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true && pPlayer->GetRecovery() == false ||
 				pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
@@ -697,6 +695,9 @@ void CBattleSys::Operation(void)
 					break;
 				}
 			}
+		}
+		else if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
 			{
@@ -727,7 +728,6 @@ void CBattleSys::Operation(void)
 				}
 			}
 		}
-
 
 		//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
 		if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
