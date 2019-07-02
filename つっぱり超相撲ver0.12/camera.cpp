@@ -176,11 +176,74 @@ void CCamera::Update(void)
 			}
 		}
 		else if (CGame::GetState() == CGame::STATE_GAME)
-		{
+		{// ゲーム中
 			if (pPlayer->GetState() == CPlayer::STATE_ULT)
-			{
-				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
-				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
+			{// 必殺を打つ時
+				if (pPlayer->GetDirection() == CPlayer::DIRECTION_RIGHT)
+				{// 右を向いている
+					if (m_posV.x <= pPlayer->GetPosition().x + 85.0f)
+					{
+						m_posV.x += 10.0f;
+
+						if (m_posV.x > pPlayer->GetPosition().x + 85.0f)
+						{
+							m_posV.x = pPlayer->GetPosition().x + 85.0f;
+						}
+					}
+					if (m_posV.y >= pPlayer->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pPlayer->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pPlayer->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pPlayer->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pPlayer->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pPlayer->GetPosition().z - 50.0f;
+						}
+					}
+					//m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
+				}
+				else if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT)
+				{// 左を向いている
+					if (m_posV.x >= pPlayer->GetPosition().x - 85.0f)
+					{
+						m_posV.x -= 10.0f;
+
+						if (m_posV.x < pPlayer->GetPosition().x - 85.0f)
+						{
+							m_posV.x = pPlayer->GetPosition().x - 85.0f;
+						}
+					}
+					if (m_posV.y >= pPlayer->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pPlayer->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pPlayer->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pPlayer->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pPlayer->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pPlayer->GetPosition().z - 50.0f;
+						}
+					}
+
+					//m_posV = D3DXVECTOR3(pPlayer->GetPosition().x - 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
+				}
 			}
 		}
 	}
