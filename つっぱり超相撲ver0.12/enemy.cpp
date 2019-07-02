@@ -531,7 +531,7 @@ void CEnemy::Update(void)
 			}
 			else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
 			{
-				//	m_State = STATE_NEUTRAL;
+				//m_State = STATE_NEUTRAL;
 			}
 
 			if (pPlayer != NULL)

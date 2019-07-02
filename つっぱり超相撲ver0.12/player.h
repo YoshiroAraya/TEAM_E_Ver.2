@@ -144,7 +144,6 @@ public:
 	bool GetDying(void) { return m_bDying; }				//死んでいるかどうか
 	void SetDying(bool bDying) { m_bDying = bDying; }		//死を設定
 	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }		//過去の位置を取得
-
 	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
 	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }				//土俵端を設定
@@ -153,19 +152,22 @@ public:
 	int GetCounterTime(void) { return m_nCounterTime; }							//カウンターの時間を取得
 	void SetCounterTime(int nCounter) { m_nCounterTime = nCounter; }			//カウンターの時間を設定
 	HAZI_LR GetDohyoHaziLR(void) { return m_DohyoHaziLR; }						//右左どちらの土俵端にいるか
-
 	void SetDohyoHaziLR(HAZI_LR DohyoHaziLR) { m_DohyoHaziLR = DohyoHaziLR; }	//土俵端を設定
 	bool GetSelect(void) { return m_bSelect; }				//キャラ選択を取得
 	void SetSelect(bool bSelect) { m_bSelect = bSelect; }	//キャラ選択を設定
 	bool GetbDash(void) { return m_bDash; }					//ダッシュ状態を取得
 	void SetbDash(bool bDash) { m_bDash = bDash; }			//ダッシュ状態を取得
-
 	MOTION_TYPE GetMotionType(int nParent) { return m_MotionType[nParent]; }	 //モーション情報を取得
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					 //モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; } //モーションの終わりを設定
 	void InitStatus(void);
-
-
+	float PlayerOperation(D3DXVECTOR3 pos,float fMovePlayer);
+	void CollisionEnemyAction(void);
+	void TimerUpdate(void);
+	void TsuppariCollision(D3DXVECTOR3 pos);
+	void DohyoHaziWhether(D3DXVECTOR3 pos);
+	void EntryPlayer(D3DXVECTOR3 pos,float fMovePlayer);
+	void DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
