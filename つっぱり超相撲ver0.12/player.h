@@ -167,7 +167,7 @@ public:
 	void TsuppariCollision(D3DXVECTOR3 pos);
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
 	void EntryPlayer(D3DXVECTOR3 pos,float fMovePlayer);
-	void DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
+	D3DXVECTOR3 DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 
 
 	//モーションの更新関数

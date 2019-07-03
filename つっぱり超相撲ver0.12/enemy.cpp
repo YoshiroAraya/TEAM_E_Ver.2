@@ -40,7 +40,9 @@
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 
 #define DOHYO_COLLISION			(20.0f)
-#define GUARD_SANSO				(-2.0f)
+#define GUARD_NOW_SANSO			(-2.0f)
+#define GUARD_SANSO				(-20.0f)
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -333,7 +335,7 @@ void CEnemy::Update(void)
 			TimerUpdate();
 
 			//角度の設定
-			DirectionEnemy(pos, rot);
+			rot = DirectionEnemy(pos, rot);
 
 			//敵と当たったとき
 			CollisionPlayerAction();
@@ -745,7 +747,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
 		{
 			m_State = STATE_GUARD;
-			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_SANSO);
+			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
 		}
 		if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
 			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
@@ -840,6 +842,9 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 	// プレイヤー取得
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	// つっぱりとの当たり判定
 	if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
@@ -855,6 +860,7 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 			else
 			{
 				CGame::GetBatlteSys()->GuardKnockBack(1);
+				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_SANSO);
 				m_State = STATE_GUARD;
 			}
 			CGame::SetHit(false);
@@ -948,7 +954,7 @@ void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
 //=============================================================================
 // エネミーの向き
 //=============================================================================
-void CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+D3DXVECTOR3 CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// プレイヤー取得
 	CPlayer *pPlayer;
@@ -1014,6 +1020,8 @@ void CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	{
 		m_Direction = DIRECTION_LEFT;
 	}
+
+	return rot;
 }
 
 

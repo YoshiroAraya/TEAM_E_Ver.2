@@ -40,7 +40,9 @@
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 #define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
 #define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
-#define GUARD_SANSO				(-2.0f)
+#define GUARD_NOW_SANSO			(-2.0f)
+#define GUARD_SANSO				(-20.0f)
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -333,7 +335,7 @@ void CPlayer::Update(void)
 			TimerUpdate();
 
 			//角度の設定
-			DirectionPlayer(pos,rot);
+			rot = DirectionPlayer(pos,rot);
 
 			//敵と当たったとき
 			CollisionEnemyAction();
@@ -756,7 +758,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 			pXInput->GetPress(XPLAYER_X_BUTTON, 1) == true)
 		{
 			m_State = STATE_GUARD;
-			pSansoGauge->SetSansoGaugeRightLeft(GUARD_SANSO, 0);
+			pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
 		}
 		if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
 			pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
@@ -851,6 +853,9 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	// 敵取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	// つっぱりとの当たり判定
 	if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
@@ -866,6 +871,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 			else
 			{
 				CGame::GetBatlteSys()->GuardKnockBack(0);
+				pSansoGauge->SetSansoGaugeRightLeft(GUARD_SANSO, 0);
 				m_State = STATE_GUARD;
 			}
 			CGame::SetHit(false);
@@ -958,7 +964,7 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 //=============================================================================
 // プレイヤーの向き
 //=============================================================================
-void CPlayer::DirectionPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+D3DXVECTOR3 CPlayer::DirectionPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// 敵取得
 	CEnemy *pEnemy;
@@ -1024,6 +1030,8 @@ void CPlayer::DirectionPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	{
 		m_Direction = DIRECTION_LEFT;
 	}
+
+	return rot;
 }
 
 //=============================================================================

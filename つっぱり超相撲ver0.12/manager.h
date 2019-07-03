@@ -111,6 +111,7 @@ private:
 	static CCamera *m_pCamera;
 	static CLight *m_pLight;
 	static CDebugProc *m_pDebugProc;
+
 	static CMask *m_pMask;
 	static CFade *m_pFade;
 	static CCharacterMove *m_pCharacterMove;

@@ -31,25 +31,29 @@ const char *CLoad::m_apModelFilename[] =
 
 const char *CLoad::m_apTexFilename[] =
 {// テクスチャ
-	"data/TEXTURE/dohyo.png",
-	"data/TEXTURE/TITLE/newBG.png",
-	"data/TEXTURE/sand2.jpg",
-	"data/TEXTURE/wall.png",
-	"data\\TEXTURE\\TITLE\\title.png",
-	"data/TEXTURE/time.png",
-	"data/TEXTURE/.png",						// ゲージ
-	"data/TEXTURE/JANKEN/Buchikamashi.png",
-	"data/TEXTURE/JANKEN/Henka.png",
-	"data/TEXTURE/JANKEN/Stuppari.png",
-	"data/TEXTURE/touzai.png",
-	"data/TEXTURE/TITLE/1P.png",
-	"data/TEXTURE/TITLE/2P.png",
-	"data\\TEXTURE\\EFFECT\\particle000.jpg",
-	"data\\TEXTURE\\EFFECT\\money.png",
-	"data/TEXTURE/EFFECT/16.png",
-	"data/TEXTURE/EFFECT/somke.png",
-	"data/TEXTURE/circle.png",
-
+	"data/TEXTURE/dohyo.png",					//0
+	"data/TEXTURE/TITLE/newBG.png",				//1
+	"data/TEXTURE/sand2.jpg",					//2
+	"data/TEXTURE/wall.png",					//3
+	"data\\TEXTURE\\TITLE\\title.png",			//4
+	"data/TEXTURE/time.png",					//5
+	"data/TEXTURE/.png",						//6 ゲージ
+	"data/TEXTURE/JANKEN/Buchikamashi.png",		//7
+	"data/TEXTURE/JANKEN/Henka.png",			//8
+	"data/TEXTURE/JANKEN/Stuppari.png",			//9
+	"data/TEXTURE/touzai.png",					//10
+	"data/TEXTURE/TITLE/1P.png",				//11
+	"data/TEXTURE/TITLE/2P.png",				//12
+	"data\\TEXTURE\\EFFECT\\particle000.jpg",	//13
+	"data\\TEXTURE\\EFFECT\\money.png",			//14
+	"data/TEXTURE/EFFECT/16.png",				//15
+	"data/TEXTURE/EFFECT/somke.png",			//16
+	"data/TEXTURE/circle.png",					//17
+	"data/TEXTURE/UI/number001.png"	,			//18
+	"data/TEXTURE/UI/pause000.png",				//19 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause001.png",				//20 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause002.png",				//21 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/soda000.jpg",				//22
 };
 
 //=============================================================================
@@ -180,6 +184,7 @@ HRESULT CLoad::LoadTex(void)
 	int nTexData = (sizeof m_apTexFilename);
 	int nTexSize = (sizeof m_apTexFilename[0]);
 	int nNumTex = nTexData / nTexSize;
+
 
 	// テクスチャの数を動的に確保
 	m_pTexture = new LPDIRECT3DTEXTURE9[nNumTex];
