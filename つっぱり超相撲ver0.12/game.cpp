@@ -34,6 +34,8 @@
 #include "load.h"
 #include "effect3D.h"
 #include "winnerUI.h"
+#include "effect2D.h"
+#include "mysteryUI.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -97,6 +99,7 @@ void CGame::Init(void)
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
 	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
+	CMysteryUI::Create(D3DXVECTOR3(300, 300, 0));
 
 	int nCntZ;
 	int nCnt;
@@ -346,9 +349,10 @@ void CGame::Update(void)
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
 
-		for (int nCnt = 0; nCnt < 3; nCnt++)
+		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
-
+			CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
+			100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 			//お金
 			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
 			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
@@ -358,9 +362,9 @@ void CGame::Update(void)
 			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 				//20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-			//煙
-			CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
+			//煙(エラー)
+			//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+				//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 
 			////塩
 			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
