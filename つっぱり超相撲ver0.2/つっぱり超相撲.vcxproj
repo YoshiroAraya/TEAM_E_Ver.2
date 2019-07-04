@@ -163,6 +163,7 @@
     <ClCompile Include="dohyo.cpp" />
     <ClCompile Include="dohyocircle.cpp" />
     <ClCompile Include="effect.cpp" />
+    <ClCompile Include="effect2D.cpp" />
     <ClCompile Include="effect3D.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="dohyo.h" />
     <ClInclude Include="dohyocircle.h" />
     <ClInclude Include="effect.h" />
+    <ClInclude Include="effect2D.h" />
     <ClInclude Include="effect3D.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
