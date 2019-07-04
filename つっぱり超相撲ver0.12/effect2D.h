@@ -8,12 +8,12 @@
 #define _EFFECT_H_
 
 #include "main.h"
-#include "scene3D.h"
+#include "scene2d.h"
 
 //*********************************************************************
 //ビルボードクラスの定義
 //*********************************************************************
-class CEffect3D : public CScene3D //派生クラス
+class CEffect2D : public CScene2D //派生クラス
 {
 public:
 	typedef enum
@@ -23,26 +23,22 @@ public:
 		EFFECTTYPE_MAX
 	}EFFECTTYPE;
 
-	CEffect3D();
-	~CEffect3D();
+	CEffect2D();
+	~CEffect2D();
 	HRESULT Init();
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CEffect3D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
-		float fWidth, float fHeight, int nNumMax, int nLife, int TexType);
+	static CEffect2D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
+		float fWidth, float fHeight, int nLife, int TexType);
 
-	void UpdateMoney(void);
-	void UpdateSalt(void);
 	void UpdateUI(void);
 private:
 	//メンバ変数
 	D3DXVECTOR3					m_pos;						// 位置
 	D3DXVECTOR3					m_move;						// 移動量
-	D3DXVECTOR3					m_rot;						// 向き
 	D3DXVECTOR3					m_posold;					// 前回の位置
 	float						m_fWidth, m_fHeight;		// 幅 高さ
-	D3DXMATRIX					m_mtrxWorld;				// ワールドマトリックス
 	D3DXCOLOR					m_Col;						// カラー
 	int							m_nNumMax;					// エフェクトのポリゴン数
 	int							m_nLife;					// エフェクトが消えるまでの時間
