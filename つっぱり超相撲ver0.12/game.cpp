@@ -35,8 +35,6 @@
 #include "effect3D.h"
 #include "winnerUI.h"
 #include "effect2D.h"
-#include "mysteryUI.h"
-
 
 #include "number.h"
 #include "UITime.h"
@@ -106,7 +104,6 @@ void CGame::Init(void)
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
 	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
-	CMysteryUI::Create(D3DXVECTOR3(300, 300, 0));
 
 	int nCntZ;
 	int nCnt;
