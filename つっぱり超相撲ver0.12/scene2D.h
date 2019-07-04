@@ -46,6 +46,7 @@ public:
 	void SetCol(D3DXCOLOR col);
 	LPDIRECT3DVERTEXBUFFER9 GetBuff(void) { return m_pVtxBuff; }
 	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
+	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
@@ -58,6 +59,7 @@ private:
 	float					m_fLength;				// 大きさ
 	float					m_fScale;				// 大きさ変更
 	D3DXCOLOR				m_Col;
+	bool					m_bDraw;
 
 };
 

@@ -11,20 +11,20 @@
 #include "sceneX.h"
 #include "tuppari.h"
 
-//========================================
-// マクロ定義
-//========================================
-#define MOVE_ENEMY			(0.5f)									//エネミー移動量
-#define ENEMY_COLLISION		(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//エネミーの当たり判定
-#define MAX_PARTS		(30)
-#define MAX_MOTION		(30)
-#define MODEL_PARENT	(2)
-
 //*****************************************************************************
 //　前方宣言
 //*****************************************************************************
 class CModel;
 class CBAnimation;
+
+//========================================
+// マクロ定義
+//========================================
+#define MOVE_ENEMY			(0.5f)									//エネミー移動量
+#define MAX_PARTS		(30)
+#define MAX_MOTION		(30)
+#define MODEL_PARENT	(2)
+
 
 //========================================
 // クラスの定義
@@ -125,9 +125,12 @@ public:
 	void Uninit(void);	// エネミー終了処理
 	void Update(void);	// エネミー更新処理
 	void Draw(void);	// エネミー描画処理
-
+	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// オブジェクトの生成
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
+
+	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
+	void SetMove(D3DXVECTOR3 move);							//移動を設定
 
 	bool GetLand(void);				//着地しているかどうか
 	STATE GetState(void);			//現在の状態
@@ -141,11 +144,6 @@ public:
 	bool GetDying(void) { return m_bDying; }				//死んでいるかどうか
 	void SetDying(bool bDying) { m_bDying = bDying; }		//死を設定
 	D3DXVECTOR3 GetPosOld(void) { return m_posOld; }		//過去の位置を取得
-
-	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// オブジェクトの生成
-
-	void CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);						// 当たり判定
-	void SetMove(D3DXVECTOR3 move);							//移動を設定
 	CTuppari GetTuppari(void) { return *m_pTuppari; }		//つっぱりのモデルを取得
 	DOHYO GetDohyo(void) { return m_DohyoState; }			//土俵の状態を取得
 	void SetDohyo(DOHYO dohyostate) { m_DohyoState = dohyostate; }				//土俵端を設定
@@ -164,13 +162,21 @@ public:
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
 	void InitStatus(void);
+	float EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy);
+	void CollisionPlayerAction(void);
+	void TimerUpdate(void);
+	void TsuppariCollision(D3DXVECTOR3 pos);
+	void DohyoHaziWhether(D3DXVECTOR3 pos);
+	void EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy);
+	D3DXVECTOR3 DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
+
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
 	//ファイル読み込み関数
-	void FileLoad(char FileName[256], int nParent);					//ファイル読み込み
-	char *ReadLine(FILE *pFile, char *pDst);	//1行読み込み
-	char *GetLineTop(char *pStr);				//行の先頭を取得
-	int  PopString(char *pStr, char *pDest);	//行の最後を切り捨て
+	void FileLoad(char FileName[256], int nParent);	//ファイル読み込み
+	char *ReadLine(FILE *pFile, char *pDst);		//1行読み込み
+	char *GetLineTop(char *pStr);					//行の先頭を取得
+	int  PopString(char *pStr, char *pDest);		//行の最後を切り捨て
 
 private:
 	static LPD3DXMESH		m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
@@ -181,7 +187,7 @@ private:
 
 	D3DXMATRIX				m_mtxWorld;		// ワールドマトリックス
 
-	D3DXVECTOR3				m_move;			// ポリゴンの位置
+	D3DXVECTOR3				m_move;
 	D3DXVECTOR3				m_posOld;
 	float					m_fDestAngle;	// 目的の角度
 	float					m_fDiffAngle;	// 角度の差分

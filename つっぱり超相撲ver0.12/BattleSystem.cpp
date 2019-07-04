@@ -25,12 +25,14 @@
 // マクロ
 //=============================================================================
 #define YORI_MOVE		(5.0f)
-#define NAGE_MOVE		(45.5f)
+#define NAGE_MOVE		(60.0f)
 #define OSI_MOVE		(20.0f)
 #define COUNTER_MOVE	(20.0f)
 #define TUPARI_MOVE		(10.0f)
 #define KNOCKUP_MOVE	(3.0f)
-#define NAGE_DIVIDED	(4.0f)
+#define GUARD_MOVE		(8.0f)
+
+#define NAGE_DIVIDED	(2.0f)
 #define NAGE_HINSI		(2.0f)
 #define OSI_RECOIL		(1.0f)
 #define TUPPARI_RECOIL	(0.5f)
@@ -561,14 +563,14 @@ void CBattleSys::Operation(void)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
-						pPlayer->SetState(CPlayer::STATE_KUMI);
+					//	pPlayer->SetState(CPlayer::STATE_KUMI);
 					}
 
 					if (m_abPA[1] == true)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
-						pEnemy->SetState(CEnemy::STATE_KUMI);
+					//	pEnemy->SetState(CEnemy::STATE_KUMI);
 					}
 				}
 
@@ -664,7 +666,7 @@ void CBattleSys::Operation(void)
 		}
 
 		//つっぱり
-		else if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && m_bAttack == false)
+		if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && m_bAttack == false)
 		{
 			if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true && pPlayer->GetRecovery() == false ||
 				pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
@@ -696,7 +698,8 @@ void CBattleSys::Operation(void)
 				}
 			}
 		}
-		else if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+
+		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
 		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
@@ -1695,6 +1698,46 @@ void CBattleSys::ResetBattle(void)
 	CGame::SetHit(true);
 
 	CManager::GetGame()->SetbUI(true);
+}
+
+//=============================================================================
+// ガード中に攻撃したときのノックバック処理
+//=============================================================================
+void CBattleSys::GuardKnockBack(int nAttack)
+{
+	// プレイヤーの取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// エネミーの取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
+	if (nAttack == 0)
+	{
+		//向いてる方向 プレイヤー
+		switch (pPlayer->GetDirection())
+		{
+		case CPlayer::DIRECTION_LEFT:
+			pEnemy->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		case CPlayer::DIRECTION_RIGHT:
+			pEnemy->SetMove(D3DXVECTOR3(GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		}
+	}
+	else if (nAttack == 1)
+	{
+		//向いてる方向 エネミー
+		switch (pEnemy->GetDirection())
+		{
+		case CEnemy::DIRECTION_LEFT:
+			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		case CEnemy::DIRECTION_RIGHT:
+			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		}
+	}
 }
 
 //=============================================================================
