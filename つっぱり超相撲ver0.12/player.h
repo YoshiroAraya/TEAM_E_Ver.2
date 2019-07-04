@@ -120,9 +120,6 @@ public:
 		KEY_INFO aKayInfo[MAX_MOTION];
 	}MOTION_INFO;
 
-
-
-
 	CPlayer();	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
