@@ -52,6 +52,7 @@ public:
 	static CShadow *GetShadow(void);
 	static CMeshField *GetMeshField(void);
 	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);	// “–‚½‚è”»’è
+	static CBattleSys *GetBatlteSys(void) { return m_pBatlteSys; };
 	static bool GetHit(void) { return m_bHit; };
 	static void SetHit(bool bHit) { m_bHit = bHit; };
 	bool GetbUI(void) { return m_bUI; };

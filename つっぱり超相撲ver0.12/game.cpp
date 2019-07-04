@@ -36,6 +36,13 @@
 #include "winnerUI.h"
 #include "effect2D.h"
 #include "mysteryUI.h"
+
+
+#include "number.h"
+#include "UITime.h"
+#include "pause.h"
+
+
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -189,6 +196,11 @@ void CGame::Init(void)
 		pCamera->Init();
 	}
 
+	//制限時間
+	CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
+	//ポーズ生成
+	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+
 	m_nTime = 0;
 	m_nWin1P = 0;
 	m_nWin2P = 0;
@@ -244,7 +256,7 @@ void CGame::Update(void)
 	//任意のキー←
 	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
-		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	//	pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
 	}
 	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
 	{

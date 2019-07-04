@@ -53,10 +53,12 @@ public:
 	void Update(void);
 	bool GetPress(int nKey);
 	bool GetTrigger(int nKey);
+	bool GetRelese(int nKey);
 
 private:
 	BYTE m_aKeyState[NUM_KEY_MAX];			// キーボードの入力情報（プレス情報）
 	BYTE m_aKeyStateTrigger[NUM_KEY_MAX];	// キーボードの入力情報（トリガー情報）
+	BYTE m_aKeyStateRelease[NUM_KEY_MAX];			//キーボード入力情報(リリース)
 };
 
 //*****************************************************************************

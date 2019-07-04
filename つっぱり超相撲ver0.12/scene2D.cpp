@@ -30,6 +30,7 @@ CScene2D::CScene2D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_fHeight = 0.0f;
 	m_fRight = 0.0f;
 	m_fLeft = 0.0f;
+	m_bDraw = true;
 }
 
 //=============================================================================
@@ -67,6 +68,7 @@ HRESULT CScene2D::Init(D3DXVECTOR3 pos)
 {
 	// ポリゴンの位置を設定
 	m_Pos = pos;
+	m_bDraw = true;
 
 	// オブジェクトの種類の設定
 	//SetObjType(CScene::OBJTYPE_SCENE2D);
@@ -182,8 +184,10 @@ void CScene2D::Draw(void)
 	// テクスチャの設定
 	pDevice->SetTexture(0, m_pTexture);
 
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	if (m_bDraw == true)
+	{	// ポリゴンの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	}
 }
 
 //=============================================================================

@@ -181,8 +181,10 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="newsBG.cpp" />
     <ClCompile Include="newsCaster.cpp" />
+    <ClCompile Include="number.cpp" />
     <ClCompile Include="numPlayer.cpp" />
     <ClCompile Include="particleX.cpp" />
+    <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
@@ -197,8 +199,10 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="touzai.cpp" />
     <ClCompile Include="tuppari.cpp" />
+    <ClCompile Include="UITime.cpp" />
     <ClCompile Include="ultimate.cpp" />
     <ClCompile Include="wall.cpp" />
+    <ClCompile Include="winnerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
@@ -230,8 +234,10 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="newsBG.h" />
     <ClInclude Include="newsCaster.h" />
+    <ClInclude Include="number.h" />
     <ClInclude Include="numPlayer.h" />
     <ClInclude Include="particleX.h" />
+    <ClInclude Include="pause.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
@@ -246,8 +252,10 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="touzai.h" />
     <ClInclude Include="tuppari.h" />
+    <ClInclude Include="UITime.h" />
     <ClInclude Include="ultimate.h" />
     <ClInclude Include="wall.h" />
+    <ClInclude Include="winnerUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

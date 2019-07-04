@@ -175,6 +175,145 @@ void CCamera::Update(void)
 				CGame::SetState(CGame::STATE_GAME);
 			}
 		}
+		else if (CGame::GetState() == CGame::STATE_GAME)
+		{// ゲーム中
+			if (pPlayer->GetState() == CPlayer::STATE_ULT)
+			{// 必殺を打つ時
+				if (pPlayer->GetDirection() == CPlayer::DIRECTION_RIGHT)
+				{// 右を向いている
+					if (m_posV.x <= pPlayer->GetPosition().x + 85.0f)
+					{
+						m_posV.x += 10.0f;
+
+						if (m_posV.x > pPlayer->GetPosition().x + 85.0f)
+						{
+							m_posV.x = pPlayer->GetPosition().x + 85.0f;
+						}
+					}
+					if (m_posV.y >= pPlayer->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pPlayer->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pPlayer->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pPlayer->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pPlayer->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pPlayer->GetPosition().z - 50.0f;
+						}
+					}
+					//m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
+				}
+				else if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT)
+				{// 左を向いている
+					if (m_posV.x >= pPlayer->GetPosition().x - 85.0f)
+					{
+						m_posV.x -= 10.0f;
+
+						if (m_posV.x < pPlayer->GetPosition().x - 85.0f)
+						{
+							m_posV.x = pPlayer->GetPosition().x - 85.0f;
+						}
+					}
+					if (m_posV.y >= pPlayer->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pPlayer->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pPlayer->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pPlayer->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pPlayer->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pPlayer->GetPosition().z - 50.0f;
+						}
+					}
+
+					//m_posV = D3DXVECTOR3(pPlayer->GetPosition().x - 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
+				}
+			}
+			if (pEnemy->GetState() == CEnemy::STATE_ULT)
+			{
+				if (pEnemy->GetDirection() == CEnemy::DIRECTION_RIGHT)
+				{// 右を向いている
+					if (m_posV.x <= pEnemy->GetPosition().x + 85.0f)
+					{
+						m_posV.x += 10.0f;
+
+						if (m_posV.x > pEnemy->GetPosition().x + 85.0f)
+						{
+							m_posV.x = pEnemy->GetPosition().x + 85.0f;
+						}
+					}
+					if (m_posV.y >= pEnemy->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pEnemy->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pEnemy->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pEnemy->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pEnemy->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pEnemy->GetPosition().z - 50.0f;
+						}
+					}
+					//m_posV = D3DXVECTOR3(pEnemy->GetPosition().x + 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
+				}
+				else if (pEnemy->GetDirection() == CEnemy::DIRECTION_LEFT)
+				{// 左を向いている
+					if (m_posV.x >= pEnemy->GetPosition().x - 85.0f)
+					{
+						m_posV.x -= 10.0f;
+
+						if (m_posV.x < pEnemy->GetPosition().x - 85.0f)
+						{
+							m_posV.x = pEnemy->GetPosition().x - 85.0f;
+						}
+					}
+					if (m_posV.y >= pEnemy->GetPosition().y + 60.0f)
+					{
+						m_posV.y -= 10.0f;
+
+						if (m_posV.y < pEnemy->GetPosition().y + 60.0f)
+						{
+							m_posV.y = pEnemy->GetPosition().y + 60.0f;
+						}
+					}
+					if (m_posV.z <= pEnemy->GetPosition().z - 50.0f)
+					{
+						m_posV.z += 15.0f;
+
+						if (m_posV.z > pEnemy->GetPosition().z - 50.0f)
+						{
+							m_posV.z = pEnemy->GetPosition().z - 50.0f;
+						}
+					}
+
+					//m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
+					m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
+				}
+			}
+		}
 	}
 	else if (mode == CManager::MODE_TITLE)
 	{

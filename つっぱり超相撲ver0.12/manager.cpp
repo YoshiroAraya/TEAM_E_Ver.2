@@ -30,6 +30,7 @@
 #include "result.h"
 #include "ultimate.h"
 #include "load.h"
+#include "pause.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -46,7 +47,7 @@ CUltimate *CManager::m_pUltimate = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
-CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
+CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
 //=============================================================================
@@ -366,21 +367,27 @@ void CManager::Update(void)
 	//	m_fData += 80.0f;
 	//}
 
+	bool bPause = CPause::GetPauseBool();
+
 
 	if (m_pRenderer != NULL)
 	{// レンダラー更新処理
 		m_pRenderer->Update();
 	}
 
-	if (m_pCamera != NULL)
-	{// カメラ更新処理
-		m_pCamera->Update();
+	if (bPause == false)
+	{
+		if (m_pCamera != NULL)
+		{// カメラ更新処理
+			m_pCamera->Update();
+		}
+
+		if (m_pLight != NULL)
+		{// ライト更新処理
+			m_pLight->Update();
+		}
 	}
 
-	if (m_pLight != NULL)
-	{// カメラ更新処理
-		m_pLight->Update();
-	}
 
 	if (m_pInputKeyboard != NULL)
 	{// キーボード入力更新処理
@@ -396,8 +403,6 @@ void CManager::Update(void)
 	{// フェード更新処理
 		m_pMask->Update();
 	}
-
-
 
 	if (m_pFade != NULL)
 	{//フェードの更新処理
@@ -426,7 +431,10 @@ void CManager::Update(void)
 	case CManager::MODE_GAME:
 		if (m_pGame != NULL)
 		{
-			m_pGame->Update();
+			if (bPause == false)
+			{
+				m_pGame->Update();
+			}
 		}
 		break;
 

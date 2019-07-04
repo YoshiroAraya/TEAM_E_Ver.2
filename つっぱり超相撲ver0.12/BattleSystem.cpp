@@ -25,12 +25,14 @@
 // ƒ}ƒNƒ
 //=============================================================================
 #define YORI_MOVE		(5.0f)
-#define NAGE_MOVE		(45.5f)
+#define NAGE_MOVE		(60.0f)
 #define OSI_MOVE		(20.0f)
 #define COUNTER_MOVE	(20.0f)
 #define TUPARI_MOVE		(10.0f)
 #define KNOCKUP_MOVE	(3.0f)
-#define NAGE_DIVIDED	(4.0f)
+#define GUARD_MOVE		(8.0f)
+
+#define NAGE_DIVIDED	(2.0f)
 #define NAGE_HINSI		(2.0f)
 #define OSI_RECOIL		(1.0f)
 #define TUPPARI_RECOIL	(0.5f)
@@ -561,14 +563,14 @@ void CBattleSys::Operation(void)
 					{
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
-						pPlayer->SetState(CPlayer::STATE_KUMI);
+					//	pPlayer->SetState(CPlayer::STATE_KUMI);
 					}
 
 					if (m_abPA[1] == true)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
-						pEnemy->SetState(CEnemy::STATE_KUMI);
+					//	pEnemy->SetState(CEnemy::STATE_KUMI);
 					}
 				}
 
@@ -664,9 +666,7 @@ void CBattleSys::Operation(void)
 		}
 
 		//‚Â‚Á‚Ï‚è
-		else if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL
-			&& pEnemy->GetState() == CEnemy::STATE_NEUTRAL
-			&& m_bAttack == false)
+		if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && m_bAttack == false)
 		{
 			if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true && pPlayer->GetRecovery() == false ||
 				pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
@@ -697,6 +697,10 @@ void CBattleSys::Operation(void)
 					break;
 				}
 			}
+		}
+
+		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
 			{
@@ -727,7 +731,6 @@ void CBattleSys::Operation(void)
 				}
 			}
 		}
-
 
 		//ƒ_ƒ[ƒW‚È‚ç‚Á”ò‚Ô ƒvƒŒƒCƒ„[‚Ì‚Â‚Á‚Ï‚è
 		if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
@@ -1144,8 +1147,8 @@ void CBattleSys::PushJudge(void)
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
 	// ƒQ[ƒW‚ÌŽæ“¾
-	CSansoGauge *pGauge;
-	pGauge = CGame::GetSansoGauge();
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	float fPushCntP1 = 0, fPushCntP2 = 0;
 
@@ -1173,13 +1176,13 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
+					pSansoGauge->SetSansoGaugeRightLeft(SANSO_KUMI, 0);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
+				pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, 0);
 			}
 
 			if (pEnemy->GetRecovery() == false)
@@ -1199,20 +1202,20 @@ void CBattleSys::PushJudge(void)
 				else
 				{
 					//Ž_‘f‰ñ•œ
-					pGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
+					pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_KUMI);
 				}
 			}
 			else
 			{
 				//Ž_‘f‰ñ•œ
-				pGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
+				pSansoGauge->SetSansoGaugeRightLeft(0, SANSO_NEUTRAL);
 			}
 
 			m_nFlamePush++;
 			//Ž_‘fÁ”ï
 			fPushCntP1 *= SANSO_SIKAKE;
 			fPushCntP2 *= SANSO_SIKAKE;
-			pGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
+			pSansoGauge->SetSansoGaugeRightLeft(-fPushCntP1, -fPushCntP2);
 		}
 		else
 		{
@@ -1220,7 +1223,7 @@ void CBattleSys::PushJudge(void)
 			m_nCntPushP1 = 0;
 			m_nCntPushP2 = 0;
 			//Ž_‘f‰ñ•œ
-			pGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
+			pSansoGauge->SetSansoGaugeRightLeft(SANSO_NEUTRAL, SANSO_NEUTRAL);
 		}
 	}
 
@@ -1695,6 +1698,46 @@ void CBattleSys::ResetBattle(void)
 	CGame::SetHit(true);
 
 	CManager::GetGame()->SetbUI(true);
+}
+
+//=============================================================================
+// ƒK[ƒh’†‚ÉUŒ‚‚µ‚½‚Æ‚«‚ÌƒmƒbƒNƒoƒbƒNˆ—
+//=============================================================================
+void CBattleSys::GuardKnockBack(int nAttack)
+{
+	// ƒvƒŒƒCƒ„[‚ÌŽæ“¾
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// ƒGƒlƒ~[‚ÌŽæ“¾
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
+	if (nAttack == 0)
+	{
+		//Œü‚¢‚Ä‚é•ûŒü ƒvƒŒƒCƒ„[
+		switch (pPlayer->GetDirection())
+		{
+		case CPlayer::DIRECTION_LEFT:
+			pEnemy->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		case CPlayer::DIRECTION_RIGHT:
+			pEnemy->SetMove(D3DXVECTOR3(GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		}
+	}
+	else if (nAttack == 1)
+	{
+		//Œü‚¢‚Ä‚é•ûŒü ƒGƒlƒ~[
+		switch (pEnemy->GetDirection())
+		{
+		case CEnemy::DIRECTION_LEFT:
+			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		case CEnemy::DIRECTION_RIGHT:
+			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			break;
+		}
+	}
 }
 
 //=============================================================================

@@ -48,6 +48,7 @@ public:
 		OBJTYPE_WALL,
 		OBJTYPE_FIELD,
 		OBJTYPE_PARTICLE,
+		OBJTYPE_PAUSE,
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 
@@ -70,6 +71,7 @@ public:
 	OBJTYPE GetObjType(void);									// オブジェクトの種類の取得
 	void SetObjType(OBJTYPE objType);							// オブジェクトの種類の設定
 	int GetPriority(void);
+	static void SetbPause(bool bPause) { m_bPause = bPause; };
 
 protected:
 	void Release(void);											// 死亡フラグを立てる
@@ -87,6 +89,8 @@ private:
 	int m_nPriority;											// 優先順位の番号
 	static int m_nNumPriority[NUM_PRIORITY];					// その優先順位にあるオブジェクトの数
 	OBJTYPE m_objType;											// オブジェクトの種類
+	static bool	m_bPause;										// ポーズ
+
 };
 
 #endif

@@ -7,6 +7,10 @@
 #include "scene.h"
 #include "scene2D.h"
 #include "debugProc.h"
+#include "input.h"
+#include "manager.h"
+#include "fade.h"
+#include "pause.h"
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -15,6 +19,7 @@ int CScene::m_nNumAll = 0;
 int CScene::m_nNumPriority[NUM_PRIORITY] = {};
 CScene *CScene::m_apTop[NUM_PRIORITY] = {};
 CScene *CScene::m_apCur[NUM_PRIORITY] = {};
+bool    CScene::m_bPause = false;
 
 //=============================================================================
 // シーンクラスのコンストラクタ
@@ -26,7 +31,8 @@ CScene::CScene(int nPriority, OBJTYPE objType)
 	m_pPrev = NULL;
 	m_pNext = NULL;
 	m_bDeath = false;
-	
+	m_bPause = false;
+
 	if (m_apCur[nPriority] == NULL)
 	{// カレントがNULLなら現在の位置が先頭
 		m_apTop[nPriority] = this;
@@ -106,45 +112,105 @@ void CScene::UpdeteAll(void)
 {
 	CScene *pScene = NULL;
 
-	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
-	{// 優先順位の数分繰り返す
-		// 先頭を取得する
-		pScene = m_apTop[nCntPriority];
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
 
-		while (pScene != NULL)
-		{// 空になるまでアップデートする
 
-			// Updateの最中に消える可能性があるから先に記録しておく
-			CScene *pSceneNext = pScene->m_pNext;
-
-			// 更新
-			pScene->Update();
-
-			// 次のシーンに進める
-			pScene = pSceneNext;
-		}
+	//フェードしていないときにポーズできる
+	if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
+		|| pXInput->GetTrigger(XINPUT_GAMEPAD_START,0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
+		|| pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
+	{
+		m_bPause = m_bPause ? false : true;
+		CPause::SetPauseBool(m_bPause);
 	}
 
-	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
-	{// 優先順位の数分繰り返す
-		pScene = m_apTop[nCntPriority];
+	if (m_bPause == false)
+	{
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			// 先頭を取得する
+			pScene = m_apTop[nCntPriority];
 
-		while (pScene != NULL)
-		{
-			// Updateの最中に消える可能性があるから先に記録しておく
-			CScene *pSceneNext = pScene->m_pNext;
+			while (pScene != NULL)
+			{// 空になるまでアップデートする
 
-			if (pScene->m_bDeath == true)
-			{
-				// フラグが立っているオブジェクトを消していく
-				pScene->DeleteAll();
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				// 更新
+				pScene->Update();
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
 			}
+		}
 
-			// 次のシーンに進める
-			pScene = pSceneNext;
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			pScene = m_apTop[nCntPriority];
+
+			while (pScene != NULL)
+			{
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				if (pScene->m_bDeath == true)
+				{
+					// フラグが立っているオブジェクトを消していく
+					pScene->DeleteAll();
+				}
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
 		}
 	}
+	else
+	{
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+		 // 先頭を取得する
+			pScene = m_apTop[nCntPriority];
 
+			while (pScene != NULL)
+			{// 空になるまでアップデートする
+
+			 // Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+				if (pScene->GetObjType() == OBJTYPE_PAUSE)
+				{
+					// 更新
+					pScene->Update();
+				}
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			pScene = m_apTop[nCntPriority];
+
+			while (pScene != NULL)
+			{
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				if (pScene->m_bDeath == true)
+				{
+					// フラグが立っているオブジェクトを消していく
+					pScene->DeleteAll();
+				}
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+	}
 //#ifdef _DEBUG
 //	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 //	{// 優先順位の数分繰り返す
