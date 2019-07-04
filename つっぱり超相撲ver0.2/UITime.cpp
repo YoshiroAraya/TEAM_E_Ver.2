@@ -99,6 +99,8 @@ void CUITime::Update(void)
 {
 	//プレイヤーを取得
 	CPlayer *pPlayer = CGame::GetPlayer();
+	CManager *pManager = NULL;
+	CFade *pFade = pManager->GetFade();
 
 	float AlphaCol = 1.0f;
 
@@ -122,34 +124,31 @@ void CUITime::Update(void)
 			SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, AlphaCol));
 		}
 
-#if 0
-		//クリア状態またはスタート前なら時間を止める
-		if (pPlayer->GetPlayerState() != CPlayer::PLAYERSTATE_GAMECLEAR)
+#if 1
+		if (pPlayer->GetState() != CPlayer::STATE_JANKEN
+			&& pPlayer->GetState() != CPlayer::STATE_NOKOTTA)
 		{
-			if (pPlayer->GetPlayerState() != CPlayer::PLAYERSTATE_NEUTRAL)
-			{
-				if (m_nTime > 0)
-				{	//カウント加算
-					m_nTimerCnt++;
-					if (m_nTimerCnt >= 60)
-					{	//カウント初期化
-						m_nTimerCnt = 0;
-						//実際の値を引く
-						m_nTime -= 1;
-						//更新するだけ
-						AddTime(0);
-					}
+			if (m_nTime > 0)
+			{	//カウント加算
+				m_nTimerCnt++;
+				if (m_nTimerCnt >= 60)
+				{	//カウント初期化
+					m_nTimerCnt = 0;
+					//実際の値を引く
+					m_nTime -= 1;
+					//更新するだけ
+					AddTime(0);
 				}
-				else if (m_nTime <= 0)
+			}
+			else if (m_nTime <= 0)
+			{
+				//制限時間を0に
+				m_nTime = 0;
+				//フェードまでのカウント
+				m_nFadeCnt++;
+				if (m_nFadeCnt >= 120)
 				{
-					//制限時間を0に
-					m_nTime = 0;
-					//フェードまでのカウント
-					m_nFadeCnt++;
-					if (m_nFadeCnt >= 120)
-					{
-						CFade::SetFade(CManager::MODE_RESULT);
-					}
+					CFade::SetFade(CManager::MODE_RESULT, pFade->FADE_OUT);
 				}
 			}
 		}

@@ -464,35 +464,42 @@ void CEnemy::Update(void)
 	{
 		CDebugProc::Print("c", " 土俵端　ON ");
 	}
-
-	if (pInputKeyboard->GetTrigger(DIK_Q) == true)
+	if (m_bDying == true)
 	{
-		m_nMotionType[0]--;
-		m_nMotionType[1]--;
-		m_nKey[0] = 0;
-		m_nKey[1] = 0;
-		m_nCountFlame[0] = 0;
-		m_nCountFlame[1] = 0;
+		CDebugProc::Print("c", "エネミー 瀕死 ");
 	}
-	if (pInputKeyboard->GetTrigger(DIK_E) == true)
+	else
 	{
-		m_nMotionType[0]++;
-		m_nMotionType[1]++;
-		m_nKey[0] = 0;
-		m_nKey[1] = 0;
-		m_nCountFlame[0] = 0;
-		m_nCountFlame[1] = 0;
+		CDebugProc::Print("c", "エネミー 生存 ");
 	}
+	//if (pInputKeyboard->GetTrigger(DIK_Q) == true)
+	//{
+	//	m_nMotionType[0]--;
+	//	m_nMotionType[1]--;
+	//	m_nKey[0] = 0;
+	//	m_nKey[1] = 0;
+	//	m_nCountFlame[0] = 0;
+	//	m_nCountFlame[1] = 0;
+	//}
+	//if (pInputKeyboard->GetTrigger(DIK_E) == true)
+	//{
+	//	m_nMotionType[0]++;
+	//	m_nMotionType[1]++;
+	//	m_nKey[0] = 0;
+	//	m_nKey[1] = 0;
+	//	m_nCountFlame[0] = 0;
+	//	m_nCountFlame[1] = 0;
+	//}
 	if (pInputKeyboard->GetTrigger(DIK_1) == true)
 	{
 		//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
 		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
 	}
 
-	CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
-	CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
-	CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
-	CDebugProc::Print("cn", " フレーム数1 : ", m_nCountFlame[1]);
+	//CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
+	//CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
+	//CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
+	//CDebugProc::Print("cn", " フレーム数1 : ", m_nCountFlame[1]);
 #endif
 }
 

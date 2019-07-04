@@ -59,6 +59,7 @@ CMeshField *CGame::m_pMeshField = NULL;
 CBattleSys *CGame::m_pBatlteSys = NULL;
 CGauge *CGame::m_pGauge = NULL;
 CSansoGauge *CGame::m_pSansoGauge = NULL;
+CUITime *CGame::m_pUITime = NULL;
 
 bool CGame::m_bHit = false;
 CGame::STATE CGame::m_State = CGame::STATE_START;
@@ -101,9 +102,9 @@ void CGame::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 580, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
-	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
+	CWinnerUI::Create(D3DXVECTOR3(300, 130, 0));
 
 	int nCntZ;
 	int nCnt;
@@ -194,7 +195,7 @@ void CGame::Init(void)
 	}
 
 	//§ŒÀŽžŠÔ
-	CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
+	m_pUITime = CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
 	//ƒ|[ƒY¶¬
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
 
@@ -270,6 +271,11 @@ void CGame::Update(void)
 	{
 		m_pBatlteSys->Update();
 	}
+
+	//if (m_pUITime != NULL)
+	//{
+	//	m_pUITime->Update();
+	//}
 
 	if (m_State == STATE_GAME)
 	{

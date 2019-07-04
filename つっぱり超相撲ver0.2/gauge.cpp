@@ -125,20 +125,20 @@ void CGauge::Update(void)
 #if 1
 	if (pInputKeyboard->GetPress(DIK_1) == true)
 	{
-		m_fRight -= 10.0f;
+		m_fLeft += 10.0f;
 	}
 	if (pInputKeyboard->GetPress(DIK_2) == true)
 	{
-		m_fRight += 10.0f;
+		m_fLeft -= 10.0f;
 	}
 
 	if (pInputKeyboard->GetPress(DIK_3) == true)
 	{
-		m_fLeft += 10.0f;
+		m_fRight -= 10.0f;
 	}
 	if (pInputKeyboard->GetPress(DIK_4) == true)
 	{
-		m_fLeft -= 10.0f;
+		m_fRight += 10.0f;
 	}
 
 	if (m_fLeft > 0 )
@@ -176,11 +176,12 @@ void CGauge::Update(void)
 	}
 
 	//ゲージの左右を調整
-	m_pScene2D[0]->SetRIghtLeft(m_fRight, 0.0f);
-	m_pScene2D[1]->SetRIghtLeft(0.0f, m_fLeft);
+	m_pScene2D[0]->SetRIghtLeft(0.0f, m_fLeft);
+	m_pScene2D[1]->SetRIghtLeft(m_fRight, 0.0f);
 
 #endif
-	CDebugProc::Print("cf", "m_fRight    : ", m_fRight);
+	//CDebugProc::Print("cf", "m_fRight    : ", m_fRight);
+	//CDebugProc::Print("cf", "m_fLeft    : ", m_fLeft);
 #endif
 }
 
@@ -232,17 +233,16 @@ void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 	}
 	else if (m_fLeft > -590)
 	{
-		pEnemy->SetDying(false);
+		pPlayer->SetDying(false);
 	}
 	else if (m_fLeft <= -590)
 	{
-		pEnemy->SetDying(true);
+		pPlayer->SetDying(true);
 	}
 	else if (m_fLeft < -600)
 	{
 		m_fLeft = -600;
 	}
-
 
 	if (m_fRight > 0)
 	{
@@ -250,11 +250,11 @@ void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 	}
 	else if (m_fRight > -590)
 	{
-		pPlayer->SetDying(false);
+		pEnemy->SetDying(false);
 	}
 	else if (m_fRight <= -590)
 	{
-		pPlayer->SetDying(true);
+		pEnemy->SetDying(true);
 	}
 	else if (m_fRight < -600)
 	{
@@ -262,6 +262,6 @@ void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 	}
 
 	//ゲージの左右を調整
-	m_pScene2D[0]->SetRIghtLeft(m_fRight, 0.0f);
-	m_pScene2D[1]->SetRIghtLeft(0.0f, m_fLeft);
+	m_pScene2D[0]->SetRIghtLeft(0.0f, m_fLeft);
+	m_pScene2D[1]->SetRIghtLeft(m_fRight, 0.0f);
 }

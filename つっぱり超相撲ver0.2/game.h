@@ -18,7 +18,7 @@ class CShadow;
 class CBattleSys;
 class CGauge;
 class CSansoGauge;
-
+class CUITime;
 //クラス（シーン2Dの派生クラス）
 class CGame
 {
@@ -72,6 +72,8 @@ private:
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
 	static CShadow *m_pShadow;
+	static CUITime *m_pUITime;
+
 	static CMeshField *m_pMeshField;
 	static CBattleSys *m_pBatlteSys;
 	static bool m_bHit;
@@ -79,6 +81,7 @@ private:
 	static CSansoGauge *m_pSansoGauge;
 	static STATE m_State;
 	static WINNER m_Winner;
+
 	bool m_bUI;				//
 	int m_n1P;				//選んだモデルNo
 	int m_n2P;				//選んだモデルNo

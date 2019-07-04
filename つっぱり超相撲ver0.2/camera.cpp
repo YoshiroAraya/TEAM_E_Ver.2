@@ -19,8 +19,20 @@
 //*****************************************************************************
 #define CAMERA_SPEED	(2.0f)
 
-#define HIGASI_TIME	(5)
-#define NISI_TIME	(10)
+#define HIGASI_TIME		(5)
+#define NISI_TIME		(10)
+
+#define GAME_CAMERA_X	(0.0f)
+#define GAME_CAMERA_Y	(180.0f)
+#define GAME_CAMERA_Z	(-280.0f)
+#define GAME_RCAMERA_X	(0.0f)
+#define GAME_RCAMERA_Y	(70.0f)
+#define GAME_RCAMERA_Z	(50.0f)
+
+
+#define START_CAMERA_X	(90.0f)
+#define START_CAMERA_Y	(80.0f)
+#define START_CAMERA_Z	(90.0f)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -52,7 +64,7 @@ CCamera::~CCamera()
 //=============================================================================
 void CCamera::Init(void)
 {
-	m_posV = D3DXVECTOR3(0.0f, 200.0f, -280.0f);	// 視点
+	m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);	// 視点
 	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 注視点
 	m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -65,7 +77,7 @@ void CCamera::Init(void)
 
 	if (mode == CManager::MODE_RESULT)
 	{
-		m_posV = D3DXVECTOR3(0.0f, 100.0f, -200.0f);	// 視点
+		m_posV = D3DXVECTOR3(0.0f, 100.0f, -GAME_CAMERA_Y);	// 視点
 		m_posR = D3DXVECTOR3(0.0f, 80.0f, 0.0f);		// 注視点
 		m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	}
@@ -109,43 +121,43 @@ void CCamera::Update(void)
 			{// 東側の入場
 				m_State = STATE_HIGASHI;
 
-				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+				m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + START_CAMERA_X, pPlayer->GetPosition().y + START_CAMERA_Y, pPlayer->GetPosition().z - START_CAMERA_Z);	// 視点
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= HIGASI_TIME && nTime < NISI_TIME && pEnemy != NULL)
 			{// 西側の入場
 				m_State = STATE_NISHI;
 
-				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
+				m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - START_CAMERA_X, pEnemy->GetPosition().y + START_CAMERA_Y, pEnemy->GetPosition().z - START_CAMERA_Z);	// 視点
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 			}
 			else if (nTime >= NISI_TIME)
 			{// カメラの引き
 				m_State = STATE_NORMAL;
 				m_posV.x = 0.0f;
-				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
+				m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
 
-				if (m_posV.y <= 200.0f)
+				if (m_posV.y <= GAME_CAMERA_Y)
 				{// y軸移動
 					m_posV.y += 2.6f;
 
-					if (m_posV.y > 200.0f)
+					if (m_posV.y > GAME_CAMERA_Y)
 					{
-						m_posV.y = 200.0f;
+						m_posV.y = GAME_CAMERA_Y;
 					}
 				}
 
-				if (m_posV.z >= -280.0f)
+				if (m_posV.z >= GAME_CAMERA_Z)
 				{
 					m_posV.z -= 4.0f;
 
-					if (m_posV.z < -280.0f)
+					if (m_posV.z < GAME_CAMERA_Z)
 					{
-						m_posV.z = -280.0f;
+						m_posV.z = GAME_CAMERA_Z;
 					}
 				}
 
-				if (m_posV.y == 200.0f && m_posV.z == -280.0f)
+				if (m_posV.y == GAME_CAMERA_Y && m_posV.z == GAME_CAMERA_Z)
 				{
 					CGame::SetState(CGame::STATE_GAME);
 				}
@@ -154,8 +166,8 @@ void CCamera::Update(void)
 			if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
 			{
 				m_State = STATE_NORMAL;
-				m_posV = D3DXVECTOR3(0.0f, 200.0f, -280.0f);
-				m_posR = D3DXVECTOR3(0.0f, 0.0f, 50.0f);
+				m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);
+				m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
 
 				if (pPlayer != NULL && pEnemy != NULL)
 				{
@@ -492,8 +504,8 @@ void CCamera::Update(void)
 #endif
 
 #ifdef _DEBUG
-	CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
-	CDebugProc::Print("cfccfccfc", "posR     : x", m_posR.x, "f", "   y", m_posR.y, "f", " z", m_posR.z, "f");
+//	CDebugProc::Print("cfccfccfc", "posV     : x", m_posV.x, "f", "   y", m_posV.y, "f", " z", m_posV.z, "f");
+//	CDebugProc::Print("cfccfccfc", "posR     : x", m_posR.x, "f", "   y", m_posR.y, "f", " z", m_posR.z, "f");
 #endif
 }
 

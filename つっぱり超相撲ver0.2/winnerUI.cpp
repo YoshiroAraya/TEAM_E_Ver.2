@@ -21,6 +21,16 @@
 //--------------------------------------------
 
 
+//--------------------------------------------
+//マクロ
+//--------------------------------------------
+#define UI_WIDTH		(40.0f)
+#define UI_HEIGHT		(40.0f)
+#define UI_SPACE		(60.0f)
+
+#define PLAYER_UI_POS_X	(482.0f)
+#define ENEMY_UI_POS_X	(798.0f)
+
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -31,7 +41,6 @@ CWinnerUI::CWinnerUI() : CScene2D(7, CScene::OBJTYPE_SCENE2D)
 	m_n1player = 0;
 	m_n2player = 0;
 	m_bWinner = false;
-
 }
 
 //=============================================================================
@@ -87,18 +96,18 @@ HRESULT CWinnerUI::Init(D3DXVECTOR3 pos)
 	//1p側
 	for (int nCnt1 = 0; nCnt1 < 3; nCnt1++)
 	{
-		m_pScene2D[nCnt1] = CScene2D::Create(D3DXVECTOR3(400.0f - (nCnt1 * 100.0f), pos.y, 0.0f));
+		m_pScene2D[nCnt1] = CScene2D::Create(D3DXVECTOR3(PLAYER_UI_POS_X - (nCnt1 * UI_SPACE), pos.y, 0.0f));
 		m_pScene2D[nCnt1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_UI));
-		m_pScene2D[nCnt1]->SetWidthHeight(50.0f, 50.0f);
+		m_pScene2D[nCnt1]->SetWidthHeight(UI_WIDTH, UI_HEIGHT);
 		m_pScene2D[nCnt1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 	//2p側
 	for (int nCnt2 = 0; nCnt2 < 3; nCnt2++)
 	{
-		m_pScene2D[nCnt2 + 3] = CScene2D::Create(D3DXVECTOR3(850.0f + (nCnt2 * 100.0f), pos.y, 0.0f));
+		m_pScene2D[nCnt2 + 3] = CScene2D::Create(D3DXVECTOR3(ENEMY_UI_POS_X + (nCnt2 * UI_SPACE), pos.y, 0.0f));
 		m_pScene2D[nCnt2 + 3]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_UI));
-		m_pScene2D[nCnt2 + 3]->SetWidthHeight(50.0f, 50.0f);
+		m_pScene2D[nCnt2 + 3]->SetWidthHeight(UI_WIDTH, UI_HEIGHT);
 		m_pScene2D[nCnt2 + 3]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
@@ -139,15 +148,15 @@ void CWinnerUI::Update(void)
 
 		if (m_n1player == 1)
 		{
-			m_pScene2D[0]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 		}
 		else if (m_n1player == 2)
 		{
-			m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			m_pScene2D[1]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 		}
 		else if (m_n1player == 3)
 		{
-			m_pScene2D[2]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			m_pScene2D[2]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 		}
 	}
 

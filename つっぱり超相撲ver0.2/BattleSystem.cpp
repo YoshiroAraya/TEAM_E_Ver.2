@@ -392,7 +392,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f );
 					}
 
 				}
@@ -416,7 +416,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[1] = false;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE );
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_GU_BUTI)
@@ -428,7 +428,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						CGame::SetHit(false);
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
 
 					}
 
@@ -495,7 +495,7 @@ void CBattleSys::Operation(void)
 						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 						m_aCHOKICounter[0] = 0;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
 					}
 
 					if (m_abPA[1] == true)
@@ -512,7 +512,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetMove(D3DXVECTOR3(JANKEN_KAWASI_MOVE, 10.0f, 0.0f));
 						m_abPA[0] = false;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
+						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
 					}
 
 					m_aGUCounter[1]++;
@@ -554,7 +554,7 @@ void CBattleSys::Operation(void)
 						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 						m_aCHOKICounter[1] = 0;
 						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE );
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_PA_KAWASI)
@@ -749,7 +749,7 @@ void CBattleSys::Operation(void)
 			//状態変化
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			//ダメージ
-			pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+			pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 		}
 
 		//ダメージなら吹っ飛ぶ エネミーのつっぱり
@@ -772,7 +772,7 @@ void CBattleSys::Operation(void)
 				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 			}
 			//ダメージ
-			pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+			pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 		}
 
 
@@ -914,11 +914,11 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 	//ダメージ判定
 	if (nPlayer == 0)
 	{
-		pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+		pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
 	}
 	else
 	{
-		pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+		pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 	}
 
 	//攻撃の種類
@@ -1116,11 +1116,11 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		//追加回復
 		if (nPlayer == 0)
 		{
-			pGauge->SetGaugeRightLeft(HEEL, 0);
+			pGauge->SetGaugeRightLeft(0, HEEL);
 		}
 		else
 		{
-			pGauge->SetGaugeRightLeft(0, HEEL);
+			pGauge->SetGaugeRightLeft(HEEL, 0);
 		}
 
 		break;
