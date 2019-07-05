@@ -57,7 +57,6 @@ bool CManager::m_bCharaSelectMode = false;
 CManager::CManager()
 {
 	m_fData = 0.0f;
-	m_bCharaSelectMode = false;
 }
 
 //=============================================================================
@@ -621,6 +620,11 @@ void CManager::SetMode(MODE mode)
 			{
 				// ‰Šú‰»ˆ—
 				m_pTitle->Init();
+
+				if (m_bCharaSelectMode == true)
+				{
+					m_pTitle->SetState(CTitle::STATE_CHARASELECT);
+				}
 			}
 			else
 			{

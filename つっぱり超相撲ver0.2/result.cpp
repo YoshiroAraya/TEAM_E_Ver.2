@@ -108,11 +108,11 @@ void CResult::Update(void)
 	mode = CNumPlayer::GetMode();
 
 	//”CˆÓ‚ÌƒL[
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-	{
-		pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
+	//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	//{
+	////	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 
-	}
+	//}
 
 	m_nCntDrawTimer++;
 	if (m_nCntDrawTimer > 120)

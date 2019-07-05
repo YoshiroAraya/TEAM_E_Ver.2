@@ -93,7 +93,8 @@ void CNewsBG::Update(void)
 	CTitle *pTitle;
 	pTitle = CManager::GetTitle();
 
-	if (pTitle->GetState() == CTitle::STATE_TITLE)
+	if (pTitle->GetState() == CTitle::STATE_TITLE
+		|| pTitle->GetState() == CTitle::STATE_CHARASELECT)
 	{
 		Uninit();
 	}

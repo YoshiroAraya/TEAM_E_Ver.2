@@ -126,7 +126,8 @@ void CNewsCaster::Update(void)
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
 
-	if (pTitle->GetState() == CTitle::STATE_TITLE)
+	if (pTitle->GetState() == CTitle::STATE_TITLE
+		|| pTitle->GetState() == CTitle::STATE_CHARASELECT)
 	{
 		Uninit();
 	}

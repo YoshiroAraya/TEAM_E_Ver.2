@@ -211,12 +211,13 @@ void CModeSelect::Update(void)
 				break;
 			case SELECTMODE_RETRY:
 				m_bModeSelect = false;
-				CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
 				pManager->SetCharaSelectMode(true);
+				CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
 				//SetbModeSelect(m_bModeSelect);
 				break;
 			case SELECTMODE_QUIT:
 				m_bModeSelect = false;
+				pManager->SetCharaSelectMode(false);
 				CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
 				//SetbModeSelect(m_bModeSelect);
 				break;

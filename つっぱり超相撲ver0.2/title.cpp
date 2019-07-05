@@ -138,6 +138,33 @@ void CTitle::Update(void)
 	}
 	else if (m_state == CTitle::STATE_CHARASELECT)
 	{// キャラクター選択
+
+		if (m_bSetDohyo == true)
+		{
+			// タイトルで使うオブジェクトを設置
+			CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
+			CField::Create(D3DXVECTOR3(0, -10.0f, 0), 700.0f);
+			CWall::Create(D3DXVECTOR3(0, 200.0f, 500), D3DXVECTOR3(300.0f, 0.0f, 0.0f), 200.0f, 700.0f);
+			CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);
+			CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
+			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
+			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0.0f), SCREEN_WIDTH / 2, 300.0f, CLoad::TEXTURE_TITLE);
+			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
+			if (m_pPlayer == NULL)
+			{
+				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+			}
+			if (m_pEnemy == NULL)
+			{
+				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+			}
+
+			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
+			m_bSetDohyo = false;
+		}
+
+
 		if (m_state == STATE_CHARASELECT && m_bTurnRight == false && m_bTurnLeft == false)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
