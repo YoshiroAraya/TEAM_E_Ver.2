@@ -22,6 +22,8 @@
 #include "player.h"
 #include "enemy.h"
 #include "camera.h"
+#include "modeSelect.h"
+
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -39,6 +41,8 @@ CResult::CResult()
 {
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
+	m_nCntDrawTimer = 0;
+	m_bDrawSelect = false;
 }
 
 //=============================================================================
@@ -58,6 +62,7 @@ void CResult::Init(void)
 	m_bTurn = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
+	m_bDrawSelect = false;
 	CDohyo::LoadMat();
 
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -108,6 +113,17 @@ void CResult::Update(void)
 		pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 
 	}
+
+	m_nCntDrawTimer++;
+	if (m_nCntDrawTimer > 120)
+	{
+		if (m_bDrawSelect == false)
+		{
+			CModeSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+			m_bDrawSelect = true;
+		}
+	}
+
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");

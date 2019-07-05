@@ -54,6 +54,10 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/pause001.png",				//20 読み込むテクスチャファイル名
 	"data/TEXTURE/UI/pause002.png",				//21 読み込むテクスチャファイル名
 	"data/TEXTURE/UI/soda000.jpg",				//22
+	"data/TEXTURE/UI/pause000.png",				//23 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause001.png",				//24 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause002.png",				//25 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/soda000.jpg",				//26
 };
 
 //=============================================================================

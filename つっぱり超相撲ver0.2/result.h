@@ -34,6 +34,8 @@ private:
 	bool m_bTurn;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
 	int m_nCntReturn;
+	int m_nCntDrawTimer;	//•\Ž¦‚·‚é‚Ü‚Å‚ÌŽžŠÔ
+	bool m_bDrawSelect;
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
 	int m_nWinner;

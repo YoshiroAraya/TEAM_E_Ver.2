@@ -104,7 +104,7 @@ public:
 	static CUltimate *GetUltimate(void) { return m_pUltimate; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
 	static CSound *GetSound(int nNum);
-
+	static void SetCharaSelectMode(bool bCharaSelect) { m_bCharaSelectMode = bCharaSelect; };
 private:
 	static CRenderer *m_pRenderer;
 	static CInputKeyboard *m_pInputKeyboard;
@@ -119,6 +119,7 @@ private:
 	static CTitle *m_pTitle;
 	static CResult *m_pResult;
 	static CUltimate *m_pUltimate;
+	static bool m_bCharaSelectMode;
 
 	static CXInputJoyPad *m_pXInput;
 	float m_fData;

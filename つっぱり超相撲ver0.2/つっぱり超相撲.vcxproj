@@ -180,6 +180,7 @@
     <ClCompile Include="mask.cpp" />
     <ClCompile Include="meshField.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="modeSelect.cpp" />
     <ClCompile Include="newsBG.cpp" />
     <ClCompile Include="newsCaster.cpp" />
     <ClCompile Include="number.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="mask.h" />
     <ClInclude Include="meshField.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="modeSelect.h" />
     <ClInclude Include="newsBG.h" />
     <ClInclude Include="newsCaster.h" />
     <ClInclude Include="number.h" />

@@ -49,6 +49,7 @@ CCharacterMove *CManager::m_pCharacterMove = NULL;
 CXInputJoyPad *CManager::m_pXInput = NULL;
 CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
+bool CManager::m_bCharaSelectMode = false;
 
 //=============================================================================
 // マネージャクラスのコンストラクタ
@@ -56,6 +57,7 @@ CSound	*CManager::m_pSound[MAX_SOUND] = {};
 CManager::CManager()
 {
 	m_fData = 0.0f;
+	m_bCharaSelectMode = false;
 }
 
 //=============================================================================
@@ -71,6 +73,7 @@ CManager::~CManager()
 HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 {
 	m_fData = 0.0f;
+	m_bCharaSelectMode = false;
 
 	if (m_pRenderer == NULL)
 	{
