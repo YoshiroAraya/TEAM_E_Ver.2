@@ -141,21 +141,14 @@ void CGauge::Update(void)
 		m_fRight += 10.0f;
 	}
 
-	if (m_fLeft > 0 )
+	//ゲージの最大と最小
+	if (m_fLeft > 0)
 	{
 		m_fLeft = 0;
 	}
 	else if (m_fLeft < -600)
 	{
 		m_fLeft = -600;
-	}
-	if (m_fLeft < -480)
-	{
-		m_bUlt[1] = true;
-	}
-	else if (m_fLeft >= -480)
-	{
-		m_bUlt[1] = false;
 	}
 
 	if (m_fRight > 0)
@@ -165,14 +158,6 @@ void CGauge::Update(void)
 	else if (m_fRight < -600)
 	{
 		m_fRight = -600;
-	}
-	if (m_fRight < -480)
-	{
-		m_bUlt[0] = true;
-	}
-	else if (m_fRight >= -480)
-	{
-		m_bUlt[0] = false;
 	}
 
 	//ゲージの左右を調整

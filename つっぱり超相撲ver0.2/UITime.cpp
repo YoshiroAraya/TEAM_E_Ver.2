@@ -108,19 +108,7 @@ void CUITime::Update(void)
 	{
 		//10秒以下
 		if (m_nTime <= 10)
-		{	//5秒以下
-			if (m_nTime <= 5)
-			{
-				m_nColorFlash++;
-				if (m_nColorFlash <= 8)
-				{
-					AlphaCol = 0.0f;
-				}
-				if (m_nColorFlash >= 16)
-				{
-					m_nColorFlash = 0;
-				}
-			}
+		{
 			SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, AlphaCol));
 		}
 
@@ -146,9 +134,9 @@ void CUITime::Update(void)
 				m_nTime = 0;
 				//フェードまでのカウント
 				m_nFadeCnt++;
-				if (m_nFadeCnt >= 120)
+				if (m_nFadeCnt >= 60)
 				{
-					CFade::SetFade(CManager::MODE_RESULT, pFade->FADE_OUT);
+					CManager::GetGame()->TimeOver();
 				}
 			}
 		}
@@ -170,6 +158,8 @@ void CUITime::Draw(void)
 void CUITime::SetTime(int nTime)
 {
 	m_nTime = nTime;
+	SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	AddTime(0);
 }
 
 //=============================================================================

@@ -13,10 +13,10 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
-
+#include "UITime.h"
 #include "gauge.h"
 #include "SansoGauge.h"
-
+#include "UltimateGauge.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -252,6 +252,8 @@ void CBattleSys::Operation(void)
 	// ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();
 
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
@@ -393,6 +395,7 @@ void CBattleSys::Operation(void)
 						CGame::SetHit(false);
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f );
+						pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 					}
 
 				}
@@ -417,6 +420,7 @@ void CBattleSys::Operation(void)
 						m_abPA[1] = false;
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE );
+						pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_CHOKI_TUPPA && m_aJanken[1] == JANKEN_GU_BUTI)
@@ -429,7 +433,7 @@ void CBattleSys::Operation(void)
 						CGame::SetHit(false);
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE);
-
+						pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 					}
 
 					m_aCHOKICounter[0]++;
@@ -496,6 +500,7 @@ void CBattleSys::Operation(void)
 						m_aCHOKICounter[0] = 0;
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+						pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 					}
 
 					if (m_abPA[1] == true)
@@ -513,6 +518,7 @@ void CBattleSys::Operation(void)
 						m_abPA[0] = false;
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+						pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 					}
 
 					m_aGUCounter[1]++;
@@ -555,6 +561,7 @@ void CBattleSys::Operation(void)
 						m_aCHOKICounter[1] = 0;
 						//ライフゲージ消費
 						pGauge->SetGaugeRightLeft(0.0f, -JANKEN_DAMAGE );
+						pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 					}
 				}
 				else if (m_aJanken[0] == JANKEN_PA_KAWASI && m_aJanken[1] == JANKEN_PA_KAWASI)
@@ -750,6 +757,7 @@ void CBattleSys::Operation(void)
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			//ダメージ
 			pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+			pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 		}
 
 		//ダメージなら吹っ飛ぶ エネミーのつっぱり
@@ -773,6 +781,7 @@ void CBattleSys::Operation(void)
 			}
 			//ダメージ
 			pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+			pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 		}
 
 
@@ -898,6 +907,8 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();
 
 	//プレイヤー1の位置を取得
 	D3DXVECTOR3 p1pos;
@@ -915,10 +926,12 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 	if (nPlayer == 0)
 	{
 		pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+		pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 	}
 	else
 	{
 		pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+		pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 	}
 
 	//攻撃の種類
@@ -1669,6 +1682,9 @@ void CBattleSys::ResetBattle(void)
 	// ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
+	// タイムの取得
+	CUITime *pTime;
+	pTime = CGame::GetTime();
 
 	pPlayer->InitStatus();
 	pEnemy->InitStatus();
@@ -1696,8 +1712,8 @@ void CBattleSys::ResetBattle(void)
 	pGauge->SetGaugeRightLeft(600, 600);
 	CGame::SetWinner(CGame::WINNER_NONE);
 	CGame::SetHit(true);
-
 	CManager::GetGame()->SetbUI(true);
+	pTime->SetTime(60);
 }
 
 //=============================================================================

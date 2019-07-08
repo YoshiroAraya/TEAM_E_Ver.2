@@ -24,6 +24,7 @@
 #include "particleX.h"
 #include "gauge.h"
 #include "SansoGauge.h"
+#include "UltimateGauge.h"
 #include "BattleSystem.h"
 
 //=============================================================================
@@ -40,7 +41,7 @@
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 
 #define DOHYO_COLLISION			(20.0f)
-#define GUARD_NOW_SANSO			(-2.0f)
+#define GUARD_NOW_SANSO			(-2.5f)
 #define GUARD_SANSO				(-20.0f)
 
 //=============================================================================
@@ -244,9 +245,6 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
-	//オーラ
-		//CBAnimation::Create(D3DXVECTOR3(pos), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			//50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 	}
 	return S_OK;
 }
@@ -312,9 +310,8 @@ void CEnemy::Update(void)
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
 	//ゲージの取得
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-	//モードの取得
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -350,7 +347,7 @@ void CEnemy::Update(void)
 			//土俵際判定
 			DohyoHaziWhether(pos);
 
-			if (pGauge->GetUlt(1) == true && m_bUltDis == false)
+			if (pULTGauge->GetUlt(0) == true && m_bUltDis == false)
 			{
 				if (m_pAnimation == NULL)
 				{
@@ -359,7 +356,7 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = true;
 			}
-			else if (pGauge->GetUlt(1) == false)
+			else if (pULTGauge->GetUlt(0) == false)
 			{
 				if (m_pAnimation != NULL)
 				{

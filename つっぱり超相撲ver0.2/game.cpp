@@ -25,6 +25,7 @@
 #include <time.h>
 #include "gauge.h"
 #include "SansoGauge.h"
+#include "UltimateGauge.h"
 #include "effect.h"
 #include "jankenUI.h"
 #include "field.h"
@@ -47,7 +48,7 @@
 #define SIZE_X (SCREEN_WIDTH)
 #define SIZE_Y (SCREEN_HEIGHT)
 #define COLISIONSIZE (20.0f)
-
+#define TIME_INI		(60)
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
@@ -58,6 +59,7 @@ CShadow *CGame::m_pShadow = NULL;
 CMeshField *CGame::m_pMeshField = NULL;
 CBattleSys *CGame::m_pBatlteSys = NULL;
 CGauge *CGame::m_pGauge = NULL;
+CUltimateGauge *CGame::m_pUltimateGauge = NULL;
 CSansoGauge *CGame::m_pSansoGauge = NULL;
 CUITime *CGame::m_pUITime = NULL;
 
@@ -103,7 +105,8 @@ void CGame::Init(void)
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
-	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 612, 0));
+	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 200, 0));
+	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
 	CWinnerUI::Create(D3DXVECTOR3(300, 130, 0));
 
 	int nCntZ;
@@ -286,28 +289,29 @@ void CGame::Update(void)
 		}
 	}
 
-	if (m_Winner != WINNER_NONE)
-	{
-		/*if (pFade->GetFade() == CFade::FADE_NONE)
-		{
-			SaveWinner();
-			pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-		}*/
-	}
-
+	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
 		m_nWin1P++;
 		m_Winner = WINNER_NONE;
-		m_pBatlteSys->ResetBattle();
+		if (m_nWin1P != 3)
+		{
+			m_pBatlteSys->ResetBattle();
+			m_pUITime->SetTime(TIME_INI);
+		}
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
 		m_nWin2P++;
 		m_Winner = WINNER_NONE;
-		m_pBatlteSys->ResetBattle();
+		if (m_nWin2P != 3)
+		{
+			m_pBatlteSys->ResetBattle();
+			m_pUITime->SetTime(TIME_INI);
+		}
 	}
 
+	//勝ちの数が3回目
 	if (m_nWin1P == 3 || m_nWin2P == 3)
 	{
 		if (m_nWin1P == 3)
@@ -449,6 +453,26 @@ CMeshField *CGame::GetMeshField(void)
 CGauge *CGame::GetGauge(void)
 {
 	return m_pGauge;
+}
+
+//=============================================================================
+// 時間切れ
+//=============================================================================
+void CGame::TimeOver(void)
+{
+	float Life1P, Life2P;	// 左右の値
+
+	Life1P = m_pGauge->GetGaugeRight();
+	Life2P = m_pGauge->GetGaugeLeft();
+
+	if (Life1P < Life2P)
+	{
+		m_Winner = WINNER_PLAYER1;
+	}
+	else if(Life2P < Life1P)
+	{
+		m_Winner = WINNER_PLAYER2;
+	}
 }
 
 //=============================================================================

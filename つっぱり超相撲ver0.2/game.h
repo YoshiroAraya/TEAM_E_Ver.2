@@ -19,6 +19,7 @@ class CBattleSys;
 class CGauge;
 class CSansoGauge;
 class CUITime;
+class CUltimateGauge;
 //クラス（シーン2Dの派生クラス）
 class CGame
 {
@@ -59,13 +60,16 @@ public:
 	void SetbUI(bool bUI) { m_bUI = bUI; };
 	static CGauge *GetGauge(void);
 	static CSansoGauge *GetSansoGauge(void) { return m_pSansoGauge; };
+	static CUltimateGauge *GetUltimateGauge(void) { return m_pUltimateGauge; };
 	static STATE GetState(void) { return m_State; };
 	static void SetState(STATE state) { m_State = state; };
 	static WINNER GetWinner(void) { return m_Winner; };
 	static void SetWinner(WINNER Winner) { m_Winner = Winner; };
+	static CUITime *GetTime(void) { return m_pUITime; };
 	int Get1P(void) { return m_n1P; };
 	int Get2P(void) { return m_n2P; };
 	void SaveWinner(void);
+	void TimeOver(void);
 
 private:
 	static CScene3D *m_pScene3D;
@@ -78,6 +82,7 @@ private:
 	static CBattleSys *m_pBatlteSys;
 	static bool m_bHit;
 	static CGauge *m_pGauge;
+	static CUltimateGauge *m_pUltimateGauge;
 	static CSansoGauge *m_pSansoGauge;
 	static STATE m_State;
 	static WINNER m_Winner;

@@ -203,6 +203,7 @@
     <ClCompile Include="tuppari.cpp" />
     <ClCompile Include="UITime.cpp" />
     <ClCompile Include="ultimate.cpp" />
+    <ClCompile Include="UltimateGauge.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="winnerUI.cpp" />
   </ItemGroup>
@@ -258,6 +259,7 @@
     <ClInclude Include="tuppari.h" />
     <ClInclude Include="UITime.h" />
     <ClInclude Include="ultimate.h" />
+    <ClInclude Include="UltimateGauge.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="winnerUI.h" />
   </ItemGroup>

@@ -24,6 +24,7 @@
 #include "particleX.h"
 #include "gauge.h"
 #include "SansoGauge.h"
+#include "UltimateGauge.h"
 #include "BattleSystem.h"
 
 //=============================================================================
@@ -40,7 +41,7 @@
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
 #define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
 #define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//‚Â‚Á‚Ï‚è‚Ì“–‚½‚è”»’è
-#define GUARD_NOW_SANSO			(-2.0f)
+#define GUARD_NOW_SANSO			(-2.5f)
 #define GUARD_SANSO				(-20.0f)
 
 //=============================================================================
@@ -312,8 +313,8 @@ void CPlayer::Update(void)
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
 	//ƒQ[ƒW‚ÌŽæ“¾
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();
 	//ƒ‚[ƒh‚ÌŽæ“¾
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -350,7 +351,7 @@ void CPlayer::Update(void)
 			//“y•UÛ”»’è
 			DohyoHaziWhether(pos);
 
-			if (pGauge->GetUlt(0) == true && m_bUltDis == false)
+			if (pULTGauge->GetUlt(1) == true && m_bUltDis == false)
 			{
 				if (m_pAnimation == NULL)
 				{
@@ -359,7 +360,7 @@ void CPlayer::Update(void)
 				}
 				m_bUltDis = true;
 			}
-			else if (pGauge->GetUlt(0) == false)
+			else if (pULTGauge->GetUlt(1) == false)
 			{
 				if (m_pAnimation != NULL)
 				{
@@ -810,7 +811,7 @@ void CPlayer::CollisionEnemyAction(void)
 	}
 	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
 	{
-		//m_State = STATE_NEUTRAL;
+		m_State = STATE_NEUTRAL;
 	}
 }
 
