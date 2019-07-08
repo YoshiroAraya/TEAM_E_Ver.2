@@ -1,10 +1,10 @@
 //=============================================================================
 //
-// エネミー処理 [enemy.cpp]
+// エネミー処理 [CPU.cpp]
 // Author : 目黒 未来也
 //
 //=============================================================================
-#include "enemy.h"
+#include "CPU.h"
 #include "player.h"
 #include "input.h"
 #include "renderer.h"
@@ -30,7 +30,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define ENEMY_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//エネミーの当たり判定
+#define CPU_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))		//エネミーの当たり判定
 #define DOHYO_HAZI_MAX			(175.0f)
 #define DOHYO_HAZI_MIN			(150.0f)
 #define DASH_MOVE				(1.2f)
@@ -47,16 +47,16 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-LPD3DXMESH					CEnemy::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
-LPD3DXBUFFER				CEnemy::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
-LPDIRECT3DTEXTURE9			CEnemy::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
-DWORD						CEnemy::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
-CBAnimation *CEnemy::m_pAnimation = NULL;
+LPD3DXMESH					CCPU::m_pMeshModel[MAX_PARTS][MODEL_PARENT] = {};
+LPD3DXBUFFER				CCPU::m_pBuffMatModel[MAX_PARTS][MODEL_PARENT] = {};
+LPDIRECT3DTEXTURE9			CCPU::m_pTextureModel[MAX_PARTS][MODEL_PARENT] = {};
+DWORD						CCPU::m_nNumMatModel[MAX_PARTS][MODEL_PARENT] = {};
+CBAnimation *CCPU::m_pAnimation = NULL;
 
 //=============================================================================
 // エネミークラスのコンストラクタ
 //=============================================================================
-CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
+CCPU::CCPU() : CSceneX(CPU_PRIORITY)
 {
 	// 値をクリア
 	m_pTexture = NULL;							// テクスチャへのポインタ
@@ -82,10 +82,6 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_fRot = 0.0f;
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
-	//CPU用の変数
-	m_nThinkingTime = 0;
-	m_nActionTime = 0;
-
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -112,37 +108,36 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CEnemy::~CEnemy()
+CCPU::~CCPU()
 {
 }
 
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, MODE mode)
+CCPU *CCPU::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	CEnemy *pEnemy = NULL;
+	CCPU *pCPU = NULL;
 
-	if (pEnemy == NULL)
+	if (pCPU == NULL)
 	{
 		// オブジェクトクラスの生成
-		pEnemy = new CEnemy;
+		pCPU = new CCPU;
 
-		if (pEnemy != NULL)
+		if (pCPU != NULL)
 		{
-			//pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-			pEnemy->Init(pos, rot);
-			pEnemy->m_Mode = mode;
+			//pCPU->BindModel(CLoad::GetBuffMat(CLoad::MODEL_CPU), CLoad::GetNumMat(CLoad::MODEL_CPU), CLoad::GetMesh(CLoad::MODEL_CPU));
+			pCPU->Init(pos, rot);
 		}
 	}
 
-	return pEnemy;
+	return pCPU;
 }
 
 //=============================================================================
 // エネミー初期化処理
 //=============================================================================
-HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+HRESULT CCPU::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// タイトル取得
 	CGame *pGame;
@@ -257,7 +252,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //=============================================================================
 // エネミー終了処理
 //=============================================================================
-void CEnemy::Uninit(void)
+void CCPU::Uninit(void)
 {
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -286,7 +281,7 @@ void CEnemy::Uninit(void)
 //=============================================================================
 // エネミー更新処理
 //=============================================================================
-void CEnemy::Update(void)
+void CCPU::Update(void)
 {
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
@@ -323,28 +318,21 @@ void CEnemy::Update(void)
 	// 前のフレームの位置代入
 	m_posOld = pos;
 
-	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
+	float fMoveCPU = MOVE_CPU;	// エネミーの移動量を設定
 
 	switch (mode)
 	{
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
-			//エネミーの操作
-			if (m_Mode == MODE_P2)
-			{
-				fMoveEnemy = EnemyOperation(pos, fMoveEnemy);
-			}
-			else if(m_Mode == MODE_CPU)
-			{
-				fMoveEnemy = EnemyCPU(pos, fMoveEnemy);
-			}
+			//プレイヤーの動作
+			fMoveCPU = CPUOperation(pos, fMoveCPU);
 
 			//タイマーの更新
 			TimerUpdate();
 
 			//角度の設定
-			rot = DirectionEnemy(pos, rot);
+			rot = DirectionCPU(pos, rot);
 
 			//敵と当たったとき
 			CollisionPlayerAction();
@@ -388,7 +376,7 @@ void CEnemy::Update(void)
 	case CManager::MODE_ULTIMATE:
 		if (pos.x < 550.0f)
 		{
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy * 15.0f);
+			m_move = pCharacterMove->MoveRight(m_move, fMoveCPU * 15.0f);
 		}
 		else if (pos.x > 550.0f)
 		{
@@ -401,7 +389,7 @@ void CEnemy::Update(void)
 	}
 
 	//キャラ入場
-	EntryEnemy(pos, fMoveEnemy);
+	EntryCPU(pos, fMoveCPU);
 
 
 	pos += m_move;
@@ -423,7 +411,7 @@ void CEnemy::Update(void)
 	}
 
 	// モデルとの当たり判定
-	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, ENEMY_COLLISION);
+	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, CPU_COLLISION);
 
 	CSceneX::SetPosition(pos);
 	CSceneX::SetRot(rot);
@@ -515,7 +503,7 @@ void CEnemy::Update(void)
 //=============================================================================
 // エネミー描画処理
 //=============================================================================
-void CEnemy::Draw(void)
+void CCPU::Draw(void)
 {
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
@@ -565,7 +553,7 @@ void CEnemy::Draw(void)
 //=============================================================================
 // モデルとの当たり判定の処理
 //=============================================================================
-void CEnemy::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
+void CCPU::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
 {
 	CScene *pScene = NULL;
 
@@ -597,7 +585,7 @@ void CEnemy::CollisonSceneX(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *
 //=============================================================================
 // 右側にいるかどうかを取得
 //=============================================================================
-bool CEnemy::GetLand(void)
+bool CCPU::GetLand(void)
 {
 	return m_bLand;
 }
@@ -605,7 +593,7 @@ bool CEnemy::GetLand(void)
 //=============================================================================
 // 状態を取得
 //=============================================================================
-CEnemy::STATE CEnemy::GetState(void)
+CCPU::STATE CCPU::GetState(void)
 {
 	return m_State;
 }
@@ -613,7 +601,7 @@ CEnemy::STATE CEnemy::GetState(void)
 //=============================================================================
 // 状態を設定
 //=============================================================================
-void CEnemy::SetState(STATE state)
+void CCPU::SetState(STATE state)
 {
 	m_State = state;
 }
@@ -621,7 +609,7 @@ void CEnemy::SetState(STATE state)
 //=============================================================================
 // 移動量を設定
 //=============================================================================
-void CEnemy::SetMove(D3DXVECTOR3 move)
+void CCPU::SetMove(D3DXVECTOR3 move)
 {
 	m_move = move;
 }
@@ -629,7 +617,7 @@ void CEnemy::SetMove(D3DXVECTOR3 move)
 //=============================================================================
 // モーションを設定
 //=============================================================================
-void CEnemy::SetMotionType(int nParent, CEnemy::MOTION_TYPE MotionType)
+void CCPU::SetMotionType(int nParent, CCPU::MOTION_TYPE MotionType)
 {
 	m_MotionType[nParent] = MotionType;
 	m_nMotionType[nParent] = m_MotionType[nParent];
@@ -641,7 +629,7 @@ void CEnemy::SetMotionType(int nParent, CEnemy::MOTION_TYPE MotionType)
 //=============================================================================
 // エネミーのステータスを初期化
 //=============================================================================
-void CEnemy::InitStatus(void)
+void CCPU::InitStatus(void)
 {
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -675,7 +663,7 @@ void CEnemy::InitStatus(void)
 //=============================================================================
 // エネミーの操作
 //=============================================================================
-float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
+float CCPU::CPUOperation(D3DXVECTOR3 pos, float fMoveCPU)
 {
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
@@ -689,146 +677,96 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 	CSansoGauge *pSansoGauge;
 	pSansoGauge = CGame::GetSansoGauge();
 
-	//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
-	{
-		//任意のキー←
-		if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-			pXInput->GetPress(XENEMY_LEFT, 1) == true)
-		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-			{
-				fMoveEnemy = DASH_MOVE;
-				m_bDash = true;
-			}
-			else
-			{
-				m_bDash = false;
-			}
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
+	////通常状態で硬直していない
+	//if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	//{
+	//	//任意のキー←
+	//	if (pInputKeyboard->GetPress(CPU_LEFT) == true ||
+	//	pXInput->GetPress(XCPU_LEFT, 1) == true)
+	//	{
+	//		//ダッシュ設定
+	//		if (pInputKeyboard->GetPress(CPU_B_BUTTON) == true ||
+	//			pXInput->GetPress(XCPU_B_BUTTON, 1) == true)
+	//		{
+	//			fMoveCPU = DASH_MOVE;
+	//			m_bDash = true;
+	//		}
+	//		else
+	//		{
+	//			m_bDash = false;
+	//		}
+	//		// 左に進む
+	//		m_move = pCharacterMove->MoveLeft(m_move, fMoveCPU);
+	//		m_nMotionType[0] = MOTION_SURIASI;
+	//		m_nMotionType[1] = MOTION_SURIASI;
+	//	}
 
-		//任意のキー→
-		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-			pXInput->GetPress(XENEMY_RIGHT, 1) == true)
-		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-			{
-				fMoveEnemy = DASH_MOVE;
-				m_bDash = true;
-			}
-			else
-			{
-				m_bDash = false;
-			}
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-		else
-		{
-			if (m_bMotionEnd[0] == true)
-			{
-				m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-			}
-			if (m_bMotionEnd[1] == true)
-			{
-				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
-			}
-		}
+	//	//任意のキー→
+	//else if (pInputKeyboard->GetPress(CPU_RIGHT) == true ||
+	//		pXInput->GetPress(XCPU_RIGHT, 1) == true)
+	//{
+	//		//ダッシュ設定
+	//		if (pInputKeyboard->GetPress(CPU_B_BUTTON) == true ||
+	//			pXInput->GetPress(XCPU_B_BUTTON, 1) == true)
+	//		{
+	//			fMoveCPU = DASH_MOVE;
+	//			m_bDash = true;
+	//		}
+	//		else
+	//		{
+	//			m_bDash = false;
+	//		}
+	//		// 右に進む
+	//		m_move = pCharacterMove->MoveRight(m_move, fMoveCPU);
+	//		m_nMotionType[0] = MOTION_SURIASI;
+	//		m_nMotionType[1] = MOTION_SURIASI;
+	//	}
+	//	else
+	//	{
+	//		if (m_bMotionEnd[0] == true)
+	//		{
+	//			m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+	//		}
+	//		if (m_bMotionEnd[1] == true)
+	//		{
+	//			m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+	//		}
+	//	}
 
-		if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
-		{// 必殺
-			m_State = STATE_ULT;
+	//	if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
+	//	{// 必殺
+	//		m_State = STATE_ULT;
 
-			if (m_pAnimation != NULL)
-			{
-				m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
-			}
-		}
-	}
+	//		if (m_pAnimation != NULL)
+	//		{
+	//			m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
+	//		}
+	//	}
+	//}
 
 	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 	{
 		//ガード状態
-		if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
-			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+		//if (pInputKeyboard->GetPress(CPU_C_BUTTON) == true ||
+		//	pXInput->GetPress(XCPU_X_BUTTON, 1) == true)
 		{
 			m_State = STATE_GUARD;
 			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
 		}
-		if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
-			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+	//	if (pInputKeyboard->GetRelese(CPU_C_BUTTON) == true && m_State == STATE_GUARD ||
+	//		pXInput->GetRelese(XCPU_X_BUTTON, 1) == true && m_State == STATE_GUARD)
 		{
 			m_State = STATE_NEUTRAL;
 		}
 	}
 
-	return fMoveEnemy;
-}
-
-//=============================================================================
-// CPUの動作
-//=============================================================================
-float CEnemy::EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy)
-{
-	// 移動処理取得
-	CCharacterMove *pCharacterMove;
-	pCharacterMove = CManager::GetCharacterMove();
-	// プレイヤー取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
-
-	D3DXVECTOR3 PlayerPos = pPlayer->GetPosition();
-	float PosDiff;
-
-	m_nThinkingTime++;
-	if (m_nThinkingTime > 20)
-	{
-		m_nThinkingTime = 0;
-
-		PosDiff = PlayerPos.x - pos.x;
-		if (PosDiff > 50)
-		{
-
-		}
-	}
-
-	PosDiff = PlayerPos.x - pos.x;
-
-	//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
-	{
-		if (PlayerPos.x < pos.x)
-		{
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-		if (PlayerPos.x > pos.x)
-		{
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-	}
-	return fMoveEnemy;
+	return fMoveCPU;
 }
 
 //=============================================================================
 // 敵との衝突
 //=============================================================================
-void CEnemy::CollisionPlayerAction(void)
+void CCPU::CollisionPlayerAction(void)
 {
 	if (CGame::GetHit() == true)
 	{
@@ -873,7 +811,7 @@ void CEnemy::CollisionPlayerAction(void)
 //=============================================================================
 // タイマーの更新
 //=============================================================================
-void CEnemy::TimerUpdate(void)
+void CCPU::TimerUpdate(void)
 {
 	//硬直しているとき
 	if (m_bRecovery == true)
@@ -903,7 +841,7 @@ void CEnemy::TimerUpdate(void)
 //=============================================================================
 // つっぱりとの当たり判定
 //============================================================================
-void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
+void CCPU::TsuppariCollision(D3DXVECTOR3 pos)
 {
 	// プレイヤー取得
 	CPlayer *pPlayer;
@@ -938,7 +876,7 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 //=============================================================================
 // 土俵端かどうか
 //============================================================================
-void CEnemy::DohyoHaziWhether(D3DXVECTOR3 pos)
+void CCPU::DohyoHaziWhether(D3DXVECTOR3 pos)
 {
 	if (pos.x < -DOHYO_HAZI_MIN && pos.x > -DOHYO_HAZI_MAX || pos.x > DOHYO_HAZI_MIN && pos.x < DOHYO_HAZI_MAX)
 	{
@@ -964,7 +902,7 @@ void CEnemy::DohyoHaziWhether(D3DXVECTOR3 pos)
 //=============================================================================
 // エネミーの入場シーン
 //=============================================================================
-void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
+void CCPU::EntryCPU(D3DXVECTOR3 pos, float fMoveCPU)
 {
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
@@ -1010,17 +948,17 @@ void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
 					m_nMotionType[1] = MOTION_SIOMAKI;
 				}
 			}
-			fMoveEnemy = 0.0f;
+			fMoveCPU = 0.0f;
 			pos.x = 80.0f;
 		}
-		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
+		m_move = pCharacterMove->MoveLeft(m_move, fMoveCPU * 0.7f);
 	}
 }
 
 //=============================================================================
 // エネミーの向き
 //=============================================================================
-D3DXVECTOR3 CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+D3DXVECTOR3 CCPU::DirectionCPU(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// プレイヤー取得
 	CPlayer *pPlayer;
@@ -1095,7 +1033,7 @@ D3DXVECTOR3 CEnemy::DirectionEnemy(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //=============================================================================
 // エネミーのモーション
 //=============================================================================
-void CEnemy::UpdateMotion(int nParent)
+void CCPU::UpdateMotion(int nParent)
 {
 	//サウンド情報を取得
 	//CSound *pSound = CManager::GetSound();
@@ -1273,7 +1211,7 @@ void CEnemy::UpdateMotion(int nParent)
 //=============================================================================
 // ファイル読み込み
 //=============================================================================
-void CEnemy::FileLoad(char FileName[256], int nParent)
+void CCPU::FileLoad(char FileName[256], int nParent)
 {
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
@@ -1722,7 +1660,7 @@ void CEnemy::FileLoad(char FileName[256], int nParent)
 //=============================================================================
 //　ファイル読み込み無効文を排除
 //=============================================================================
-char *CEnemy::ReadLine(FILE *pFile, char *pDst)
+char *CCPU::ReadLine(FILE *pFile, char *pDst)
 {
 	while (1)
 	{
@@ -1784,7 +1722,7 @@ char *CEnemy::ReadLine(FILE *pFile, char *pDst)
 //=============================================================================
 //　ファイル読み込み先頭を排除
 //=============================================================================
-char * CEnemy::GetLineTop(char * pStr)
+char * CCPU::GetLineTop(char * pStr)
 {
 	while (1)
 	{
@@ -1832,7 +1770,7 @@ char * CEnemy::GetLineTop(char * pStr)
 //=============================================================================
 //　文字数を返す
 //=============================================================================
-int CEnemy::PopString(char * pStr, char * pDest)
+int CCPU::PopString(char * pStr, char * pDest)
 {
 	int nWord = 0;
 

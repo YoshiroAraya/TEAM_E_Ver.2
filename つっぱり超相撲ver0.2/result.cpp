@@ -165,7 +165,7 @@ void CResult::LoadWinner(void)
 	{
 		if (m_pEnemy == NULL)
 		{// エネミー
-			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f));
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f), CEnemy::MODE_P2);
 		}
 	}
 }

@@ -1,11 +1,11 @@
 //=============================================================================
 //
-// エネミー処理 [enemy.h]
+// エネミー処理 [CPU.h]
 // Author : 目黒 未来也
 //
 //=============================================================================
-#ifndef _ENEMY_H_
-#define _ENEMY_H_
+#ifndef _CPU_H_
+#define _CPU_H_
 
 #include "main.h"
 #include "sceneX.h"
@@ -20,7 +20,7 @@ class CBAnimation;
 //========================================
 // マクロ定義
 //========================================
-#define MOVE_ENEMY			(0.5f)									//エネミー移動量
+#define MOVE_CPU			(0.5f)									//エネミー移動量
 #define MAX_PARTS		(30)
 #define MAX_MOTION		(30)
 #define MODEL_PARENT	(2)
@@ -33,15 +33,9 @@ class CBAnimation;
 //=====================
 // エネミークラス
 //=====================
-class CEnemy : public CSceneX
+class CCPU : public CSceneX
 {
 public:
-	typedef enum
-	{
-		MODE_P2 = 0,
-		MODE_CPU,
-	}MODE;
-
 	//状態
 	typedef enum
 	{
@@ -56,22 +50,6 @@ public:
 		STATE_DOWN,
 		STATE_ULT,
 	}STATE;
-
-	//状態
-	typedef enum
-	{
-		CPUACTION_NEUTRAL = 0,
-		CPUACTION_NEAR,
-		CPUACTION_FAR,
-		CPUACTION_DASHNEAR,
-		CPUACTION_DASHFAR,
-		CPUACTION_GUARD,
-		CPUACTION_TUPPARI,
-		CPUACTION_YORI,
-		CPUACTION_OSHI,
-		CPUACTION_NAGE,
-		CPUACTION_MAX,
-	}CPUACTION;
 
 	typedef enum
 	{
@@ -140,14 +118,14 @@ public:
 		KEY_INFO aKayInfo[MAX_MOTION];
 	}MOTION_INFO;
 
-	CEnemy();	// コンストラクタ
-	~CEnemy();	// デストラクタ
+	CCPU();	// コンストラクタ
+	~CCPU();	// デストラクタ
 
 	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// エネミー初期化処理
 	void Uninit(void);	// エネミー終了処理
 	void Update(void);	// エネミー更新処理
 	void Draw(void);	// エネミー描画処理
-	static CEnemy *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,MODE mode);	// オブジェクトの生成
+	static CCPU *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// オブジェクトの生成
 	static HRESULT LoadModel(void);	// モデル読み込み
 	static void UnloadModel(void);	// モデルテクスチャ解放
 
@@ -184,14 +162,13 @@ public:
 	void SetMotionType(int nParent, MOTION_TYPE MotionType);					//モーションを設定
 	void SetbMotionEnd(int nParent, bool bend) { m_bMotionEnd[nParent] = bend; }//モーションの終わりを設定
 	void InitStatus(void);
-	float EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy);
-	float EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy);
+	float CPUOperation(D3DXVECTOR3 pos, float fMoveCPU);
 	void CollisionPlayerAction(void);
 	void TimerUpdate(void);
 	void TsuppariCollision(D3DXVECTOR3 pos);
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
-	void EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy);
-	D3DXVECTOR3 DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
+	void EntryCPU(D3DXVECTOR3 pos, float fMoveCPU);
+	D3DXVECTOR3 DirectionCPU(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -242,34 +219,30 @@ private:
 	static LPDIRECT3DTEXTURE9	m_pTextureModel[MAX_PARTS][MODEL_PARENT];	//テクスチャへのポインタ
 	static DWORD				m_nNumMatModel[MAX_PARTS][MODEL_PARENT];	//マテリアル情報の数
 
-	KEY_INFO		*m_pKeyInfo[MAX_MOTION][MODEL_PARENT];		//キー情報へのポインタ
-	int				m_nKey[MODEL_PARENT];						//現在のキーナンバー
-	int				m_nCountFlame[MODEL_PARENT];				//フレーム数
+	KEY_INFO					*m_pKeyInfo[MAX_MOTION][MODEL_PARENT];		//キー情報へのポインタ
+	int							m_nKey[MODEL_PARENT];						//現在のキーナンバー
+	int							m_nCountFlame[MODEL_PARENT];				//フレーム数
 
-	int				m_nNumParts[MODEL_PARENT];					//パーツ数
-	int				m_aIndexParent[MAX_PARTS][MODEL_PARENT];	//親のインデックス
-	KEY				m_aKayOffset[MAX_PARTS][MODEL_PARENT];		//オフセット情報
-	MOTION_INFO		m_aMotionInfo[MAX_MOTION][MODEL_PARENT];	//モーション情報
-	int				m_nMotionType[MODEL_PARENT];				//モーションのタイプ(int型)
-	bool			m_bMotionEnd[MODEL_PARENT];					//モーションの終わり
-	int				m_nOldMotion;								//前回のモーション
-	D3DXVECTOR3		m_OffSetPos[MAX_PARTS][MODEL_PARENT];		//オフセット情報(モーション)
-																	//MOTIONSTATE				m_MotionState;
+	int							m_nNumParts[MODEL_PARENT];					//パーツ数
+	int							m_aIndexParent[MAX_PARTS][MODEL_PARENT];	//親のインデックス
+	KEY							m_aKayOffset[MAX_PARTS][MODEL_PARENT];		//オフセット情報
+	MOTION_INFO					m_aMotionInfo[MAX_MOTION][MODEL_PARENT];	//モーション情報
+	int							m_nMotionType[MODEL_PARENT];				//モーションのタイプ(int型)
+	bool						m_bMotionEnd[MODEL_PARENT];					//モーションの終わり
+	int							m_nOldMotion;								//前回のモーション
+	D3DXVECTOR3					m_OffSetPos[MAX_PARTS][MODEL_PARENT];		//オフセット情報(モーション)
+																			//MOTIONSTATE				m_MotionState;
 																			//DASHSTATE					m_DashState;
-	D3DXCOLOR		m_effectCol;
-	CModel			*m_apModel[MAX_PARTS][MODEL_PARENT];		//パーツ情報
+	D3DXCOLOR					m_effectCol;
+	CModel						*m_apModel[MAX_PARTS][MODEL_PARENT];		//パーツ情報
 
-	char			m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
-	MOTION_TYPE		m_MotionType[MODEL_PARENT];					//モーションの種類を設定
+	char						m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
+	MOTION_TYPE					m_MotionType[MODEL_PARENT];					//モーションの種類を設定
 
 	static CBAnimation *m_pAnimation;
-	MODE			m_Mode;
-	//CPU用の変数
-	int				m_nThinkingTime;
-	int				m_nActionTime;
 
 #ifdef _DEBUG
-	bool			m_bColBlockDraw;
+	bool						m_bColBlockDraw;
 #endif
 };
 #endif

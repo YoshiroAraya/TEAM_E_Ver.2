@@ -18,6 +18,7 @@
 #define DOHYO_PRIORITY	(3)
 #define ENEMY_PRIORITY	(2)
 #define PLAYER_PRIORITY	(2)
+#define CPU_PRIORITY	(2)
 
 //========================================
 // ƒNƒ‰ƒX‚Ì’è‹`

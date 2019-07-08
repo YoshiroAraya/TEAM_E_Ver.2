@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "player.h"
 #include "enemy.h"
+#include "CPU.h"
 #include "scene3D.h"
 #include "game.h"
 #include "meshField.h"
@@ -151,7 +152,7 @@ void CGame::Init(void)
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
 	}
 	if (m_pMeshField == NULL)
 	{
