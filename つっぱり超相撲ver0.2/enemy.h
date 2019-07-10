@@ -60,17 +60,18 @@ public:
 	//状態
 	typedef enum
 	{
-		CPUACTION_NEUTRAL = 0,
-		CPUACTION_NEAR,
-		CPUACTION_FAR,
-		CPUACTION_DASHNEAR,
-		CPUACTION_DASHFAR,
-		CPUACTION_GUARD,
-		CPUACTION_TUPPARI,
-		CPUACTION_YORI,
-		CPUACTION_OSHI,
-		CPUACTION_NAGE,
-		CPUACTION_MAX,
+		CPUACTION_NEUTRAL = 0,	//初期状態
+		CPUACTION_WALK,			//歩く
+		CPUACTION_NEAR,			//近づく
+		CPUACTION_FAR,			//遠ざかる
+		CPUACTION_DASHNEAR,		//走って近づく
+		CPUACTION_DASHFAR,		//走って遠ざかる
+		CPUACTION_GUARD,		//ガード
+		CPUACTION_TUPPARI,		//つっぱり
+		CPUACTION_YORI,			//寄り
+		CPUACTION_OSHI,			//押し
+		CPUACTION_NAGE,			//投げ
+		CPUACTION_MAX,			//最大数
 	}CPUACTION;
 
 	typedef enum
@@ -265,9 +266,11 @@ private:
 	static CBAnimation *m_pAnimation;
 	MODE			m_Mode;
 	//CPU用の変数
-	int				m_nThinkingTime;
-	int				m_nActionTime;
-
+	int				m_nThinkingTime;	//考える時間
+	int				m_nActionTime;		//行動時間
+	CPUACTION		m_CPUAction;		//行動の種類
+	bool			m_bAction;			//アクションしたかどうか
+	int				m_DamageCnt;		//ダメージを何回受けたか
 #ifdef _DEBUG
 	bool			m_bColBlockDraw;
 #endif

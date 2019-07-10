@@ -85,7 +85,9 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	//CPU用の変数
 	m_nThinkingTime = 0;
 	m_nActionTime = 0;
-
+	m_CPUAction = CPUACTION_NEUTRAL;
+	m_bAction = false;
+	m_DamageCnt = 0;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -214,6 +216,11 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bWallHit = false;
 	m_bUltDis = false;
 	m_fRot = 0.0f;
+	m_nThinkingTime = 0;
+	m_nActionTime = 0;
+	m_CPUAction = CPUACTION_NEUTRAL;
+	m_bAction = false;
+	m_DamageCnt = 0;
 
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
@@ -663,6 +670,12 @@ void CEnemy::InitStatus(void)
 	m_bSelect = false;
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
+	//CPU用の変数
+	m_nThinkingTime = 0;
+	m_nActionTime = 0;
+	m_CPUAction = CPUACTION_NEUTRAL;
+	m_bAction = false;
+	m_DamageCnt = 0;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -772,6 +785,9 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		}
 	}
 
+	//ダメージを受けた回数を初期化
+	m_DamageCnt = 0;
+
 	return fMoveEnemy;
 }
 
@@ -786,42 +802,159 @@ float CEnemy::EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy)
 	// プレイヤー取得
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
+	// ゲージの取得
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	D3DXVECTOR3 PlayerPos = pPlayer->GetPosition();
-	float PosDiff;
+	float PosDiff = 0.0f;		//プレイヤーとの距離
 
-	m_nThinkingTime++;
-	if (m_nThinkingTime > 20)
-	{
-		m_nThinkingTime = 0;
 
-		PosDiff = PlayerPos.x - pos.x;
-		if (PosDiff > 50)
+	if (m_nActionTime > 0)
+	{	//行動時間
+		m_nActionTime--;
+
+		if (m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_ULT)
 		{
-
+			switch (m_CPUAction)
+			{
+			case CPUACTION_WALK:
+				if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+				{//通常状態で硬直していない
+					if (PlayerPos.x < pos.x)
+					{	// 左に進む
+						m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+						m_nMotionType[0] = MOTION_SURIASI;
+						m_nMotionType[1] = MOTION_SURIASI;
+					}
+					if (PlayerPos.x > pos.x)
+					{	// 右に進む
+						m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+						m_nMotionType[0] = MOTION_SURIASI;
+						m_nMotionType[1] = MOTION_SURIASI;
+					}
+				}
+				break;
+			case CPUACTION_TUPPARI:
+				//アクションをしているかどうか
+				if (m_bAction == false)
+				{	//アクションをしている
+					m_bAction = true;
+					CGame::GetBatlteSys()->CPUBattle(CPUACTION_TUPPARI);
+				}
+				break;
+			case CPUACTION_GUARD:
+				//ガード状態へ
+				m_State = STATE_GUARD;
+				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
+				break;
+			case CPUACTION_DASHFAR:
+				if (PlayerPos.x < pos.x)
+				{	// 右に進む
+					fMoveEnemy = DASH_MOVE;
+					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
+				}
+				if (PlayerPos.x > pos.x)
+				{	// 左に進む
+					fMoveEnemy = DASH_MOVE;
+					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
+				}
+				break;
+			case CPUACTION_DASHNEAR:
+				if (PlayerPos.x < pos.x)
+				{	// 右に進む
+					fMoveEnemy = DASH_MOVE;
+					m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
+				}
+				if (PlayerPos.x > pos.x)
+				{	// 左に進む
+					fMoveEnemy = DASH_MOVE;
+					m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+					m_nMotionType[0] = MOTION_SURIASI;
+					m_nMotionType[1] = MOTION_SURIASI;
+				}
+				break;
+			}
 		}
+
+	}
+	else if (m_nActionTime == 0)
+	{	//考える時間(フレーム)
+		m_nThinkingTime++;
+		m_bAction = false;
+		if (m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_ULT)
+		{
+			m_State = STATE_NEUTRAL;
+		}
+	}
+
+	//タイムが一定になったら何をするか決める
+	if (m_nThinkingTime > 1)
+	{	//タイムを初期化
+		m_nThinkingTime = 0;
+		//距離を測る
+		PosDiff = PlayerPos.x - pos.x;
+		//正規化
+		PosDiff = abs(PosDiff);
+
+		if (PosDiff < 80)
+		{//距離が近い時
+			m_CPUAction = CPUACTION_TUPPARI;
+			m_nActionTime = 30;
+		}
+		else if (PosDiff > 80)
+		{//距離が遠い時
+			int nNearPattern = rand() % 2;
+
+			if (nNearPattern == 0)
+			{
+				m_CPUAction = CPUACTION_WALK;
+				m_nActionTime = 30;
+			}
+			else if (nNearPattern == 1)
+			{
+				m_CPUAction = CPUACTION_DASHNEAR;
+				m_nActionTime = 30;
+			}
+		}
+
+		//ガードのタイミング
+		if (m_DamageCnt > 1)
+		{//攻撃を2回受けたら
+			if (PosDiff < 120)
+			{//相手が近い
+				int nGuardPattern = rand() % 3;
+
+				if (nGuardPattern == 0)
+				{
+					m_CPUAction = CPUACTION_GUARD;
+					m_nActionTime = 120;
+				}
+				else if (nGuardPattern == 1)
+				{
+					m_CPUAction = CPUACTION_DASHFAR;
+					m_nActionTime = 30;
+				}
+				else
+				{
+					m_CPUAction = CPUACTION_TUPPARI;
+					m_nActionTime = 20;
+				}
+			}
+			//カウントを初期化
+			m_DamageCnt = 0;
+		}
+
 	}
 
 	PosDiff = PlayerPos.x - pos.x;
 
-	//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
-	{
-		if (PlayerPos.x < pos.x)
-		{
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-		if (PlayerPos.x > pos.x)
-		{
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-	}
 	return fMoveEnemy;
 }
 
@@ -863,7 +996,7 @@ void CEnemy::CollisionPlayerAction(void)
 			}
 		}
 	}
-	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT)
+	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI && m_State != STATE_ULT && m_State != STATE_GUARD)
 	{
 		m_State = STATE_NEUTRAL;
 	}
@@ -922,6 +1055,7 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 			if (m_State != STATE_GUARD)
 			{
 				m_State = STATE_DAMAGE;
+				m_DamageCnt++;
 			}
 			else
 			{
@@ -1264,10 +1398,8 @@ void CEnemy::UpdateMotion(int nParent)
 			}
 			m_nCountFlame[nParent] = 0;
 		}
-
 		break;
 	}
-
 }
 
 //=============================================================================

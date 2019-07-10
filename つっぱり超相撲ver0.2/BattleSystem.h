@@ -8,7 +8,7 @@
 #define _BATTLESYSTEM_H_
 
 #include "main.h"
-
+#include "enemy.h"
 //========================================
 // マクロ定義
 //========================================
@@ -67,6 +67,8 @@ public:
 	void ResetBattle(void);
 	void GuardKnockBack(int nAttack);
 	void MotionSetYORI(int nAttack);
+
+	void CPUBattle(CEnemy::CPUACTION CpuAction);
 
 	static CBattleSys *Create();	// オブジェクトの生成
 
