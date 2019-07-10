@@ -29,10 +29,23 @@
 #define GAME_RCAMERA_Y	(70.0f)
 #define GAME_RCAMERA_Z	(50.0f)
 
-
 #define START_CAMERA_X	(90.0f)
 #define START_CAMERA_Y	(80.0f)
 #define START_CAMERA_Z	(90.0f)
+
+#define SELECT_CAMERA_POSR (D3DXVECTOR3(0.0f, 70.0f, 0.0f))
+#define TITLE_POSV (D3DXVECTOR3(-340.0f, 400.0f, -400.0f))
+#define TITLE_POSR (D3DXVECTOR3(0.0f, 25.0f, 0.0f))
+#define NEWS_POSV (D3DXVECTOR3(0.0f, 25.0f, -200.0f))
+#define NEWS_POSR (D3DXVECTOR3(0.0f, 25.0f, 0.0f))
+
+#define SELECT_CAMERA_SPEED (1.0f)
+#define SELECT_CAMERA_POSX (-150.0f)
+#define SELECT_CAMERA_POSY (130.0f)
+#define SELECT_CAMERA_POSZ (30.0f)
+
+#define PLAYER_POS (D3DXVECTOR3(-80.0f, 30.0f, 0.0f))
+#define ENEMY_POS (D3DXVECTOR3(80.0f, 30.0f, 0.0f))
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -171,8 +184,8 @@ void CCamera::Update(void)
 
 				if (pPlayer != NULL && pEnemy != NULL)
 				{
-					pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
-					pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+					pPlayer->SetPosition(PLAYER_POS);
+					pEnemy->SetPosition(ENEMY_POS);
 
 					pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
 					pPlayer->SetbMotionEnd(0, true);
@@ -220,7 +233,7 @@ void CCamera::Update(void)
 							m_posV.z = pPlayer->GetPosition().z - 50.0f;
 						}
 					}
-					//m_posV = D3DXVECTOR3(pPlayer->GetPosition().x + 85.0f, pPlayer->GetPosition().y + 60.0f, pPlayer->GetPosition().z - 50.0f);	// 視点
+
 					m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// 注視点
 				}
 				else if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT)
@@ -321,7 +334,6 @@ void CCamera::Update(void)
 						}
 					}
 
-					//m_posV = D3DXVECTOR3(pEnemy->GetPosition().x - 85.0f, pEnemy->GetPosition().y + 60.0f, pEnemy->GetPosition().z - 50.0f);	// 視点
 					m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 				}
 			}
@@ -337,18 +349,47 @@ void CCamera::Update(void)
 		{
 			if (pTitle->GetState() == CTitle::STATE_TITLE)
 			{
-				m_posV = D3DXVECTOR3(-340.0f, 400.0f, -400.0f);	// 視点
-				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+				m_posV = TITLE_POSV;	// 視点
+				m_posR = TITLE_POSR;		// 注視点
 			}
 			else if(pTitle->GetState() == CTitle::STATE_NEWS)
 			{
-				m_posV = D3DXVECTOR3(0.0f, 25.0f, -200.0f);	// 視点
-				m_posR = D3DXVECTOR3(0.0f, 25.0f, 0.0f);		// 注視点
+				m_posV = NEWS_POSV;	// 視点
+				m_posR = NEWS_POSR;		// 注視点
 			}
 			else if(pTitle->GetState() == CTitle::STATE_CHARASELECT)
 			{
-				m_posV = D3DXVECTOR3(-150.0f, 130.0f, 30.0f);	// 視点
-				m_posR = D3DXVECTOR3(0.0f, 70.0f, 0.0f);		// 注視点
+				m_posR = SELECT_CAMERA_POSR;		// 注視点
+
+				if (m_posV.x < SELECT_CAMERA_POSX)
+				{
+					m_posV.x += 7.0f * SELECT_CAMERA_SPEED;
+
+					if (m_posV.x > SELECT_CAMERA_POSX)
+					{
+						m_posV.x = SELECT_CAMERA_POSX;
+					}
+				}
+
+				if (m_posV.y > SELECT_CAMERA_POSY)
+				{
+					m_posV.y -= 10.0f * SELECT_CAMERA_SPEED;
+
+					if (m_posV.y < SELECT_CAMERA_POSY)
+					{
+						m_posV.y = SELECT_CAMERA_POSY;
+					}
+				}
+
+				if (m_posV.z < SELECT_CAMERA_POSZ)
+				{
+					m_posV.z += 15.0f * SELECT_CAMERA_SPEED;
+
+					if (m_posV.z > SELECT_CAMERA_POSZ)
+					{
+						m_posV.z = SELECT_CAMERA_POSZ;
+					}
+				}
 			}
 		}
 	}
