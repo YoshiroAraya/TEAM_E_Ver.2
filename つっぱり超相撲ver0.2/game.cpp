@@ -270,7 +270,6 @@ void CGame::Update(void)
 	if (pInputKeyboard->GetTrigger(DIK_9) == true)
 	{
 		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
-
 	}
 
 	if (m_pBatlteSys != NULL)

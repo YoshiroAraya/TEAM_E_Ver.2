@@ -757,16 +757,6 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 			}
 		}
-
-		if (pInputKeyboard->GetPress(DIK_6) == true && m_bUltDis == true)
-		{// •KŽE
-			m_State = STATE_ULT;
-
-			if (m_pAnimation != NULL)
-			{
-				m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
-			}
-		}
 	}
 
 	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
@@ -1127,7 +1117,7 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 	pSansoGauge = CGame::GetSansoGauge();
 
 	// ‚Â‚Á‚Ï‚è‚Æ‚Ì“–‚½‚è”»’è
-	if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI)
+	if (pPlayer->GetState() == CPlayer::STATE_TSUPPARI || pPlayer->GetState() == CPlayer::STATE_ULT)
 	{
 		bool bHit = pPlayer->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 		//‚Â‚Á‚Ï‚è‚É‚ ‚½‚Á‚½

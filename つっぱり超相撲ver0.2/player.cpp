@@ -210,6 +210,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
 	m_bUltDis = false;
+	m_bEnemyDamage = false;
 
 	//‚Â‚Á‚Ï‚è¶¬
 	m_pTuppari = CTuppari::Create(pos);
@@ -684,6 +685,8 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 	// ƒQ[ƒW‚ÌŽæ“¾
 	CSansoGauge *pSansoGauge;
 	pSansoGauge = CGame::GetSansoGauge();
+	// “G‚ÌŽæ“¾
+	CEnemy *pEnemy = CGame::GetEnemy();
 
 	//’Êíó‘Ô‚Åd’¼‚µ‚Ä‚¢‚È‚¢
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
@@ -740,16 +743,6 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
 			}
 		}
-
-		if (pInputKeyboard->GetPress(DIK_5) == true && m_bUltDis == true)
-		{// •KŽE
-			m_State = STATE_ULT;
-
-			if (m_pAnimation != NULL)
-			{
-				m_pAnimation->SetBillboard(pos, 150.0f, 100.0f);
-			}
-		}
 	}
 
 	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
@@ -765,6 +758,29 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 			pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
 		{
 			m_State = STATE_NEUTRAL;
+		}
+	}
+
+	CBattleSys *pBattleSys = CGame::GetBatlteSys();
+
+	if (pBattleSys != NULL)
+	{
+		if (pBattleSys->GetUlt() == true)
+		{
+			if (pEnemy != NULL)
+			{
+				if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
+				{
+					m_bEnemyDamage = true;
+					m_move.x = 0;
+				}
+				
+				if (m_bEnemyDamage == false)
+				{// “Ë‚Á’£‚è‚ª“–‚½‚Á‚½‚çŽ~‚Ü‚é
+					// ‰E‚Éi‚Þ
+					m_move.x += sinf(D3DX_PI * 0.5f) * fMovePlayer;
+				}
+			}
 		}
 	}
 
@@ -860,7 +876,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	pSansoGauge = CGame::GetSansoGauge();
 
 	// ‚Â‚Á‚Ï‚è‚Æ‚Ì“–‚½‚è”»’è
-	if (pEnemy->GetState() == CPlayer::STATE_TSUPPARI)
+	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI)
 	{
 		bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 		//‚Â‚Á‚Ï‚è‚É‚ ‚½‚Á‚½

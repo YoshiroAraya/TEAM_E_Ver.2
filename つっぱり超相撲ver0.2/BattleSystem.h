@@ -68,6 +68,7 @@ public:
 	void GuardKnockBack(int nAttack);
 	void MotionSetYORI(int nAttack);
 	void PlusCntPushP2(int nCnt) { m_nCntPushP2 += nCnt; };
+	bool GetUlt(void) { return m_bUlt; }
 	void CPUBattle(CEnemy::CPUACTION CpuAction);
 	ATTACK_TURN GetAttackTurn(void) { return m_AttackTurn; };
 
@@ -79,8 +80,11 @@ private:
 	int		m_nImpossibleFlame;		//ëÄçÏïsâ¬éûä‘
 	int		m_aGUCounter[MAX_CHARACTER];
 	int		m_aCHOKICounter[MAX_CHARACTER];
+	int		m_nUltTimer;
 	bool	m_abPA[MAX_CHARACTER];
 	bool	m_bAttack;				//çUåÇÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
+	bool	m_bPlayerUlt;
+	bool	m_bUlt;
 	int		m_nStartCounter;
 	int		m_nCntPushP1, m_nCntPushP2;	//Ç«ÇÃÇ≠ÇÁÇ¢òAë≈ÇµÇΩÇ©
 	int		m_nFlamePush;

@@ -194,6 +194,9 @@ public:
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
 	void EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy);
 	D3DXVECTOR3 DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
+	bool GetUltDis(void) { return m_bUltDis; }
+
+	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
