@@ -658,6 +658,18 @@ void CBattleSys::Operation(void)
 			m_fMoveDying[1] = 1.0f;
 		}
 
+		//重ならないように
+		if (pPlayer->GetState() == CPlayer::STATE_KUMI
+			&& pEnemy->GetState() == CEnemy::STATE_KUMI)
+		{
+			//お互いの中心を見る -10 +10間は0  -150 0間は-75  -50 +150間は 50
+			float DiffDis = (p1pos.x + p2pos.x) / 2;
+			//POSを代入(固定)
+			pPlayer->SetPosition(D3DXVECTOR3(DiffDis - 18, p1pos.y, p1pos.z));
+			pEnemy->SetPosition(D3DXVECTOR3(DiffDis + 18, p2pos.y, p2pos.z));
+		}
+
+
 		//2pの方が強い(処理が後に入る) 修正
 		if (pPlayer->GetState() == CPlayer::STATE_KUMI
 			&& pEnemy->GetState() == CEnemy::STATE_KUMI
@@ -789,7 +801,7 @@ void CBattleSys::Operation(void)
 			pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 		}
 
-
+		//もう一度取得
 		if (pPlayer != NULL)
 		{	//プレイヤー1の位置を取得
 			p1pos = pPlayer->GetPosition();
@@ -1152,18 +1164,30 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 
 		break;
 	case ATTACK_TYPE_TUPPARI:
-		if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false
-			|| pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
-		{//体力がある場合で土俵端のつっぱり攻撃
+		if (pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && pPlayer->GetDying() == false)
+		{//プレイヤーの体力がある場合で土俵端のつっぱり攻撃
 			if (nPlayer == 0)
-			{
+			{	//プレイヤーのつっぱり
+				pPlayer->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(P2move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
+			}
+			else
+			{	//エネミーのつっぱり
+				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+			}
+		}
+		else if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
+		{//エネミーの体力がある場合で土俵端のつっぱり攻撃
+			if (nPlayer == 0)
+			{	//プレイヤーのつっぱり
 				pPlayer->SetMove(D3DXVECTOR3(-P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
 			else
-			{
-				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
-				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+			{	//エネミーのつっぱり
+				pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
+				pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 		}
 		else
@@ -1171,6 +1195,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			pPlayer->SetMove(P1move);
 			pEnemy->SetMove(P2move);
 		}
+
 
 		break;
 	case ATTACK_TYPE_COUNTER:
@@ -1864,4 +1889,68 @@ void CBattleSys::MotionSetYORI(int nAttack)
 		pPlayer->SetMotionType(1, CPlayer::MOTION_TUKAMI_AGERARERU);
 		pPlayer->SetbMotionEnd(1, false);
 	}
+}
+
+//=============================================================================
+// CPUのバトル処理
+//=============================================================================
+void CBattleSys::CPUBattle(CEnemy::CPUACTION CpuAction)
+{
+	// プレイヤーの取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// エネミーの取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+	// ゲージの取得
+	CGauge *pGauge;
+	pGauge = CGame::GetGauge();
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();
+
+	//サウンド情報の取得
+	CSound *pSound = CManager::GetSound(0);
+	D3DXVECTOR3 p1pos;
+
+	if (pPlayer != NULL)
+	{	//プレイヤー1の位置を取得
+		p1pos = pPlayer->GetPosition();
+	}
+
+	switch (CpuAction)
+	{
+	case CEnemy::CPUACTION_TUPPARI:
+		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+		{
+			pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(0, true);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(1, true);
+			pEnemy->SetbDash(false);
+			//向いてる方向 エネミー
+			switch (pEnemy->GetDirection())
+			{
+			case CEnemy::DIRECTION_LEFT:
+				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
+				pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x - 10, p1pos.y, p1pos.z));
+				m_nCntAttackFlame = TUPARI_FLAME;
+				pEnemy->SetRecovery(true);
+				pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
+				m_bAttack = true;
+				break;
+			case CEnemy::DIRECTION_RIGHT:
+				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
+				pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x + 10, p1pos.y, p1pos.z));
+				m_nCntAttackFlame = TUPARI_FLAME;
+				pEnemy->SetRecovery(true);
+				pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
+				m_bAttack = true;
+				break;
+			}
+		}
+		break;
+	}
+
+
+
 }
