@@ -48,6 +48,7 @@ public:
 		TEXTURE_TOUZAI,				// 東西
 		TEXTURE_1P,					// 1P VS COM
 		TEXTURE_2P,					// 1P VS 2P
+		TEXTURE_TUTORIAL,			// チュートリアル
 		TEXTURE_EFFECT_NORMAL000,	// エフェクト000
 		TEXTURE_EFFECT_NORMAL001,	// エフェクト001
 		TEXTURE_ANIMATION,			// アニメーション

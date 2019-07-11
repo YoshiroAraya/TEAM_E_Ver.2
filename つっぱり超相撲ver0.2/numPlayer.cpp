@@ -106,6 +106,13 @@ HRESULT CNumPlayer::Init(D3DXVECTOR3 pos)
 	m_apScene2D[1]->SetWidthHeight(250.0f, 100.0f);
 	m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
+	m_apScene2D[2] = new CScene2D(7);
+	m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL));
+	m_apScene2D[2]->Init(D3DXVECTOR3(pos.x - 25.0f, pos.y + 300.0f, 0.0f));
+	m_apScene2D[2]->SetWidthHeight(300.0f, 100.0f);
+	m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+
 	return S_OK;
 }
 
@@ -155,11 +162,11 @@ void CNumPlayer::Update(void)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
-		//m_nSelect = (m_nSelect + 1) % 2;
-		if (m_nSelect == 0)
-		{
-			m_nSelect = (m_nSelect + 1);
-		}
+		m_nSelect = (m_nSelect + 1) % 3;
+		//if (m_nSelect == 0)
+		//{
+		//	m_nSelect = (m_nSelect + 1);
+		//}
 		m_aSelect[m_nSelect] = SELECT_SELECT;
 	}
 	if (pInputKeyboard->GetTrigger(DIK_UP) == true/* || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_UP) == true
@@ -167,11 +174,11 @@ void CNumPlayer::Update(void)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
-		//m_nSelect = (m_nSelect + 1) % 2;
-		if (m_nSelect == 1)
+		m_nSelect = (m_nSelect + 2) % 3;
+		/*if (m_nSelect == 1)
 		{
 			m_nSelect = (m_nSelect - 1);
-		}
+		}*/
 		m_aSelect[m_nSelect] = SELECT_SELECT;
 	}
 
@@ -201,6 +208,10 @@ void CNumPlayer::Update(void)
 			m_Mode = MODE_1P;
 		}
 		else if (m_aSelect[1] == SELECT_SELECT)
+		{
+			m_Mode = MODE_2P;
+		}
+		else if (m_aSelect[2] == SELECT_SELECT)
 		{
 			m_Mode = MODE_2P;
 		}

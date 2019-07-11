@@ -42,6 +42,8 @@ public:
 	static CSansoGauge *Create(D3DXVECTOR3 pos);				// オブジェクトの生成
 
 	void SetSansoGaugeRightLeft(float fRight, float fLeft);
+	float GetSansoRight(void) { return m_fRight; };
+	float GetSansoLeft(void) { return m_fLeft; };
 
 private:
 	static LPDIRECT3DTEXTURE9		m_pTexture;						// テクスチャへのポインタ

@@ -67,8 +67,9 @@ public:
 	void ResetBattle(void);
 	void GuardKnockBack(int nAttack);
 	void MotionSetYORI(int nAttack);
-
+	void PlusCntPushP2(int nCnt) { m_nCntPushP2 += nCnt; };
 	void CPUBattle(CEnemy::CPUACTION CpuAction);
+	ATTACK_TURN GetAttackTurn(void) { return m_AttackTurn; };
 
 	static CBattleSys *Create();	// オブジェクトの生成
 

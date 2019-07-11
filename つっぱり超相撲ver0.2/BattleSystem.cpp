@@ -51,7 +51,7 @@
 #define BATTLE_FLAME		(20)
 
 #define YORI_FLAME			(20)
-#define NAGE_FLAME			(30)
+#define NAGE_FLAME			(15)
 #define OSI_FLAME			(20)
 #define TUPARI_FLAME		(2)
 #define TUPARI_RECOVERY		(30)
@@ -659,9 +659,21 @@ void CBattleSys::Operation(void)
 		{
 			//お互いの中心を見る -10 +10間は0  -150 0間は-75  -50 +150間は 50
 			float DiffDis = (p1pos.x + p2pos.x) / 2;
-			//POSを代入(固定)
-			pPlayer->SetPosition(D3DXVECTOR3(DiffDis - 18, p1pos.y, p1pos.z));
-			pEnemy->SetPosition(D3DXVECTOR3(DiffDis + 18, p2pos.y, p2pos.z));
+
+			if (pPlayer->GetDirection() == CPlayer::DIRECTION_RIGHT
+				&& pEnemy->GetDirection() == CEnemy::DIRECTION_LEFT)
+			{
+				//POSを代入(固定)
+				pPlayer->SetPosition(D3DXVECTOR3(DiffDis - 18, p1pos.y, p1pos.z));
+				pEnemy->SetPosition(D3DXVECTOR3(DiffDis + 18, p2pos.y, p2pos.z));
+			}
+			else if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT
+				&& pEnemy->GetDirection() == CEnemy::DIRECTION_RIGHT)
+			{
+				//POSを代入(固定)
+				pPlayer->SetPosition(D3DXVECTOR3(DiffDis + 18, p1pos.y, p1pos.z));
+				pEnemy->SetPosition(D3DXVECTOR3(DiffDis - 18, p2pos.y, p2pos.z));
+			}
 		}
 
 
@@ -1707,6 +1719,8 @@ void CBattleSys::ResetBattle(void)
 	// ゲージの取得
 	CGauge *pGauge;
 	pGauge = CGame::GetGauge();
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 	// タイムの取得
 	CUITime *pTime;
 	pTime = CGame::GetTime();
@@ -1735,6 +1749,7 @@ void CBattleSys::ResetBattle(void)
 	}
 
 	pGauge->SetGaugeRightLeft(600, 600);
+	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
 	CGame::SetWinner(CGame::WINNER_NONE);
 	CGame::SetHit(true);
 	CManager::GetGame()->SetbUI(true);
@@ -1775,7 +1790,7 @@ void CBattleSys::GuardKnockBack(int nAttack)
 			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
 			break;
 		case CEnemy::DIRECTION_RIGHT:
-			pPlayer->SetMove(D3DXVECTOR3(-GUARD_MOVE, 0.0f, 0.0f));
+			pPlayer->SetMove(D3DXVECTOR3(GUARD_MOVE, 0.0f, 0.0f));
 			break;
 		}
 	}
@@ -1833,50 +1848,118 @@ void CBattleSys::CPUBattle(CEnemy::CPUACTION CpuAction)
 	pGauge = CGame::GetGauge();
 	CUltimateGauge *pULTGauge;
 	pULTGauge = CGame::GetUltimateGauge();
-
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
 	D3DXVECTOR3 p1pos;
+	//瀕死時の移動量
+	float fHinshiOshi = 1.0f;
+	float fHinshiNage = 1.0f;
 
 	if (pPlayer != NULL)
 	{	//プレイヤー1の位置を取得
 		p1pos = pPlayer->GetPosition();
+
+		if (pPlayer->GetDying() == true)
+		{
+			fHinshiNage = HINSI_N_MOVE;
+			fHinshiOshi = HINSI_O_MOVE;
+		}
 	}
 
-	switch (CpuAction)
+	//向いてる方向 エネミー
+	switch (pEnemy->GetDirection())
 	{
-	case CEnemy::CPUACTION_TUPPARI:
-		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+	case CEnemy::DIRECTION_LEFT:
+		switch (CpuAction)
 		{
-			pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
-			pEnemy->SetbMotionEnd(0, true);
-			pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
-			pEnemy->SetbMotionEnd(1, true);
-			pEnemy->SetbDash(false);
-			//向いてる方向 エネミー
-			switch (pEnemy->GetDirection())
+		case CEnemy::CPUACTION_TUPPARI:
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
 			{
-			case CEnemy::DIRECTION_LEFT:
+				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(0, true);
+				pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(1, true);
+				pEnemy->SetbDash(false);
 				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
 				pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x - 10, p1pos.y, p1pos.z));
 				m_nCntAttackFlame = TUPARI_FLAME;
 				pEnemy->SetRecovery(true);
 				pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
 				m_bAttack = true;
-				break;
-			case CEnemy::DIRECTION_RIGHT:
+			}
+			break;
+		case CEnemy::CPUACTION_YORI:
+			//寄り
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_YORI, D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+			MotionSetYORI(1);
+			break;
+		case CEnemy::CPUACTION_NAGE:
+			//投げ
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetMotionType(0, CEnemy::MOTION_NAGE);
+			pEnemy->SetbMotionEnd(0, true);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_NAGE);
+			pEnemy->SetbMotionEnd(1, true);
+			break;
+		case CEnemy::CPUACTION_OSHI:
+			//押し
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(-OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(0, true);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(1, true);
+			pEnemy->SetbDash(false);
+			break;
+		}
+		break;
+	case CEnemy::DIRECTION_RIGHT:
+		switch (CpuAction)
+		{
+		case CEnemy::CPUACTION_TUPPARI:
+			if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+			{
+				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(0, true);
+				pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(1, true);
+				pEnemy->SetbDash(false);
+
 				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
 				pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x + 10, p1pos.y, p1pos.z));
 				m_nCntAttackFlame = TUPARI_FLAME;
 				pEnemy->SetRecovery(true);
 				pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
 				m_bAttack = true;
-				break;
 			}
+			break;
+		case CEnemy::CPUACTION_YORI:
+			//寄り
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_YORI, D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
+			MotionSetYORI(1);
+			break;
+		case CEnemy::CPUACTION_NAGE:
+			//投げ
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(-NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetMotionType(0, CEnemy::MOTION_NAGE);
+			pEnemy->SetbMotionEnd(0, true);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_NAGE);
+			pEnemy->SetbMotionEnd(1, true);
+			break;
+		case CEnemy::CPUACTION_OSHI:
+			//押し
+			pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+			Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(0, true);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+			pEnemy->SetbMotionEnd(1, true);
+			pEnemy->SetbDash(false);
+			break;
 		}
-		break;
 	}
-
-
-
 }
