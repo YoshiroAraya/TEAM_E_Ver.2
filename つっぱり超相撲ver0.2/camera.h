@@ -9,6 +9,12 @@
 
 #include "main.h"
 
+//*****************************************************************************
+//　前方宣言
+//*****************************************************************************
+class CEnemy;
+class CPlayer;
+
 //========================================
 // クラスの定義
 //========================================
@@ -33,6 +39,10 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void SetCamera(void);
+
+	void Start(CPlayer *pPlayer, CEnemy *pEnemy);
+	void EnemyUlt(CEnemy *pEnemy);
+	void PlayerUlt(CPlayer *pPlayer);
 
 	D3DXVECTOR3 GetRot(void);						// 位置の取得
 	static STATE GetState(void) { return m_State; }

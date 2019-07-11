@@ -68,6 +68,8 @@ public:
 	void GuardKnockBack(int nAttack);
 	void MotionSetYORI(int nAttack);
 
+	bool GetUlt(void) { return m_bUlt; }
+
 	static CBattleSys *Create();	// オブジェクトの生成
 
 	void Operation(void);
@@ -76,8 +78,11 @@ private:
 	int		m_nImpossibleFlame;		//操作不可時間
 	int		m_aGUCounter[MAX_CHARACTER];
 	int		m_aCHOKICounter[MAX_CHARACTER];
+	int		m_nUltTimer;
 	bool	m_abPA[MAX_CHARACTER];
 	bool	m_bAttack;				//攻撃しているかどうか
+	bool	m_bPlayerUlt;
+	bool	m_bUlt;
 	int		m_nStartCounter;
 	int		m_nCntPushP1, m_nCntPushP2;	//どのくらい連打したか
 	int		m_nFlamePush;

@@ -17,6 +17,7 @@
 #include "gauge.h"
 #include "SansoGauge.h"
 #include "UltimateGauge.h"
+#include "Banimation.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -85,6 +86,7 @@ CBattleSys::CBattleSys()
 	m_nCntPushP2 = 0;
 	m_nFlamePush = 0;
 	m_AttackTurn = ATTACK_TURN_NORMAL;
+	m_nUltTimer = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -144,6 +146,9 @@ HRESULT CBattleSys::Init()
 	m_nCntPushP2 = 0;
 	m_nFlamePush = 0;
 	m_AttackTurn = ATTACK_TURN_NORMAL;
+	m_nUltTimer = 0;
+	m_bPlayerUlt = false;
+	m_bUlt = false;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -860,6 +865,75 @@ void CBattleSys::Operation(void)
 			CGame::SetHit(true);
 
 			CManager::GetGame()->SetbUI(true);
+		}
+
+		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true)
+		{
+			m_bPlayerUlt = true;
+		}
+
+		if (m_bPlayerUlt == true)
+		{// 奥義（プレイヤー）
+			if ((float)m_nUltTimer / 60.0f >= 1.5f)
+			{// ある程度の秒数がたったら
+				m_bUlt = true;
+
+				// 突っ張る
+				pPlayer->SetState(CPlayer::STATE_TSUPPARI);
+				pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
+				pPlayer->SetbMotionEnd(0, true);
+				pPlayer->SetMotionType(1, CPlayer::MOTION_TSUPPARI);
+				pPlayer->SetbMotionEnd(1, true);
+				pPlayer->SetbDash(false);
+				//向いてる方向 プレイヤー
+				switch (pPlayer->GetDirection())
+				{
+				case CPlayer::DIRECTION_LEFT:
+					pPlayer->SetState(CPlayer::STATE_TSUPPARI);
+					pPlayer->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x - 10, p1pos.y, p1pos.z));
+					m_nCntAttackFlame = TUPARI_FLAME;
+					pPlayer->SetRecovery(true);
+					pPlayer->SetRecoveryTime(TUPARI_RECOVERY);
+					m_bAttack = true;
+					break;
+				case CPlayer::DIRECTION_RIGHT:
+					pPlayer->SetState(CPlayer::STATE_TSUPPARI);
+					pPlayer->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x + 10, p1pos.y, p1pos.z));
+					m_nCntAttackFlame = TUPARI_FLAME;
+					pPlayer->SetRecovery(true);
+					pPlayer->SetRecoveryTime(TUPARI_RECOVERY);
+					m_bAttack = true;
+					break;
+				}
+
+				m_nUltTimer = 70;
+			}
+			else
+			{
+				m_nUltTimer++;
+				
+			}
+			
+			// プレイヤーを奥義状態にする
+			pPlayer->SetState(CPlayer::STATE_ULT);
+
+			CBAnimation *pAnimation = pPlayer->GetAnimation();
+
+			if (pAnimation != NULL)
+			{// オーラを大きくする
+				pAnimation->SetBillboard(pPlayer->GetPosition(), 150.0f, 100.0f);
+			}
+		}
+		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true)
+		{// 奥義（エネミー）
+			pEnemy->SetState(CEnemy::STATE_ULT);
+
+			CBAnimation *pAnimation = pEnemy->GetAnimation();
+
+			if (pAnimation != NULL)
+			{// オーラを大きくする
+				pAnimation->SetBillboard(pEnemy->GetPosition(), 150.0f, 100.0f);
+			}
 		}
 	}
 #ifdef _DEBUG
