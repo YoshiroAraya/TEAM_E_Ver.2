@@ -146,13 +146,6 @@ void CNumPlayer::Update(void)
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 
-	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
-	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
-
 	// タイトル取得
 	CTitle *pTitle;
 	pTitle = CManager::GetTitle();
@@ -202,7 +195,6 @@ void CNumPlayer::Update(void)
 	if (pTitle->GetState() == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
 		m_bDecision = true;
-
 		if (m_aSelect[0] == SELECT_SELECT)
 		{
 			m_Mode = MODE_1P;
@@ -213,7 +205,7 @@ void CNumPlayer::Update(void)
 		}
 		else if (m_aSelect[2] == SELECT_SELECT)
 		{
-			m_Mode = MODE_2P;
+			m_Mode = MODE_TUTORIAL;
 		}
 	}
 

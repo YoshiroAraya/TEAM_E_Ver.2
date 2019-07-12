@@ -67,7 +67,6 @@ void CTitle::Init(void)
 
 	CNewsBG::Create(D3DXVECTOR3(0.0f, 25.0f, 40.0f), D3DXVECTOR3(-D3DX_PI * 0.5f, 0.0f, 0.0f), 100.0f, 180.0f);
 	CNewsCaster::Create(D3DXVECTOR3(0.0f, -20.0f, -50.0f));
-
 	CTime::Create(D3DXVECTOR3(100.0f, 55.0f, 0.0f));
 }
 
@@ -236,6 +235,32 @@ void CTitle::Update(void)
 					m_Character[1] = CHARACTER_ENEMY;
 				}
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+				m_nCntReturn = 0;
+
+				// 選んだキャラを保存
+				SaveCharacter();
+			}
+		}
+
+		if (mode == CNumPlayer::MODE_TUTORIAL)
+		{// 1Pモードの時
+			if (m_nCntReturn == 1)
+			{
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{// プレイヤーを選択
+					m_Character[0] = CHARACTER_PLAYER;
+					m_pPlayer->SetSelect(false);
+				}
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{// エネミーを選択
+					m_Character[0] = CHARACTER_ENEMY;
+					m_pEnemy->SetSelect(false);
+				}
+
+				// 敵のキャラ選択
+				m_Character[1] = CHARACTER_ENEMY;
+
+				pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
 				m_nCntReturn = 0;
 
 				// 選んだキャラを保存

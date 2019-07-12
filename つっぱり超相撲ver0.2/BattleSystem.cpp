@@ -18,6 +18,7 @@
 #include "SansoGauge.h"
 #include "UltimateGauge.h"
 #include "Banimation.h"
+#include "tutorial.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -176,17 +177,34 @@ void CBattleSys::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	//ゲージの取得
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
+	CGauge *pGauge = NULL;
 
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		//ゲージの取得
+		pGauge = CTutorial::GetGauge();
+	}
+	else if(mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		//ゲージの取得
+		pGauge = CGame::GetGauge();
+	}
 
 	//キーボード/コントローラー操作
 	Operation();
@@ -249,16 +267,39 @@ void CBattleSys::Operation(void)
 	pXInput = CManager::GetXInput();
 
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// ゲージの取得
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-	CUltimateGauge *pULTGauge;
-	pULTGauge = CGame::GetUltimateGauge();
+	CGauge *pGauge = NULL;
+	CUltimateGauge *pULTGauge = NULL;
+	CGame::STATE GState = CGame::STATE_GAME;
+	CTutorial::STATE TState = CTutorial::STATE_GAME;;
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		//ゲージの取得
+		pGauge = CTutorial::GetGauge();
+		pULTGauge = CTutorial::GetUltimateGauge();
+		TState = CTutorial::GetState();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		//ゲージの取得
+		pGauge = CGame::GetGauge();
+		pULTGauge = CGame::GetUltimateGauge();
+		GState = CGame::GetState();
+	}
 
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
@@ -276,7 +317,8 @@ void CBattleSys::Operation(void)
 
 	if (pPlayer != NULL && pEnemy != NULL)
 	{
-		if (CGame::GetState() == CGame::STATE_GAME)
+		if (GState == CGame::STATE_GAME
+			|| TState == CTutorial::STATE_GAME)
 		{
 			if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
 			{
@@ -392,15 +434,33 @@ void CBattleSys::Operation(void)
 					{
 						pEnemy->SetMove(D3DXVECTOR3(-JANKEN_TUPARI_MOVE, 0.0f, 0.0f));
 					}
-					if (CGame::GetHit() == true)
+
+					//チュートリアルとゲームで処理分け
+					if (mode == CManager::MODE_TUTORIAL)
 					{
-						pEnemy->SetMove(D3DXVECTOR3(J_BUTI_KNOCKUP_MOVE * 3, 5.0f, 0.0f));
-						pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-						pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-						CGame::SetHit(false);
-						//ライフゲージ消費
-						pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f );
-						pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+						if (CTutorial::GetHit() == true)
+						{
+							pEnemy->SetMove(D3DXVECTOR3(J_BUTI_KNOCKUP_MOVE * 3, 5.0f, 0.0f));
+							pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+							pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+							CTutorial::SetHit(false);
+							//ライフゲージ消費
+							pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+							pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+						}
+					}
+					else if (mode == CManager::MODE_GAME)
+					{
+						if (CGame::GetHit() == true)
+						{
+							pEnemy->SetMove(D3DXVECTOR3(J_BUTI_KNOCKUP_MOVE * 3, 5.0f, 0.0f));
+							pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+							pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+							CGame::SetHit(false);
+							//ライフゲージ消費
+							pGauge->SetGaugeRightLeft(-JANKEN_DAMAGE, 0.0f);
+							pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+						}
 					}
 
 				}
@@ -885,9 +945,17 @@ void CBattleSys::Operation(void)
 			}
 
 			pGauge->SetGaugeRightLeft(600, 600);
-			CGame::SetWinner(CGame::WINNER_NONE);
-			CGame::SetHit(true);
 
+			if (mode == CManager::MODE_TUTORIAL)
+			{
+				CTutorial::SetWinner(CTutorial::WINNER_NONE);
+				CTutorial::SetHit(true);
+			}
+			else if (mode == CManager::MODE_GAME)
+			{
+				CGame::SetWinner(CGame::WINNER_NONE);
+				CGame::SetHit(true);
+			}
 			CManager::GetGame()->SetbUI(true);
 		}
 
@@ -935,9 +1003,9 @@ void CBattleSys::Operation(void)
 			else
 			{
 				m_nUltTimer++;
-				
+
 			}
-			
+
 			// プレイヤーを奥義状態にする
 			pPlayer->SetState(CPlayer::STATE_ULT);
 
@@ -975,8 +1043,23 @@ void CBattleSys::Recovery(void)
 	// エネミーの取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
 
-	CGame::SetHit(false);
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		CTutorial::SetWinner(CTutorial::WINNER_NONE);
+		CTutorial::SetHit(true);
+		CTutorial::SetHit(false);
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		CGame::SetWinner(CGame::WINNER_NONE);
+		CGame::SetHit(true);
+		CGame::SetHit(false);
+	}
+
 	if (pPlayer != NULL)
 	{
 		pPlayer->SetState(CPlayer::STATE_NEUTRAL);
@@ -997,16 +1080,35 @@ void CBattleSys::Recovery(void)
 void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move, D3DXVECTOR3 P2move)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+	CGauge *pGauge = NULL;
+	CUltimateGauge *pULTGauge = NULL;
 
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-	CUltimateGauge *pULTGauge;
-	pULTGauge = CGame::GetUltimateGauge();
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		//ゲージの取得
+		pGauge = CTutorial::GetGauge();
+		pULTGauge = CTutorial::GetUltimateGauge();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		//ゲージの取得
+		pGauge = CGame::GetGauge();
+		pULTGauge = CGame::GetUltimateGauge();
+	}
+
 
 	//プレイヤー1の位置を取得
 	D3DXVECTOR3 p1pos;
@@ -1170,7 +1272,6 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		m_nCntAttackFlame = NAGE_FLAME;
 		//硬直
 		Recovery();
-		CGame::SetHit(false);
 		pEnemy->SetState(CEnemy::STATE_NAGE);
 		pPlayer->SetState(CPlayer::STATE_NAGE);
 
@@ -1265,17 +1366,35 @@ void CBattleSys::PushJudge(void)
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// ゲージの取得
-	CSansoGauge *pSansoGauge;
-	pSansoGauge = CGame::GetSansoGauge();
+	CSansoGauge *pSansoGauge = NULL;
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		//ゲージの取得
+		pSansoGauge = CTutorial::GetSansoGauge();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		//ゲージの取得
+		pSansoGauge = CGame::GetSansoGauge();
+	}
+
 
 	float fPushCntP1 = 0, fPushCntP2 = 0;
-
 
 	if (pPlayer != NULL && pEnemy != NULL)
 	{
@@ -1407,13 +1526,26 @@ void CBattleSys::P1Attack(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
-
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+	}
+
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
 	//瀕死時の移動量
@@ -1557,11 +1689,26 @@ void CBattleSys::P2Attack(void)
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+	}
+
+
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
 
@@ -1706,11 +1853,26 @@ void CBattleSys::CounterAttack(void)
 	pXInput = CManager::GetXInput();
 
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+	}
+
+
 	if (pPlayer != NULL && pEnemy != NULL)
 	{
 		if (pPlayer->GetCounter() == false && pPlayer->GetRecovery() == false)
@@ -1785,19 +1947,41 @@ void CBattleSys::CounterAttack(void)
 void CBattleSys::ResetBattle(void)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// ゲージの取得
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-	CSansoGauge *pSansoGauge;
-	pSansoGauge = CGame::GetSansoGauge();
+	CGauge *pGauge = NULL;
+	CSansoGauge *pSansoGauge = NULL;
 	// タイムの取得
-	CUITime *pTime;
-	pTime = CGame::GetTime();
+	CUITime *pTime = NULL;
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		// ゲージの取得
+		pGauge = CTutorial::GetGauge();
+		pSansoGauge = CTutorial::GetSansoGauge();
+		// タイムの取得
+		pTime = CTutorial::GetTime();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		// ゲージの取得
+		pGauge = CGame::GetGauge();
+		pSansoGauge = CGame::GetSansoGauge();
+		// タイムの取得
+		pTime = CGame::GetTime();
+	}
+
 
 	pPlayer->InitStatus();
 	pEnemy->InitStatus();
@@ -1824,8 +2008,18 @@ void CBattleSys::ResetBattle(void)
 
 	pGauge->SetGaugeRightLeft(600, 600);
 	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
-	CGame::SetWinner(CGame::WINNER_NONE);
-	CGame::SetHit(true);
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		CTutorial::SetWinner(CTutorial::WINNER_NONE);
+		CTutorial::SetHit(true);
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		CGame::SetWinner(CGame::WINNER_NONE);
+		CGame::SetHit(true);
+	}
+
 	CManager::GetGame()->SetbUI(true);
 	pTime->SetTime(60);
 }
@@ -1836,11 +2030,26 @@ void CBattleSys::ResetBattle(void)
 void CBattleSys::GuardKnockBack(int nAttack)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+	}
+
 
 	if (nAttack == 0)
 	{
@@ -1876,11 +2085,26 @@ void CBattleSys::GuardKnockBack(int nAttack)
 void CBattleSys::MotionSetYORI(int nAttack)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+	}
+
 
 	if (nAttack == 0)
 	{
@@ -1912,16 +2136,34 @@ void CBattleSys::MotionSetYORI(int nAttack)
 void CBattleSys::CPUBattle(CEnemy::CPUACTION CpuAction)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// ゲージの取得
-	CGauge *pGauge;
-	pGauge = CGame::GetGauge();
-	CUltimateGauge *pULTGauge;
-	pULTGauge = CGame::GetUltimateGauge();
+	CGauge *pGauge = NULL;
+	CUltimateGauge *pULTGauge = NULL;
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{	// プレイヤーの取得
+		pPlayer = CTutorial::GetPlayer();
+		// エネミーの取得
+		pEnemy = CTutorial::GetEnemy();
+		// ゲージの取得
+		pGauge = CTutorial::GetGauge();
+		pULTGauge = CTutorial::GetUltimateGauge();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{	// プレイヤーの取得
+		pPlayer = CGame::GetPlayer();
+		// エネミーの取得
+		pEnemy = CGame::GetEnemy();
+		// ゲージの取得
+		pGauge = CGame::GetGauge();
+		pULTGauge = CGame::GetUltimateGauge();
+	}
+
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
 	D3DXVECTOR3 p1pos;
