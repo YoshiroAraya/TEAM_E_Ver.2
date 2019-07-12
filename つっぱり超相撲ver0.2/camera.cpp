@@ -259,6 +259,10 @@ void CCamera::Update(void)
 						m_posV.x = SELECT_CAMERA_POSX;
 					}
 				}
+				else
+				{
+					m_posV.x = SELECT_CAMERA_POSX;
+				}
 
 				if (m_posV.y > SELECT_CAMERA_POSY)
 				{
@@ -269,6 +273,10 @@ void CCamera::Update(void)
 						m_posV.y = SELECT_CAMERA_POSY;
 					}
 				}
+				else
+				{
+					m_posV.y = SELECT_CAMERA_POSY;
+				}
 
 				if (m_posV.z < SELECT_CAMERA_POSZ)
 				{
@@ -278,6 +286,10 @@ void CCamera::Update(void)
 					{
 						m_posV.z = SELECT_CAMERA_POSZ;
 					}
+				}
+				else
+				{
+					m_posV.z = SELECT_CAMERA_POSZ;
 				}
 			}
 		}
