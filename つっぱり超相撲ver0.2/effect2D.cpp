@@ -126,20 +126,20 @@ void CEffect2D::UpdateUI(void)
 
 	if (m_nLife > 0)
 	{
-		m_nLife--;
+		//m_nLife--;
 
 		//位置を更新		
 		m_pos += m_move;
 		
 		//徐々に透明にしていく
 		//m_Col.a = m_Col.a - m_fAlpha;
-		m_Col.a -= 0.02f;
+		m_Col.a -= 0.002f;
 
-		//一定以下になったら0に
-		if (m_Col.a < 0.01f)
-		{
-			m_Col.a = 0;
-		}
+		////一定以下になったら0に
+		//if (m_Col.a < 0.01f)
+		//{
+		//	m_Col.a = 0;
+		//}
 		m_fWidth += 3.0f;
 		m_fHeight += 3.0f;
 		//色を設定
@@ -152,15 +152,21 @@ void CEffect2D::UpdateUI(void)
 	else if (m_nLife <= 0)
 	{
 		//自分を消すフラグを立てる
-		bDestroy = true;
+		//bDestroy = true;
 	}
 
-	if (bDestroy == true)
-	{
-		//自分を消す(破棄)
-		Uninit();
-	}
-	/*CDebugProc::Print("c", "エフェクト");*/
+	//if (bDestroy == true)
+	//{
+	//	//自分を消す(破棄)
+	//	Uninit();
+	//}
+
+	//if (m_Col.a <= 0.0f)
+	//{
+	//	//自分を消す(破棄)
+	//	Uninit();
+	//}
+	CDebugProc::Print("cf", "エフェクト : ",m_Col.a);
 }
 
 //=============================================================================
