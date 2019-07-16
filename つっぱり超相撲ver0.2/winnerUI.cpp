@@ -97,7 +97,7 @@ HRESULT CWinnerUI::Init(D3DXVECTOR3 pos)
 	//1p‘¤
 	for (int nCnt1 = 0; nCnt1 < 3; nCnt1++)
 	{
-		m_pScene2D[nCnt1] = CScene2D::Create(D3DXVECTOR3(PLAYER_UI_POS_X - (nCnt1 * UI_SPACE), pos.y, 0.0f));
+		m_pScene2D[nCnt1] = CScene2D::Create(D3DXVECTOR3(PLAYER_UI_POS_X - (nCnt1 * UI_SPACE), pos.y, 0.0f), 3);
 		m_pScene2D[nCnt1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_UI));
 		m_pScene2D[nCnt1]->SetWidthHeight(UI_WIDTH, UI_HEIGHT);
 		m_pScene2D[nCnt1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
@@ -106,7 +106,7 @@ HRESULT CWinnerUI::Init(D3DXVECTOR3 pos)
 	//2p‘¤
 	for (int nCnt2 = 0; nCnt2 < 3; nCnt2++)
 	{
-		m_pScene2D[nCnt2 + 3] = CScene2D::Create(D3DXVECTOR3(ENEMY_UI_POS_X + (nCnt2 * UI_SPACE), pos.y, 0.0f));
+		m_pScene2D[nCnt2 + 3] = CScene2D::Create(D3DXVECTOR3(ENEMY_UI_POS_X + (nCnt2 * UI_SPACE), pos.y, 0.0f), 3);
 		m_pScene2D[nCnt2 + 3]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_UI));
 		m_pScene2D[nCnt2 + 3]->SetWidthHeight(UI_WIDTH, UI_HEIGHT);
 		m_pScene2D[nCnt2 + 3]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));

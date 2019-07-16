@@ -19,7 +19,7 @@ class CScene2D;
 // マクロ定義
 //*****************************************************************************
 #define MAX_JANKENUI_TEXTURE	(6)
-#define MAX_JANKENUI			(3)										
+#define MAX_JANKENUI			(3)
 
 //=========================
 // ポーズクラス
@@ -42,7 +42,7 @@ public:
 		SELECT_MAX
 	} SELECT;
 
-	CJankenUI(int nPriority = 7, OBJTYPE objType = OBJTYPE_UI);									// コンストラクタ
+	CJankenUI(int nPriority = 2, OBJTYPE objType = OBJTYPE_UI);									// コンストラクタ
 	~CJankenUI();													// デストラクタ
 
 	static CJankenUI *Create(D3DXVECTOR3 pos);								// ポーズを生成
