@@ -79,7 +79,7 @@ CCamera::~CCamera()
 void CCamera::Init(void)
 {
 	m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);	// éãì_
-	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// íçéãì_
+	m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);		// íçéãì_
 	m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));

@@ -274,7 +274,8 @@ void CBattleSys::Operation(void)
 	CGauge *pGauge = NULL;
 	CUltimateGauge *pULTGauge = NULL;
 	CGame::STATE GState = CGame::STATE_GAME;
-	CTutorial::STATE TState = CTutorial::STATE_GAME;;
+	CTutorial::STATE TState = CTutorial::STATE_GAME;
+	CUltimateGauge *pUltGauge = CGame::GetUltimateGauge();
 
 	// モード取得
 	CManager::MODE mode;
@@ -962,12 +963,14 @@ void CBattleSys::Operation(void)
 		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true)
 		{
 			m_bPlayerUlt = true;
+		
+			pUltGauge->SetGaugeRightLeft(pUltGauge->GetGaugeRight(), -600.0f);
 		}
 
 		if (m_bPlayerUlt == true)
 		{// 奥義（プレイヤー）
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
-			{// ある程度の秒数がたったら
+			{// ある程度の秒数がたったら 
 				m_bUlt = true;
 
 				// 突っ張る
@@ -1125,8 +1128,11 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 	//ダメージ判定
 	if (nPlayer == 0)
 	{
-		pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-		pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+		if (m_bPlayerUlt == false)
+		{
+			pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+			pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+		}
 	}
 	else
 	{
@@ -1998,6 +2004,17 @@ void CBattleSys::ResetBattle(void)
 	pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
 	m_aJanken[0] = JANKEN_GU_BUTI;
 	m_aJanken[1] = JANKEN_GU_BUTI;
+	m_bPlayerUlt = false;
+	m_bUlt = false;
+	pPlayer->SetUltDis(false);
+	pEnemy->SetUltDis(false);
+
+	CCamera *pCamera = CManager::GetCamera();
+
+	if (pCamera != NULL)
+	{
+		pCamera->Init();
+	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
