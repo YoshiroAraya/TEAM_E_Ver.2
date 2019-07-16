@@ -13,6 +13,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
+#include "tutorial.h"
 #include "load.h"
 
 //*****************************************************************************
@@ -159,11 +160,23 @@ void CJankenUI::Update(void)
 	pXInput = CManager::GetXInput();
 
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pPlayer = CTutorial::GetPlayer();
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pPlayer = CGame::GetPlayer();
+		pEnemy = CGame::GetEnemy();
+	}
+
 
 	if (pPlayer != NULL && pEnemy != NULL)
 	{

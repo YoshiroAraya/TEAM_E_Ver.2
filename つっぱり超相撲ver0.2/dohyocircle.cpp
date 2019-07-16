@@ -11,6 +11,7 @@
 #include "input.h"
 #include "debugproc.h"
 #include "game.h"
+#include "tutorial.h"
 #include "player.h"
 #include "enemy.h"
 #include "load.h"
@@ -122,15 +123,9 @@ void CDohyoCircle::Update(void)
 
 			 //目的の場所から中心点の角度を求める
 				float fAnglePlayer = atan2f(PlayerPos.x - m_pos.x, PlayerPos.z - m_pos.z);
-
-				//プレイヤーがえんの外に行ったら範囲内に戻す
-				//PlayerPos.x = m_pos.x + sinf(fAnglePlayer) * GROUND_SIZE;
-				//PlayerPos.z = m_pos.z + cosf(fAnglePlayer) * GROUND_SIZE;
 			}
 			//プレイヤーの位置を設定
 			pGame->GetPlayer()->SetPosition(D3DXVECTOR3(PlayerPos));
-
-
 			//中心から距離を計算する
 			fLengthEnemy = sqrt((EnemyPos.x - m_pos.x) * (EnemyPos.x - m_pos.x) +
 				(EnemyPos.z - m_pos.z) * (EnemyPos.z - m_pos.z));
@@ -140,17 +135,49 @@ void CDohyoCircle::Update(void)
 
 			 //目的の場所から中心点の角度を求める
 				float fAngleEnemy = atan2f(EnemyPos.x - m_pos.x, EnemyPos.z - m_pos.z);
-
-				//プレイヤーがえんの外に行ったら範囲内に戻す
-				//EnemyPos.x = m_pos.x + sinf(fAngleEnemy) * GROUND_SIZE;
-				//EnemyPos.z = m_pos.z + cosf(fAngleEnemy) * GROUND_SIZE;
 			}
 			//プレイヤーの位置を設定
 			pGame->GetEnemy()->SetPosition(D3DXVECTOR3(EnemyPos));
 		}
+	}
+	else if (nMode == CManager::MODE_TUTORIAL)
+	{
+		CTutorial *pTuto = pManager->GetTutorial();
 
-		//CDebugProc::print(1, "\n\n\nLength %.1f", fLength);
-		//CScene3D::SetPosition(D3DXVECTOR3(m_pos), m_fHeight, m_fWidth);
+		D3DXVECTOR3 PlayerPos;
+		D3DXVECTOR3 EnemyPos;
+
+		if (pTuto->GetPlayer() != NULL)
+		{
+			PlayerPos = pTuto->GetPlayer()->GetPosition();
+			EnemyPos = pTuto->GetEnemy()->GetPosition();
+
+			float fLengthPlayer;
+			float fLengthEnemy;
+
+			//中心から距離を計算する
+			fLengthPlayer = sqrt((PlayerPos.x - m_pos.x) * (PlayerPos.x - m_pos.x) +
+				(PlayerPos.z - m_pos.z) * (PlayerPos.z - m_pos.z));
+
+			if (fLengthPlayer > GROUND_SIZE)
+			{//プレイヤーが距離を超えたら
+			 //目的の場所から中心点の角度を求める
+				float fAnglePlayer = atan2f(PlayerPos.x - m_pos.x, PlayerPos.z - m_pos.z);
+			}
+			//プレイヤーの位置を設定
+			pTuto->GetPlayer()->SetPosition(D3DXVECTOR3(PlayerPos));
+			//中心から距離を計算する
+			fLengthEnemy = sqrt((EnemyPos.x - m_pos.x) * (EnemyPos.x - m_pos.x) +
+				(EnemyPos.z - m_pos.z) * (EnemyPos.z - m_pos.z));
+
+			if (fLengthEnemy > GROUND_SIZE)
+			{//エネミーが距離を超えたら
+			 //目的の場所から中心点の角度を求める
+				float fAngleEnemy = atan2f(EnemyPos.x - m_pos.x, EnemyPos.z - m_pos.z);
+			}
+			//プレイヤーの位置を設定
+			pTuto->GetEnemy()->SetPosition(D3DXVECTOR3(EnemyPos));
+		}
 	}
 }
 

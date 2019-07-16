@@ -185,6 +185,33 @@ void CTitle::Update(void)
 			}
 		}
 
+
+		if (mode == CNumPlayer::MODE_TUTORIAL)
+		{//
+			if (m_nCntReturn == 1)
+			{
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{//
+					m_Character[0] = CHARACTER_PLAYER;
+					m_pPlayer->SetSelect(false);
+				}
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{//
+					m_Character[0] = CHARACTER_ENEMY;
+					m_pEnemy->SetSelect(false);
+				}
+
+				//
+				m_Character[1] = CHARACTER_ENEMY;
+
+				pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
+				m_nCntReturn = 0;
+
+				//
+				SaveCharacter();
+			}
+		}
+
 		if (mode == CNumPlayer::MODE_1P)
 		{// 1Pƒ‚[ƒh‚Ì
 			if (m_nCntReturn == 1)

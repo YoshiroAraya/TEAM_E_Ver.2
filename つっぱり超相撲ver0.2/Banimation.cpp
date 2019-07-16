@@ -14,6 +14,7 @@
 #include "player.h"
 #include "game.h"
 #include "enemy.h"
+#include "tutorial.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -109,7 +110,20 @@ void CBAnimation::Update(void)
 	{//ゲームモードだったら処理に入る
 
 		CGame *pGame = NULL;
-		CPlayer *pPlayer = pGame->GetPlayer();
+		CPlayer *pPlayer = NULL;
+
+		CManager::MODE mode;
+		mode = CManager::GetMode();
+
+		if (mode == CManager::MODE_TUTORIAL)
+		{	//
+			pPlayer = CTutorial::GetPlayer();
+		}
+		else if (mode == CManager::MODE_GAME)
+		{	//
+			pPlayer = CGame::GetPlayer();
+		}
+
 		D3DXVECTOR3 pos;
 		if (pPlayer != NULL)
 		{
