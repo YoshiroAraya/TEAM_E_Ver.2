@@ -239,6 +239,7 @@ private:
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
+	bool					m_bUse;
 
 
 	// ƒ‚[ƒVƒ‡ƒ“ŠÖ”

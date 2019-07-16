@@ -26,6 +26,7 @@
 #include "SansoGauge.h"
 #include "UltimateGauge.h"
 #include "BattleSystem.h"
+#include "effect.h"
 
 //=============================================================================
 // マクロ定義
@@ -82,6 +83,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_fRot = 0.0f;
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
+	m_bUse = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -931,6 +933,11 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
+	D3DXVECTOR3 moveRand = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	////// 位置取得
+	//D3DXVECTOR3 posPlayer;
+	//posPlayer = CSceneX::GetPosition();
 
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
 	{
@@ -949,6 +956,7 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 		if (pos.x >= -80.0f)
 		{
 			m_nSiomakiCnt++;
+			
 
 			if (m_nSiomakiCnt > 60)
 			{
@@ -970,6 +978,26 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 					m_nKey[1] = 0;
 					m_nMotionType[0] = MOTION_SIOMAKI;
 					m_nMotionType[1] = MOTION_SIOMAKI;
+				}
+			}
+
+			//塩を投げる
+			if (m_nSiomakiCnt > 20)
+			{
+				if (m_bUse == false)
+				{
+					for (int nCnt = 0; nCnt < 30; nCnt++)
+					{
+						//塩
+						moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
+						moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
+						moveRand.z = (float)((rand() % 7 + 3));
+
+						CEffect::Create(D3DXVECTOR3(-100.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z),
+							D3DXCOLOR(1, 1, 1, 1), 6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
+					}
+					m_bUse = true;
+
 				}
 			}
 			fMovePlayer = 0.0f;

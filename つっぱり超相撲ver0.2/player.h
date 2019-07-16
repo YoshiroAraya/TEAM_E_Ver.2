@@ -215,6 +215,7 @@ private:
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
 	static CBAnimation *m_pAnimation;
+	bool					m_bUse;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ

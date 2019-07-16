@@ -26,6 +26,7 @@
 #include "SansoGauge.h"
 #include "UltimateGauge.h"
 #include "BattleSystem.h"
+#include "effect.h"
 
 //=============================================================================
 // É}ÉNÉçíËã`
@@ -88,6 +89,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_CPUAction = CPUACTION_NEUTRAL;
 	m_bAction = false;
 	m_DamageCnt = 0;
+	m_bUse = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -1174,6 +1176,7 @@ void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
 	// à⁄ìÆèàóùéÊìæ
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
+	D3DXVECTOR3 moveRand = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	if (CCamera::GetState() == CCamera::STATE_NISHI)
 	{
@@ -1215,6 +1218,27 @@ void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
 					m_nMotionType[1] = MOTION_SIOMAKI;
 				}
 			}
+
+			//âñÇìäÇ∞ÇÈ
+			if (m_nSiomakiCnt > 20)
+			{
+				if (m_bUse == false)
+				{
+					for (int nCnt = 0; nCnt < 30; nCnt++)
+					{
+						//âñ
+						moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
+						moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
+						moveRand.z = (float)((rand() % 7 + 3));
+
+						CEffect::Create(D3DXVECTOR3(80.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z),
+							D3DXCOLOR(1, 1, 1, 1), 6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
+					}
+					m_bUse = true;
+
+				}
+			}
+
 			fMoveEnemy = 0.0f;
 			pos.x = 80.0f;
 		}

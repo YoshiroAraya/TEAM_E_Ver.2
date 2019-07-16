@@ -372,12 +372,12 @@ void CGame::Update(void)
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
-			CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
-			100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
-			//‚¨‹à
-			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
-			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
-			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			//CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
+			//100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+			////‚¨‹à
+			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
+			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
 			//moveRand.x = rand() % 2 - 2;
 
 			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
@@ -387,15 +387,7 @@ void CGame::Update(void)
 			//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 				//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 
-			////‰–
-			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
-			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 6 + 3));
-			//moveRand.z = (float)((rand() % 7 + 3));
-			////moveRand.x = rand() % 2 - 2;
-			//PosRand.x = (float)(rand() % 300 - 300);
-
-			//CEffect3D::Create(D3DXVECTOR3(0.0f, 100.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, -moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-			//	6, 6, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL000);
+			
 		}
 	}
 #endif
