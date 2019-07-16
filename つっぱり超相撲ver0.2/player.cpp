@@ -395,7 +395,51 @@ void CPlayer::Update(void)
 			}
 		}
 		break;
+	case CManager::MODE_TUTORIAL:
+		if (CTutorial::GetState() == CTutorial::STATE_GAME)
+		{
+			//プレイヤーの動作
+			fMovePlayer = PlayerOperation(pos, fMovePlayer);
 
+			//タイマーの更新
+			TimerUpdate();
+
+			//角度の設定
+			rot = DirectionPlayer(pos, rot);
+
+			//敵と当たったとき
+			CollisionEnemyAction();
+
+			if (pEnemy != NULL)
+			{	// つっぱりとの当たり判定
+				TsuppariCollision(pos);
+			}
+			//つっぱり位置更新
+			m_pTuppari->SetPosition(pos);
+
+			//土俵際判定
+			DohyoHaziWhether(pos);
+
+			if (pULTGauge->GetUlt(1) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
+				}
+				m_bUltDis = true;
+			}
+			else if (pULTGauge->GetUlt(1) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+		}
+		break;
 	case CManager::MODE_TITLE:
 		// 回転処理
 		m_fRot = sinf(D3DX_PI + rot.y);

@@ -89,7 +89,13 @@ void CCamera::Init(void)
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
-	if (mode == CManager::MODE_RESULT)
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);
+		m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
+		m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	}
+	else if (mode == CManager::MODE_RESULT)
 	{
 		m_posV = D3DXVECTOR3(0.0f, 100.0f, -GAME_CAMERA_Y);	// 視点
 		m_posR = D3DXVECTOR3(0.0f, 80.0f, 0.0f);		// 注視点
@@ -165,54 +171,6 @@ void CCamera::Update(void)
 				}
 			}
 		}
-		else if (mode == CManager::MODE_TUTORIAL)
-		{
-			if (CTutorial::GetState() == CTutorial::STATE_START)
-			{
-				if (pPlayer != NULL && pEnemy != NULL)
-				{
-					// 入場のカメラワーク
-					Start(pPlayer, pEnemy);
-
-					if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
-					{
-						m_State = STATE_NORMAL;
-						m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);
-						m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
-
-						if (pPlayer != NULL && pEnemy != NULL)
-						{
-							pPlayer->SetPosition(PLAYER_POS);
-							pEnemy->SetPosition(ENEMY_POS);
-
-							pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
-							pPlayer->SetbMotionEnd(0, true);
-							pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
-							pPlayer->SetbMotionEnd(1, true);
-							pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
-							pEnemy->SetbMotionEnd(0, true);
-							pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
-							pEnemy->SetbMotionEnd(1, true);
-						}
-						CTutorial::SetState(CTutorial::STATE_GAME);
-					}
-				}
-			}
-			else if (CTutorial::GetState() == CTutorial::STATE_GAME)
-			{// ゲーム中
-				if (pPlayer != NULL)
-				{
-					// プレイヤーの奥義カメラワーク
-					PlayerUlt(pPlayer);
-				}
-
-				if (pEnemy != NULL)
-				{
-					// 敵の奥義カメラワーク
-					EnemyUlt(pEnemy);
-				}
-			}
-		}
 		else if (CGame::GetState() == CGame::STATE_GAME)
 		{// ゲーム中
 			if (pPlayer != NULL)
@@ -228,6 +186,55 @@ void CCamera::Update(void)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_TUTORIAL)
+	{
+		if (CTutorial::GetState() == CTutorial::STATE_START)
+		{
+			if (pPlayer != NULL && pEnemy != NULL)
+			{
+				// 入場のカメラワーク
+				Start(pPlayer, pEnemy);
+
+				if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
+				{
+					m_State = STATE_NORMAL;
+					m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);
+					m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
+
+					if (pPlayer != NULL && pEnemy != NULL)
+					{
+						pPlayer->SetPosition(PLAYER_POS);
+						pEnemy->SetPosition(ENEMY_POS);
+
+						pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
+						pPlayer->SetbMotionEnd(0, true);
+						pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
+						pPlayer->SetbMotionEnd(1, true);
+						pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
+						pEnemy->SetbMotionEnd(1, true);
+					}
+					CTutorial::SetState(CTutorial::STATE_GAME);
+				}
+			}
+		}
+		else if (CTutorial::GetState() == CTutorial::STATE_GAME)
+		{// ゲーム中
+			if (pPlayer != NULL)
+			{
+				// プレイヤーの奥義カメラワーク
+				PlayerUlt(pPlayer);
+			}
+
+			if (pEnemy != NULL)
+			{
+				// 敵の奥義カメラワーク
+				EnemyUlt(pEnemy);
+			}
+		}
+	}
+
 	else if (mode == CManager::MODE_TITLE)
 	{
 		// タイトル取得

@@ -63,7 +63,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_pTexture = NULL;							// テクスチャへのポインタ
 	m_pVtxBuff = NULL;							// 頂点バッファへのポインタ
 	m_bLand = false;							// 右にいるかどうか
-	m_bHit = false;									// 右にいるかどうか
+	m_bHit = false;								// 右にいるかどうか
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_State = STATE_NEUTRAL;
@@ -400,7 +400,52 @@ void CEnemy::Update(void)
 			}
 		}
 		break;
+	case CManager::MODE_TUTORIAL:
 
+		if (CTutorial::GetState() == CTutorial::STATE_GAME)
+		{
+			//エネミーの処理
+			EnemyTutorial(pos, fMoveEnemy);
+			//タイマーの更新
+			TimerUpdate();
+
+			//角度の設定
+			rot = DirectionEnemy(pos, rot);
+
+			//敵と当たったとき
+			CollisionPlayerAction();
+
+			if (pPlayer != NULL)
+			{
+				TsuppariCollision(pos);
+			}
+			//つっぱり位置更新
+			m_pTuppari->SetPosition(pos);
+
+			//土俵際判定
+			DohyoHaziWhether(pos);
+
+			if (pULTGauge->GetUlt(0) == true && m_bUltDis == false)
+			{
+				if (m_pAnimation == NULL)
+				{
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+				}
+				m_bUltDis = true;
+			}
+			else if (pULTGauge->GetUlt(0) == false)
+			{
+				if (m_pAnimation != NULL)
+				{
+					m_pAnimation->SetDestroy(true);
+					m_pAnimation = NULL;
+				}
+				m_bUltDis = false;
+			}
+		}
+
+		break;
 	case CManager::MODE_TITLE:
 		// 回転処理
 		m_fRot = sinf(D3DX_PI + rot.y);
@@ -1120,6 +1165,53 @@ float CEnemy::EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy)
 	}
 
 	PosDiff = PlayerPos.x - pos.x;
+
+	return fMoveEnemy;
+}
+
+//=============================================================================
+// チュートリアルのエネミー処理
+//=============================================================================
+float CEnemy::EnemyTutorial(D3DXVECTOR3 pos, float fMoveEnemy)
+{
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+	// ゲージの取得
+	CSansoGauge *pSansoGauge = NULL;
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pSansoGauge = CTutorial::GetSansoGauge();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pSansoGauge = CGame::GetSansoGauge();
+	}
+
+	//通常状態で硬直していない
+	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	{
+		if (m_bMotionEnd[0] == true)
+		{
+			m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+		}
+		if (m_bMotionEnd[1] == true)
+		{
+			m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+		}
+	}
+
+	//ダメージを受けた回数を初期化
+	m_DamageCnt = 0;
 
 	return fMoveEnemy;
 }

@@ -188,6 +188,7 @@ public:
 	void InitStatus(void);
 	float EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy);
 	float EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy);
+	float EnemyTutorial(D3DXVECTOR3 pos, float fMoveEnemy);
 	void CollisionPlayerAction(void);
 	void TimerUpdate(void);
 	void TsuppariCollision(D3DXVECTOR3 pos);

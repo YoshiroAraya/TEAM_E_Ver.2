@@ -142,7 +142,9 @@ void CPause::Update(void)
 	//フェードを取得
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
+	// モード取得
+	CManager::MODE mode;
+	mode = CManager::GetMode();
 
 	//サウンド情報を取得
 	CSound *pSound = CManager::GetSound(0);
@@ -210,7 +212,15 @@ void CPause::Update(void)
 				break;
 			case SELECTMODE_RETRY:
 				m_bPause = false;
-				CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+
+				if (mode == CManager::MODE_TUTORIAL)
+				{
+					CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+				}
+				else if (mode == CManager::MODE_GAME)
+				{
+					CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+				}
 				SetbPause(m_bPause);
 				break;
 			case SELECTMODE_QUIT:

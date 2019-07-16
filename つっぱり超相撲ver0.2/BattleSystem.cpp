@@ -950,13 +950,16 @@ void CBattleSys::Operation(void)
 			{
 				CTutorial::SetWinner(CTutorial::WINNER_NONE);
 				CTutorial::SetHit(true);
+				CManager::GetTutorial()->SetbUI(true);
 			}
 			else if (mode == CManager::MODE_GAME)
 			{
 				CGame::SetWinner(CGame::WINNER_NONE);
 				CGame::SetHit(true);
+				CManager::GetGame()->SetbUI(true);
 			}
-			CManager::GetGame()->SetbUI(true);
+
+
 		}
 
 		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true)
@@ -1038,23 +1041,27 @@ void CBattleSys::Operation(void)
 void CBattleSys::Recovery(void)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// エネミーの取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 	// モード取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{
+		pPlayer = CTutorial::GetPlayer();
+		pEnemy = CTutorial::GetEnemy();
+
 		CTutorial::SetWinner(CTutorial::WINNER_NONE);
 		CTutorial::SetHit(true);
 		CTutorial::SetHit(false);
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
+		pPlayer = CGame::GetPlayer();
+		pEnemy = CGame::GetEnemy();
+
 		CGame::SetWinner(CGame::WINNER_NONE);
 		CGame::SetHit(true);
 		CGame::SetHit(false);
@@ -2013,14 +2020,15 @@ void CBattleSys::ResetBattle(void)
 	{
 		CTutorial::SetWinner(CTutorial::WINNER_NONE);
 		CTutorial::SetHit(true);
+		CManager::GetTutorial()->SetbUI(true);
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
 		CGame::SetWinner(CGame::WINNER_NONE);
 		CGame::SetHit(true);
+		CManager::GetGame()->SetbUI(true);
 	}
 
-	CManager::GetGame()->SetbUI(true);
 	pTime->SetTime(60);
 }
 

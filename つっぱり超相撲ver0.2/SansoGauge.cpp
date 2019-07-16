@@ -82,13 +82,13 @@ HRESULT CSansoGauge::Init(D3DXVECTOR3 pos)
 
 	//1p‘¤
 	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(285.0f, pos.y, 0.0f));
-	m_pScene2D[0]->SetWidthHeight(280.0f, 35.0f);
+	m_pScene2D[0]->SetWidthHeight(280.0f, 25.0f);
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.5f, 0.5f, 1.0f, 1.0f));
 	m_pScene2D[0]->BindTexture(NULL);
 
 	//2p‘¤
 	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(995.0f, pos.y, 0.0f));
-	m_pScene2D[1]->SetWidthHeight(280.0f, 35.0f);
+	m_pScene2D[1]->SetWidthHeight(280.0f, 25.0f);
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.5f, 0.5f, 1.0f));
 	m_pScene2D[1]->BindTexture(NULL);
 

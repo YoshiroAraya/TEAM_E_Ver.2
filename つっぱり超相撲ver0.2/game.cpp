@@ -105,10 +105,10 @@ void CGame::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
-	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 200, 0));
-	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
-	CWinnerUI::Create(D3DXVECTOR3(300, 130, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 50, 0));
+	CWinnerUI::Create(D3DXVECTOR3(300, 100, 0));
+	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
+	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 600, 0));
 
 	int nCntZ;
 	int nCnt;

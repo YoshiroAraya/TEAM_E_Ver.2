@@ -85,14 +85,14 @@ HRESULT CUltimateGauge::Init(D3DXVECTOR3 pos)
 
 	//1p‘¤
 	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(0 + GAUGE_POSX, pos.y, 0.0f));
-	m_pScene2D[0]->SetWidthHeight(MAX_GAUG_WIDE / 2, 30.0f);
+	m_pScene2D[0]->SetWidthHeight(MAX_GAUG_WIDE / 2, 20.0f);
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 	m_pScene2D[0]->BindTexture(NULL);
 	m_bUlt[0] = false;
 
 	//2p‘¤
 	m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH - GAUGE_POSX, pos.y, 0.0f));
-	m_pScene2D[1]->SetWidthHeight(MAX_GAUG_WIDE / 2, 30.0f);
+	m_pScene2D[1]->SetWidthHeight(MAX_GAUG_WIDE / 2, 20.0f);
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 	m_pScene2D[1]->BindTexture(NULL);
 	m_bUlt[1] = false;

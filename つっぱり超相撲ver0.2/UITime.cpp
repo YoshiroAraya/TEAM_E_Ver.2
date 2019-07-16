@@ -126,7 +126,8 @@ void CUITime::Update(void)
 
 #if 1
 		if (pPlayer->GetState() != CPlayer::STATE_JANKEN
-			&& pPlayer->GetState() != CPlayer::STATE_NOKOTTA)
+			&& pPlayer->GetState() != CPlayer::STATE_NOKOTTA
+			&& mode == CManager::MODE_GAME)
 		{
 			if (m_nTime > 0)
 			{	//ƒJƒEƒ“ƒg‰ÁŽZ

@@ -95,7 +95,7 @@ void CTutorial::Init(void)
 {
 	m_bHit = false;
 	m_bUI = true;
-	m_State = STATE_START;
+	m_State = STATE_GAME;
 	m_Winner = WINNER_NONE;
 	//ƒCƒ“ƒXƒ^ƒ“ƒX
 	CManager *pManager = NULL;
@@ -105,40 +105,40 @@ void CTutorial::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 80, 0));
-	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 200, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 50, 0));
+	//CWinnerUI::Create(D3DXVECTOR3(300, 100, 0));
+	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
-	CWinnerUI::Create(D3DXVECTOR3(300, 130, 0));
 
 	int nCntZ;
 	int nCnt;
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	{//‰œ‹q
-		for (nCnt = 0; nCnt < 3; nCnt++)
-		{//‹q
+	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	//{//‰œ‹q
+	//	for (nCnt = 0; nCnt < 3; nCnt++)
+	//	{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
-		}
-	}
+	//		CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
+	//	}
+	//}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	{//‰E‹q
-		for (nCnt = 0; nCnt < 3; nCnt++)
-		{//‹q
+	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	//{//‰E‹q
+	//	for (nCnt = 0; nCnt < 3; nCnt++)
+	//	{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
-		}
-	}
+	//		CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
+	//	}
+	//}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	{//¶‹q
-		for (nCnt = 0; nCnt < 3; nCnt++)
-		{//‹q
+	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	//{//¶‹q
+	//	for (nCnt = 0; nCnt < 3; nCnt++)
+	//	{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
-		}
-	}
+	//		CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
+	//	}
+	//}
 
 	if (m_pScene3D == NULL)
 	{
@@ -147,12 +147,12 @@ void CTutorial::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// ƒvƒŒƒCƒ„[
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// ƒGƒlƒ~[
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
 	}
 	if (m_pMeshField == NULL)
 	{
@@ -189,7 +189,7 @@ void CTutorial::Init(void)
 		m_pBatlteSys = CBattleSys::Create();
 	}
 
-	CTouzai::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+	//CTouzai::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
 	CCamera *pCamera = CManager::GetCamera();
 
@@ -291,13 +291,13 @@ void CTutorial::Update(void)
 	{
 		m_Winner = WINNER_NONE;
 		m_pBatlteSys->ResetBattle();
-		m_pUITime->SetTime(TIME_INI);
+	//	m_pUITime->SetTime(TIME_INI);
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
 		m_Winner = WINNER_NONE;
 		m_pBatlteSys->ResetBattle();
-		m_pUITime->SetTime(TIME_INI);
+	//	m_pUITime->SetTime(TIME_INI);
 	}
 
 #ifdef _DEBUG
