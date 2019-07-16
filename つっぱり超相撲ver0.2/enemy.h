@@ -195,6 +195,7 @@ public:
 	void EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy);
 	D3DXVECTOR3 DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 	bool GetUltDis(void) { return m_bUltDis; }
+	void SetUltDis(bool bUltDis) { m_bUltDis = bUltDis; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
