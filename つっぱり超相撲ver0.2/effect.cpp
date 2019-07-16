@@ -109,8 +109,17 @@ void CEffect::Uninit(void)
 //=============================================================================
 void CEffect::Update(void)
 {
-	//煙のエフェクト
-	UpdateSmoke();
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL002)
+	{
+		//煙のエフェクト
+		UpdateSmoke();
+	}
+
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
+	{
+		//塩パーティクル
+		UpdateSalt();
+	}
 }
 
 //=============================================================================
@@ -164,6 +173,54 @@ void CEffect::UpdateSmoke(void)
 	}
 }
 
+//=============================================================================
+// お金の更新処理
+//=============================================================================
+void CEffect::UpdateSalt(void)
+{
+	//自分用の死亡フラグ変数
+	bool bDestroy = false;
+
+	m_nCntTimer++;
+
+	if (m_nLife > 0)
+	{
+		m_nLife--;
+
+		//重力
+		m_move.y -= cosf(D3DX_PI * 0) * 0.2f;
+
+		//位置を更新		
+		m_pos += m_move;
+		//m_rot.x += 0.2f;
+
+		//徐々に透明にしていく
+		m_Col.a = m_Col.a - m_fAlpha;
+
+		//一定以下になったら0に
+		if (m_Col.a < 0.01f)
+		{
+			m_Col.a = 0;
+		}
+		//色を設定
+		CBillboard::SetCol(m_Col);
+	
+		//設定処理
+		CBillboard::SetBillboard(m_pos, m_fHeight, m_fWidth);
+	}
+	else if (m_nLife <= 0)
+	{
+		//自分を消すフラグを立てる
+		bDestroy = true;
+	}
+
+	if (bDestroy == true)
+	{
+		//自分を消す(破棄)
+		Uninit();
+	}
+	/*CDebugProc::Print("c", "エフェクト");*/
+}
 
 //=============================================================================
 // 描画処理

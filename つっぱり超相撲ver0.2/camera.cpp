@@ -14,7 +14,7 @@
 #include "enemy.h"
 #include "title.h"
 #include "BattleSystem.h"
-#include "tutorial.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -79,7 +79,7 @@ CCamera::~CCamera()
 void CCamera::Init(void)
 {
 	m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);	// 視点
-	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 注視点
+	m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);		// 注視点
 	m_recU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));
@@ -119,24 +119,14 @@ void CCamera::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	// プレイヤー取得
-	CPlayer *pPlayer = NULL;
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
 	// 敵取得
-	CEnemy *pEnemy = NULL;
-	// モード取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{	// プレイヤーの取得
-		pPlayer = CTutorial::GetPlayer();
-		// エネミーの取得
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{	// プレイヤーの取得
-		pPlayer = CGame::GetPlayer();
-		// エネミーの取得
-		pEnemy = CGame::GetEnemy();
-	}
 
 	if (mode == CManager::MODE_GAME)
 	{
@@ -266,10 +256,6 @@ void CCamera::Update(void)
 						m_posV.x = SELECT_CAMERA_POSX;
 					}
 				}
-				else
-				{
-					m_posV.x = SELECT_CAMERA_POSX;
-				}
 
 				if (m_posV.y > SELECT_CAMERA_POSY)
 				{
@@ -280,10 +266,6 @@ void CCamera::Update(void)
 						m_posV.y = SELECT_CAMERA_POSY;
 					}
 				}
-				else
-				{
-					m_posV.y = SELECT_CAMERA_POSY;
-				}
 
 				if (m_posV.z < SELECT_CAMERA_POSZ)
 				{
@@ -293,10 +275,6 @@ void CCamera::Update(void)
 					{
 						m_posV.z = SELECT_CAMERA_POSZ;
 					}
-				}
-				else
-				{
-					m_posV.z = SELECT_CAMERA_POSZ;
 				}
 			}
 		}

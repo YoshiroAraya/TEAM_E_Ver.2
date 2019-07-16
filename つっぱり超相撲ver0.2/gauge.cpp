@@ -11,10 +11,10 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "input.h"
+#include "gauge.h"
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
-#include "tutorial.h"
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
@@ -203,22 +203,11 @@ void CGauge::SetPosition(D3DXVECTOR3 pos)
 void CGauge::SetGaugeRightLeft(float fRight, float fLeft)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer = NULL;
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
 	// エネミーの取得
-	CEnemy *pEnemy = NULL;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pPlayer = CTutorial::GetPlayer();
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pPlayer = CGame::GetPlayer();
-		pEnemy = CGame::GetEnemy();
-	}
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
 
 	m_fRight += fRight;
 	m_fLeft += fLeft;

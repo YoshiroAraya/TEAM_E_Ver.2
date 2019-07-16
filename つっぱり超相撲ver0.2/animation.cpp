@@ -13,7 +13,6 @@
 #include "load.h"
 #include "player.h"
 #include "game.h"
-#include "tutorial.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -99,20 +98,8 @@ void CAnimation::Uninit(void)
 //=============================================================================
 void CAnimation::Update(void)
 {
-	CPlayer *pPlayer = NULL;
-
-	// モード取得
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{	// プレイヤーの取得
-		pPlayer = CTutorial::GetPlayer();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{	// プレイヤーの取得
-		pPlayer = CGame::GetPlayer();
-	}
-
+	CGame *pGame = NULL;
+	CPlayer *pPlayer = pGame->GetPlayer();
 	D3DXVECTOR3 pos;
 
 	if (pPlayer != NULL)
