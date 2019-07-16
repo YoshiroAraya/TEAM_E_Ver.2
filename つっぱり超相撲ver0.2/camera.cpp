@@ -14,7 +14,7 @@
 #include "enemy.h"
 #include "title.h"
 #include "BattleSystem.h"
-#include "tutorial.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -113,24 +113,14 @@ void CCamera::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	// プレイヤー取得
-	CPlayer *pPlayer = NULL;
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
 	// 敵取得
-	CEnemy *pEnemy = NULL;
-	// モード取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{	// プレイヤーの取得
-		pPlayer = CTutorial::GetPlayer();
-		// エネミーの取得
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{	// プレイヤーの取得
-		pPlayer = CGame::GetPlayer();
-		// エネミーの取得
-		pEnemy = CGame::GetEnemy();
-	}
 
 	if (mode == CManager::MODE_GAME)
 	{
@@ -161,55 +151,8 @@ void CCamera::Update(void)
 						pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
 						pEnemy->SetbMotionEnd(1, true);
 					}
+
 					CGame::SetState(CGame::STATE_GAME);
-				}
-			}
-		}
-		else if (mode == CManager::MODE_TUTORIAL)
-		{
-			if (CTutorial::GetState() == CTutorial::STATE_START)
-			{
-				if (pPlayer != NULL && pEnemy != NULL)
-				{
-					// 入場のカメラワーク
-					Start(pPlayer, pEnemy);
-
-					if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
-					{
-						m_State = STATE_NORMAL;
-						m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);
-						m_posR = D3DXVECTOR3(0.0f, GAME_RCAMERA_Y, GAME_RCAMERA_Z);
-
-						if (pPlayer != NULL && pEnemy != NULL)
-						{
-							pPlayer->SetPosition(PLAYER_POS);
-							pEnemy->SetPosition(ENEMY_POS);
-
-							pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
-							pPlayer->SetbMotionEnd(0, true);
-							pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
-							pPlayer->SetbMotionEnd(1, true);
-							pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
-							pEnemy->SetbMotionEnd(0, true);
-							pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
-							pEnemy->SetbMotionEnd(1, true);
-						}
-						CTutorial::SetState(CTutorial::STATE_GAME);
-					}
-				}
-			}
-			else if (CTutorial::GetState() == CTutorial::STATE_GAME)
-			{// ゲーム中
-				if (pPlayer != NULL)
-				{
-					// プレイヤーの奥義カメラワーク
-					PlayerUlt(pPlayer);
-				}
-
-				if (pEnemy != NULL)
-				{
-					// 敵の奥義カメラワーク
-					EnemyUlt(pEnemy);
 				}
 			}
 		}
@@ -220,7 +163,7 @@ void CCamera::Update(void)
 				// プレイヤーの奥義カメラワーク
 				PlayerUlt(pPlayer);
 			}
-
+			
 			if (pEnemy != NULL)
 			{
 				// 敵の奥義カメラワーク
@@ -259,10 +202,6 @@ void CCamera::Update(void)
 						m_posV.x = SELECT_CAMERA_POSX;
 					}
 				}
-				else
-				{
-					m_posV.x = SELECT_CAMERA_POSX;
-				}
 
 				if (m_posV.y > SELECT_CAMERA_POSY)
 				{
@@ -273,10 +212,6 @@ void CCamera::Update(void)
 						m_posV.y = SELECT_CAMERA_POSY;
 					}
 				}
-				else
-				{
-					m_posV.y = SELECT_CAMERA_POSY;
-				}
 
 				if (m_posV.z < SELECT_CAMERA_POSZ)
 				{
@@ -286,10 +221,6 @@ void CCamera::Update(void)
 					{
 						m_posV.z = SELECT_CAMERA_POSZ;
 					}
-				}
-				else
-				{
-					m_posV.z = SELECT_CAMERA_POSZ;
 				}
 			}
 		}

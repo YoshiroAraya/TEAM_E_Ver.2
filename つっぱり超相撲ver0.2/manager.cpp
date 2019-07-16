@@ -31,7 +31,6 @@
 #include "ultimate.h"
 #include "load.h"
 #include "pause.h"
-#include "tutorial.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -44,7 +43,6 @@ CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CTitle *CManager::m_pTitle = NULL;
 CResult *CManager::m_pResult = NULL;
-CTutorial *CManager::m_pTutorial = NULL;
 CUltimate *CManager::m_pUltimate = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
@@ -166,6 +164,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 		}
 	}
 #endif
+
 	if (m_pFade == NULL)
 	{
 		//フェードの生成
@@ -176,6 +175,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 			m_pFade->SetFade(m_mode, m_pFade->FADE_IN);
 		}
 	}
+
 	CLoad::LoadModel();
 	CLoad::LoadTex();
 
@@ -301,15 +301,13 @@ void CManager::Uninit(void)
 		}
 		break;
 
-			//チュートリアルモードの終了処理
-		case CManager::MODE_TUTORIAL:
-			if (m_pTutorial != NULL)
-			{
-				m_pTutorial->Uninit();
-				delete m_pTutorial;
-				m_pTutorial = NULL;
-			}
-			break;
+		//	//チュートリアルモードの終了処理
+		//case CManager::MODE_TUTORIAL:
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		m_pTutorial->Update();
+		//	}
+		//	break;
 
 		//ゲームモードの終了処理
 	case CManager::MODE_GAME:
@@ -423,13 +421,13 @@ void CManager::Update(void)
 		}
 		break;
 
-		//チュートリアルモードの更新処理
-	case CManager::MODE_TUTORIAL:
-		if (m_pTutorial != NULL)
-		{
-			m_pTutorial->Update();
-		}
-		break;
+		//	//チュートリアルモードの更新処理
+		//case CManager::MODE_TUTORIAL:
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		m_pTutorial->Update();
+		//	}
+		//	break;
 
 		//ゲームモードの更新処理
 	case CManager::MODE_GAME:
@@ -546,20 +544,23 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 
-	case CManager::MODE_TUTORIAL:
-		//リザルトクラスの破棄
-		if (m_pTutorial != NULL)
-		{
-			// 終了処理
-			m_pTutorial->Uninit();
+		//case CManager::MODE_TUTORIAL:
+		//	//リザルトクラスの破棄
+		//	if (m_pTutorial != NULL)
+		//	{
+		//		// 終了処理
+		//		m_pTutorial->Uninit();
 
-			//メモリの開放
-			delete m_pTutorial;
+		//		//メモリの開放
+		//		delete m_pTutorial;
 
-			//NULLにする
-			m_pTutorial = NULL;
-		}
-		break;
+		//		//NULLにする
+		//		m_pTutorial = NULL;
+
+		//		//セレクトモード中のBGM
+		//		m_pSound->StopSound(CSound::SOUND_LABEL_BGM_SELECTTUTORIAL);
+		//	}
+		//	break;
 
 	case CManager::MODE_GAME:
 		//ゲームクラスの破棄
@@ -669,7 +670,8 @@ void CManager::SetMode(MODE mode)
 			m_pResult = new CResult;
 
 			if (m_pResult != NULL)
-			{	// 初期化処理
+			{
+				// 初期化処理
 				m_pResult->Init();
 			}
 			else
@@ -691,7 +693,8 @@ void CManager::SetMode(MODE mode)
 			m_pUltimate = new CUltimate;
 
 			if (m_pUltimate != NULL)
-			{	// 初期化処理
+			{
+				// 初期化処理
 				m_pUltimate->Init();
 			}
 			else
@@ -705,27 +708,28 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 
-	case CManager::MODE_TUTORIAL:
-		//チュートーリアルの初期化
-		if (m_pTutorial == NULL)
-		{
-			//キーボードのメモリを動的確保
-			m_pTutorial = new CTutorial;
+		//case CManager::MODE_TUTORIAL:
+		//	//チュートーリアルの初期化
+		//	if (m_pTutorial == NULL)
+		//	{
+		//		//キーボードのメモリを動的確保
+		//		m_pTutorial = new CTutorial;
 
-			if (m_pTutorial != NULL)
-			{	// 初期化処理
-				m_pTutorial->Init();
-			}
-			else
-			{
-				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
-			}
-		}
-		else
-		{
-			MessageBox(0, "NULLでした", "警告", MB_OK);
-		}
-		break;
+		//		if (m_pTutorial != NULL)
+		//		{
+		//			// 初期化処理
+		//			m_pTutorial->Init();
+		//		}
+		//		else
+		//		{
+		//			MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		MessageBox(0, "NULLでした", "警告", MB_OK);
+		//	}
+		//	break;
 
 	}
 }

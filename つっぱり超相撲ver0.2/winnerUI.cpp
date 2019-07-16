@@ -16,7 +16,6 @@
 #include "enemy.h"
 #include "game.h"
 #include "load.h"
-#include "tutorial.h"
 //--------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //--------------------------------------------
@@ -134,21 +133,8 @@ void CWinnerUI::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-	int nWinner;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		//Ÿ—˜”»’è
-		nWinner = CTutorial::GetWinner();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		//Ÿ—˜”»’è
-		nWinner = CGame::GetWinner();
-	}
-
+	//Ÿ—˜”»’è
+	int nWinner = CGame::GetWinner();
 
 
 	if (nWinner == 1)

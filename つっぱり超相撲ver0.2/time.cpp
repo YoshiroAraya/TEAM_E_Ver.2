@@ -16,7 +16,7 @@
 #include "camera.h"
 #include "title.h"
 #include "load.h"
-#include "tutorial.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -116,20 +116,6 @@ void CTime::Update(void)
 	// エネミーの取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pPlayer = CTutorial::GetPlayer();
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pPlayer = CGame::GetPlayer();
-		pEnemy = CGame::GetEnemy();
-	}
-
 
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	pVtxBuff = CScene2D::GetBuff();
