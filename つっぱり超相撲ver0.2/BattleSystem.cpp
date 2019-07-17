@@ -195,8 +195,6 @@ void CBattleSys::Update(void)
 		pEnemy = CGame::GetEnemy();
 	}
 
-
-
 	//キーボード/コントローラー操作
 	Operation();
 	//カウンター処理
@@ -315,7 +313,8 @@ void CBattleSys::Operation(void)
 		if (GState == CGame::STATE_GAME
 			|| TState == CTutorial::STATE_GAME)
 		{
-			if (pPlayer->GetState() == CPlayer::STATE_JANKEN)
+			if (pPlayer->GetState() == CPlayer::STATE_JANKEN
+				&& pPlayer->GetbJanken() == true)
 			{
 #ifdef _DEBUG
 				CDebugProc::Print("c", " eじゃんけん ");
@@ -325,7 +324,6 @@ void CBattleSys::Operation(void)
 				{
 					m_aJanken[0] = JANKEN_GU_BUTI;
 					pPlayer->SetState(CPlayer::STATE_NOKOTTA);
-
 					pPlayer->SetMotionType(0, CPlayer::MOTION_SYAGAMI);
 					pPlayer->SetbMotionEnd(0, true);
 					pPlayer->SetMotionType(1, CPlayer::MOTION_SYAGAMI);
@@ -354,43 +352,81 @@ void CBattleSys::Operation(void)
 				}
 			}
 
-			if (pEnemy->GetState() == CEnemy::STATE_JANKEN)
+			if (pEnemy->GetState() == CEnemy::STATE_JANKEN
+				&& pEnemy->GetbJanken() == true)
 			{
 #ifdef _DEBUG
 				CDebugProc::Print("c", " eじゃんけん ");
 #endif
-				if (pInputKeyboard->GetPress(DIK_B) == true ||
-					pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
-				{
-					m_aJanken[1] = JANKEN_GU_BUTI;
-					pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(0, true);
-					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(1, true);
-				}
-				else if (pInputKeyboard->GetPress(DIK_N) == true ||
-					pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
-				{
-					m_aJanken[1] = JANKEN_CHOKI_TUPPA;
-					pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(0, true);
-					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(1, true);
-				}
-				else if (pInputKeyboard->GetPress(DIK_M) == true ||
-					pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
-				{
-					m_aJanken[1] = JANKEN_PA_KAWASI;
-					pEnemy->SetState(CEnemy::STATE_NOKOTTA);
-					m_abPA[1] = true;
-					pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(0, true);
-					pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
-					pEnemy->SetbMotionEnd(1, true);
-				}
+				//CPUと人間のじゃんけん操作
+				if (pEnemy->GetMode() == CEnemy::MODE_CPU)
+				{	//じゃんけんをランダムに決定
+					int nRandJanken = rand() % 3;
 
+					switch (nRandJanken)
+					{
+					case 0:
+						m_aJanken[1] = JANKEN_GU_BUTI;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+						break;
+					case 1:
+						m_aJanken[1] = JANKEN_CHOKI_TUPPA;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+						break;
+					case 2:
+						m_aJanken[1] = JANKEN_PA_KAWASI;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						m_abPA[1] = true;
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+						break;
+					}
+
+				}
+				else
+				{	//人間の操作
+					if (pInputKeyboard->GetPress(DIK_B) == true ||
+						pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+					{
+						m_aJanken[1] = JANKEN_GU_BUTI;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+					}
+					else if (pInputKeyboard->GetPress(DIK_N) == true ||
+						pXInput->GetPress(XENEMY_Y_BUTTON, 1) == true)
+					{
+						m_aJanken[1] = JANKEN_CHOKI_TUPPA;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+					}
+					else if (pInputKeyboard->GetPress(DIK_M) == true ||
+						pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+					{
+						m_aJanken[1] = JANKEN_PA_KAWASI;
+						pEnemy->SetState(CEnemy::STATE_NOKOTTA);
+						m_abPA[1] = true;
+						pEnemy->SetMotionType(0, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(0, true);
+						pEnemy->SetMotionType(1, CEnemy::MOTION_SYAGAMI);
+						pEnemy->SetbMotionEnd(1, true);
+					}
+				}
 			}
 		}
 
@@ -784,8 +820,8 @@ void CBattleSys::Operation(void)
 				}
 			}
 		}
-
-		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false)
+		//エネミーのつっぱり
+		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false && pEnemy->GetMode() == CEnemy::MODE_P2)
 		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
@@ -893,7 +929,7 @@ void CBattleSys::Operation(void)
 
 		if (pEnemy != NULL)
 		{
-			if (/*pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && */pEnemy->GetDying() == false)
+			if (pEnemy->GetDying() == false)
 			{
 				if (pEnemy->GetPosition().x > DOHYO_HAZI_NUM)
 				{
@@ -913,8 +949,8 @@ void CBattleSys::Operation(void)
 		{
 			pPlayer->InitStatus();
 			pEnemy->InitStatus();
-			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
-			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 20.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 20.0f, 0.0f));
 			pPlayer->SetState(CPlayer::STATE_JANKEN);
 			pEnemy->SetState(CEnemy::STATE_JANKEN);
 			m_bAttack = false;
@@ -1932,6 +1968,7 @@ void CBattleSys::ResetBattle(void)
 	// ゲージの取得
 	CGauge *pGauge = NULL;
 	CSansoGauge *pSansoGauge = NULL;
+	CUltimateGauge *pULTGauge = NULL;
 	// タイムの取得
 	CUITime *pTime = NULL;
 	//モードの取得
@@ -1944,6 +1981,7 @@ void CBattleSys::ResetBattle(void)
 		pEnemy = CTutorial::GetEnemy();
 		pGauge = CTutorial::GetGauge();
 		pSansoGauge = CTutorial::GetSansoGauge();
+		pULTGauge = CTutorial::GetUltimateGauge();
 		pTime = CTutorial::GetTime();
 	}
 	else if (mode == CManager::MODE_GAME)
@@ -1952,15 +1990,14 @@ void CBattleSys::ResetBattle(void)
 		pEnemy = CGame::GetEnemy();
 		pGauge = CGame::GetGauge();
 		pSansoGauge = CGame::GetSansoGauge();
+		pULTGauge = CGame::GetUltimateGauge();
 		pTime = CGame::GetTime();
 	}
 
-
-
 	pPlayer->InitStatus();
 	pEnemy->InitStatus();
-	pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 30.0f, 0.0f));
-	pEnemy->SetPosition(D3DXVECTOR3(80.0f, 30.0f, 0.0f));
+	pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 20.0f, 0.0f));
+	pEnemy->SetPosition(D3DXVECTOR3(80.0f, 20.0f, 0.0f));
 	pPlayer->SetState(CPlayer::STATE_JANKEN);
 	pEnemy->SetState(CEnemy::STATE_JANKEN);
 	m_bAttack = false;
@@ -1993,6 +2030,7 @@ void CBattleSys::ResetBattle(void)
 
 	pGauge->SetGaugeRightLeft(600, 600);
 	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
+	pULTGauge->SetGaugeRightLeft(-600, -600);
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{

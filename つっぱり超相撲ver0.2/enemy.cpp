@@ -90,6 +90,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	m_bAction = false;
 	m_DamageCnt = 0;
 	m_bUse = false;
+	m_bJanken = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{

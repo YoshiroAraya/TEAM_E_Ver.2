@@ -85,6 +85,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
 	m_bUse = false;
+	m_bJanken = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -339,7 +340,7 @@ void CPlayer::Update(void)
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
-		pEnemy = CTutorial::GetEnemy();
+		pEnemy = CGame::GetEnemy();
 		pULTGauge = CGame::GetUltimateGauge();
 		pShadow = CGame::GetShadow();
 	}
@@ -993,7 +994,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	}
 
 	// ‚Â‚Á‚Ï‚è‚Æ‚Ì“–‚½‚è”»’è
-	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI)
+	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI || pEnemy->GetState() == CPlayer::STATE_ULT)
 	{
 		bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 		//‚Â‚Á‚Ï‚è‚É‚ ‚½‚Á‚½

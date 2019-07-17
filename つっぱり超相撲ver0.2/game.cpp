@@ -41,7 +41,7 @@
 #include "number.h"
 #include "UITime.h"
 #include "pause.h"
-
+#include "numPlayer.h"
 
 //============================================================================
 //	マクロ定義
@@ -152,8 +152,16 @@ void CGame::Init(void)
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+		if (CNumPlayer::GetMode() == CNumPlayer::MODE_1P)
+		{
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+		}
+		else if (CNumPlayer::GetMode() == CNumPlayer::MODE_2P)
+		{
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_P2);
+		}
 	}
+
 	if (m_pMeshField == NULL)
 	{
 		// メッシュフィールドの生成
@@ -288,6 +296,8 @@ void CGame::Update(void)
 		{// じゃんけんのUIを出す
 			CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
 			m_bUI = false;
+			m_pPlayer->SetbJanken(true);
+			m_pEnemy->SetbJanken(true);
 		}
 	}
 
@@ -387,7 +397,7 @@ void CGame::Update(void)
 			//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 				//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 
-			
+
 		}
 	}
 #endif

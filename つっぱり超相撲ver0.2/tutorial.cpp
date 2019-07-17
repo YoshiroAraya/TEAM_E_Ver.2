@@ -264,7 +264,7 @@ void CTutorial::Update(void)
 	}
 	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
 	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
 
 	}
 	if (pInputKeyboard->GetTrigger(DIK_9) == true)
@@ -283,6 +283,8 @@ void CTutorial::Update(void)
 		{// ‚¶‚á‚ñ‚¯‚ñ‚ÌUI‚ğo‚·
 			CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
 			m_bUI = false;
+			m_pPlayer->SetbJanken(true);
+			m_pEnemy->SetbJanken(true);
 		}
 	}
 
