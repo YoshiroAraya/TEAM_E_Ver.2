@@ -120,11 +120,11 @@ void CTitle::Update(void)
 			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 300.0f, 0.0f));
 			if (m_pPlayer == NULL)
 			{
-				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 			}
 			if (m_pEnemy == NULL)
 			{
-				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CEnemy::MODE_P2);
+				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CEnemy::MODE_P2);
 			}
 
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
@@ -153,11 +153,11 @@ void CTitle::Update(void)
 			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
 			if (m_pPlayer == NULL)
 			{
-				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 			}
 			if (m_pEnemy == NULL)
 			{
-				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CEnemy::MODE_P2);
+				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CEnemy::MODE_P2);
 			}
 
 			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
@@ -185,7 +185,32 @@ void CTitle::Update(void)
 			}
 		}
 
-		if (mode == CNumPlayer::MODE_1P)
+		if (mode == CNumPlayer::MODE_TUTORIAL)
+		{//
+			if (m_nCntReturn == 1)
+			{
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{//
+					m_Character[0] = CHARACTER_PLAYER;
+					m_pPlayer->SetSelect(false);
+				}
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				{//
+					m_Character[0] = CHARACTER_ENEMY;
+					m_pEnemy->SetSelect(false);
+				}
+
+				//
+				m_Character[1] = CHARACTER_ENEMY;
+
+				pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
+				m_nCntReturn = 0;
+
+				//
+				SaveCharacter();
+			}
+		}
+		else if (mode == CNumPlayer::MODE_1P)
 		{// 1Pƒ‚[ƒh‚Ì
 			if (m_nCntReturn == 1)
 			{

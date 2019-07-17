@@ -197,6 +197,9 @@ public:
 	D3DXVECTOR3 DirectionEnemy(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 	bool GetUltDis(void) { return m_bUltDis; }
 	void SetUltDis(bool bUltDis) { m_bUltDis = bUltDis; }
+	MODE GetMode(void) { return m_Mode; }
+	void SetbJanken(bool bJanken) { m_bJanken = bJanken; }
+	bool GetbJanken(void) { return m_bJanken; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
@@ -238,11 +241,11 @@ private:
 	int						m_nSiomakiCnt;	// 塩まきカウンター
 	bool					m_bDash;		// 走っているかどうか
 	bool					m_bWallHit;		// 壁に激突したかどうか
+	bool					m_bJanken;		// じゃんけん
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
 	bool					m_bUse;
-
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ

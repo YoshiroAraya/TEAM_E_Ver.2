@@ -170,7 +170,8 @@ public:
 	D3DXVECTOR3 DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 	bool GetUltDis(void) { return m_bUltDis; }
 	void SetUltDis(bool bUltDis) { m_bUltDis = bUltDis; }
-
+	void SetbJanken(bool bJanken) { m_bJanken = bJanken; }
+	bool GetbJanken(void) { return m_bJanken; }
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
 	//モーションの更新関数
@@ -215,7 +216,7 @@ private:
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
-	static CBAnimation *m_pAnimation;
+	static CBAnimation		*m_pAnimation;
 	bool					m_bUse;
 
 	// モーション関数

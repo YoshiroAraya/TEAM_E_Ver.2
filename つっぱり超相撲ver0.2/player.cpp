@@ -84,6 +84,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
 	m_bUse = false;
+	m_bJanken = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -321,6 +322,19 @@ void CPlayer::Update(void)
 	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pEnemy = CTutorial::GetEnemy();
+		pULTGauge = CTutorial::GetUltimateGauge();
+		pShadow = CTutorial::GetShadow();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pEnemy = CGame::GetEnemy();
+		pULTGauge = CGame::GetUltimateGauge();
+		pShadow = CGame::GetShadow();
+	}
 
 	// 前のフレームの位置代入
 	m_posOld = pos;
@@ -820,7 +834,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 					m_bEnemyDamage = true;
 					m_move.x = 0;
 				}
-				
+
 				if (m_bEnemyDamage == false)
 				{// 突っ張りが当たったら止まる
 					// 右に進む
@@ -922,7 +936,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	pSansoGauge = CGame::GetSansoGauge();
 
 	// つっぱりとの当たり判定
-	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI)
+	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI || pEnemy->GetState() == CPlayer::STATE_ULT)
 	{
 		bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 		//つっぱりにあたった
@@ -1000,7 +1014,7 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 		if (pos.x >= -80.0f)
 		{
 			m_nSiomakiCnt++;
-			
+
 
 			if (m_nSiomakiCnt > 60)
 			{

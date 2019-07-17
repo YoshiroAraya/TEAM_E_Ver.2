@@ -44,21 +44,22 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/touzai.png",					//10
 	"data/TEXTURE/TITLE/1P.png",				//11
 	"data/TEXTURE/TITLE/2P.png",				//12
-	"data/TEXTURE/TITLE/tutorial01.png",		//12
-	"data\\TEXTURE\\EFFECT\\particle000.jpg",	//13
-	"data\\TEXTURE\\EFFECT\\money.png",			//14
-	"data/TEXTURE/EFFECT/16.png",				//15
-	"data/TEXTURE/EFFECT/somke.png",			//16
-	"data/TEXTURE/circle.png",					//17
-	"data/TEXTURE/UI/number002.png"	,			//18
-	"data/TEXTURE/UI/pause000.png",				//19 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause001.png",				//20 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause002.png",				//21 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/soda000.jpg",				//22
-	"data/TEXTURE/UI/pause000.png",				//23 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause001.png",				//24 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause002.png",				//25 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/soda000.jpg",				//26
+	"data/TEXTURE/TITLE/tutorial01.png",		//13
+	"data\\TEXTURE\\EFFECT\\particle000.jpg",	//14
+	"data\\TEXTURE\\EFFECT\\money.png",			//15
+	"data/TEXTURE/EFFECT/16.png",				//16
+	"data/TEXTURE/EFFECT/somke.png",			//17
+	"data/TEXTURE/circle.png",					//18
+	"data/TEXTURE/UI/Tyanco.png",				//19
+	"data/TEXTURE/UI/number002.png"	,			//20
+	"data/TEXTURE/UI/pause000.png",				//21 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause001.png",				//22 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause002.png",				//23 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/soda000.jpg",				//24
+	"data/TEXTURE/UI/pause000.png",				//25 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause001.png",				//26 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/pause002.png",				//27 読み込むテクスチャファイル名
+	"data/TEXTURE/UI/soda000.jpg",				//28
 };
 
 //=============================================================================

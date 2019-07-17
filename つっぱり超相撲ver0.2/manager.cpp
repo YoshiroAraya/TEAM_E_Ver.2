@@ -368,6 +368,9 @@ void CManager::Update(void)
 
 	//	m_fData += 80.0f;
 	//}
+	//ƒ‰ƒ“ƒ_ƒ€‚É
+	srand((unsigned int)time(NULL));
+
 
 	bool bPause = CPause::GetPauseBool();
 

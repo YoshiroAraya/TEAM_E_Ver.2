@@ -54,6 +54,7 @@ public:
 		TEXTURE_ANIMATION,			// アニメーション
 		TEXTURE_EFFECT_NORMAL002,	// エフェクト002
 		TEXTURE_WINNER_UI,			// 勝利持のUI
+		TEXTURE_TYANKO_UI,			// 勝利持のUI
 		TEXTURE_NUMBER_UI,			// 数字のUI
 		TEXTURE_PAUSE_CONTINUE,			// ポーズのUI
 		TEXTURE_PAUSE_RETRY,			// ポーズのUI
