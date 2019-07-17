@@ -202,7 +202,6 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="touzai.cpp" />
     <ClCompile Include="tuppari.cpp" />
-    <ClCompile Include="tutorial.cpp" />
     <ClCompile Include="UITime.cpp" />
     <ClCompile Include="ultimate.cpp" />
     <ClCompile Include="UltimateGauge.cpp" />
@@ -260,7 +259,6 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="touzai.h" />
     <ClInclude Include="tuppari.h" />
-    <ClInclude Include="tutorial.h" />
     <ClInclude Include="UITime.h" />
     <ClInclude Include="ultimate.h" />
     <ClInclude Include="UltimateGauge.h" />

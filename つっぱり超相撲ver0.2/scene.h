@@ -74,7 +74,6 @@ public:
 	void SetObjType(OBJTYPE objType);							// オブジェクトの種類の設定
 	int GetPriority(void);
 	static void SetbPause(bool bPause) { m_bPause = bPause; };
-	void SetPriority(int nPriority) { m_nPriority = nPriority; };	// オブジェクトの優先順位の設定
 
 protected:
 	void Release(void);											// 死亡フラグを立てる

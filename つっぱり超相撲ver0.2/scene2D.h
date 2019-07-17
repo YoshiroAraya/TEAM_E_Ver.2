@@ -37,7 +37,7 @@ public:
 	D3DXVECTOR3 GetPosition(void);						// 位置を取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
 
-	static CScene2D *Create(D3DXVECTOR3 pos,int nPriority = 3);			// オブジェクトの生成
+	static CScene2D *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
 	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
 	void SetPos(D3DXVECTOR3 pos, float fSpin, float fScale, D3DXCOLOR col);
 	void SetRot(float fSpin);

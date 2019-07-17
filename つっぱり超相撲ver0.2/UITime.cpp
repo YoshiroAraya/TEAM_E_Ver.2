@@ -7,7 +7,6 @@
 #include "manager.h"
 #include "fade.h"
 #include "game.h"
-#include "tutorial.h"
 #include "player.h"
 //*****************************************************************************
 // マクロ定義
@@ -98,22 +97,10 @@ void CUITime::Uninit(void)
 //=============================================================================
 void CUITime::Update(void)
 {
+	//プレイヤーを取得
+	CPlayer *pPlayer = CGame::GetPlayer();
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
-	// プレイヤーの取得
-	CPlayer *pPlayer = NULL;
-	//モードの取得
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pPlayer = CTutorial::GetPlayer();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pPlayer = CGame::GetPlayer();
-	}
 
 	float AlphaCol = 1.0f;
 
@@ -124,6 +111,7 @@ void CUITime::Update(void)
 		{
 			SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, AlphaCol));
 		}
+
 #if 1
 		if (pPlayer->GetState() != CPlayer::STATE_JANKEN
 			&& pPlayer->GetState() != CPlayer::STATE_NOKOTTA

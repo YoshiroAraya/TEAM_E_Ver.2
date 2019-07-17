@@ -185,7 +185,6 @@ void CTitle::Update(void)
 			}
 		}
 
-
 		if (mode == CNumPlayer::MODE_TUTORIAL)
 		{//
 			if (m_nCntReturn == 1)

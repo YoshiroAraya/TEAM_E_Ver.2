@@ -27,7 +27,6 @@
 #include "UltimateGauge.h"
 #include "BattleSystem.h"
 #include "effect.h"
-#include "tutorial.h"
 
 //=============================================================================
 // マクロ定義
@@ -143,11 +142,9 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 //=============================================================================
 HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
-	// 取得
+	// タイトル取得
 	CGame *pGame;
 	pGame = CManager::GetGame();
-	CTutorial *pTuto;
-	pTuto = CManager::GetTutorial();
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
@@ -163,21 +160,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
 			}
 			else if (pGame->Get1P() == 1)
-			{// エネミー
-				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-			}
-		}
-	}
-	else if (mode == CManager::MODE_TUTORIAL)
-	{
-		if (pTuto != NULL)
-		{
-			// 選ばれたキャラクターのモデルを割り当て
-			if (pTuto->Get1P() == 0)
-			{// プレイヤー
-				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
-			}
-			else if (pTuto->Get1P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
 			}
@@ -319,16 +301,25 @@ void CPlayer::Update(void)
 	// 位置取得
 	D3DXVECTOR3 rot;
 	rot = CSceneX::GetRot();
+	// カメラ取得
+	//CCamera *pCamera;
+	//pCamera = CManager::GetCamera();
+	// 影の取得
+	CShadow *pShadow;
+	pShadow = CGame::GetShadow();
+	// カメラの向きを取得
+	//D3DXVECTOR3 cameraRot;
+	//cameraRot = pCamera->GetRot();
+	// 敵取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
-	// 影の取得
-	CShadow *pShadow = NULL;
-	// 敵取得
-	CEnemy *pEnemy = NULL;
 	//ゲージの取得
-	CUltimateGauge *pULTGauge = NULL;
-
+	CUltimateGauge *pULTGauge;
+	pULTGauge = CGame::GetUltimateGauge();
+	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -494,14 +485,7 @@ void CPlayer::Update(void)
 	{
 		pos.y = 0;
 		CSceneX::SetPosition(pos);
-		if (mode == CManager::MODE_TUTORIAL)
-		{
-			CTutorial::SetWinner(CTutorial::WINNER_PLAYER2);
-		}
-		else if (mode == CManager::MODE_GAME)
-		{
-			CGame::SetWinner(CGame::WINNER_PLAYER2);
-		}
+		CGame::SetWinner(CGame::WINNER_PLAYER2);
 	}
 
 	//モーション更新
@@ -758,28 +742,11 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
-	pCharacterMove = CManager::GetCharacterMove();
 	// ゲージの取得
-	CSansoGauge *pSansoGauge = NULL;
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 	// 敵の取得
-	CEnemy *pEnemy = NULL;
-	// バトルシステム
-	CBattleSys *pBattleSys = NULL;
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pEnemy = CTutorial::GetEnemy();
-		pSansoGauge = CTutorial::GetSansoGauge();
-		pBattleSys = CTutorial::GetBatlteSys();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pEnemy = CGame::GetEnemy();
-		pSansoGauge = CGame::GetSansoGauge();
-		pBattleSys = CGame::GetBatlteSys();
-	}
+	CEnemy *pEnemy = CGame::GetEnemy();
 
 	//通常状態で硬直していない
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
@@ -854,6 +821,8 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		}
 	}
 
+	CBattleSys *pBattleSys = CGame::GetBatlteSys();
+
 	if (pBattleSys != NULL)
 	{
 		if (pBattleSys->GetUlt() == true)
@@ -883,20 +852,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 //=============================================================================
 void CPlayer::CollisionEnemyAction(void)
 {
-	bool Hit;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		Hit = CTutorial::GetHit();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		Hit = CGame::GetHit();
-	}
-
-	if (Hit == true)
+	if (CGame::GetHit() == true)
 	{
 		if (m_State == STATE_NEUTRAL || m_State == STATE_NOKOTTA || m_State == STATE_GUARD)
 		{	//組み状態へ
@@ -929,7 +885,7 @@ void CPlayer::CollisionEnemyAction(void)
 			}
 		}
 	}
-	else if (Hit == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI
+	else if (CGame::GetHit() == false && m_State != STATE_JANKEN && m_State != STATE_NOKOTTA && m_State != STATE_TSUPPARI
 		&& m_State != STATE_NAGE && m_State != STATE_ULT && m_State != STATE_GUARD)
 	{
 		m_State = STATE_NEUTRAL;
@@ -972,26 +928,12 @@ void CPlayer::TimerUpdate(void)
 //============================================================================
 void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 {
-	// プレイヤー取得
-	CEnemy *pEnemy = NULL;
+	// 敵取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
 	// ゲージの取得
-	CSansoGauge *pSansoGauge = NULL;
-	CBattleSys *pBattleSys = NULL;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pEnemy = CTutorial::GetEnemy();
-		pSansoGauge = CTutorial::GetSansoGauge();
-		pBattleSys = CTutorial::GetBatlteSys();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pEnemy = CGame::GetEnemy();
-		pSansoGauge = CGame::GetSansoGauge();
-		pBattleSys = CGame::GetBatlteSys();
-	}
+	CSansoGauge *pSansoGauge;
+	pSansoGauge = CGame::GetSansoGauge();
 
 	// つっぱりとの当たり判定
 	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI || pEnemy->GetState() == CPlayer::STATE_ULT)
@@ -1006,18 +948,11 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 			}
 			else
 			{
-				pBattleSys->GuardKnockBack(0);
+				CGame::GetBatlteSys()->GuardKnockBack(0);
 				pSansoGauge->SetSansoGaugeRightLeft(GUARD_SANSO, 0);
 				m_State = STATE_GUARD;
 			}
-			if (mode == CManager::MODE_TUTORIAL)
-			{
-				CTutorial::SetHit(false);
-			}
-			else if (mode == CManager::MODE_GAME)
-			{
-				CGame::SetHit(false);
-			}
+			CGame::SetHit(false);
 		}
 	}
 }
@@ -1057,6 +992,10 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 	CCharacterMove *pCharacterMove;
 	pCharacterMove = CManager::GetCharacterMove();
 	D3DXVECTOR3 moveRand = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	////// 位置取得
+	//D3DXVECTOR3 posPlayer;
+	//posPlayer = CSceneX::GetPosition();
 
 	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
 	{
@@ -1132,18 +1071,8 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 D3DXVECTOR3 CPlayer::DirectionPlayer(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// 敵取得
-	CEnemy *pEnemy = NULL;
-	CManager::MODE mode;
-
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pEnemy = CGame::GetEnemy();
-	}
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
 
 	// 目的の角度
 	if (pEnemy != NULL)

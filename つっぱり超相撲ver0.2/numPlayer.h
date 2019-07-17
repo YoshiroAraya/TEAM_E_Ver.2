@@ -30,7 +30,6 @@ public:
 	{
 		MODE_1P = 0,
 		MODE_2P,
-		MODE_TUTORIAL,
 		MODE_MAX
 	} MODE;
 

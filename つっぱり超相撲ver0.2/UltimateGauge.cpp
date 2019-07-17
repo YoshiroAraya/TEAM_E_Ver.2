@@ -223,7 +223,13 @@ void CUltimateGauge::SetPosition(D3DXVECTOR3 pos)
 //=============================================================================
 void CUltimateGauge::SetGaugeRightLeft(float fRight, float fLeft)
 {
-	//値を加算
+	// プレイヤーの取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// エネミーの取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
 	m_fRight += fRight;
 	m_fLeft += fLeft;
 	//上限を超えないように

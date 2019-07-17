@@ -13,7 +13,6 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
-#include "tutorial.h"
 #include "load.h"
 
 //*****************************************************************************
@@ -90,37 +89,37 @@ HRESULT CJankenUI::Init(D3DXVECTOR3 pos)
 		m_aCol[nCntPause] = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
-	m_apScene2D[0] = new CScene2D(4);
+	m_apScene2D[0] = new CScene2D(7);
 	m_apScene2D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_BUCHIKAMASHI));
 	m_apScene2D[0]->Init(pos);
 	m_apScene2D[0]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[1] = new CScene2D(4);
+	m_apScene2D[1] = new CScene2D(7);
 	m_apScene2D[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_HENKA));
 	m_apScene2D[1]->Init(D3DXVECTOR3(pos.x + 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[1]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[2] = new CScene2D(4);
+	m_apScene2D[2] = new CScene2D(7);
 	m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TSUPPARI));
 	m_apScene2D[2]->Init(D3DXVECTOR3(pos.x - 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[2]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[3] = new CScene2D(4);
+	m_apScene2D[3] = new CScene2D(7);
 	m_apScene2D[3]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_BUCHIKAMASHI));
 	m_apScene2D[3]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x, pos.y, 0.0f));
 	m_apScene2D[3]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[3]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[4] = new CScene2D(4);
+	m_apScene2D[4] = new CScene2D(7);
 	m_apScene2D[4]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_HENKA));
 	m_apScene2D[4]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x + 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[4]->SetWidthHeight(50.0f, 50.0f);
 	m_apScene2D[4]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[5] = new CScene2D(4);
+	m_apScene2D[5] = new CScene2D(7);
 	m_apScene2D[5]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TSUPPARI));
 	m_apScene2D[5]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x - 50.0f, pos.y + 60.0f, 0.0f));
 	m_apScene2D[5]->SetWidthHeight(50.0f, 50.0f);
@@ -160,23 +159,11 @@ void CJankenUI::Update(void)
 	pXInput = CManager::GetXInput();
 
 	// プレイヤーの取得
-	CPlayer *pPlayer = NULL;
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
 	// エネミーの取得
-	CEnemy *pEnemy = NULL;
-
-	CManager::MODE mode;
-	mode = CManager::GetMode();
-	if (mode == CManager::MODE_TUTORIAL)
-	{
-		pPlayer = CTutorial::GetPlayer();
-		pEnemy = CTutorial::GetEnemy();
-	}
-	else if (mode == CManager::MODE_GAME)
-	{
-		pPlayer = CGame::GetPlayer();
-		pEnemy = CGame::GetEnemy();
-	}
-
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
 
 	if (pPlayer != NULL && pEnemy != NULL)
 	{

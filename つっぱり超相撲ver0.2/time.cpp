@@ -110,6 +110,13 @@ void CTime::Update(void)
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 
+	// プレイヤーの取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+	// エネミーの取得
+	CEnemy *pEnemy;
+	pEnemy = CGame::GetEnemy();
+
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 	pVtxBuff = CScene2D::GetBuff();
 

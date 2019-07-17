@@ -25,7 +25,7 @@ bool CPause::m_bPause = false;
 //--------------------------------------------
 //ポーズクラス コンストラクタ
 //--------------------------------------------
-CPause::CPause(int nPriority) : CScene(1,OBJTYPE_UI)
+CPause::CPause(int nPriority) : CScene(7)
 {
 }
 
@@ -71,7 +71,7 @@ HRESULT CPause::Init(D3DXVECTOR3 pos)
 	m_pTexture[2] = CLoad::GetTexture(CLoad::TEXTURE_PAUSE_QUIT);
 
 	//BGの初期化
-	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),5);
+	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z));
 	m_apPolygonBG->BindTexture(m_pTextureBG);
 	m_apPolygonBG->SetWidthHeight(m_fWidth * 4, m_fHeight * 3);
 	m_apPolygonBG->SetbDraw(false);
@@ -84,7 +84,7 @@ HRESULT CPause::Init(D3DXVECTOR3 pos)
 			m_Pos[nCnt].y = m_InitPos.y - m_fWidth;
 			//位置をずらす
 			m_Pos[nCnt].y = m_Pos[nCnt].y + (m_fWidth * nCnt);
-			m_apPolygon[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z), 6);
+			m_apPolygon[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z));
 			m_apPolygon[nCnt]->SetWidthHeight(m_fWidth * 2, m_fHeight * 1.4f);
 			m_apPolygon[nCnt]->BindTexture(m_pTexture[nCnt]);
 			m_apPolygon[nCnt]->SetbDraw(false);

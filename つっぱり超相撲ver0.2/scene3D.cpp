@@ -23,7 +23,7 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
-
+	
 	//for (int nCntNor = 0; nCntNor < 2; nCntNor++)
 	//{
 	//	m_aNor[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
@@ -161,7 +161,7 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	//pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
 	//pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
 	//pVtx[3].nor = m_aNor[0];
-
+	
 	pVtx[0].nor = m_Nor;
 	pVtx[1].nor = m_Nor;
 	pVtx[2].nor = m_Nor;
@@ -387,6 +387,24 @@ void CScene3D::SetNor(D3DXVECTOR3 nor)
 //============================================================================
 float CScene3D::GetHeight(D3DXVECTOR3 pos)
 {
+	// プレイヤーを取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
+
+	//// 右側の三角にいるかどうかを取得
+	//bool bRTriangle;
+	//bRTriangle = pPlayer->GetRTriangle();
+
+	//if (bRTriangle == true)
+	//{
+	//	pos.y = (((m_aNor[0].x * (pos.x - m_aPos[0].x) + m_aNor[0].z * (pos.z - m_aPos[0].z)) / -m_aNor[0].y) + m_aPos[0].y);
+	//}
+	//else
+	//{
+	//	pos.y = (((m_aNor[3].x * (pos.x - m_aPos[3].x) + m_aNor[3].z * (pos.z - m_aPos[3].z)) / -m_aNor[3].y) + m_aPos[3].y);
+	//}
+
+	
 	return pos.y;
 }
 

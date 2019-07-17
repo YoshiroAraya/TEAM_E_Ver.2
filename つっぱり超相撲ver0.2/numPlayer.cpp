@@ -213,7 +213,7 @@ void CNumPlayer::Update(void)
 		}
 		else if (m_aSelect[2] == SELECT_SELECT)
 		{
-			m_Mode = MODE_TUTORIAL;
+			m_Mode = MODE_2P;
 		}
 	}
 

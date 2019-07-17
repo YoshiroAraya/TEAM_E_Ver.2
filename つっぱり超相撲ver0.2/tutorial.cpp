@@ -110,8 +110,8 @@ void CTutorial::Init(void)
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
 
-	//int nCntZ;
-	//int nCnt;
+	int nCntZ;
+	int nCnt;
 
 	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
 	//{//‰œ‹q
