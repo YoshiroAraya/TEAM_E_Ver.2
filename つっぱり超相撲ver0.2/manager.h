@@ -27,6 +27,7 @@ class CUltimate;
 class CCharacterMove;
 class CXInputJoyPad;
 class CSound;
+class CTutorial;
 //=============================================================================
 // É}ÉNÉç
 //=============================================================================
@@ -100,6 +101,7 @@ public:
 	static void SetMode(MODE mode);
 	static CGame *GetGame(void) { return m_pGame; }
 	static CTitle *GetTitle(void) { return m_pTitle; }
+	static CTutorial *GetTutorial(void) { return m_pTutorial; }
 	static CResult *GetResult(void) { return m_pResult; }
 	static CUltimate *GetUltimate(void) { return m_pUltimate; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
@@ -117,6 +119,7 @@ private:
 	static CCharacterMove *m_pCharacterMove;
 	static CGame *m_pGame;
 	static CTitle *m_pTitle;
+	static CTutorial *m_pTutorial;
 	static CResult *m_pResult;
 	static CUltimate *m_pUltimate;
 	static bool m_bCharaSelectMode;

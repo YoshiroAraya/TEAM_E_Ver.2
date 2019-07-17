@@ -36,14 +36,14 @@ CScene2D::CScene2D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CScene2D *CScene2D::Create(D3DXVECTOR3 pos)
+CScene2D *CScene2D::Create(D3DXVECTOR3 pos, int nPriority)
 {
 	CScene2D *pScene2D = NULL;
 
 	if (pScene2D == NULL)
 	{
 		// オブジェクトクラスの生成
-		pScene2D = new CScene2D;
+		pScene2D = new CScene2D(nPriority, OBJTYPE_SCENE2D);
 
 		if (pScene2D != NULL)
 		{
@@ -151,13 +151,6 @@ void CScene2D::Uninit(void)
 //=============================================================================
 void CScene2D::Update(void)
 {
-	// 入力情報を取得
-	CInputKeyboard *pInputKeyboard;
-	pInputKeyboard = CManager::GetInputKeyboard();
-
-#ifdef _DEBUG
-	//CDebugProc::Print("cfccfccfc", "2DPos    : x", m_Pos.x, "f", " y", m_Pos.y, "f", " z", m_Pos.z, "f");
-#endif
 }
 
 //=============================================================================

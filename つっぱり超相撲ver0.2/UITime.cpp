@@ -8,6 +8,7 @@
 #include "fade.h"
 #include "game.h"
 #include "player.h"
+#include "tutorial.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -98,9 +99,20 @@ void CUITime::Uninit(void)
 void CUITime::Update(void)
 {
 	//プレイヤーを取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pPlayer = CTutorial::GetPlayer();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pPlayer = CGame::GetPlayer();
+	}
 
 	float AlphaCol = 1.0f;
 

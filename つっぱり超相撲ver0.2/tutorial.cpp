@@ -110,36 +110,6 @@ void CTutorial::Init(void)
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
 
-	int nCntZ;
-	int nCnt;
-
-	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	//{//‰œ‹q
-	//	for (nCnt = 0; nCnt < 3; nCnt++)
-	//	{//‹q
-
-	//		CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
-	//	}
-	//}
-
-	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	//{//‰E‹q
-	//	for (nCnt = 0; nCnt < 3; nCnt++)
-	//	{//‹q
-
-	//		CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
-	//	}
-	//}
-
-	//for (nCntZ = 0; nCntZ < 2; nCntZ++)
-	//{//¶‹q
-	//	for (nCnt = 0; nCnt < 3; nCnt++)
-	//	{//‹q
-
-	//		CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
-	//	}
-	//}
-
 	if (m_pScene3D == NULL)
 	{
 		//m_pScene3D = CScene3D::Create(D3DXVECTOR3(200.0f, 0.0f, 0.0f));

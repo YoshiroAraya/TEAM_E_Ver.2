@@ -13,6 +13,7 @@
 #include "load.h"
 #include "player.h"
 #include "game.h"
+#include "tutorial.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -48,12 +49,8 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 {
 	//色を代入
 	m_col = col;
-
-
-
 	CScene3D::SetSize(fHeight, fWidth);
 	CScene3D::SetRot(rot);
-
 
 	//初期化
 	CScene3D::Init(pos);
@@ -99,8 +96,21 @@ void CAnimation::Uninit(void)
 void CAnimation::Update(void)
 {
 	CGame *pGame = NULL;
-	CPlayer *pPlayer = pGame->GetPlayer();
+	CPlayer *pPlayer = NULL;
 	D3DXVECTOR3 pos;
+
+
+	CManager::MODE mode;
+	mode = CManager::GetMode();
+
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pPlayer = CTutorial::GetPlayer();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pPlayer = CGame::GetPlayer();
+	}
 
 	if (pPlayer != NULL)
 	{

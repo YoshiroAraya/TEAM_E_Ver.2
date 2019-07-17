@@ -23,7 +23,7 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
-	
+
 	//for (int nCntNor = 0; nCntNor < 2; nCntNor++)
 	//{
 	//	m_aNor[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
@@ -161,7 +161,7 @@ HRESULT CScene3D::Init(D3DXVECTOR3 pos)
 	//pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
 	//pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
 	//pVtx[3].nor = m_aNor[0];
-	
+
 	pVtx[0].nor = m_Nor;
 	pVtx[1].nor = m_Nor;
 	pVtx[2].nor = m_Nor;
@@ -211,100 +211,6 @@ void CScene3D::Uninit(void)
 //=============================================================================
 void CScene3D::Update(void)
 {
-	// 入力情報を取得
-	CInputKeyboard *pInputKeyboard;
-	pInputKeyboard = CManager::GetInputKeyboard();
-
-#ifdef _DEBUG
-	//// 頂点情報の設定
-	//VERTEX_3D *pVtx;	// 頂点情報へのポインタ
-
-	//// 頂点バッファをロックし、頂点データへのポインタを取得
-	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	//if (pInputKeyboard->GetPress(DIK_I) == true)
-	//{
-	//	pVtx[1].pos.y += 1.0f;
-	//	pVtx[2].pos.y += 1.0f;
-	//}
-	//if (pInputKeyboard->GetPress(DIK_K) == true)
-	//{
-	//	pVtx[1].pos.y -= 1.0f;
-	//	pVtx[2].pos.y -= 1.0f;
-	//}
-
-	//// 頂点座標の設定
-	////pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
-	////pVtx[1].pos = D3DXVECTOR3(m_fSize, pVtx[1].pos.y, m_fSize);
-	////pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, -m_fSize);
-	////pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, -m_fSize);
-
-	//pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, -m_fSize);
-	//pVtx[1].pos = D3DXVECTOR3(-m_fSize, pVtx[1].pos.y, m_fSize);
-	//pVtx[2].pos = D3DXVECTOR3(m_fSize, pVtx[2].pos.y, -m_fSize);
-	//pVtx[3].pos = D3DXVECTOR3(m_fSize, pVtx[3].pos.y, m_fSize);
-	////pVtx[0].pos = D3DXVECTOR3(-m_fSize, pVtx[0].pos.y, m_fSize);
-	////pVtx[1].pos = D3DXVECTOR3(pVtx[1].pos.x, pVtx[1].pos.y, m_fSize);
-	////pVtx[2].pos = D3DXVECTOR3(-m_fSize, pVtx[2].pos.y, pVtx[2].pos.z);
-	////pVtx[3].pos = D3DXVECTOR3(pVtx[3].pos.x, pVtx[3].pos.y, pVtx[3].pos.z);
-
-	//// 法線の設定
-	//// ベクトルを求める
-	//m_aVec[0] = pVtx[2].pos - pVtx[3].pos;
-	//m_aVec[1] = pVtx[1].pos - pVtx[3].pos;
-	//m_aVec[2] = pVtx[1].pos - pVtx[0].pos;
-	//m_aVec[3] = pVtx[2].pos - pVtx[0].pos;
-
-	//// 外積を使って法線を求める
-	//D3DXVec3Cross(&m_aNor[0], &m_aVec[0], &m_aVec[1]);
-	//D3DXVec3Cross(&m_aNor[1], &m_aVec[2], &m_aVec[3]);
-
-	//// 正規化する
-	//D3DXVec3Normalize(&m_aNor[0], &m_aNor[0]);
-	//D3DXVec3Normalize(&m_aNor[1], &m_aNor[1]);
-
-	//// 法線の設定
-	////pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	////pVtx[1].nor = m_aNor[1];
-	////pVtx[2].nor = m_aNor[0];
-	////pVtx[3].nor = (m_aNor[0] + m_aNor[1]) / 2;
-
-	//pVtx[0].nor = m_aNor[1];
-	//pVtx[1].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	//pVtx[2].nor = (m_aNor[0] + m_aNor[1]) / 2;
-	//pVtx[3].nor = m_aNor[0];
-
-	//for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
-	//{
-	//	m_aPos[nCntPos] = pVtx[nCntPos].pos;
-	//	m_aNor[nCntPos] = pVtx[nCntPos].nor;
-	//}
-
-	//// 頂点バッファをアンロックする
-	//m_pVtxBuff->Unlock();
-
-	//if (pInputKeyboard->GetPress(DIK_4) == true)
-	//{
-	//	m_rot.y += 0.1f;
-	//}
-
-	////CDebugProc::Print("cfccfccfc", "3DPos    : x", m_pos.x, "f", "   y", m_pos.y, "f", "   z", m_pos.z, "f");
-	//for (int nCntNor = 0; nCntNor < 2; nCntNor++)
-	//{
-	//	CDebugProc::Print("cncfcfcfc", "m_aNor[", nCntNor, "] : (", m_aNor[nCntNor].x,", ", m_aNor[nCntNor].y, ", ", m_aNor[nCntNor].z, ")");
-	//}
-
-	//for (int nCntNor = 0; nCntNor < NUM_VTX; nCntNor++)
-	//{
-	//	CDebugProc::Print("f", pVtx[nCntNor].pos.y);
-	//}
-
-
-	//if (pInputKeyboard->GetTrigger(DIK_2) == true)
-	//{
-	//	Uninit();
-	//}
-#endif
 }
 
 //=============================================================================
@@ -387,24 +293,6 @@ void CScene3D::SetNor(D3DXVECTOR3 nor)
 //============================================================================
 float CScene3D::GetHeight(D3DXVECTOR3 pos)
 {
-	// プレイヤーを取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
-
-	//// 右側の三角にいるかどうかを取得
-	//bool bRTriangle;
-	//bRTriangle = pPlayer->GetRTriangle();
-
-	//if (bRTriangle == true)
-	//{
-	//	pos.y = (((m_aNor[0].x * (pos.x - m_aPos[0].x) + m_aNor[0].z * (pos.z - m_aPos[0].z)) / -m_aNor[0].y) + m_aPos[0].y);
-	//}
-	//else
-	//{
-	//	pos.y = (((m_aNor[3].x * (pos.x - m_aPos[3].x) + m_aNor[3].z * (pos.z - m_aPos[3].z)) / -m_aNor[3].y) + m_aPos[3].y);
-	//}
-
-	
 	return pos.y;
 }
 

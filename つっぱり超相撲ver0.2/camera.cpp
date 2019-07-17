@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "title.h"
 #include "BattleSystem.h"
+#include "tutorial.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -119,14 +120,22 @@ void CCamera::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	// プレイヤー取得
-	CPlayer *pPlayer;
-	pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = NULL;
 	// 敵取得
-	CEnemy *pEnemy;
-	pEnemy = CGame::GetEnemy();
+	CEnemy *pEnemy = NULL;
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+	if (mode == CManager::MODE_TUTORIAL)
+	{
+		pPlayer = CTutorial::GetPlayer();
+		pEnemy = CTutorial::GetEnemy();
+	}
+	else if (mode == CManager::MODE_GAME)
+	{
+		pPlayer = CGame::GetPlayer();
+		pEnemy = CGame::GetEnemy();
+	}
 
 	if (mode == CManager::MODE_GAME)
 	{

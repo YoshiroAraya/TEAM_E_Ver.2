@@ -15,6 +15,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
+#include "tutorial.h"
 #include "load.h"
 //--------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”éŒ¾
