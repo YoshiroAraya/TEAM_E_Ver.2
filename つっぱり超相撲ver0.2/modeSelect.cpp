@@ -81,30 +81,30 @@ HRESULT CModeSelect::Init(D3DXVECTOR3 pos)
 		if (m_apPolygon[nCnt] == NULL)
 		{	//ポリゴンの初期化
 			m_Pos[nCnt] = m_InitPos;
-			m_Pos[nCnt].y = m_InitPos.y - m_fWidth;
+			m_Pos[nCnt].y = m_InitPos.y - m_fWidth - 60;
 			//位置をずらす
-			m_Pos[nCnt].y = m_Pos[nCnt].y + (m_fWidth * nCnt);
+			m_Pos[nCnt].y = m_Pos[nCnt].y + ((m_fWidth + 60) * nCnt);
 			m_apPolygon[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z));
-			m_apPolygon[nCnt]->SetWidthHeight(m_fWidth * 2, m_fHeight * 1.4f);
+			m_apPolygon[nCnt]->SetWidthHeight(m_fWidth * 2.5f, m_fHeight * 1.0f);
 			m_apPolygon[nCnt]->BindTexture(m_pTexture[nCnt]);
 			m_apPolygon[nCnt]->SetbDraw(true);
 		}
 	}
 
-	//頂点情報へのポインタ
-	VERTEX_2D *pVtx;
-	//頂点バッファを取得
-	m_pVtxBuff = m_apPolygonBG->GetBuff();
+	////頂点情報へのポインタ
+	//VERTEX_2D *pVtx;
+	////頂点バッファを取得
+	//m_pVtxBuff = m_apPolygonBG->GetBuff();
 
-	//頂点バッファをロックし頂点データのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	//頂点カラー
-	pVtx[0].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	pVtx[1].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	pVtx[2].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	pVtx[3].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	// 頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
+	////頂点バッファをロックし頂点データのポインタを取得
+	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	////頂点カラー
+	//pVtx[0].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
+	//pVtx[1].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
+	//pVtx[2].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
+	//pVtx[3].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
+	//// 頂点バッファをアンロックする
+	//m_pVtxBuff->Unlock();
 
 	//値の初期化
 	m_nSelect = 0;
@@ -240,11 +240,11 @@ void CModeSelect::Update(void)
 		{
 			if (m_aModeSelectMenu[nCnt].select == SELECTTYPE_SELECT)
 			{//選択中の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.0f, 0.5f, 1.0f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 			}
 			else
 			{//未選択の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
 			}
 
 			//頂点情報へのポインタ
