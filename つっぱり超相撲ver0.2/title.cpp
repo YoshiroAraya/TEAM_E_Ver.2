@@ -117,7 +117,7 @@ void CTitle::Update(void)
 			CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0.0f), SCREEN_WIDTH / 2, 300.0f, CLoad::TEXTURE_TITLE);
-			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 300.0f, 0.0f));
+			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.5f, 600.0f, 0.0f));
 			if (m_pPlayer == NULL)
 			{
 				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
@@ -150,7 +150,7 @@ void CTitle::Update(void)
 			CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 			CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0.0f), SCREEN_WIDTH / 2, 300.0f, CLoad::TEXTURE_TITLE);
-			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 500.0f, 0.0f));
+			CNumPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH / 5.5f, 500.0f, 0.0f));
 			if (m_pPlayer == NULL)
 			{
 				m_pPlayer = CPlayer::Create(D3DXVECTOR3(-30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));

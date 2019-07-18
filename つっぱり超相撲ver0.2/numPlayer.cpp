@@ -102,13 +102,13 @@ HRESULT CNumPlayer::Init(D3DXVECTOR3 pos)
 
 	m_apScene2D[1] = new CScene2D(7);
 	m_apScene2D[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_2P));
-	m_apScene2D[1]->Init(D3DXVECTOR3(pos.x - 25.0f, pos.y + 150.0f, 0.0f));
+	m_apScene2D[1]->Init(D3DXVECTOR3(pos.x + 400.0f, pos.y, 0.0f));
 	m_apScene2D[1]->SetWidthHeight(250.0f, 100.0f);
 	m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	m_apScene2D[2] = new CScene2D(7);
 	m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL));
-	m_apScene2D[2]->Init(D3DXVECTOR3(pos.x - 25.0f, pos.y + 300.0f, 0.0f));
+	m_apScene2D[2]->Init(D3DXVECTOR3(pos.x + 800.0f, pos.y, 0.0f));
 	m_apScene2D[2]->SetWidthHeight(300.0f, 100.0f);
 	m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
@@ -157,8 +157,9 @@ void CNumPlayer::Update(void)
 	CTitle *pTitle;
 	pTitle = CManager::GetTitle();
 
-	if (pInputKeyboard->GetTrigger(DIK_DOWN) == true/* || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_DOWN) == true
-		|| pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_LS_DOWN) == true*/)
+	if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true
+		|| pXInput->GetTrigger(XPLAYER_RIGHT, 0) == true
+		|| pXInput->GetTrigger(XPLAYER_RIGHT, 1) == true)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
@@ -169,8 +170,9 @@ void CNumPlayer::Update(void)
 		//}
 		m_aSelect[m_nSelect] = SELECT_SELECT;
 	}
-	if (pInputKeyboard->GetTrigger(DIK_UP) == true/* || pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_UP) == true
-		|| pInputJoypad->GetTrigger(CInputJoypad::DIJS_BUTTON_LS_UP) == true*/)
+	if (pInputKeyboard->GetTrigger(DIK_LEFT) == true
+		|| pXInput->GetTrigger(XPLAYER_LEFT, 0) == true
+		|| pXInput->GetTrigger(XPLAYER_LEFT, 1) == true)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
@@ -190,7 +192,7 @@ void CNumPlayer::Update(void)
 		}
 		else
 		{// ‘I‘ð‚µ‚Ä‚¢‚È‚¢
-			m_aCol[m_nSelect] = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+			m_aCol[m_nSelect] = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
 		}
 
 		if (m_apScene2D[nCntPause] != NULL)
