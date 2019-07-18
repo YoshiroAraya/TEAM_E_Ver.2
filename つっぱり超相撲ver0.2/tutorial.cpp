@@ -117,12 +117,12 @@ void CTutorial::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-80.0f, 26.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(80.0f, 26.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_P2);
 	}
 	if (m_pMeshField == NULL)
 	{
@@ -242,9 +242,12 @@ void CTutorial::Update(void)
 		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
 	}
 
-	if (m_pBatlteSys != NULL)
+	if (CPause::GetPauseBool() == false)
 	{
-		m_pBatlteSys->Update();
+		if (m_pBatlteSys != NULL)
+		{
+			m_pBatlteSys->Update();
+		}
 	}
 
 	if (m_State == STATE_GAME)

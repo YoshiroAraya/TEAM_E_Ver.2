@@ -158,14 +158,14 @@ void CResult::LoadWinner(void)
 	{
 		if (m_pPlayer == NULL)
 		{// プレイヤー
-			m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
+			m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 26.0f, -50.0f), D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
 		}
 	}
 	else if(m_nWinner == 2)
 	{
 		if (m_pEnemy == NULL)
 		{// エネミー
-			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f), CEnemy::MODE_P2);
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 26.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f), CEnemy::MODE_P2);
 		}
 	}
 }
