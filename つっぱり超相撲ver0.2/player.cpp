@@ -848,8 +848,16 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		{
 			if (pEnemy != NULL)
 			{
-				// 右に進む
-				m_move.x += sinf(D3DX_PI * 0.5f) * fMovePlayer;
+				if (m_Direction == DIRECTION_RIGHT)
+				{// 右向き
+					// 右に進む
+					m_move.x += sinf(D3DX_PI * 0.5f) * fMovePlayer;
+				}
+				else if (m_Direction == DIRECTION_LEFT)
+				{// 左向き
+					// 左に進む
+					m_move.x -= sinf(D3DX_PI * 0.5f) * fMovePlayer;
+				}
 			}
 		}
 	}
