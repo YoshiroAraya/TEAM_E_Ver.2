@@ -952,8 +952,8 @@ void CBattleSys::Operation(void)
 		{
 			pPlayer->InitStatus();
 			pEnemy->InitStatus();
-			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 26.0f, 0.0f));
-			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 26.0f, 0.0f));
+			pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 20.0f, 0.0f));
+			pEnemy->SetPosition(D3DXVECTOR3(80.0f, 20.0f, 0.0f));
 			pPlayer->SetState(CPlayer::STATE_JANKEN);
 			pEnemy->SetState(CEnemy::STATE_JANKEN);
 			m_bAttack = false;
@@ -2047,8 +2047,8 @@ void CBattleSys::ResetBattle(void)
 
 	pPlayer->InitStatus();
 	pEnemy->InitStatus();
-	pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 26.0f, 0.0f));
-	pEnemy->SetPosition(D3DXVECTOR3(80.0f, 26.0f, 0.0f));
+	pPlayer->SetPosition(D3DXVECTOR3(-80.0f, 20.0f, 0.0f));
+	pEnemy->SetPosition(D3DXVECTOR3(80.0f, 20.0f, 0.0f));
 	pPlayer->SetState(CPlayer::STATE_JANKEN);
 	pEnemy->SetState(CEnemy::STATE_JANKEN);
 	m_bAttack = false;

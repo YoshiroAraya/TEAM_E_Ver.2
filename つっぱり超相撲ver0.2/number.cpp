@@ -163,7 +163,9 @@ void CNumber::Draw(void)
 	pDevice->SetTexture(0, m_pTexture);
 
 	// 数字の描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,0, 2);
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
+		0,	//開始する頂点のインデックス
+		2); //描画するプリミティブ数
 }
 
 //=============================================================================

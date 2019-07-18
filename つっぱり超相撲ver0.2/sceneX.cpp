@@ -294,11 +294,11 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 	if (pos->x - radius.x < m_pos.x + ScaleVtxMax.x - SCENEX_SIZE && pos->x + radius.x > m_pos.x + ScaleVtxMin.x + SCENEX_SIZE
 		&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
 	{// áŠQ•¨‚Ì“à‘¤‚Éæ‚Á‚½
-		if (posOld->y >= m_pos.y + ScaleVtxMax.y + 5 && pos->y < m_pos.y + ScaleVtxMax.y + 5
-			|| pos->y <= m_pos.y + ScaleVtxMax.y + 5 && posOld->y > m_pos.y + ScaleVtxMax.y + 5)
+		if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
+			|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
 		{// ã‚©‚çƒuƒƒbƒN‚É“–‚½‚Á‚½‚Æ‚«
 			bLand = true;  // æ‚Á‚½”»’è‚ð•Ô‚·
-			pos->y = m_pos.y + ScaleVtxMax.y + 5;
+			pos->y = m_pos.y + ScaleVtxMax.y;
 			move->y = 0.0f;  // ˆÚ“®—Ê‚ð‚È‚­‚·
 		}
 
