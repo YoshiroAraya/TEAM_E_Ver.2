@@ -232,6 +232,7 @@ private:
 	bool					m_bCounter;		// カウンターフラグ
 	bool					m_bSelect;		// 選ばれているかどうか
 	bool					m_bUltDis;		// 必殺の演出表示
+	bool					m_bPlayerDamage;
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
