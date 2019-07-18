@@ -118,7 +118,7 @@ void CBAnimation::Update(void)
 	else if (mode == CManager::MODE_GAME)
 	{	//
 		pPlayer = CGame::GetPlayer();
-		pEnemy = CTutorial::GetEnemy();
+		pEnemy = CGame::GetEnemy();
 	}
 
 	//if (mode == CManager::MODE_GAME)

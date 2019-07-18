@@ -241,6 +241,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_nActionTime = 0;
 	m_CPUAction = CPUACTION_NEUTRAL;
 	m_bAction = false;
+	m_bPlayerDamage = false;
 	m_DamageCnt = 0;
 
 	//つっぱり生成
@@ -399,7 +400,7 @@ void CEnemy::Update(void)
 			{
 				if (m_pAnimation == NULL)
 				{
-					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f),
 						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 				}
 				m_bUltDis = true;
@@ -413,6 +414,17 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = false;
 			}
+
+#ifdef _DEBUG
+			if (m_bUltDis == true)
+			{
+				CDebugProc::Print("c", "オーラ出現");
+			}
+			else
+			{
+				CDebugProc::Print("c", "オーラ出現しない");
+			}
+#endif
 		}
 		break;
 	case CManager::MODE_TUTORIAL:
@@ -781,6 +793,8 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 	pCharacterMove = CManager::GetCharacterMove();
 	// ゲージの取得
 	CSansoGauge *pSansoGauge = NULL;
+	CBattleSys *pBattleSys = NULL;
+	CPlayer *pPlayer = NULL;
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -788,10 +802,14 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		pSansoGauge = CTutorial::GetSansoGauge();
+		pPlayer = CTutorial::GetPlayer();
+		pBattleSys = CTutorial::GetBatlteSys();
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
 		pSansoGauge = CGame::GetSansoGauge();
+		pPlayer = CGame::GetPlayer();
+		pBattleSys = CGame::GetBatlteSys();
 	}
 	//通常状態で硬直していない
 	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
@@ -863,6 +881,23 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
 		{
 			m_State = STATE_NEUTRAL;
+		}
+	}
+
+	if (pBattleSys != NULL)
+	{
+		if (pBattleSys->GetUlt(1) == true)
+		{
+			if (m_Direction == DIRECTION_LEFT)
+			{// 左向き
+				// 左に進む
+				m_move.x -= sinf(D3DX_PI * 0.5f) * fMoveEnemy;
+			}
+			else if (m_Direction == DIRECTION_RIGHT)
+			{// 右向き
+				// 右に進む	
+				m_move.x += sinf(D3DX_PI * 0.5f) * fMoveEnemy;
+			}
 		}
 	}
 
