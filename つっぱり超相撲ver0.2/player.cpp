@@ -844,20 +844,19 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 
 	if (pBattleSys != NULL)
 	{
-		if (pBattleSys->GetUlt() == true)
+		if (pBattleSys->GetUlt(0) == true)
 		{
 			if (pEnemy != NULL)
 			{
-				if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
-				{
-					m_bEnemyDamage = true;
-					m_move.x = 0;
-				}
-
-				if (m_bEnemyDamage == false)
-				{// 突っ張りが当たったら止まる
+				if (m_Direction == DIRECTION_RIGHT)
+				{// 右向き
 					// 右に進む
 					m_move.x += sinf(D3DX_PI * 0.5f) * fMovePlayer;
+				}
+				else if (m_Direction == DIRECTION_LEFT)
+				{// 左向き
+					// 左に進む
+					m_move.x -= sinf(D3DX_PI * 0.5f) * fMovePlayer;
 				}
 			}
 		}

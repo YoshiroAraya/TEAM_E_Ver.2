@@ -640,7 +640,7 @@ void CCamera::PlayerUlt(CPlayer *pPlayer)
 
 		if (pBattleSys != NULL)
 		{
-			if (pBattleSys->GetUlt() == true)
+			if (pBattleSys->GetUlt(0) == true)
 			{
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 80.0f, pPlayer->GetPosition().z);		// ’Ž‹“_
 
@@ -663,6 +663,8 @@ void CCamera::PlayerUlt(CPlayer *pPlayer)
 //=============================================================================
 void CCamera::EnemyUlt(CEnemy *pEnemy)
 {
+	CBattleSys *pBattleSys = CGame::GetBatlteSys();
+
 	if (pEnemy->GetState() == CEnemy::STATE_ULT)
 	{
 		if (pEnemy->GetDirection() == CEnemy::DIRECTION_RIGHT)
@@ -728,6 +730,24 @@ void CCamera::EnemyUlt(CEnemy *pEnemy)
 			}
 
 			m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// ’Ž‹“_
+		}
+
+		if (pBattleSys != NULL)
+		{
+			if (pBattleSys->GetUlt(1) == true)
+			{
+				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// ’Ž‹“_
+
+				m_rot.y += 0.03f;
+
+				if (m_rot.y > D3DX_PI)
+				{
+					m_rot.y -= D3DX_PI * 2.0f;
+				}
+
+				m_posV.x = m_posR.x + sinf(D3DX_PI + m_rot.y) * m_fLength;
+				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
+			}
 		}
 	}
 }

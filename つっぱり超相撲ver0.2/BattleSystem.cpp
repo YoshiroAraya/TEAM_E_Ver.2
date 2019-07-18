@@ -151,7 +151,9 @@ HRESULT CBattleSys::Init()
 	m_AttackTurn = ATTACK_TURN_NORMAL;
 	m_nUltTimer = 0;
 	m_bPlayerUlt = false;
-	m_bUlt = false;
+	m_bEnemyUlt = false;
+	m_abUlt[0] = false;
+	m_abUlt[1] = false;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -991,12 +993,18 @@ void CBattleSys::Operation(void)
 
 			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
 		}
+		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true)
+		{
+			m_bEnemyUlt = true;
+
+			pULTGauge->SetGaugeRightLeft(0.0f, pULTGauge->GetGaugeLeft());
+		}
 
 		if (m_bPlayerUlt == true)
-		{// 奥義（プレイヤー）
+		{// 奥義（プレイヤー） 
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
 			{// ある程度の秒数がたったら
-				m_bUlt = true;
+				m_abUlt[0] = true;
 
 				// 突っ張る
 				pPlayer->SetState(CPlayer::STATE_TSUPPARI);
@@ -1044,8 +1052,49 @@ void CBattleSys::Operation(void)
 				pAnimation->SetBillboard(pPlayer->GetPosition(), 150.0f, 100.0f);
 			}
 		}
-		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true)
+		if (m_bEnemyUlt == true)
 		{// 奥義（エネミー）
+			if ((float)m_nUltTimer / 60.0f >= 1.5f)
+			{// ある程度の秒数がたったら
+				m_abUlt[1] = true;
+
+				// 突っ張る
+				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
+				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(0, true);
+				pEnemy->SetMotionType(1, CEnemy::MOTION_TSUPPARI);
+				pEnemy->SetbMotionEnd(1, true);
+				pEnemy->SetbDash(false);
+				//向いてる方向 プレイヤー
+				switch (pEnemy->GetDirection())
+				{
+				case CEnemy::DIRECTION_LEFT:
+					pEnemy->SetState(CEnemy::STATE_TSUPPARI);
+					pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x - 10, p1pos.y, p1pos.z));
+					m_nCntAttackFlame = TUPARI_FLAME;
+					pEnemy->SetRecovery(true);
+					pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
+					m_bAttack = true;
+					break;
+				case CEnemy::DIRECTION_RIGHT:
+					pEnemy->SetState(CEnemy::STATE_TSUPPARI);
+					pEnemy->GetTuppari().SetPosition(D3DXVECTOR3(p1pos.x + 10, p1pos.y, p1pos.z));
+					m_nCntAttackFlame = TUPARI_FLAME;
+					pEnemy->SetRecovery(true);
+					pEnemy->SetRecoveryTime(TUPARI_RECOVERY);
+					m_bAttack = true;
+					break;
+				}
+
+				m_nUltTimer = 70;
+			}
+			else
+			{
+				m_nUltTimer++;
+
+			}
+
+			// プレイヤーを奥義状態にする
 			pEnemy->SetState(CEnemy::STATE_ULT);
 
 			CBAnimation *pAnimation = pEnemy->GetAnimation();
@@ -2012,7 +2061,9 @@ void CBattleSys::ResetBattle(void)
 	m_aJanken[0] = JANKEN_GU_BUTI;
 	m_aJanken[1] = JANKEN_GU_BUTI;
 	m_bPlayerUlt = false;
-	m_bUlt = false;
+	m_bEnemyUlt = false;
+	m_abUlt[0] = false;
+	m_abUlt[1] = false;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
 
