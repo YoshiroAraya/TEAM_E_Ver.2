@@ -44,7 +44,7 @@ C2DAnimation::~C2DAnimation()
 //=============================================================================
 // アニメーションの初期化処理
 //=============================================================================
-HRESULT C2DAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,
+HRESULT C2DAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fScale, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,
 	int nDrawType)
 {
 	//色を代入
@@ -55,7 +55,7 @@ HRESULT C2DAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float 
 	CScene2D::Init(pos);
 	//テクスチャの貼り付け
 	CScene2D::BindTexture(CLoad::GetTexture(CLoad::TEXTURE_ANIMATION_OUGI));
-	CScene2D::SetPos(pos,0.0f,300.0f,m_col);
+	CScene2D::SetPos(pos,0.0f,fScale,m_col);
 	//UVの値を代入
 	m_fUV_U = fUV_U;
 	m_fUV_V = fUV_V;
@@ -224,8 +224,8 @@ void C2DAnimation::Draw(void)
 //=============================================================================
 // アニメーションの生成処理
 //=============================================================================
-C2DAnimation *C2DAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,
-	int nDrawType)
+C2DAnimation *C2DAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fScale, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,
+	int nRoop,int nDrawType)
 {
 	C2DAnimation *pAnimation = {};
 
@@ -238,7 +238,7 @@ C2DAnimation *C2DAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight
 		if (pAnimation != NULL)
 		{
 			// ポリゴンの初期化処理
-			pAnimation->Init(pos, col, fWidth, fHeight, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType);
+			pAnimation->Init(pos, col, fScale, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType);
 		}
 		else
 		{

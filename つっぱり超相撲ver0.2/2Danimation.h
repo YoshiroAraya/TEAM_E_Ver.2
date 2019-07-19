@@ -25,14 +25,14 @@ public:
 	C2DAnimation();
 	~C2DAnimation();
 
-	HRESULT Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType);
+	HRESULT Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fScale, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 	void UpdateAnim();
 
 	//ê√ìIÉÅÉìÉoä÷êî
-	static C2DAnimation *Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,
+	static C2DAnimation *Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fScale, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,
 		int nDrawType);
 
 private:
