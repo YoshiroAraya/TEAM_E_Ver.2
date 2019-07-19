@@ -47,6 +47,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9 GetBuff(void) { return m_pVtxBuff; }
 	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
 	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
+	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ

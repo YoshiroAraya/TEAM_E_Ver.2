@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2Danimation.cpp" />
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="Banimation.cpp" />
     <ClCompile Include="BattleSystem.cpp" />
@@ -211,6 +212,7 @@
     <ClCompile Include="winnerUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2Danimation.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="Banimation.h" />
     <ClInclude Include="BattleSystem.h" />

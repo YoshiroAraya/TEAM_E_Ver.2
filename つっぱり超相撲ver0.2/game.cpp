@@ -37,6 +37,7 @@
 #include "effect3D.h"
 #include "winnerUI.h"
 #include "effect2D.h"
+#include "2Danimation.h"
 
 #include "number.h"
 #include "UITime.h"
@@ -379,6 +380,14 @@ void CGame::Update(void)
 		////オーラ
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
+
+
+		//アニメーションテクスチャの生成
+		//(Pos / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
+		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
+		//奥義アニメーション
+		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
