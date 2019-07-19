@@ -52,14 +52,14 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/circle.png",					//18
 	"data/TEXTURE/UI/Tyanco.png",				//19
 	"data/TEXTURE/UI/number002.png"	,			//20
-	"data/TEXTURE/UI/pause000.png",				//21 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause001.png",				//22 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause002.png",				//23 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/soda000.jpg",				//24
-	"data/TEXTURE/UI/pause000.png",				//25 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause001.png",				//26 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/pause002.png",				//27 読み込むテクスチャファイル名
-	"data/TEXTURE/UI/soda000.jpg",				//28
+	"data/TEXTURE/UI/Select00.png",				//21
+	"data/TEXTURE/UI/Select01.png",				//22
+	"data/TEXTURE/UI/Select02.png",				//23
+	"data/TEXTURE/UI/pause100.png",				//24
+	"data/TEXTURE/UI/Select03.png",				//25
+	"data/TEXTURE/UI/Select04.png",				//26
+	"data/TEXTURE/UI/Select02.png",				//27
+	"data/TEXTURE/UI/pause100.png",				//28
 };
 
 //=============================================================================
