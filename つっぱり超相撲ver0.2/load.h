@@ -64,6 +64,7 @@ public:
 		TEXTURE_MODESELECT_RETRY,		// モードセレクトのUI
 		TEXTURE_MODESELECT_QUIT,		// モードセレクトのBG
 		TEXTURE_MODESELECT_BG,			// モードセレクトのUI
+		TEXTURE_CHARASELECT,			// 決定テクスチャ
 		TEXTURE_ANIMATION_OUGI,			// 奥義のアニメーション
 	} TEXTURE;
 

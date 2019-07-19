@@ -159,6 +159,7 @@
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="characterMove.cpp" />
+    <ClCompile Include="charaSelect.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="customer.cpp" />
     <ClCompile Include="debugProc.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="billboard.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="characterMove.h" />
+    <ClInclude Include="charaSelect.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="customer.h" />
     <ClInclude Include="debugProc.h" />

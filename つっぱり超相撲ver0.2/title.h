@@ -51,6 +51,7 @@ private:
 	STATE m_state;
 	CHARACTER m_Character[MAX_NUMPLAYER];
 	bool m_bSetDohyo;
+	bool m_bSetUI;
 	bool m_bTurnRight;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	bool m_bTurnLeft;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	int m_nCntTurn;
