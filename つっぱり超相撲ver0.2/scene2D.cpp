@@ -351,3 +351,32 @@ void CScene2D::SetCol(D3DXCOLOR col)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
+
+
+//=============================================================================
+// アニメーションの設定処理
+//=============================================================================
+void CScene2D::SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V)
+{
+	VERTEX_2D*pVtx;	//頂点情報へのポインタ
+
+					//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//テクスチャの座標
+	pVtx[0].tex = D3DXVECTOR2(fUV_U * m_PatternAnim, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(fUV_U * m_PatternAnim + fUV_U, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(fUV_U * m_PatternAnim, fUV_V);
+	pVtx[3].tex = D3DXVECTOR2(fUV_U * m_PatternAnim + fUV_U, fUV_V);
+
+	////テクスチャの座標
+	//pVtx[0].tex = D3DXVECTOR2(EXPLOSION_UV_U, EXPLOSION_UV_V * m_PatternAnim);
+	//pVtx[1].tex = D3DXVECTOR2(0.0f, EXPLOSION_UV_V * m_PatternAnim);
+	//pVtx[2].tex = D3DXVECTOR2(EXPLOSION_UV_U, EXPLOSION_UV_V * m_PatternAnim + EXPLOSION_UV_V);
+	//pVtx[3].tex = D3DXVECTOR2(0.0f, EXPLOSION_UV_V * m_PatternAnim + EXPLOSION_UV_V);
+
+	m_PatternAnim = 0;
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
