@@ -14,24 +14,24 @@ NUM_MODEL = 18
 #------------------------------------------------------------------------------
 # モデルファイル名
 #------------------------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_1_body.x				# [1]胴体
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_2_head.x				# [2]頭
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_3_armL0.x			# [3]左上腕
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_4_armL1.x			# [4]左前腕
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_5_handL.x			# [5]左手
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_6_finger0L.x			# [6]左指0
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_7_finger1L.x			# [7]左指1
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_8_finger2L.x			# [8]左指2
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_9_thumbL0.x			# [9]左親指0
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_10_thumbL1.x			# [10]左親指1
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_11_armR0.x			# [11]右上腕
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_12_armR1.x			# [12]右前腕
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_13_handR.x			# [13]右手
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_14_fingerR0.x		# [14]右指0
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_15_fingerR1.x		# [15]右指1
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_16_fingerR2.x		# [16]右指2
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_17_thumbR0.x			# [17]右親指0
-MODEL_FILENAME = data/MODEL/力士/Wrestlers_18_thumbR1.x			# [18]右親指1
+MODEL_FILENAME = data/MODEL/レスラー/resura_1_body.x			# [1]胴体
+MODEL_FILENAME = data/MODEL/レスラー/resura_2_head.x			# [2]頭
+MODEL_FILENAME = data/MODEL/レスラー/resura_3_armL0.x			# [3]左上腕
+MODEL_FILENAME = data/MODEL/レスラー/resura_4_armL1.x			# [4]左前腕
+MODEL_FILENAME = data/MODEL/レスラー/resura_5_handL.x			# [5]左手
+MODEL_FILENAME = data/MODEL/レスラー/resura_6_finger0L.x		# [6]左指0
+MODEL_FILENAME = data/MODEL/レスラー/resura_7_finger1L.x		# [7]左指1
+MODEL_FILENAME = data/MODEL/レスラー/resura_8_finger2L.x		# [8]左指2
+MODEL_FILENAME = data/MODEL/レスラー/resura_9_thumbL0.x			# [9]左親指0
+MODEL_FILENAME = data/MODEL/レスラー/resura_10_thumbL1.x		# [10]左親指1
+MODEL_FILENAME = data/MODEL/レスラー/resura_11_armR0.x			# [11]右上腕
+MODEL_FILENAME = data/MODEL/レスラー/resura_12_armR1.x			# [12]右前腕
+MODEL_FILENAME = data/MODEL/レスラー/resura_13_handR.x			# [13]右手
+MODEL_FILENAME = data/MODEL/レスラー/resura_14_fingerR0.x		# [14]右指0
+MODEL_FILENAME = data/MODEL/レスラー/resura_15_fingerR1.x		# [15]右指1
+MODEL_FILENAME = data/MODEL/レスラー/resura_16_fingerR2.x		# [16]右指2
+MODEL_FILENAME = data/MODEL/レスラー/resura_17_thumbR0.x		# [17]右親指0
+MODEL_FILENAME = data/MODEL/レスラー/resura_18_thumbR1.x		# [18]右親指1
 
 #------------------------------------------------------------------------------
 # キャラクター情報
