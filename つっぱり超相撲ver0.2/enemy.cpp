@@ -414,17 +414,6 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = false;
 			}
-
-#ifdef _DEBUG
-			if (m_bUltDis == true)
-			{
-				CDebugProc::Print("c", "オーラ出現");
-			}
-			else
-			{
-				CDebugProc::Print("c", "オーラ出現しない");
-			}
-#endif
 		}
 		break;
 	case CManager::MODE_TUTORIAL:

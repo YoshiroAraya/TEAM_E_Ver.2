@@ -21,6 +21,7 @@
 #include "numPlayer.h"
 #include "player.h"
 #include "enemy.h"
+#include "charaSelect.h"
 
 //============================================================================
 //	マクロ定義
@@ -56,6 +57,7 @@ void CTitle::Init(void)
 {
 	m_state = STATE_NEWS;
 	m_bSetDohyo = true;
+	m_bSetUI = true;
 	m_bTurnRight = false;
 	m_bTurnLeft = false;
 	m_nCntTurn = 0;
@@ -138,6 +140,13 @@ void CTitle::Update(void)
 	}
 	else if (m_state == CTitle::STATE_CHARASELECT)
 	{// キャラクター選択
+
+		if (m_bSetUI == true)
+		{
+			CCharaSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
+			m_bSetUI = false;
+		}
+		
 
 		if (m_bSetDohyo == true)
 		{

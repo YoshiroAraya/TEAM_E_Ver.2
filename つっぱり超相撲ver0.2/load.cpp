@@ -60,6 +60,7 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/Select04.png",				//26
 	"data/TEXTURE/UI/Select02.png",				//27
 	"data/TEXTURE/UI/pause100.png",				//28
+	"data/TEXTURE/UI/select.png",				//29
 };
 
 //=============================================================================
