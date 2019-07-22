@@ -14,18 +14,20 @@
 //=============================================================================
 // 前方宣言
 //=============================================================================
+class CScene2D;
 
 //*****************************************************************************
 // マクロ定義
-//*****************************************************************************					
+//*****************************************************************************	
+#define MAX_SELECT (2)
 
 //=========================
 // ポーズクラス
 //=========================
-class CCharaSelect : public CScene2D
+class CCharaSelect : public CScene
 {
 public:
-	CCharaSelect();									// コンストラクタ
+	CCharaSelect(int nPriority = SELECT_PRIORITY, OBJTYPE objType = OBJTYPE_UI);									// コンストラクタ
 	~CCharaSelect();								// デストラクタ
 
 	static CCharaSelect *Create(D3DXVECTOR3 pos);	// 決定テクスチャを生成
@@ -36,6 +38,7 @@ public:
 	void Draw(void);								// 決定テクスチャ描画処理
 
 private:
+	CScene2D *m_apScene2D[MAX_SELECT];
 	D3DXCOLOR m_Col;
 	int	m_nSelect;
 	float m_fScale;
