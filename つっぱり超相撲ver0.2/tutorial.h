@@ -9,6 +9,10 @@
 
 #include "scene.h"
 
+//=============================================================================
+// 前方宣言
+//=============================================================================
+class CScene2D;
 class CScene3D;
 class CPlayer;
 class CEnemy;
@@ -19,6 +23,10 @@ class CGauge;
 class CSansoGauge;
 class CUITime;
 class CUltimateGauge;
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define MAX_TUTORIAL			(3)
 
 class CTutorial
 {
@@ -93,5 +101,7 @@ private:
 	int m_nWin2P;			//
 	int m_WinerNum;			//
 	int m_nTime = 0;
+
+	CScene2D *m_apScene2D[MAX_TUTORIAL];
 };
 #endif

@@ -66,6 +66,9 @@ public:
 		TEXTURE_MODESELECT_BG,			// モードセレクトのUI
 		TEXTURE_CHARASELECT,			// 決定テクスチャ
 		TEXTURE_ANIMATION_OUGI,			// 奥義のアニメーション
+		TEXTURE_TUTORIAL00,			// チュートリアルの画像
+		TEXTURE_TUTORIAL01,			// チュートリアルの画像
+		TEXTURE_TUTORIAL02,			// チュートリアルの画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

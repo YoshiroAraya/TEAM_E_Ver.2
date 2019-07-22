@@ -78,6 +78,11 @@ CTutorial::CTutorial()
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+	// 値をクリア
+	for (int nCntPause = 0; nCntPause < MAX_TUTORIAL; nCntPause++)
+	{
+		m_apScene2D[nCntPause] = NULL;
+	}
 }
 
 //=============================================================================
@@ -177,6 +182,24 @@ void CTutorial::Init(void)
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+
+	//m_apScene2D[0] = new CScene2D(4);
+	//m_apScene2D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
+	//m_apScene2D[0]->Init(D3DXVECTOR3(240, 100, 0));
+	//m_apScene2D[0]->SetWidthHeight(250.0f, 200.0f);
+	//m_apScene2D[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+	//m_apScene2D[1] = new CScene2D(4);
+	//m_apScene2D[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL01));
+	//m_apScene2D[1]->Init(D3DXVECTOR3(240 + 400.0f, 100, 0.0f));
+	//m_apScene2D[1]->SetWidthHeight(250.0f, 200.0f);
+	//m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+	m_apScene2D[2] = new CScene2D(4);
+	m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
+	m_apScene2D[2]->Init(D3DXVECTOR3(220 + 800.0f, 150, 0.0f));
+	m_apScene2D[2]->SetWidthHeight(350.0f, 200.0f);
+	m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 }
 
 //=============================================================================
@@ -198,6 +221,15 @@ void CTutorial::Uninit(void)
 		m_pBatlteSys = NULL;
 	}
 
+	// 2Dオブジェクト終了処理
+	for (int nCntPause = 0; nCntPause < MAX_TUTORIAL; nCntPause++)
+	{
+		if (m_apScene2D[nCntPause] != NULL)
+		{
+			m_apScene2D[nCntPause]->Uninit();
+			m_apScene2D[nCntPause] = NULL;
+		}
+	}
 
 	//全ての終了処理
 	CScene::ReleseAll();
