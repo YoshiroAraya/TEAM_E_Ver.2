@@ -60,6 +60,8 @@ void CTitle::Init(void)
 	m_bSetUI = true;
 	m_bTurnRight = false;
 	m_bTurnLeft = false;
+	m_aCharaSelect[0] = false;
+	m_aCharaSelect[1] = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
 	m_Character[0] = CHARACTER_PLAYER;
@@ -143,7 +145,7 @@ void CTitle::Update(void)
 
 		if (m_bSetUI == true)
 		{
-			CCharaSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
+			CCharaSelect::Create(D3DXVECTOR3(200.0f, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
 			m_bSetUI = false;
 		}
 		
@@ -223,6 +225,8 @@ void CTitle::Update(void)
 		{// 1Pモードの時
 			if (m_nCntReturn == 1)
 			{
+				m_aCharaSelect[0] = true;
+
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_PLAYER;
@@ -248,6 +252,8 @@ void CTitle::Update(void)
 		{// 2Pモードの時
 			if (m_nCntReturn == 1)
 			{// 1P選択
+				m_aCharaSelect[0] = true;
+
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_PLAYER;
@@ -260,6 +266,8 @@ void CTitle::Update(void)
 			}
 			else if (m_nCntReturn == 2)
 			{// 2P選択
+				m_aCharaSelect[1] = true;
+
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
 					m_Character[1] = CHARACTER_PLAYER;

@@ -45,6 +45,7 @@ public:
 	void SetTurnR(bool turn) { m_bTurnRight = turn; }
 	bool GetTurnL(void) { return m_bTurnLeft; }
 	void SetTurnL(bool turn) { m_bTurnLeft = turn; }
+	bool GetCharaSelect(int nCharacter) { return m_aCharaSelect[nCharacter]; }
 	void SaveCharacter(void);
 
 private:
@@ -54,6 +55,7 @@ private:
 	bool m_bSetUI;
 	bool m_bTurnRight;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
 	bool m_bTurnLeft;		// ‰ñ“]‚·‚é‚©‚µ‚È‚¢‚©
+	bool m_aCharaSelect[MAX_NUMPLAYER];
 	int m_nCntTurn;
 	int m_nCntReturn;
 	static CPlayer *m_pPlayer;

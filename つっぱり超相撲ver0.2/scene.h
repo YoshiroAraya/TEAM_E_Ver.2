@@ -19,6 +19,7 @@
 #define ENEMY_PRIORITY	(2)
 #define PLAYER_PRIORITY	(2)
 #define CPU_PRIORITY	(2)
+#define SELECT_PRIORITY	(3)
 
 //========================================
 // ƒNƒ‰ƒX‚Ì’è‹`

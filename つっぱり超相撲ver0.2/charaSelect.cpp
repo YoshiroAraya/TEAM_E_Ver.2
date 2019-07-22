@@ -15,6 +15,7 @@
 #include "game.h"
 #include "camera.h"
 #include "load.h"
+#include "title.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -23,7 +24,7 @@
 #define PAUSE_POS_Y		((SCREEN_HEIGHT / 2))		// 東西の左上Y座標
 #define PAUSE_WIDTH		((SCREEN_WIDTH / 2))		// 東西の幅
 #define PAUSE_HEIGHT	((SCREEN_HEIGHT / 2))		// 東西の高さ
-#define TOUZAI_SIZE		(150.0f)						// 東西のサイズ
+#define SELECT_SIZE		(50.0f)						// 東西のサイズ
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -43,7 +44,6 @@ CCharaSelect *CCharaSelect::Create(D3DXVECTOR3 pos)
 
 		if (pCharaSelect != NULL)
 		{
-			pCharaSelect->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_CHARASELECT));
 			pCharaSelect->Init(pos);
 		}
 	}
@@ -53,13 +53,18 @@ CCharaSelect *CCharaSelect::Create(D3DXVECTOR3 pos)
 //=============================================================================
 // 決定テクスチャクラスのコンストラクタ
 //=============================================================================
-CCharaSelect::CCharaSelect() : CScene2D(3)
+CCharaSelect::CCharaSelect(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 {
 	// 値をクリア
 	m_Col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 
 	m_nSelect = 0;
 	m_fScale = 0.0f;
+
+	for (int nCntPause = 0; nCntPause < MAX_SELECT; nCntPause++)
+	{
+		m_apScene2D[nCntPause] = NULL;
+	}
 }
 
 //=============================================================================
@@ -74,17 +79,31 @@ CCharaSelect::~CCharaSelect()
 //=============================================================================
 HRESULT CCharaSelect::Init(D3DXVECTOR3 pos)
 {
+	CNumPlayer::MODE mode;
+	mode = CNumPlayer::GetMode();
+
 	m_nSelect = 0;
-	m_fScale = 150.0f;
+	m_fScale = SELECT_SIZE;
 	m_bReset = true;
 
-	CScene2D::Init(pos);
+	m_apScene2D[0] = new CScene2D(SELECT_PRIORITY);
+	m_apScene2D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_CHARASELECT));
+	m_apScene2D[0]->Init(pos);
+	m_apScene2D[0]->SetWidthHeight(100.0f, 100.0f);
+	m_apScene2D[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	CScene2D::SetWidthHeight(m_fScale, m_fScale);
-
-	// オブジェクトの種類の設定
-	CScene2D::SetObjType(CScene::OBJTYPE_UI);
-
+	if (mode != NULL)
+	{
+		if (mode == CNumPlayer::MODE_2P)
+		{
+			m_apScene2D[1] = new CScene2D(SELECT_PRIORITY);
+			m_apScene2D[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_CHARASELECT));
+			m_apScene2D[1]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x, pos.y, pos.z));
+			m_apScene2D[1]->SetWidthHeight(100.0f, 100.0f);
+			m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+	}
+	
 	return S_OK;
 }
 
@@ -93,7 +112,18 @@ HRESULT CCharaSelect::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CCharaSelect::Uninit(void)
 {
-	CScene2D::Uninit();
+	// 2Dオブジェクト終了処理
+	for (int nCntPause = 0; nCntPause < MAX_SELECT; nCntPause++)
+	{
+		if (m_apScene2D[nCntPause] != NULL)
+		{
+			m_apScene2D[nCntPause]->Uninit();
+			m_apScene2D[nCntPause] = NULL;
+		}
+	}
+
+	// オブジェクトの解放
+	Release();
 }
 
 //=============================================================================
@@ -107,25 +137,39 @@ void CCharaSelect::Update(void)
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
 
-	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
-	pVtxBuff = CScene2D::GetBuff();
+	CNumPlayer::MODE mode;
+	mode = CNumPlayer::GetMode();
 
-	D3DXVECTOR3 pos = CScene2D::GetPosition();
+	// タイトル取得
+	CTitle *pTitle = CManager::GetTitle();
 
-	VERTEX_2D *pVtx;	// 頂点情報へのポインタ
+	if (pTitle->GetCharaSelect(0) == false)
+	{// 選択中
+		// テクスチャ座標の設定
+		m_apScene2D[0]->SetTex(D3DXVECTOR2(0.0f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
+	}
+	else if(pTitle->GetCharaSelect(0) == true)
+	{// 決定
+		// テクスチャ座標の設定
+		m_apScene2D[0]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 0.5f));
+	}
 
-						// 頂点バッファをロックし、頂点データへのポインタを取得
-	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-
-	// テクスチャ座標の設定
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(0.5f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(0.5f, 1.0f);
-
-	CScene2D::SetBuff(pVtxBuff);
-	CScene2D::SetPos(pos, 0.0f, m_fScale, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	if (mode != NULL)
+	{
+		if (mode == CNumPlayer::MODE_2P)
+		{
+			if (pTitle->GetCharaSelect(1) == false)
+			{// 選択中
+			 // テクスチャ座標の設定
+				m_apScene2D[1]->SetTex(D3DXVECTOR2(0.0f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
+			}
+			else if (pTitle->GetCharaSelect(1) == true)
+			{// 決定
+			 // テクスチャ座標の設定
+				m_apScene2D[1]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 0.5f));
+			}
+		}
+	}
 }
 
 //=============================================================================
@@ -133,5 +177,4 @@ void CCharaSelect::Update(void)
 //=============================================================================
 void CCharaSelect::Draw(void)
 {
-	CScene2D::Draw();
 }

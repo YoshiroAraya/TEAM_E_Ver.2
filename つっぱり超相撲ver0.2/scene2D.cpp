@@ -380,3 +380,23 @@ void CScene2D::SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V)
 	//頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 }
+
+//=============================================================================
+// アニメーションの設定処理
+//=============================================================================
+void CScene2D::SetTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax)
+{
+	VERTEX_2D*pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(texmin.x, texmin.y);
+	pVtx[1].tex = D3DXVECTOR2(texmax.x, texmin.y);
+	pVtx[2].tex = D3DXVECTOR2(texmin.x, texmax.y);
+	pVtx[3].tex = D3DXVECTOR2(texmax.x, texmax.y);
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
