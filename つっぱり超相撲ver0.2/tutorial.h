@@ -103,5 +103,7 @@ private:
 	int m_nTime = 0;
 
 	CScene2D *m_apScene2D[MAX_TUTORIAL];
+	CScene3D *m_apScene3D[MAX_TUTORIAL];
+
 };
 #endif

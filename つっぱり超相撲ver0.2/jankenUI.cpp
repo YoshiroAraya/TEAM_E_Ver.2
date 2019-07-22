@@ -143,7 +143,6 @@ void CJankenUI::Uninit(void)
 			m_apScene2D[nCntPause] = NULL;
 		}
 	}
-
 	// オブジェクトの解放
 	Release();
 }

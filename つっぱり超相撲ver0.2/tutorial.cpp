@@ -79,9 +79,15 @@ CTutorial::CTutorial()
 	m_nWin2P = 0;
 	m_WinerNum = 0;
 	// 値をクリア
-	for (int nCntPause = 0; nCntPause < MAX_TUTORIAL; nCntPause++)
+	for (int nCnt = 0; nCnt < MAX_TUTORIAL; nCnt++)
 	{
-		m_apScene2D[nCntPause] = NULL;
+		m_apScene2D[nCnt] = NULL;
+	}
+
+	// 値をクリア
+	for (int nCnt = 0; nCnt < MAX_TUTORIAL; nCnt++)
+	{
+		m_apScene3D[nCnt] = NULL;
 	}
 }
 
@@ -195,11 +201,20 @@ void CTutorial::Init(void)
 	//m_apScene2D[1]->SetWidthHeight(250.0f, 200.0f);
 	//m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-	m_apScene2D[2] = new CScene2D(4);
-	m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
-	m_apScene2D[2]->Init(D3DXVECTOR3(220 + 800.0f, 150, 0.0f));
-	m_apScene2D[2]->SetWidthHeight(350.0f, 200.0f);
-	m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	//m_apScene2D[2] = new CScene2D(4);
+	//m_apScene2D[2]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
+	//m_apScene2D[2]->Init(D3DXVECTOR3(220 + 800.0f, 150, 0.0f));
+	//m_apScene2D[2]->SetWidthHeight(350.0f, 200.0f);
+	//m_apScene2D[2]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+
+	m_apScene3D[0] = CScene3D::Create(D3DXVECTOR3(0, 50, 150));
+	m_apScene3D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
+	m_apScene3D[0]->SetSize(100, 150);
+	m_apScene3D[0]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_apScene3D[0]->Init(D3DXVECTOR3(0, 100, 200));
+	m_apScene3D[0]->SetRot(D3DXVECTOR3(-1.3f, 0, 0));
+
 }
 
 //=============================================================================
@@ -222,12 +237,22 @@ void CTutorial::Uninit(void)
 	}
 
 	// 2Dオブジェクト終了処理
-	for (int nCntPause = 0; nCntPause < MAX_TUTORIAL; nCntPause++)
+	for (int nCnt = 0; nCnt < MAX_TUTORIAL; nCnt++)
 	{
-		if (m_apScene2D[nCntPause] != NULL)
+		if (m_apScene2D[nCnt] != NULL)
 		{
-			m_apScene2D[nCntPause]->Uninit();
-			m_apScene2D[nCntPause] = NULL;
+			m_apScene2D[nCnt]->Uninit();
+			m_apScene2D[nCnt] = NULL;
+		}
+	}
+
+	// 2Dオブジェクト終了処理
+	for (int nCnt = 0; nCnt < MAX_TUTORIAL; nCnt++)
+	{
+		if (m_apScene3D[nCnt] != NULL)
+		{
+			m_apScene3D[nCnt]->Uninit();
+			m_apScene3D[nCnt] = NULL;
 		}
 	}
 
