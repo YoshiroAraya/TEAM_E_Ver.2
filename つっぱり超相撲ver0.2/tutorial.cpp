@@ -116,10 +116,10 @@ void CTutorial::Init(void)
 	CDohyo::LoadMat();
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 50, 0));
-	//CWinnerUI::Create(D3DXVECTOR3(300, 100, 0));
+	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 100, 0));
+	//CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
-	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,600, 0));
+	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100,680, 0));
 
 	if (m_pScene3D == NULL)
 	{
@@ -212,7 +212,7 @@ void CTutorial::Init(void)
 	m_apScene3D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
 	m_apScene3D[0]->SetSize(100, 150);
 	m_apScene3D[0]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	m_apScene3D[0]->Init(D3DXVECTOR3(0, 100, 200));
+	m_apScene3D[0]->Init(D3DXVECTOR3(0, 130, 200));
 	m_apScene3D[0]->SetRot(D3DXVECTOR3(-1.3f, 0, 0));
 
 }
@@ -308,7 +308,7 @@ void CTutorial::Update(void)
 	{
 		if (m_bUI == true)
 		{// ‚¶‚á‚ñ‚¯‚ñ‚ÌUI‚ðo‚·
-			CJankenUI::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f));
+			CJankenUI::Create(D3DXVECTOR3(200.0f, 500.0f, 0.0f));
 			m_bUI = false;
 			m_pPlayer->SetbJanken(true);
 			m_pEnemy->SetbJanken(true);
@@ -329,6 +329,18 @@ void CTutorial::Update(void)
 	//	m_pUITime->SetTime(TIME_INI);
 	}
 
+	if (m_pPlayer->GetState() == CPlayer::STATE_JANKEN)
+	{
+		m_apScene3D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL00));
+	}
+	else if (m_pPlayer->GetState() == CPlayer::STATE_NEUTRAL)
+	{
+		m_apScene3D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL01));
+	}
+	else if (m_pPlayer->GetState() == CPlayer::STATE_KUMI)
+	{
+		m_apScene3D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TUTORIAL02));
+	}
 #ifdef _DEBUG
 
 	if (pInputKeyboard->GetTrigger(DIK_7) == true)

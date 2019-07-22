@@ -25,10 +25,10 @@
 #define NISI_TIME		(10)
 
 #define GAME_CAMERA_X	(0.0f)
-#define GAME_CAMERA_Y	(150.0f)
+#define GAME_CAMERA_Y	(160.0f)
 #define GAME_CAMERA_Z	(-330.0f)
 #define GAME_RCAMERA_X	(0.0f)
-#define GAME_RCAMERA_Y	(100.0f)
+#define GAME_RCAMERA_Y	(110.0f)
 #define GAME_RCAMERA_Z	(50.0f)
 
 #define START_CAMERA_X	(90.0f)
@@ -549,7 +549,7 @@ void CCamera::Start(CPlayer *pPlayer, CEnemy *pEnemy)
 
 		if (m_posV.z >= GAME_CAMERA_Z)
 		{
-			m_posV.z -= 4.0f;
+			m_posV.z -= 10.0f;
 
 			if (m_posV.z < GAME_CAMERA_Z)
 			{
