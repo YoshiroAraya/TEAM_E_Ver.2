@@ -865,6 +865,14 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		{
 			m_State = STATE_GUARD;
 			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
+			if (m_nMotionType[0] != MOTION_GUARD
+				&& m_nMotionType[1] != MOTION_GUARD)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_GUARD;
+				m_nMotionType[1] = MOTION_GUARD;
+			}
 		}
 		if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
 			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
@@ -884,7 +892,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			}
 			else if (m_Direction == DIRECTION_RIGHT)
 			{// 右向き
-				// 右に進む	
+				// 右に進む
 				m_move.x += sinf(D3DX_PI * 0.5f) * fMoveEnemy;
 			}
 		}
@@ -972,6 +980,14 @@ float CEnemy::EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy)
 				//ガード状態へ
 				m_State = STATE_GUARD;
 				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
+				if (m_nMotionType[0] != MOTION_GUARD
+					&& m_nMotionType[1] != MOTION_GUARD)
+				{
+					m_nKey[0] = 0;
+					m_nKey[1] = 0;
+					m_nMotionType[0] = MOTION_GUARD;
+					m_nMotionType[1] = MOTION_GUARD;
+				}
 				break;
 			case CPUACTION_DASHFAR:
 				if (m_State == STATE_NEUTRAL && m_bRecovery == false)

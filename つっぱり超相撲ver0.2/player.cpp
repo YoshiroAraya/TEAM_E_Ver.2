@@ -543,24 +543,24 @@ void CPlayer::Update(void)
 		CDebugProc::Print("c", "ƒvƒŒƒCƒ„[ ¶‘¶ ");
 	}
 
-	//if (pInputKeyboard->GetTrigger(DIK_Q) == true)
-	//{
-	//	m_nMotionType[0]--;
-	//	m_nMotionType[1]--;
-	//	m_nKey[0] = 0;
-	//	m_nKey[1] = 0;
-	//	m_nCountFlame[0] = 0;
-	//	m_nCountFlame[1] = 0;
-	//}
-	//if (pInputKeyboard->GetTrigger(DIK_E) == true)
-	//{
-	//	m_nMotionType[0]++;
-	//	m_nMotionType[1]++;
-	//	m_nKey[0] = 0;
-	//	m_nKey[1] = 0;
-	//	m_nCountFlame[0] = 0;
-	//	m_nCountFlame[1] = 0;
-	//}
+	if (pInputKeyboard->GetTrigger(DIK_Q) == true)
+	{
+		m_nMotionType[0]--;
+		m_nMotionType[1]--;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_E) == true)
+	{
+		m_nMotionType[0]++;
+		m_nMotionType[1]++;
+		m_nKey[0] = 0;
+		m_nKey[1] = 0;
+		m_nCountFlame[0] = 0;
+		m_nCountFlame[1] = 0;
+	}
 
 	if (pInputKeyboard->GetTrigger(DIK_1) == true)
 	{
@@ -834,6 +834,15 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		{
 			m_State = STATE_GUARD;
 			pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
+
+			if (m_nMotionType[0] != MOTION_GUARD
+				&& m_nMotionType[1] != MOTION_GUARD)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_GUARD;
+				m_nMotionType[1] = MOTION_GUARD;
+			}
 		}
 		if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
 			pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
