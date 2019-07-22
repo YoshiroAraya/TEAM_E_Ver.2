@@ -800,79 +800,81 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		pPlayer = CGame::GetPlayer();
 		pBattleSys = CGame::GetBatlteSys();
 	}
-	//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	if (pBattleSys->GetUlt(0) == true)
 	{
-		//任意のキー←
-		if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-			pXInput->GetPress(XENEMY_LEFT, 1) == true)
+		//通常状態で硬直していない
+		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+			//任意のキー←
+			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
+				pXInput->GetPress(XENEMY_LEFT, 1) == true)
 			{
-				fMoveEnemy = DASH_MOVE;
-				m_bDash = true;
+				//ダッシュ設定
+				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+					pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+				{
+					fMoveEnemy = DASH_MOVE;
+					m_bDash = true;
+				}
+				else
+				{
+					m_bDash = false;
+				}
+				// 左に進む
+				m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
+				m_nMotionType[0] = MOTION_SURIASI;
+				m_nMotionType[1] = MOTION_SURIASI;
+			}
+
+			//任意のキー→
+			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
+				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+			{
+				//ダッシュ設定
+				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
+					pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+				{
+					fMoveEnemy = DASH_MOVE;
+					m_bDash = true;
+				}
+				else
+				{
+					m_bDash = false;
+				}
+				// 右に進む
+				m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
+				m_nMotionType[0] = MOTION_SURIASI;
+				m_nMotionType[1] = MOTION_SURIASI;
 			}
 			else
 			{
-				m_bDash = false;
+				if (m_bMotionEnd[0] == true)
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+				}
+				if (m_bMotionEnd[1] == true)
+				{
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				}
 			}
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
 		}
 
-		//任意のキー→
-		else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-			pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+		if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+			//ガード状態
+			if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
+				pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
 			{
-				fMoveEnemy = DASH_MOVE;
-				m_bDash = true;
+				m_State = STATE_GUARD;
+				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
 			}
-			else
+			if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
+				pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
 			{
-				m_bDash = false;
-			}
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-		else
-		{
-			if (m_bMotionEnd[0] == true)
-			{
-				m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-			}
-			if (m_bMotionEnd[1] == true)
-			{
-				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				m_State = STATE_NEUTRAL;
 			}
 		}
 	}
-
-	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
-	{
-		//ガード状態
-		if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
-			pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
-		{
-			m_State = STATE_GUARD;
-			pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
-		}
-		if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
-			pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
-		{
-			m_State = STATE_NEUTRAL;
-		}
-	}
-
 	if (pBattleSys != NULL)
 	{
 		if (pBattleSys->GetUlt(1) == true)

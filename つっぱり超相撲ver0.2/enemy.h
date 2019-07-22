@@ -55,6 +55,7 @@ public:
 		STATE_GUARD,
 		STATE_DOWN,
 		STATE_ULT,
+		STATE_ULTDAMAGE,
 	}STATE;
 
 	//èÛë‘

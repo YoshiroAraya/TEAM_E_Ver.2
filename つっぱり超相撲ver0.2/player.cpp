@@ -768,77 +768,79 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		pBattleSys = CGame::GetBatlteSys();
 	}
 
-
-	//通常状態で硬直していない
-	if (m_State == STATE_NEUTRAL && m_bRecovery == false)
+	if (pBattleSys->GetUlt(1) == true)
 	{
-		//任意のキー←
-		if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
-			pXInput->GetPress(XPLAYER_LEFT, 1) == true)
+		//通常状態で硬直していない
+		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-				pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+			//任意のキー←
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
+				pXInput->GetPress(XPLAYER_LEFT, 1) == true)
 			{
-				fMovePlayer = DASH_MOVE;
-				m_bDash = true;
+				//ダッシュ設定
+				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+					pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+				{
+					fMovePlayer = DASH_MOVE;
+					m_bDash = true;
+				}
+				else
+				{
+					m_bDash = false;
+				}
+				// 左に進む
+				m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
+				m_nMotionType[0] = MOTION_SURIASI;
+				m_nMotionType[1] = MOTION_SURIASI;
+			}
+
+			//任意のキー→
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
+				pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
+			{
+				//ダッシュ設定
+				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
+					pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+				{
+					fMovePlayer = DASH_MOVE;
+					m_bDash = true;
+				}
+				else
+				{
+					m_bDash = false;
+				}
+				// 右に進む
+				m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
+				m_nMotionType[0] = MOTION_SURIASI;
+				m_nMotionType[1] = MOTION_SURIASI;
 			}
 			else
 			{
-				m_bDash = false;
+				if (m_bMotionEnd[0] == true)
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+				}
+				if (m_bMotionEnd[1] == true)
+				{
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				}
 			}
-			// 左に進む
-			m_move = pCharacterMove->MoveLeft(m_move, fMovePlayer);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
 		}
 
-		//任意のキー→
-		else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
-			pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
+		if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 		{
-			//ダッシュ設定
-			if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-				pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+			//ガード状態
+			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
+				pXInput->GetPress(XPLAYER_X_BUTTON, 1) == true)
 			{
-				fMovePlayer = DASH_MOVE;
-				m_bDash = true;
+				m_State = STATE_GUARD;
+				pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
 			}
-			else
+			if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
+				pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
 			{
-				m_bDash = false;
+				m_State = STATE_NEUTRAL;
 			}
-			// 右に進む
-			m_move = pCharacterMove->MoveRight(m_move, fMovePlayer);
-			m_nMotionType[0] = MOTION_SURIASI;
-			m_nMotionType[1] = MOTION_SURIASI;
-		}
-		else
-		{
-			if (m_bMotionEnd[0] == true)
-			{
-				m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
-			}
-			if (m_bMotionEnd[1] == true)
-			{
-				m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
-			}
-		}
-	}
-
-	if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
-	{
-		//ガード状態
-		if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
-			pXInput->GetPress(XPLAYER_X_BUTTON, 1) == true)
-		{
-			m_State = STATE_GUARD;
-			pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
-		}
-		if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
-			pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
-		{
-			m_State = STATE_NEUTRAL;
 		}
 	}
 
