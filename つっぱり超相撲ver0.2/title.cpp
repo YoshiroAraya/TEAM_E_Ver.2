@@ -148,7 +148,7 @@ void CTitle::Update(void)
 			CCharaSelect::Create(D3DXVECTOR3(200.0f, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
 			m_bSetUI = false;
 		}
-		
+
 
 		if (m_bSetDohyo == true)
 		{
@@ -353,6 +353,6 @@ void CTitle::SaveCharacter(void)
 	}
 	else
 	{// ファイルが開けなかったら
-		printf("開けませんでした\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 }

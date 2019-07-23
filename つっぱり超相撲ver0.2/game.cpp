@@ -510,7 +510,7 @@ void CGame::SaveWinner(void)
 	}
 	else
 	{// ファイルが開けなかったら
-		printf("開けませんでした\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 }
 
