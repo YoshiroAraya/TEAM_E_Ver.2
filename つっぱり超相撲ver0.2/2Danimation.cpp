@@ -131,7 +131,7 @@ void C2DAnimation::Update(void)
 		m_nLife--;
 
 		//“§–¾“x‚ðŒ¸‚ç‚·
-		m_col.a -= 0.05f;
+		//m_col.a -= 0.05f;
 
 		if (m_bUse == true)
 		{

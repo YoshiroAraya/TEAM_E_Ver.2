@@ -69,6 +69,8 @@ public:
 		TEXTURE_TUTORIAL00,			// チュートリアルの画像
 		TEXTURE_TUTORIAL01,			// チュートリアルの画像
 		TEXTURE_TUTORIAL02,			// チュートリアルの画像
+		TEXTURE_OUGIUI00,			// 奥義時のUI画像
+
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ
