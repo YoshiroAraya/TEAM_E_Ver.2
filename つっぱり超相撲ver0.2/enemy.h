@@ -55,7 +55,6 @@ public:
 		STATE_GUARD,
 		STATE_DOWN,
 		STATE_ULT,
-		STATE_ULTDAMAGE,
 	}STATE;
 
 	//状態
@@ -201,6 +200,8 @@ public:
 	MODE GetMode(void) { return m_Mode; }
 	void SetbJanken(bool bJanken) { m_bJanken = bJanken; }
 	bool GetbJanken(void) { return m_bJanken; }
+	bool GetUltDamage(void) { return m_bUltDamage; }
+	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
@@ -234,6 +235,7 @@ private:
 	bool					m_bSelect;		// 選ばれているかどうか
 	bool					m_bUltDis;		// 必殺の演出表示
 	bool					m_bPlayerDamage;
+	bool					m_bUltDamage;
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態

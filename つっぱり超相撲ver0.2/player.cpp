@@ -232,6 +232,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bDash = false;
 	m_bUltDis = false;
 	m_bEnemyDamage = false;
+	m_bUltDamage = false;
 
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
@@ -485,13 +486,16 @@ void CPlayer::Update(void)
 	{
 		pos.y = 0;
 		CSceneX::SetPosition(pos);
-		if (mode == CManager::MODE_TUTORIAL)
+		if (m_bUltDamage == false)
 		{
-			CTutorial::SetWinner(CTutorial::WINNER_PLAYER2);
-		}
-		else if (mode == CManager::MODE_GAME)
-		{
-			CGame::SetWinner(CGame::WINNER_PLAYER2);
+			if (mode == CManager::MODE_TUTORIAL)
+			{
+				CTutorial::SetWinner(CTutorial::WINNER_PLAYER2);
+			}
+			else if (mode == CManager::MODE_GAME)
+			{
+				CGame::SetWinner(CGame::WINNER_PLAYER2);
+			}
 		}
 	}
 
@@ -567,6 +571,16 @@ void CPlayer::Update(void)
 		//3項演算 式１?式２:式３  bool == true(式1) なら 式2 : falseなら式3
 		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
 	}
+
+	if (m_bUltDamage == true)
+	{
+		CDebugProc::Print("c", "プレイヤーが奥義受けている");
+	}
+	else if (m_bUltDamage == false)
+	{
+		CDebugProc::Print("c", "プレイヤーが奥義受けていない");
+	}
+
 	//CDebugProc::Print("cn", " Numキー0  : ", m_nKey[0]);
 	//CDebugProc::Print("cn", " フレーム数0  : ", m_nCountFlame[0]);
 	//CDebugProc::Print("cn", " Numキー1  : ", m_nKey[1]);
@@ -724,6 +738,7 @@ void CPlayer::InitStatus(void)
 	m_bSelect = false;
 	m_nSiomakiCnt = 0;
 	m_bDash = false;
+	m_bUltDamage = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -859,7 +874,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		{
 			if (pEnemy != NULL)
 			{
-				pEnemy->SetState(CEnemy::STATE_ULTDAMAGE);
+				pEnemy->SetUltDamage(true);
 				if (m_Direction == DIRECTION_RIGHT)
 				{// 右向き
 					// 右に進む

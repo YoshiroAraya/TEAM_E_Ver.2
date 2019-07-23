@@ -89,8 +89,8 @@ HRESULT CCharaSelect::Init(D3DXVECTOR3 pos)
 	m_apScene2D[0] = new CScene2D(SELECT_PRIORITY);
 	m_apScene2D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_CHARASELECT));
 	m_apScene2D[0]->Init(pos);
-	m_apScene2D[0]->SetWidthHeight(100.0f, 100.0f);
-	m_apScene2D[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_apScene2D[0]->SetWidthHeight(200.0f, 150.0f);
+	m_apScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 
 	if (mode != NULL)
 	{
@@ -99,8 +99,8 @@ HRESULT CCharaSelect::Init(D3DXVECTOR3 pos)
 			m_apScene2D[1] = new CScene2D(SELECT_PRIORITY);
 			m_apScene2D[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_CHARASELECT));
 			m_apScene2D[1]->Init(D3DXVECTOR3(SCREEN_WIDTH - pos.x, pos.y, pos.z));
-			m_apScene2D[1]->SetWidthHeight(100.0f, 100.0f);
-			m_apScene2D[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_apScene2D[1]->SetWidthHeight(200.0f, 150.0f);
+			m_apScene2D[1]->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 	}
 	
