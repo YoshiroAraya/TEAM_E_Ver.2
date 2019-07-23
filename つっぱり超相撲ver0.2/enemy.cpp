@@ -800,7 +800,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		pPlayer = CGame::GetPlayer();
 		pBattleSys = CGame::GetBatlteSys();
 	}
-	if (pBattleSys->GetUlt(0) == true)
+	if (pBattleSys->GetUlt(0) == false)
 	{
 		//’Êíó‘Ô‚Åd’¼‚µ‚Ä‚¢‚È‚¢
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)

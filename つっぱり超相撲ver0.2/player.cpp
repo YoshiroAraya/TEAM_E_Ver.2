@@ -768,7 +768,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		pBattleSys = CGame::GetBatlteSys();
 	}
 
-	if (pBattleSys->GetUlt(1) == true)
+	if (pBattleSys->GetUlt(1) == false)
 	{
 		//’Êíó‘Ô‚Åd’¼‚µ‚Ä‚¢‚È‚¢
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
