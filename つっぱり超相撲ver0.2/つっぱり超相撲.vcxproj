@@ -188,6 +188,7 @@
     <ClCompile Include="newsCaster.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="numPlayer.cpp" />
+    <ClCompile Include="ougiUI.cpp" />
     <ClCompile Include="particleX.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="newsCaster.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="numPlayer.h" />
+    <ClInclude Include="ougiUI.h" />
     <ClInclude Include="particleX.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="player.h" />
