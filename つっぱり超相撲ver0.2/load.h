@@ -69,6 +69,7 @@ public:
 		TEXTURE_TUTORIAL00,			// チュートリアルの画像
 		TEXTURE_TUTORIAL01,			// チュートリアルの画像
 		TEXTURE_TUTORIAL02,			// チュートリアルの画像
+		TEXTURE_SENSU,			// タイムの背景用
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

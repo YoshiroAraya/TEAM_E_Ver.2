@@ -299,9 +299,12 @@ void CTutorial::Update(void)
 		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
 	}
 
-	if (m_pBatlteSys != NULL)
+	if (CScene::GetbPause() == false)
 	{
-		m_pBatlteSys->Update();
+		if (m_pBatlteSys != NULL)
+		{
+			m_pBatlteSys->Update();
+		}
 	}
 
 	if (m_State == STATE_GAME)
