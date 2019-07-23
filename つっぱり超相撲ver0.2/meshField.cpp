@@ -158,7 +158,7 @@ HRESULT CMeshField::Init(D3DXVECTOR3 pos)
 			// 頂点カラーの設定
 			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			// テクスチャ座標の設定
-			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].tex = 
+			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].tex =
 				D3DXVECTOR2(0.0f + (nCntVtxX /** (10.0f / POLYGON_X)*/), 0.0f + (nCntVtxZ /** (10.0f / POLYGON_Z)*/));
 		}
 		nVtxCounter += POLYGON_X;
@@ -374,7 +374,7 @@ HRESULT CMeshField::Init(D3DXVECTOR3 pos)
 	// 正規化する
 	D3DXVec3Normalize(&aNor[6], &aNor[6]); // 法線Ｇ
 	D3DXVec3Normalize(&aNor[7], &aNor[7]); // 法線Ｈ
-	
+
 	//====================================================================
 	// 各頂点の法線を算出する
 	//====================================================================
@@ -595,7 +595,7 @@ void CMeshField::Update(void)
 	//{// 9キーが押されたら
 	//	LoadHeight();
 	//}
-	
+
 #endif
 
 #ifdef _DEBUG
@@ -855,7 +855,7 @@ void CMeshField::SaveHeight(void)
 	}
 	else
 	{
-		printf("number.txtを開けませんでした。\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 
 }
@@ -883,7 +883,7 @@ void CMeshField::LoadHeight(void)
 	}
 	else
 	{
-		printf("number.txtを開けませんでした。\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 
 	for (int nCntZ = 0; nCntZ < POLYGON_Z + 1; nCntZ++)

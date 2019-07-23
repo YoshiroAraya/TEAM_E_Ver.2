@@ -41,6 +41,8 @@
 #define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
+#define FILE_NAME_2				("data\\TEXT\\motion_resura_down.txt")
+#define FILE_NAME_3				("data\\TEXT\\motion_resura_up.txt")
 
 #define DOHYO_COLLISION			(20.0f)
 #define GUARD_NOW_SANSO			(-2.5f)
@@ -272,8 +274,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	m_nOldMotion = 0;	//前のモーション
 						//プレイヤー情報の読み込み
-	FileLoad(FILE_NAME_0, 0);
-	FileLoad(FILE_NAME_1, 1);
+	FileLoad(FILE_NAME_2, 0);
+	FileLoad(FILE_NAME_3, 1);
 
 	//モデルの親を指定
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
@@ -2233,7 +2235,7 @@ void CEnemy::FileLoad(char FileName[256], int nParent)
 	}
 	else
 	{	//ファイルが開けなかった
-		printf("ファイルが開けませんでした\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 	//ファイルを閉じる
 	fclose(pFile);

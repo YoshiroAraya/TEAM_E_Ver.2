@@ -1844,7 +1844,7 @@ void CPlayer::FileLoad(char FileName[256], int nParent)
 	}
 	else
 	{	//ファイルが開けなかった
-		printf("ファイルが開けませんでした\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 	//ファイルを閉じる
 	fclose(pFile);

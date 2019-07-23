@@ -38,6 +38,7 @@
 #include "winnerUI.h"
 #include "effect2D.h"
 #include "2Danimation.h"
+#include "ougiUI.h"
 
 #include "number.h"
 #include "UITime.h"
@@ -148,18 +149,18 @@ void CGame::Init(void)
 
 	if (m_pPlayer == NULL)
 	{// プレイヤー
-		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
+		m_pPlayer = CPlayer::Create(D3DXVECTOR3(-170.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f));
 	}
 
 	if (m_pEnemy == NULL)
 	{// エネミー
 		if (CNumPlayer::GetMode() == CNumPlayer::MODE_1P)
 		{
-			m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(170.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
 		}
 		else if (CNumPlayer::GetMode() == CNumPlayer::MODE_2P)
 		{
-			m_pEnemy = CEnemy::Create(D3DXVECTOR3(200.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_P2);
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(170.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_P2);
 		}
 	}
 
@@ -281,15 +282,18 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_ULTIMATE, pFade->FADE_OUT);
 	}
 
-	if (m_pBatlteSys != NULL)
+	if (CScene::GetbPause() == false)
 	{
-		m_pBatlteSys->Update();
+		if (m_pBatlteSys != NULL)
+		{
+			m_pBatlteSys->Update();
+		}
 	}
 
-	//if (m_pUITime != NULL)
-	//{
-	//	m_pUITime->Update();
-	//}
+	if (m_pUITime != NULL)
+	{
+		m_pUITime->Update();
+	}
 
 	if (m_State == STATE_GAME)
 	{
@@ -388,6 +392,8 @@ void CGame::Update(void)
 		//奥義アニメーション
 		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
+		
+		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
@@ -507,7 +513,7 @@ void CGame::SaveWinner(void)
 	}
 	else
 	{// ファイルが開けなかったら
-		printf("開けませんでした\n");
+		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 }
 
