@@ -243,6 +243,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bAction = false;
 	m_bPlayerDamage = false;
 	m_DamageCnt = 0;
+	m_bUltDamage = false;
 
 	//‚Â‚Á‚Ï‚è¶¬
 	m_pTuppari = CTuppari::Create(pos);
@@ -514,13 +515,16 @@ void CEnemy::Update(void)
 	{
 		pos.y = 0;
 		CSceneX::SetPosition(pos);
-		if (mode == CManager::MODE_TUTORIAL)
+		if (m_bUltDamage == false)
 		{
-			CTutorial::SetWinner(CTutorial::WINNER_PLAYER1);
-		}
-		else if (mode == CManager::MODE_GAME)
-		{
-			CGame::SetWinner(CGame::WINNER_PLAYER1);
+			if (mode == CManager::MODE_TUTORIAL)
+			{
+				CTutorial::SetWinner(CTutorial::WINNER_PLAYER1);
+			}
+			else if (mode == CManager::MODE_GAME)
+			{
+				CGame::SetWinner(CGame::WINNER_PLAYER1);
+			}
 		}
 	}
 
@@ -592,6 +596,15 @@ void CEnemy::Update(void)
 	{
 		//3€‰‰Z ®‚P?®‚Q:®‚R  bool == true(®1) ‚È‚ç ®2 : false‚È‚ç®3
 		m_bColBlockDraw = m_bColBlockDraw == true ? m_bColBlockDraw = false : m_bColBlockDraw = true;
+	}
+
+	if (m_bUltDamage == true)
+	{
+		CDebugProc::Print("c", "“G‚ª‰œ‹`ó‚¯‚Ä‚¢‚é");
+	}
+	else if (m_bUltDamage == false)
+	{
+		CDebugProc::Print("c", "“G‚ª‰œ‹`ó‚¯‚Ä‚¢‚È‚¢");
 	}
 
 	//CDebugProc::Print("cn", " NumƒL[0  : ", m_nKey[0]);
@@ -758,6 +771,7 @@ void CEnemy::InitStatus(void)
 	m_CPUAction = CPUACTION_NEUTRAL;
 	m_bAction = false;
 	m_DamageCnt = 0;
+	m_bUltDamage = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -890,7 +904,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		{
 			if (pPlayer != NULL)
 			{
-				pPlayer->SetState(CPlayer::STATE_ULTDAMAGE);
+				pPlayer->SetUltDamage(true);
 				if (m_Direction == DIRECTION_LEFT)
 				{// ¶Œü‚«
 				 // ¶‚Éi‚Ş
