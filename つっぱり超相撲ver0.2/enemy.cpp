@@ -888,15 +888,19 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 	{
 		if (pBattleSys->GetUlt(1) == true)
 		{
-			if (m_Direction == DIRECTION_LEFT)
-			{// 左向き
-				// 左に進む
-				m_move.x -= sinf(D3DX_PI * 0.5f) * fMoveEnemy;
-			}
-			else if (m_Direction == DIRECTION_RIGHT)
-			{// 右向き
-				// 右に進む
-				m_move.x += sinf(D3DX_PI * 0.5f) * fMoveEnemy;
+			if (pPlayer != NULL)
+			{
+				pPlayer->SetState(CPlayer::STATE_ULTDAMAGE);
+				if (m_Direction == DIRECTION_LEFT)
+				{// 左向き
+				 // 左に進む
+					m_move.x -= sinf(D3DX_PI * 0.5f) * fMoveEnemy;
+				}
+				else if (m_Direction == DIRECTION_RIGHT)
+				{// 右向き
+				 // 右に進む
+					m_move.x += sinf(D3DX_PI * 0.5f) * fMoveEnemy;
+				}
 			}
 		}
 	}

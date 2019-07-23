@@ -859,6 +859,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		{
 			if (pEnemy != NULL)
 			{
+				pEnemy->SetState(CEnemy::STATE_ULTDAMAGE);
 				if (m_Direction == DIRECTION_RIGHT)
 				{// ‰EŒü‚«
 					// ‰E‚Éi‚Ş
