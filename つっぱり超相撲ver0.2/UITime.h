@@ -13,6 +13,7 @@
 //　前方宣言
 //*****************************************************************************
 class CNumber;
+class CScene2D;
 
 //*****************************************************************************
 // マクロ定義
@@ -41,6 +42,7 @@ public:
 private:
 	//メンバ変数
 	CNumber			*m_apNumber[MAX_TIME];
+	CScene2D		*m_p2DSensu;
 	D3DXVECTOR3		m_pos;
 	float			m_fLength;
 	float			m_fWidth, m_fHeight;	// 幅高さ

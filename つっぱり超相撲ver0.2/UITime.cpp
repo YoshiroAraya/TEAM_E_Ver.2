@@ -8,6 +8,7 @@
 #include "fade.h"
 #include "game.h"
 #include "player.h"
+#include "load.h"
 #include "tutorial.h"
 //*****************************************************************************
 // マクロ定義
@@ -72,6 +73,14 @@ HRESULT CUITime::Init(D3DXVECTOR3 pos)
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), m_fWidth, m_fHeight);
 		}
 	}
+
+	//2D背景
+	m_p2DSensu = new CScene2D(2);
+	m_p2DSensu->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_SENSU));
+	m_p2DSensu->Init(D3DXVECTOR3(m_pos.x - (m_fWidth * 0.58f), m_pos.y + 10 , m_pos.z));
+	m_p2DSensu->SetWidthHeight(200.0f, 100.0f);
+	m_p2DSensu->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
 	//タイム初期化
 	m_nTime = INIT_TIME;
 	m_nTimerCnt = 0;
@@ -89,6 +98,11 @@ HRESULT CUITime::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CUITime::Uninit(void)
 {
+	if (m_p2DSensu != NULL)
+	{
+		m_p2DSensu->Uninit();
+		m_p2DSensu = NULL;
+	}
 	//自分を破棄
 	Release();
 }
