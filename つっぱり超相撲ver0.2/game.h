@@ -94,5 +94,6 @@ private:
 	int m_nWin2P;			//Ÿ‚Á‚½”‚ğ‹L‰¯
 	int m_WinerNum;			//Ÿ‚Á‚½‚Ì‚Í‚Ç‚¿‚ç‚©
 	int m_nTime = 0;
+	int m_nBattleResetTimer;
 };
 #endif

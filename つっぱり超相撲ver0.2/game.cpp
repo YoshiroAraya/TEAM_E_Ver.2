@@ -80,6 +80,7 @@ CGame::CGame()
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+	m_nBattleResetTimer = 0;
 }
 
 //=============================================================================
@@ -309,23 +310,36 @@ void CGame::Update(void)
 	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
-		m_nWin1P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin1P != 3)
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+			m_nWin1P++;
+			m_Winner = WINNER_NONE;
+			if (m_nWin1P != 3)
+			{
+				m_pBatlteSys->ResetBattle();
+				m_pUITime->SetTime(TIME_INI);
+			}
+			//タイマー初期化
+			m_nBattleResetTimer = 0;
 		}
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
-		m_nWin2P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin2P != 3)
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+			m_nWin2P++;
+			m_Winner = WINNER_NONE;
+			if (m_nWin2P != 3)
+			{
+				m_pBatlteSys->ResetBattle();
+				m_pUITime->SetTime(TIME_INI);
+			}
+			//タイマー初期化
+			m_nBattleResetTimer = 0;
 		}
+
 	}
 
 	//勝ちの数が3回目
