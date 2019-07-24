@@ -202,6 +202,7 @@ public:
 	bool GetbJanken(void) { return m_bJanken; }
 	bool GetUltDamage(void) { return m_bUltDamage; }
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
+	D3DXVECTOR3 GetMove(void) { return m_move; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 

@@ -202,6 +202,7 @@ void CPause::Update(void)
 			else if (m_nSelect == 2)
 			{
 				m_SelectMode = SELECTMODE_QUIT;
+				pManager->SetCharaSelectMode(false);
 			}
 
 			switch (m_SelectMode)

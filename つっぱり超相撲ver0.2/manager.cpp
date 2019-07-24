@@ -52,6 +52,7 @@ CXInputJoyPad *CManager::m_pXInput = NULL;
 CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 bool CManager::m_bCharaSelectMode = false;
+int CManager::m_nNumPlayerMode = 0;
 
 //=============================================================================
 // マネージャクラスのコンストラクタ
@@ -75,6 +76,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 {
 	m_fData = 0.0f;
 	m_bCharaSelectMode = false;
+	m_nNumPlayerMode = 0;
 
 	if (m_pRenderer == NULL)
 	{
@@ -267,8 +269,6 @@ void CManager::Uninit(void)
 		//NULLにする
 		m_pFade = NULL;
 	}
-
-
 
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)

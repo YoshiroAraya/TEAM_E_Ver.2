@@ -212,6 +212,7 @@ void CModeSelect::Update(void)
 			case SELECTMODE_RETRY:
 				m_bModeSelect = false;
 				pManager->SetCharaSelectMode(true);
+				pManager->SetNumPlayerMode(1);
 				CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
 				//SetbModeSelect(m_bModeSelect);
 				break;

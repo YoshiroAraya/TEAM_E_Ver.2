@@ -145,7 +145,7 @@ void CNumPlayer::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CXInputJoyPad *pXInput = NULL;
 	pXInput = CManager::GetXInput();
-
+	CManager *pManager = NULL;
 	// ƒvƒŒƒCƒ„[‚ÌŽæ“¾
 	CPlayer *pPlayer;
 	pPlayer = CGame::GetPlayer();
@@ -208,14 +208,17 @@ void CNumPlayer::Update(void)
 		if (m_aSelect[0] == SELECT_SELECT)
 		{
 			m_Mode = MODE_1P;
+			pManager->SetNumPlayerMode(0);
 		}
 		else if (m_aSelect[1] == SELECT_SELECT)
 		{
 			m_Mode = MODE_2P;
+			pManager->SetNumPlayerMode(1);
 		}
 		else if (m_aSelect[2] == SELECT_SELECT)
 		{
 			m_Mode = MODE_TUTORIAL;
+			pManager->SetNumPlayerMode(2);
 		}
 	}
 

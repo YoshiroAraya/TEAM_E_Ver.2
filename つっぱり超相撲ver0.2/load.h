@@ -71,6 +71,7 @@ public:
 		TEXTURE_TUTORIAL02,			// チュートリアルの画像
 		TEXTURE_SENSU,			// タイムの背景用
 		TEXTURE_OUGIUI00,			// 奥義時のUI画像
+		TEXTURE_IPPON,			// 一本!のUI画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

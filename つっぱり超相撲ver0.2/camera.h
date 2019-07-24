@@ -41,8 +41,8 @@ public:
 	void SetCamera(void);
 
 	void Start(CPlayer *pPlayer, CEnemy *pEnemy);
-	void EnemyUlt(CEnemy *pEnemy);
-	void PlayerUlt(CPlayer *pPlayer);
+	void EnemyUlt(CPlayer *pPlayer, CEnemy *pEnemy);
+	void PlayerUlt(CPlayer *pPlayer, CEnemy *pEnemy);
 
 	D3DXVECTOR3 GetRot(void);						// ˆÊ’u‚ÌŽæ“¾
 	static STATE GetState(void) { return m_State; }

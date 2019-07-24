@@ -51,6 +51,7 @@ public:
 	void Update(void);											// 人数選択更新処理
 	void Draw(void);											// 人数選択描画処理
 	static	MODE GetMode(void);									// 人数選択を取得
+	static	void SetMode(MODE mode) { m_Mode = mode; };									// 人数選択を取得
 	int GetSelect(void);
 	static bool GetDecision(void) { return m_bDecision; }
 
