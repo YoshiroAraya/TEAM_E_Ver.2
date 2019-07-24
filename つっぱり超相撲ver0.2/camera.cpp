@@ -182,11 +182,6 @@ void CCamera::Update(void)
 			{
 				// 敵の奥義カメラワーク
 				EnemyUlt(pEnemy);
-
-				if (pEnemy->GetDying() == true)
-				{// やられたときのカメラワーク
-					m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 20.0f, pEnemy->GetPosition().z);
-				}
 			}
 		}
 	}
@@ -575,6 +570,9 @@ void CCamera::Start(CPlayer *pPlayer, CEnemy *pEnemy)
 void CCamera::PlayerUlt(CPlayer *pPlayer)
 {
 	CBattleSys *pBattleSys = CGame::GetBatlteSys();
+	// 敵取得
+	CEnemy *pEnemy = NULL;
+	pEnemy = CGame::GetEnemy();
 
 	if (pPlayer->GetState() == CPlayer::STATE_ULT)
 	{// 必殺を打つ時
@@ -659,6 +657,11 @@ void CCamera::PlayerUlt(CPlayer *pPlayer)
 				m_posV.x = m_posR.x + sinf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
 			}
+		}
+
+		if (pEnemy->GetDying() == true)
+		{// やられたときのカメラワーク
+			m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 20.0f, pEnemy->GetPosition().z);
 		}
 	}
 }
