@@ -888,17 +888,7 @@ void CBattleSys::Operation(void)
 			//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
 			if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
 			{
-				switch (pPlayer->GetDirection())
-				{
-				case CPlayer::DIRECTION_LEFT:
-					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
-					break;
-				case CPlayer::DIRECTION_RIGHT:
-					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
-					break;
-				}
+				
 				//状態変化
 				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 				//ダメージ
@@ -913,11 +903,25 @@ void CBattleSys::Operation(void)
 					{
 					case CPlayer::DIRECTION_LEFT:
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]) * 8.0f, KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(((-TUPARI_MOVE * 17.0f)), KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
 						break;
 					case CPlayer::DIRECTION_RIGHT:
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]) * 8.0f, KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(((TUPARI_MOVE * 17.0f)), KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
+						break;
+					}
+				}
+				else
+				{
+					switch (pPlayer->GetDirection())
+					{
+					case CPlayer::DIRECTION_LEFT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
+						break;
+					case CPlayer::DIRECTION_RIGHT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
 						break;
 					}
 				}
