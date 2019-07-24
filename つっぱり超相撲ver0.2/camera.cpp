@@ -182,6 +182,11 @@ void CCamera::Update(void)
 			{
 				// 敵の奥義カメラワーク
 				EnemyUlt(pEnemy);
+
+				if (pEnemy->GetDying() == true)
+				{// やられたときのカメラワーク
+					m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 20.0f, pEnemy->GetPosition().z);
+				}
 			}
 		}
 	}
