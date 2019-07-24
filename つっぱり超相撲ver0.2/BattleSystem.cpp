@@ -28,21 +28,23 @@
 //=============================================================================
 // マクロ
 //=============================================================================
-#define YORI_MOVE		(5.0f)
-#define NAGE_MOVE		(60.0f)
-#define OSI_MOVE		(20.0f)
-#define COUNTER_MOVE	(20.0f)
-#define TUPARI_MOVE		(10.0f)
-#define KNOCKUP_MOVE	(3.0f)
-#define GUARD_MOVE		(8.0f)
+#define YORI_MOVE			(5.0f)
+#define NAGE_MOVE			(60.0f)
+#define OSI_MOVE			(20.0f)
+#define COUNTER_MOVE		(20.0f)
+#define TUPARI_MOVE			(10.0f)
+#define TUPARI_MOVE_ULT		(5.0f)
+#define KNOCKUP_MOVE		(3.0f)
+#define KNOCKUP_MOVE_ULT	(2.0f)
+#define GUARD_MOVE			(8.0f)
 
-#define NAGE_DIVIDED	(2.0f)
-#define NAGE_HINSI		(2.0f)
-#define OSI_RECOIL		(1.0f)
-#define TUPPARI_RECOIL	(0.5f)
-#define HINSI_T_MOVE	(2.8f)
-#define HINSI_N_MOVE	(1.4f)
-#define HINSI_O_MOVE	(1.9f)
+#define NAGE_DIVIDED		(2.0f)
+#define NAGE_HINSI			(2.0f)
+#define OSI_RECOIL			(1.0f)
+#define TUPPARI_RECOIL		(0.5f)
+#define HINSI_T_MOVE		(2.8f)
+#define HINSI_N_MOVE		(1.4f)
+#define HINSI_O_MOVE		(1.9f)
 
 #define JANKEN_TUPARI_MOVE		(5.0f)
 #define JANKEN_BUTI_MOVE		(5.0f)
@@ -857,49 +859,99 @@ void CBattleSys::Operation(void)
 			}
 		}
 
-		//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
-		if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
-		{
-			switch (pPlayer->GetDirection())
+		if (pEnemy->GetUltDamage() == false)
+		{// 通常時
+			//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
+			if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
 			{
-			case CPlayer::DIRECTION_LEFT:
-				pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-				Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
-				break;
-			case CPlayer::DIRECTION_RIGHT:
-				pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-				Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
-				break;
+				switch (pPlayer->GetDirection())
+				{
+				case CPlayer::DIRECTION_LEFT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
+					break;
+				case CPlayer::DIRECTION_RIGHT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE, 0.0f));
+					break;
+				}
+				//状態変化
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				//ダメージ
+				pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+				pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 			}
-			//状態変化
-			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
-			//ダメージ
-			pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-			pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 		}
+		else
+		{// 突っ張りの奥義を受けているとき
+			//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
+			if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
+			{
+				switch (pPlayer->GetDirection())
+				{
+				case CPlayer::DIRECTION_LEFT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
+					break;
+				case CPlayer::DIRECTION_RIGHT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]), KNOCKUP_MOVE_ULT, 0.0f));
+					break;
+				}
+				//状態変化
+				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+				//ダメージ
+				pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+				pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
 
-		//ダメージなら吹っ飛ぶ エネミーのつっぱり
-		if (pPlayer->GetState() == CPlayer::STATE_DAMAGE)
+				if (pEnemy->GetDying() == true)
+				{
+					m_abUlt[0] = false;
+					m_bPlayerUlt = false;
+					switch (pPlayer->GetDirection())
+					{
+					case CPlayer::DIRECTION_LEFT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[1]) * 8.0f, KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
+						break;
+					case CPlayer::DIRECTION_RIGHT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(0, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[1]) * 8.0f, KNOCKUP_MOVE_ULT * 2.0f, 0.0f));
+						break;
+					}
+				}
+			}
+			if (pEnemy->GetWallHit() == true)
+			{
+				pEnemy->SetUltDamage(false);
+			}
+		}
+		
+		if (pPlayer->GetUltDamage() == false)
 		{
-			switch (pEnemy->GetDirection())
+			//ダメージなら吹っ飛ぶ エネミーのつっぱり
+			if (pPlayer->GetState() == CPlayer::STATE_DAMAGE)
 			{
-			case CEnemy::DIRECTION_LEFT:
-				pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-				Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-				break;
-			case CEnemy::DIRECTION_RIGHT:
-				pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
-				Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-				break;
+				switch (pEnemy->GetDirection())
+				{
+				case CEnemy::DIRECTION_LEFT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+					break;
+				case CEnemy::DIRECTION_RIGHT:
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+					Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+					break;
+				}
+				//状態変化
+				if (pPlayer != NULL)
+				{
+					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				}
+				//ダメージ
+				pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+				pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 			}
-			//状態変化
-			if (pPlayer != NULL)
-			{
-				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
-			}
-			//ダメージ
-			pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
-			pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 		}
 
 		//もう一度取得
@@ -1373,12 +1425,28 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		{//エネミーの体力がある場合で土俵端のつっぱり攻撃
 			if (nPlayer == 0)
 			{	//プレイヤーのつっぱり
-				pPlayer->SetMove(D3DXVECTOR3(-P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+				if (pEnemy->GetUltDamage() == true)
+				{
+					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / 1.5f, 0.0f, 0.0f));
+				}
+				else
+				{
+					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+				}
+				
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
 			else
 			{	//エネミーのつっぱり
-				pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
+				if (pEnemy->GetUltDamage() == true)
+				{
+					pPlayer->SetMove(D3DXVECTOR3(P1move.x / 1.5f, KNOCKUP_MOVE, 0.0f));
+				}
+				else
+				{
+					pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
+				}
+				
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 		}

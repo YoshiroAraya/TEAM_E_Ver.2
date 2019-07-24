@@ -49,8 +49,6 @@ public:
 		ATTACK_TURN_PLAYER2,
 	}ATTACK_TURN;
 
-
-
 	CBattleSys();	// コンストラクタ
 	~CBattleSys();	// デストラクタ
 
@@ -67,6 +65,7 @@ public:
 	void ResetBattle(void);
 	void GuardKnockBack(int nAttack);
 	void MotionSetYORI(int nAttack);
+	void UltDamage(void);
 	void PlusCntPushP2(int nCnt) { m_nCntPushP2 += nCnt; };
 	bool GetUlt(int nCharacter) { return m_abUlt[nCharacter]; }
 	void CPUBattle(CEnemy::CPUACTION CpuAction);

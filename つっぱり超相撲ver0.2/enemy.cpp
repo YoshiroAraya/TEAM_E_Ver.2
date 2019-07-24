@@ -417,6 +417,14 @@ void CEnemy::Update(void)
 				}
 				m_bUltDis = false;
 			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+
+			}
 		}
 		break;
 	case CManager::MODE_TUTORIAL:
@@ -474,13 +482,6 @@ void CEnemy::Update(void)
 		if (pos.x < 550.0f)
 		{
 			m_move = pCharacterMove->MoveRight(m_move, fMoveEnemy * 15.0f);
-		}
-		else if (pos.x > 550.0f)
-		{
-			m_bWallHit = true;
-			pos.x = 550.0f;
-			m_move.x = 0.0f;
-
 		}
 		break;
 	}
