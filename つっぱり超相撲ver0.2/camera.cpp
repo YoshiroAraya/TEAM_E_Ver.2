@@ -570,6 +570,9 @@ void CCamera::Start(CPlayer *pPlayer, CEnemy *pEnemy)
 void CCamera::PlayerUlt(CPlayer *pPlayer)
 {
 	CBattleSys *pBattleSys = CGame::GetBatlteSys();
+	// “GŽæ“¾
+	CEnemy *pEnemy = NULL;
+	pEnemy = CGame::GetEnemy();
 
 	if (pPlayer->GetState() == CPlayer::STATE_ULT)
 	{// •KŽE‚ð‘Å‚ÂŽž
@@ -654,6 +657,11 @@ void CCamera::PlayerUlt(CPlayer *pPlayer)
 				m_posV.x = m_posR.x + sinf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
 			}
+		}
+
+		if (pEnemy->GetDying() == true)
+		{// ‚â‚ç‚ê‚½‚Æ‚«‚ÌƒJƒƒ‰ƒ[ƒN
+			m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 20.0f, pEnemy->GetPosition().z);
 		}
 	}
 }

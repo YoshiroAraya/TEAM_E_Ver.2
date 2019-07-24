@@ -95,5 +95,6 @@ private:
 	int m_WinerNum;			//Ÿ‚Á‚½‚Ì‚Í‚Ç‚¿‚ç‚©
 	int m_nTime = 0;
 	bool m_bDetermine;
+	int m_nBattleResetTimer;
 };
 #endif

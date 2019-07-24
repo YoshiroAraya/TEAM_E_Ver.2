@@ -106,7 +106,7 @@ void CCustomer::Update(void)
 
 	// “GŽæ“¾
 	CEnemy *pEnemy;
-	pEnemy = CUltimate::GetEnemy();
+	pEnemy = CGame::GetEnemy();
 
 	// ˆÊ’u‚ðŽæ“¾
 	D3DXVECTOR3 pos;
@@ -114,19 +114,19 @@ void CCustomer::Update(void)
 
 	switch (mode)
 	{
-	case CManager::MODE_ULTIMATE:
-		if (m_CustomerPos == POSITION_RIGHT)
+	case CManager::MODE_GAME:
+	/*	if (m_CustomerPos == POSITION_RIGHT)
 		{
 			if (pEnemy != NULL)
 			{
 				if (pEnemy->GetWallHit() == true)
 				{
-					pos -= m_move * 5.5f;
+					pos -= m_move * 3.5f;
 
 					CSceneX::SetRot(m_rot);
 				}
 			}
-		}
+		}*/
 		break;
 	}
 
