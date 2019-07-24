@@ -103,6 +103,9 @@ void CTitle::Update(void)
 
 	CNumPlayer::MODE mode;
 	mode = CNumPlayer::GetMode();
+	int nMode = pManager->GetNumPlayerMode();
+	mode = (CNumPlayer::MODE)nMode;
+	CNumPlayer::SetMode(mode);
 
 	if (m_state == CTitle::STATE_NEWS && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{// ニュースの画面からタイトル画面へ

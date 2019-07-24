@@ -124,6 +124,12 @@ HRESULT CWinnerUI::Init(D3DXVECTOR3 pos)
 		m_pTyanko2D[nCnt2 + 3]->SetbDraw(false);
 	}
 
+	m_pSyouhai2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 0, SCREEN_HEIGHT / 2, 0.0f), 4);
+	m_pSyouhai2D->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_IPPON));
+	m_pSyouhai2D->SetWidthHeight(800, 450);
+	m_pSyouhai2D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pSyouhai2D->SetbDraw(false);
+
 	return S_OK;
 }
 

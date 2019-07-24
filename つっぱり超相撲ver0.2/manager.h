@@ -107,6 +107,9 @@ public:
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
 	static CSound *GetSound(int nNum);
 	static void SetCharaSelectMode(bool bCharaSelect) { m_bCharaSelectMode = bCharaSelect; };
+	static void SetNumPlayerMode(int mode) { m_nNumPlayerMode = mode; };
+	static int GetNumPlayerMode(void) { return m_nNumPlayerMode; };
+
 private:
 	static CRenderer *m_pRenderer;
 	static CInputKeyboard *m_pInputKeyboard;
@@ -128,7 +131,7 @@ private:
 	float m_fData;
 	static MODE m_mode;
 	static CSound			*m_pSound[MAX_SOUND];	// サウンドのポインタ
-
+	static int m_nNumPlayerMode;
 };
 
 #endif

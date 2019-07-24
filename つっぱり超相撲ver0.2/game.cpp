@@ -65,6 +65,7 @@ CGauge *CGame::m_pGauge = NULL;
 CUltimateGauge *CGame::m_pUltimateGauge = NULL;
 CSansoGauge *CGame::m_pSansoGauge = NULL;
 CUITime *CGame::m_pUITime = NULL;
+CWinnerUI *CGame::m_pWinnerUI = NULL;
 
 bool CGame::m_bHit = false;
 CGame::STATE CGame::m_State = CGame::STATE_START;
@@ -112,7 +113,7 @@ void CGame::Init(void)
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 100, 0));
-	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
+	m_pWinnerUI = CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 680, 0));
 
@@ -313,8 +314,9 @@ void CGame::Update(void)
 	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
+		m_pUITime->SetTimeStop(true);
 		m_bDetermine = false;
-
+		m_pWinnerUI->SetDrawSyouhai(true);
 		m_nBattleResetTimer++;
 		if (m_nBattleResetTimer > 120)
 		{
@@ -326,9 +328,10 @@ void CGame::Update(void)
 				{
 					m_pBatlteSys->ResetBattle();
 					m_pUITime->SetTime(TIME_INI);
+					m_pUITime->SetTimeStop(false);
+					m_pWinnerUI->SetDrawSyouhai(false);
 				}
 				m_bDetermine = true;
-
 				//タイマー初期化
 				m_nBattleResetTimer = 0;
 			}
@@ -336,8 +339,8 @@ void CGame::Update(void)
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
+		m_pUITime->SetTimeStop(true);
 		m_bDetermine = false;
-
 		m_nBattleResetTimer++;
 
 		if (m_nBattleResetTimer > 120)
@@ -350,13 +353,14 @@ void CGame::Update(void)
 				{
 					m_pBatlteSys->ResetBattle();
 					m_pUITime->SetTime(TIME_INI);
+					m_pUITime->SetTimeStop(false);
+					m_pWinnerUI->SetDrawSyouhai(false);
 				}
 				m_bDetermine = true;
 				//タイマー初期化
 				m_nBattleResetTimer = 0;
 			}
 		}
-
 	}
 
 	//勝ちの数が3回目
