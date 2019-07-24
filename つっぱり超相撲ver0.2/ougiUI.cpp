@@ -87,8 +87,9 @@ HRESULT COugiUI::Init(D3DXVECTOR3 pos)
 	}
 
 	//1p‘¤
-	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(pos.x, pos.y, 0.0f));
-	m_pScene2D[0]->SetWidthHeight(300.0f, 30.0f);
+	m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(m_Pos.x, m_Pos.y, 0.0f));
+	m_pScene2D[0]->SetWidthHeight(220.0f, 70.0f);
+	m_pScene2D[0]->SetPos(m_Pos, 00.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	m_pScene2D[0]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
 	m_pScene2D[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_OUGIUI00));
 
@@ -124,10 +125,13 @@ void COugiUI::Update(void)
 #ifdef _DEBUG
 
 #if 1
-
+	m_Pos.x += 10.0f;
+	m_pScene2D[0]->SetPosition(m_Pos);
+	/*m_pScene2D[0]->SetWidthHeight(250.0f, 10.0f);
+	m_pScene2D[0]->SetPos(m_Pos, -30.0f, 100.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));*/
 
 	//ƒQ[ƒW‚Ì¶‰E‚ð’²®
-	m_pScene2D[0]->SetRIghtLeft(0.0f, m_fLeft);
+	//m_pScene2D[0]->SetRIghtLeft(0.0f, m_fLeft);
 	//m_pScene2D[1]->SetRIghtLeft(m_fRight, 0.0f);
 
 #endif
