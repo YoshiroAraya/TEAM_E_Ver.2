@@ -115,7 +115,6 @@ void CResult::Update(void)
 	//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	//{
 	////	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
-
 	//}
 
 	m_nCntDrawTimer++;

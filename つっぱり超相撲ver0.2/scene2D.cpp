@@ -206,6 +206,20 @@ D3DXVECTOR3 CScene2D::GetPosition(void)
 void CScene2D::SetPosition(D3DXVECTOR3 pos)
 {
 	m_Pos = pos;
+
+	VERTEX_2D *pVtx;	// 頂点情報へのポインタ
+
+	// 頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報を設定
+	pVtx[0].pos = D3DXVECTOR3(m_Pos.x - m_fWidth, m_Pos.y - m_fHeight, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_Pos.x + m_fWidth, m_Pos.y - m_fHeight, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_Pos.x - m_fWidth, m_Pos.y + m_fHeight, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_Pos.x + m_fWidth, m_Pos.y + m_fHeight, 0.0f);
+
+	// 頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
 }
 
 //=============================================================================

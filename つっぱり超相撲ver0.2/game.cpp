@@ -65,6 +65,7 @@ CGauge *CGame::m_pGauge = NULL;
 CUltimateGauge *CGame::m_pUltimateGauge = NULL;
 CSansoGauge *CGame::m_pSansoGauge = NULL;
 CUITime *CGame::m_pUITime = NULL;
+CWinnerUI *CGame::m_pWinnerUI = NULL;
 
 bool CGame::m_bHit = false;
 CGame::STATE CGame::m_State = CGame::STATE_START;
@@ -80,6 +81,8 @@ CGame::CGame()
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+	m_bDetermine = false;
+	m_nBattleResetTimer = 0;
 }
 
 //=============================================================================
@@ -99,6 +102,8 @@ void CGame::Init(void)
 	m_bUI = true;
 	m_State = STATE_START;
 	m_Winner = WINNER_NONE;
+	m_bDetermine = false;
+
 	//インスタンス
 	CManager *pManager = NULL;
 
@@ -108,7 +113,7 @@ void CGame::Init(void)
 	CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	m_pGauge = CGauge::Create(D3DXVECTOR3(100, 100, 0));
-	CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
+	m_pWinnerUI = CWinnerUI::Create(D3DXVECTOR3(300, 50, 0));
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 680, 0));
 
@@ -309,22 +314,52 @@ void CGame::Update(void)
 	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
-		m_nWin1P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin1P != 3)
+		m_pUITime->SetTimeStop(true);
+		m_bDetermine = false;
+		m_pWinnerUI->SetDrawSyouhai(true);
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+			if (m_bDetermine == false)
+			{
+				m_nWin1P++;
+				m_Winner = WINNER_NONE;
+				if (m_nWin1P != 3)
+				{
+					m_pBatlteSys->ResetBattle();
+					m_pUITime->SetTime(TIME_INI);
+					m_pUITime->SetTimeStop(false);
+					m_pWinnerUI->SetDrawSyouhai(false);
+				}
+				m_bDetermine = true;
+				//タイマー初期化
+				m_nBattleResetTimer = 0;
+			}
 		}
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
-		m_nWin2P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin2P != 3)
+		m_pUITime->SetTimeStop(true);
+		m_bDetermine = false;
+		m_nBattleResetTimer++;
+
+		if (m_nBattleResetTimer > 120)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+			if (m_bDetermine == false)
+			{
+				m_nWin2P++;
+				m_Winner = WINNER_NONE;
+				if (m_nWin2P != 3)
+				{
+					m_pBatlteSys->ResetBattle();
+					m_pUITime->SetTime(TIME_INI);
+					m_pUITime->SetTimeStop(false);
+					m_pWinnerUI->SetDrawSyouhai(false);
+				}
+				m_bDetermine = true;
+				//タイマー初期化
+				m_nBattleResetTimer = 0;
+			}
 		}
 	}
 
@@ -391,7 +426,7 @@ void CGame::Update(void)
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 		//奥義アニメーション
 		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
+			200.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
 
 		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
 

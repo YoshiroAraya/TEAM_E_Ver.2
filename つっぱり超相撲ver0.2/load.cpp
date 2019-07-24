@@ -62,11 +62,12 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/pause100.png",				//28
 	"data/TEXTURE/UI/select.png",				//29
 	"data/TEXTURE/EFFECT/all.png",				//30
-	"data/TEXTURE/UI/tutorial00.jpg",				//31
-	"data/TEXTURE/UI/tutorial01.jpg",				//32
-	"data/TEXTURE/UI/tutorial02.jpg",				//33
+	"data/TEXTURE/UI/tutorial00.jpg",			//31
+	"data/TEXTURE/UI/tutorial01.jpg",			//32
+	"data/TEXTURE/UI/tutorial02.jpg",			//33
 	"data/TEXTURE/UI/sensu.png",				//34
 	"data/TEXTURE/UI/line.png",					//35
+	"data/TEXTURE/UI/ippon.png",				//36
 };
 
 //=============================================================================

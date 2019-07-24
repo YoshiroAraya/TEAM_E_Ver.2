@@ -38,6 +38,8 @@ public:
 	void AddTime(int nValue);
 	int GetTime();
 	void SetColor(D3DXCOLOR col);
+	bool GetTimeStop(void) { return m_bStopTime; };
+	void SetTimeStop(bool bStop) { m_bStopTime = bStop; };
 
 private:
 	//メンバ変数
@@ -50,6 +52,7 @@ private:
 	int				m_nTimerCnt;			// タイマー用カウント
 	int				m_nColorFlash;			// 点滅カウント
 	int				m_nFadeCnt;				// フェードまでのカウント
+	bool			m_bStopTime;			// タイムを止めるかどうか
 };
 
 #endif

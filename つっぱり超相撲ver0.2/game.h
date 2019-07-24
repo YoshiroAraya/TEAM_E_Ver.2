@@ -20,6 +20,7 @@ class CGauge;
 class CSansoGauge;
 class CUITime;
 class CUltimateGauge;
+class CWinnerUI;
 //クラス（シーン2Dの派生クラス）
 class CGame
 {
@@ -77,6 +78,7 @@ private:
 	static CEnemy *m_pEnemy;
 	static CShadow *m_pShadow;
 	static CUITime *m_pUITime;
+	static CWinnerUI *m_pWinnerUI;
 
 	static CMeshField *m_pMeshField;
 	static CBattleSys *m_pBatlteSys;
@@ -94,5 +96,7 @@ private:
 	int m_nWin2P;			//勝った数を記憶
 	int m_WinerNum;			//勝ったのはどちらか
 	int m_nTime = 0;
+	bool m_bDetermine;
+	int m_nBattleResetTimer;
 };
 #endif
