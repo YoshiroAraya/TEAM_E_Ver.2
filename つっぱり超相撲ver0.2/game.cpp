@@ -506,8 +506,17 @@ void CGame::SaveWinner(void)
 
 	if (pFileW != NULL)
 	{// ファイルが開けたら
-		//モデルの総数
+		//勝者のNo
 		fprintf(pFileW, "%d\n", m_WinerNum);
+		if (m_WinerNum == 1)
+		{	//どのキャラか
+			fprintf(pFileW, "%d\n", m_n1P);
+		}
+		else
+		{	//どのキャラか
+			fprintf(pFileW, "%d\n", m_n2P);
+		}
+
 		//ファイルを閉じる
 		fclose(pFileW);
 	}

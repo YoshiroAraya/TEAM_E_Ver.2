@@ -268,16 +268,7 @@ void CManager::Uninit(void)
 		m_pFade = NULL;
 	}
 
-	//サウンド
-	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
-	{
-		if (m_pSound[nCnt] != NULL)
-		{
-			m_pSound[nCnt]->UninitSound();
-			delete m_pSound[nCnt];
-			m_pSound[nCnt] = NULL;
-		}
-	}
+
 
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)
@@ -351,6 +342,17 @@ void CManager::Uninit(void)
 
 	CLoad::UnloadModel();
 	CLoad::UnloadTex();
+
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->UninitSound();
+			delete m_pSound[nCnt];
+			m_pSound[nCnt] = NULL;
+		}
+	}
 
 	// 全てのオブジェクトを解放
 	CScene::ReleseAll();

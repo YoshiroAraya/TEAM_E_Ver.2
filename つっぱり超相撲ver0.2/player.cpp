@@ -28,7 +28,7 @@
 #include "BattleSystem.h"
 #include "effect.h"
 #include "tutorial.h"
-
+#include "result.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -150,6 +150,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pGame = CManager::GetGame();
 	CTutorial *pTuto;
 	pTuto = CManager::GetTutorial();
+	CResult *pResult;
+	pResult = CManager::GetResult();
+
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
@@ -291,6 +294,23 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 				FileLoad(FILE_NAME_1, 1);
 			}
 			else if (pTuto->Get1P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get1P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pResult->Get1P() == 1)
 			{// レスラー
 				FileLoad(FILE_NAME_2, 0);
 				FileLoad(FILE_NAME_3, 1);
