@@ -292,7 +292,7 @@ void CGame::Update(void)
 
 	if (m_pUITime != NULL)
 	{
-		m_pUITime->Update();
+	//	m_pUITime->Update();
 	}
 
 	if (m_State == STATE_GAME)
@@ -392,7 +392,7 @@ void CGame::Update(void)
 		//奥義アニメーション
 		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
-		
+
 		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)

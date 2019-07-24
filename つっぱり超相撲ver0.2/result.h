@@ -28,6 +28,8 @@ public:
 	bool GetTurn(void) { return m_bTurn; }
 	void SetTurn(bool turn) { m_bTurn = turn; }
 	void LoadWinner(void);
+	int Get1P(void) { return m_n1P; };
+	int Get2P(void) { return m_n2P; };
 
 private:
 	bool m_bSetDohyo;
@@ -39,5 +41,7 @@ private:
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
 	int m_nWinner;
+	int m_n1P;				//選んだモデルNo
+	int m_n2P;				//選んだモデルNo
 };
 #endif
