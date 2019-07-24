@@ -64,8 +64,8 @@ void CTitle::Init(void)
 	m_aCharaSelect[1] = false;
 	m_nCntTurn = 0;
 	m_nCntReturn = 0;
-	m_Character[0] = CHARACTER_PLAYER;
-	m_Character[1] = CHARACTER_PLAYER;
+	m_Character[0] = CHARACTER_RIKISI;
+	m_Character[1] = CHARACTER_RIKISI;
 	CNewsCaster::LoadMat();
 	CDohyo::LoadMat();
 
@@ -142,13 +142,11 @@ void CTitle::Update(void)
 	}
 	else if (m_state == CTitle::STATE_CHARASELECT)
 	{// キャラクター選択
-
 		if (m_bSetUI == true)
 		{
 			CCharaSelect::Create(D3DXVECTOR3(200.0f, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
 			m_bSetUI = false;
 		}
-
 
 		if (m_bSetDohyo == true)
 		{
@@ -171,7 +169,6 @@ void CTitle::Update(void)
 				m_pEnemy = CEnemy::Create(D3DXVECTOR3(30.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CEnemy::MODE_P2);
 			}
 
-			//CLogo::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f), 50, 50, CLogo::TYPE_TEST);
 			m_bSetDohyo = false;
 		}
 
@@ -202,17 +199,24 @@ void CTitle::Update(void)
 			{
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{//
-					m_Character[0] = CHARACTER_PLAYER;
+					m_Character[0] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{//
-					m_Character[0] = CHARACTER_ENEMY;
+					m_Character[0] = CHARACTER_WRESTLER;
 					m_pEnemy->SetSelect(false);
 				}
 
-				//
-				m_Character[1] = CHARACTER_ENEMY;
+				//敵側のキャラ
+				if (m_Character[0] == CHARACTER_RIKISI)
+				{
+					m_Character[1] = CHARACTER_WRESTLER;
+				}
+				else
+				{
+					m_Character[1] = CHARACTER_RIKISI;
+				}
 
 				pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
 				m_nCntReturn = 0;
@@ -229,17 +233,24 @@ void CTitle::Update(void)
 
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
-					m_Character[0] = CHARACTER_PLAYER;
+					m_Character[0] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// エネミーを選択
-					m_Character[0] = CHARACTER_ENEMY;
+					m_Character[0] = CHARACTER_WRESTLER;
 					m_pEnemy->SetSelect(false);
 				}
 
 				// 敵のキャラ選択
-				m_Character[1] = CHARACTER_ENEMY;
+				if (m_Character[0] == CHARACTER_RIKISI)
+				{
+					m_Character[1] = CHARACTER_WRESTLER;
+				}
+				else
+				{
+					m_Character[1] = CHARACTER_RIKISI;
+				}
 
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;
@@ -256,12 +267,12 @@ void CTitle::Update(void)
 
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
-					m_Character[0] = CHARACTER_PLAYER;
+					m_Character[0] = CHARACTER_RIKISI;
 
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// エネミーを選択
-					m_Character[0] = CHARACTER_ENEMY;
+					m_Character[0] = CHARACTER_WRESTLER;
 				}
 			}
 			else if (m_nCntReturn == 2)
@@ -270,12 +281,12 @@ void CTitle::Update(void)
 
 				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// プレイヤーを選択
-					m_Character[1] = CHARACTER_PLAYER;
+					m_Character[1] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
 				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 				{// エネミーを選択
-					m_Character[1] = CHARACTER_ENEMY;
+					m_Character[1] = CHARACTER_WRESTLER;
 				}
 				pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 				m_nCntReturn = 0;

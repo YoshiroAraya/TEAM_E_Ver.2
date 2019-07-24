@@ -28,7 +28,7 @@
 #include "BattleSystem.h"
 #include "effect.h"
 #include "tutorial.h"
-
+#include "result.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -41,6 +41,8 @@
 #define PARTICLE_TIME			(35)							// 壁に激突したときのパーティクル出現時間
 #define FILE_NAME_0				("data\\TEXT\\motion_Wrestler_down.txt")
 #define FILE_NAME_1				("data\\TEXT\\motion_Wrestler_up.txt")
+#define FILE_NAME_2				("data\\TEXT\\motion_resura_down.txt")
+#define FILE_NAME_3				("data\\TEXT\\motion_resura_up.txt")
 #define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
 #define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
 #define GUARD_NOW_SANSO			(-2.5f)
@@ -148,6 +150,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pGame = CManager::GetGame();
 	CTutorial *pTuto;
 	pTuto = CManager::GetTutorial();
+	CResult *pResult;
+	pResult = CManager::GetResult();
+
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
@@ -259,9 +264,64 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	}
 
 	m_nOldMotion = 0;	//前のモーション
-						//プレイヤー情報の読み込み
-	FileLoad(FILE_NAME_0, 0);
-	FileLoad(FILE_NAME_1, 1);
+
+	//プレイヤー情報の読み込み
+	if (mode == CManager::MODE_GAME)
+	{
+		if (pGame != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pGame->Get1P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pGame->Get1P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else if (mode == CManager::MODE_TUTORIAL)
+	{
+		if (pTuto != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pTuto->Get1P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pTuto->Get1P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get1P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pResult->Get1P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else
+	{
+		FileLoad(FILE_NAME_0, 0);
+		FileLoad(FILE_NAME_1, 1);
+	}
 
 	//モデルの親を指定
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
@@ -273,6 +333,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			//50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
 	}
 	return S_OK;
+
 }
 
 //=============================================================================

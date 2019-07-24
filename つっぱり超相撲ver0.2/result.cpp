@@ -43,6 +43,10 @@ CResult::CResult()
 	m_nCntReturn = 0;
 	m_nCntDrawTimer = 0;
 	m_bDrawSelect = false;
+	m_nWinner = 0;
+	m_n1P = 0;				//選んだモデルNo
+	m_n2P = 0;				//選んだモデルNo
+
 }
 
 //=============================================================================
@@ -149,7 +153,16 @@ void CResult::LoadWinner(void)
 
 	if (pFile != NULL)
 	{
-		fscanf(pFile, "%d", &m_nWinner);
+		fscanf(pFile, "%d\n", &m_nWinner);
+
+		if (m_nWinner == 1)
+		{	//勝ったのが1Pなら1Pのモデルを読み込む
+			fscanf(pFile, "%d\n", &m_n1P);
+		}
+		else
+		{	//勝ったのが2Pなら2Pのモデルを読み込む
+			fscanf(pFile, "%d\n", &m_n2P);
+		}
 
 		fclose(pFile);
 	}
