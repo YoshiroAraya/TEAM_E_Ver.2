@@ -459,7 +459,12 @@ void CEnemy::Update(void)
 				m_bWallHit = true;
 				pos.x = 550.0f;
 				m_move.x = 0.0f;
-
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
 			}
 		}
 		break;
@@ -505,6 +510,19 @@ void CEnemy::Update(void)
 					m_pAnimation = NULL;
 				}
 				m_bUltDis = false;
+			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
 			}
 		}
 
