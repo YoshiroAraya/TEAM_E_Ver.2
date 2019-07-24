@@ -125,7 +125,7 @@ void COugiUI::Update(void)
 #ifdef _DEBUG
 
 #if 1
-	m_Pos.x += 10.0f;
+	m_Pos.x += 1.0f;
 	m_pScene2D[0]->SetPosition(m_Pos);
 	/*m_pScene2D[0]->SetWidthHeight(250.0f, 10.0f);
 	m_pScene2D[0]->SetPos(m_Pos, -30.0f, 100.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));*/

@@ -80,6 +80,7 @@ CGame::CGame()
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+	m_bDetermine = false;
 }
 
 //=============================================================================
@@ -99,6 +100,8 @@ void CGame::Init(void)
 	m_bUI = true;
 	m_State = STATE_START;
 	m_Winner = WINNER_NONE;
+	m_bDetermine = false;
+
 	//インスタンス
 	CManager *pManager = NULL;
 
@@ -309,22 +312,36 @@ void CGame::Update(void)
 	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
-		m_nWin1P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin1P != 3)
+		m_bDetermine = false;
+
+		if (m_bDetermine == false)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+
+			m_nWin1P++;
+			m_Winner = WINNER_NONE;
+			if (m_nWin1P != 3)
+			{
+				m_pBatlteSys->ResetBattle();
+				m_pUITime->SetTime(TIME_INI);
+			}
+			m_bDetermine = true;
+
 		}
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
-		m_nWin2P++;
-		m_Winner = WINNER_NONE;
-		if (m_nWin2P != 3)
+		m_bDetermine = false;
+
+		if (m_bDetermine == false)
 		{
-			m_pBatlteSys->ResetBattle();
-			m_pUITime->SetTime(TIME_INI);
+			m_nWin2P++;
+			m_Winner = WINNER_NONE;
+			if (m_nWin2P != 3)
+			{
+				m_pBatlteSys->ResetBattle();
+				m_pUITime->SetTime(TIME_INI);
+			}
+			m_bDetermine = true;
 		}
 	}
 
@@ -391,7 +408,7 @@ void CGame::Update(void)
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 		//奥義アニメーション
 		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
+			200.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
 
 		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
 
