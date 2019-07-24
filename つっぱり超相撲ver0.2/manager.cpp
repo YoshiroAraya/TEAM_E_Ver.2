@@ -268,16 +268,7 @@ void CManager::Uninit(void)
 		m_pFade = NULL;
 	}
 
-	//サウンド
-	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
-	{
-		if (m_pSound[nCnt] != NULL)
-		{
-			m_pSound[nCnt]->UninitSound();
-			delete m_pSound[nCnt];
-			m_pSound[nCnt] = NULL;
-		}
-	}
+
 
 #ifdef _DEBUG
 	if (m_pDebugProc != NULL)
@@ -300,6 +291,9 @@ void CManager::Uninit(void)
 			m_pTitle->Uninit();
 			delete m_pTitle;
 			m_pTitle = NULL;
+
+			//タイトルのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
 		}
 		break;
 
@@ -329,6 +323,9 @@ void CManager::Uninit(void)
 			m_pResult->Uninit();
 			delete m_pResult;
 			m_pResult = NULL;
+
+			//タイトルのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
 		}
 		break;
 
@@ -345,6 +342,17 @@ void CManager::Uninit(void)
 
 	CLoad::UnloadModel();
 	CLoad::UnloadTex();
+
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->UninitSound();
+			delete m_pSound[nCnt];
+			m_pSound[nCnt] = NULL;
+		}
+	}
 
 	// 全てのオブジェクトを解放
 	CScene::ReleseAll();
@@ -546,6 +554,9 @@ void CManager::SetMode(MODE mode)
 
 			//NULLにする
 			m_pTitle = NULL;
+
+			//タイトルのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
 		}
 		break;
 
@@ -585,6 +596,9 @@ void CManager::SetMode(MODE mode)
 
 			//NULLにする
 			m_pResult = NULL;
+
+			//リザルトのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
 		}
 		break;
 
@@ -616,6 +630,9 @@ void CManager::SetMode(MODE mode)
 
 			if (m_pTitle != NULL)
 			{
+				//タイトルのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TITLE);
+
 				// 初期化処理
 				m_pTitle->Init();
 
@@ -669,6 +686,9 @@ void CManager::SetMode(MODE mode)
 
 			if (m_pResult != NULL)
 			{
+				//リザルトのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
+
 				// 初期化処理
 				m_pResult->Init();
 			}

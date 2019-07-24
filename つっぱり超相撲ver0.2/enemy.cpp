@@ -271,12 +271,48 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		m_nCountFlame[nCntParent] = 0;		//現在のフレーム
 		m_nMotionType[nCntParent] = 0;	//現在のモーションタイプ
 	}
-
-	m_nOldMotion = 0;	//前のモーション
-						//プレイヤー情報の読み込み
-	FileLoad(FILE_NAME_2, 0);
-	FileLoad(FILE_NAME_3, 1);
-
+	//前のモーション
+	m_nOldMotion = 0;
+	//エネミー情報の読み込み
+	if (mode == CManager::MODE_GAME)
+	{
+		if (pGame != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pGame->Get2P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pGame->Get2P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else if (mode == CManager::MODE_TUTORIAL)
+	{
+		if (pTuto != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pTuto->Get2P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pTuto->Get2P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
+	else
+	{
+		FileLoad(FILE_NAME_2, 0);
+		FileLoad(FILE_NAME_3, 1);
+	}
 	//モデルの親を指定
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 

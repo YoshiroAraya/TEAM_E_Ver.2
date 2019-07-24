@@ -292,7 +292,7 @@ void CGame::Update(void)
 
 	if (m_pUITime != NULL)
 	{
-		m_pUITime->Update();
+	//	m_pUITime->Update();
 	}
 
 	if (m_State == STATE_GAME)
@@ -392,7 +392,7 @@ void CGame::Update(void)
 		//奥義アニメーション
 		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			300.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
-		
+
 		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
@@ -506,8 +506,17 @@ void CGame::SaveWinner(void)
 
 	if (pFileW != NULL)
 	{// ファイルが開けたら
-		//モデルの総数
+		//勝者のNo
 		fprintf(pFileW, "%d\n", m_WinerNum);
+		if (m_WinerNum == 1)
+		{	//どのキャラか
+			fprintf(pFileW, "%d\n", m_n1P);
+		}
+		else
+		{	//どのキャラか
+			fprintf(pFileW, "%d\n", m_n2P);
+		}
+
 		//ファイルを閉じる
 		fclose(pFileW);
 	}

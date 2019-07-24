@@ -27,8 +27,8 @@ public:
 
 	typedef enum
 	{
-		CHARACTER_PLAYER = 0,
-		CHARACTER_ENEMY,
+		CHARACTER_RIKISI = 0,
+		CHARACTER_WRESTLER,
 	}CHARACTER;
 
 	CTitle();
