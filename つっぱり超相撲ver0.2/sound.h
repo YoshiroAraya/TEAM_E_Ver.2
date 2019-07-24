@@ -54,10 +54,10 @@ protected:
     // 各音素材のパラメータ ラベルと数と並びを揃える
 	SOUNDPARAM m_aSoundParam[SOUND_LABEL_MAX] =
 	{
-		{ "data/BGM/title.wav", -1 },		// タイトル
+		{ "data/BGM/title1.wav", -1 },		// タイトル
 		{ "data/BGM/tutorial.wav", -1 },	// チュートリアル
 		{ "data/BGM/game.wav", -1 },		// ゲーム
-		{ "data/BGM/result.wav", -1 },		// リザルト
+		{ "data/BGM/result1.wav", -1 },		// リザルト
 		{ "data/BGM/gameover.wav", -1 },	// ゲームオーバー
 		{ "data/BGM/ranking.wav", -1 },		// ランキング
 		{ "data/SE/hit.wav", 0 },			// 衝撃音001
