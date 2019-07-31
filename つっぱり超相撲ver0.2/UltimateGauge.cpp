@@ -14,6 +14,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
+#include "load.h"
 //--------------------------------------------
 //マクロ定義
 //--------------------------------------------
@@ -102,6 +103,17 @@ HRESULT CUltimateGauge::Init(D3DXVECTOR3 pos)
 
 	m_fRight = -MAX_GAUG_WIDE;
 	m_fLeft = -MAX_GAUG_WIDE;			// 左右の値
+
+	m_pHPgaugeBG[0] = CScene2D::Create(D3DXVECTOR3(GAUGE_POSX, pos.y + 0.19f, 0.0f), 2);
+	m_pHPgaugeBG[0]->SetWidthHeight(233.0f, 25.0f);
+	m_pHPgaugeBG[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pHPgaugeBG[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_EXGAUGEBG));
+
+	m_pHPgaugeBG[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH - GAUGE_POSX, pos.y + 0.19f, 0.0f), 2);
+	m_pHPgaugeBG[1]->SetWidthHeight(233.0f, 25.0f);
+	m_pHPgaugeBG[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pHPgaugeBG[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_EXGAUGEBG));
+	m_pHPgaugeBG[1]->SetRot(D3DX_PI);
 
 	return S_OK;
 }

@@ -68,6 +68,8 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/sensu.png",				//34
 	"data/TEXTURE/UI/line.png",					//35
 	"data/TEXTURE/UI/ippon.png",				//36
+	"data/TEXTURE/UI/HPgauge.png",				//37
+	"data/TEXTURE/UI/EXgauge.png",				//38
 };
 
 //=============================================================================

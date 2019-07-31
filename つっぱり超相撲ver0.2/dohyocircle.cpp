@@ -32,7 +32,7 @@
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
-CDohyoCircle::CDohyoCircle() : CScene3D(5, CScene::OBJTYPE_DOHYOCIRCLE)
+CDohyoCircle::CDohyoCircle() : CScene3D(4, CScene::OBJTYPE_DOHYOCIRCLE)
 {
 	//m_pTexture = NULL;						// テクスチャへのポインタ
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
