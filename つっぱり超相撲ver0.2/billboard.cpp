@@ -23,7 +23,7 @@ CBillboard::CBillboard(int nPriority, OBJTYPE objType) : CScene(nPriority, objTy
 	m_pTexture = NULL;						// テクスチャへのポインタ
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fHeight = 0;
 	m_fWidth = 0;
 	m_bDraw = true;
@@ -67,7 +67,8 @@ CBillboard *CBillboard::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 {
 	// ポリゴンの情報を設定
-	//m_pos = D3DXVECTOR3(0.0f, 100.0f, 0.0f);
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ポリゴンの位置を設定
 	m_pos = pos;
@@ -190,9 +191,9 @@ void CBillboard::Draw(void)
 	m_mtxWorld._11 = mtxView._11;
 	m_mtxWorld._12 = mtxView._21;
 	m_mtxWorld._13 = mtxView._31;
-	/*m_mtxWorld._21 = mtxView._12;
+	m_mtxWorld._21 = mtxView._12;
 	m_mtxWorld._22 = mtxView._22;
-	m_mtxWorld._23 = mtxView._32;*/
+	m_mtxWorld._23 = mtxView._32;
 	m_mtxWorld._31 = mtxView._13;
 	m_mtxWorld._32 = mtxView._23;
 	m_mtxWorld._33 = mtxView._33;

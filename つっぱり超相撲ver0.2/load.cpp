@@ -74,6 +74,8 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/HPgauge.png",				//37
 	"data/TEXTURE/UI/EXgauge.png",				//38
 	"data/TEXTURE/UI/ResultWinner.png",			//39
+	"data/TEXTURE/EFFECT/10.png",				//40
+	"data/TEXTURE/EFFECT/19.png",				//41
 };
 
 //=============================================================================
