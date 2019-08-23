@@ -71,12 +71,6 @@ public:
 		TEXTURE_TUTORIAL02,				// チュートリアルの画像
 		TEXTURE_SENSU,					// タイムの背景用
 		TEXTURE_OUGIUI00,				// 奥義時のUI画像
-		TEXTURE_IPPON,					// 一本!のUI画像
-		TEXTURE_TUTORIAL00,			// チュートリアルの画像
-		TEXTURE_TUTORIAL01,			// チュートリアルの画像
-		TEXTURE_TUTORIAL02,			// チュートリアルの画像
-		TEXTURE_SENSU,				// タイムの背景用
-		TEXTURE_OUGIUI00,			// 奥義時のUI画像
 		TEXTURE_IPPON,				// 一本!のUI画像
 		TEXTURE_GAUGEBG,			// ゲージのUI画像
 		TEXTURE_EXGAUGEBG,			// 必殺ゲージのUI画像
