@@ -48,6 +48,7 @@ public:
 
 private:
 	CScene2D		*m_pScene2D[MAX_GAUGE];		// 2dへのポインタ
+	CScene2D		*m_pHPgaugeBG[MAX_GAUGE];	// 2dへのポインタ
 
 	D3DXVECTOR3		m_Pos;						// ポリゴンの位置
 	float			m_fRight, m_fLeft;			// 左右の値

@@ -112,6 +112,8 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 		m_bMotionEnd[nCntParent] = false;
 	}
 
+	m_pEnemyTag = NULL;
+
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
 #endif
@@ -316,6 +318,31 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	//モデルの親を指定
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 
+	//敵のタグ
+	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
+	m_pEnemyTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
+
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+	// 頂点バッファへのポインタ
+	LPDIRECT3DVERTEXBUFFER9	pVtxBuff;
+	//頂点バッファを取得
+	pVtxBuff = m_pEnemyTag->GetVtxBuff();
+	//頂点バッファをロックし頂点データのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	//頂点カラー
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.5f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.5f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+	// 頂点バッファをアンロックする
+	pVtxBuff->Unlock();
+
+	//描画しない
+	m_pEnemyTag->SetbDraw(false);
+
+
+
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
 	}
@@ -398,6 +425,8 @@ void CEnemy::Update(void)
 	}
 	// 前のフレームの位置代入
 	m_posOld = pos;
+	// ビルボードの位置更新
+	m_pEnemyTag->SetPosition(D3DXVECTOR3(pos.x, pos.y + 120, pos.z));
 
 	float fMoveEnemy = MOVE_ENEMY;	// エネミーの移動量を設定
 
@@ -406,6 +435,9 @@ void CEnemy::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
+			//描画する
+			m_pEnemyTag->SetbDraw(true);
+
 			//エネミーの操作
 			if (m_Mode == MODE_P2)
 			{

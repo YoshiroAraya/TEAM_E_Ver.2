@@ -158,7 +158,6 @@ void CWinnerUI::Update(void)
 
 	if (nWinner == 1)
 	{//1p‘¤
-		m_bWinner = true;
 		if (m_bWinner == true)
 		{
 			m_n1player += 1;
@@ -185,13 +184,10 @@ void CWinnerUI::Update(void)
 
 	if (nWinner == 2)
 	{//2p‘¤
-
-		m_bWinner = true;
 		if (m_bWinner == true)
 		{
 			m_n2player += 1;
 			m_bWinner = false;
-
 		}
 		if (m_n2player == 1)
 		{

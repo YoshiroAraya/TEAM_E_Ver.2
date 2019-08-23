@@ -39,6 +39,7 @@ public:
 
 	static CWinnerUI *Create(D3DXVECTOR3 pos);			// オブジェクトの生成
 	void SetDrawSyouhai(bool bDraw) { m_pSyouhai2D->SetbDraw(bDraw); };
+	void SetbWinner(bool bWinner) { m_bWinner = bWinner; };
 private:
 	CScene2D						*m_pScene2D[MAX_UI];		// 2dへのポインタ
 	CScene2D						*m_pTyanko2D[MAX_UI];		// 2dへのポインタ

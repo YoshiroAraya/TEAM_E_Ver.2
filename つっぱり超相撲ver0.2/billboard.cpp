@@ -24,6 +24,11 @@ CBillboard::CBillboard(int nPriority, OBJTYPE objType) : CScene(nPriority, objTy
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fHeight = 0;
+	m_fWidth = 0;
+	m_bDraw = true;
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
 }
 
 //=============================================================================
@@ -47,9 +52,9 @@ CBillboard *CBillboard::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 
 		if (pSceneBillboard != NULL)
 		{
-			pSceneBillboard->Init(pos);
 			pSceneBillboard->m_fHeight = fHeight;
 			pSceneBillboard->m_fWidth = fWidth;
+			pSceneBillboard->Init(pos);
 		}
 	}
 
@@ -114,7 +119,7 @@ HRESULT CBillboard::Init(D3DXVECTOR3 pos)
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
 	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);;
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
@@ -171,13 +176,14 @@ void CBillboard::Draw(void)
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 150);
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	// 深度バッファを有効にする
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	//深度バッファを有効にする
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
-
+	D3DXMatrixIdentity(&mtxView);
+	D3DXMatrixIdentity(&mtxTrans);
 	//ビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
 
@@ -221,18 +227,21 @@ void CBillboard::Draw(void)
 	//テクスチャの設定
 	pDevice->SetTexture(0, m_pTexture);
 
-	// ビルボードの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-		0,	//開始する頂点のインデックス
-		2); //描画するプリミティブ数
-
-
-	//レンダーステートの設定を元に戻す
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	if (m_bDraw == true)
+	{	// ビルボードの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
+			0,	//開始する頂点のインデックス
+			2); //描画するプリミティブ数
+	}
 
 	// 深度バッファを無効にする
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+//	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+//	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+
+	// αブレンディングを元に戻す
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================
@@ -294,7 +303,6 @@ void CBillboard::BindTexture(LPDIRECT3DTEXTURE9 Texture)
 {
 	m_pTexture = Texture;
 }
-
 
 //=============================================================================
 //ビルボード色設定

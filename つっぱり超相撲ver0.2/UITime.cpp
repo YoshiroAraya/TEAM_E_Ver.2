@@ -76,7 +76,7 @@ HRESULT CUITime::Init(D3DXVECTOR3 pos)
 	}
 
 	//2D”wŒi
-	m_p2DSensu = new CScene2D(2);
+	m_p2DSensu = new CScene2D(1);
 	m_p2DSensu->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_SENSU));
 	m_p2DSensu->Init(D3DXVECTOR3(m_pos.x - (m_fWidth * 0.58f), m_pos.y + 10 , m_pos.z));
 	m_p2DSensu->SetWidthHeight(200.0f, 100.0f);

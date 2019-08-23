@@ -16,6 +16,7 @@
 #include "enemy.h"
 #include "game.h"
 #include "tutorial.h"
+#include "load.h"
 //--------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //--------------------------------------------
@@ -98,6 +99,17 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	m_pScene2D[1]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 	m_pScene2D[1]->BindTexture(NULL);
 	m_bUlt[1] = false;
+
+	m_pHPgaugeBG[0] = CScene2D::Create(D3DXVECTOR3(283.0f, pos.y + 0.19f, 0.0f), 2);
+	m_pHPgaugeBG[0]->SetWidthHeight(343.0f, 46.0f);
+	m_pHPgaugeBG[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pHPgaugeBG[0]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_GAUGEBG));
+
+	m_pHPgaugeBG[1] = CScene2D::Create(D3DXVECTOR3(997.0f, pos.y + 0.19f, 0.0f),2);
+	m_pHPgaugeBG[1]->SetWidthHeight(343.0f, 46.0f);
+	m_pHPgaugeBG[1]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pHPgaugeBG[1]->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_GAUGEBG));
+	m_pHPgaugeBG[1]->SetRot(D3DX_PI);
 
 	return S_OK;
 }

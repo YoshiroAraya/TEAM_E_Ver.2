@@ -316,13 +316,15 @@ void CGame::Update(void)
 	{
 		m_pUITime->SetTimeStop(true);
 		m_bDetermine = false;
-		m_pWinnerUI->SetDrawSyouhai(true);
 		m_nBattleResetTimer++;
+		m_pWinnerUI->SetDrawSyouhai(true);
 		if (m_nBattleResetTimer > 120)
 		{
 			if (m_bDetermine == false)
 			{
 				m_nWin1P++;
+				m_pWinnerUI->SetbWinner(true);
+				m_pWinnerUI->Update();
 				m_Winner = WINNER_NONE;
 				if (m_nWin1P != 3)
 				{
@@ -342,12 +344,15 @@ void CGame::Update(void)
 		m_pUITime->SetTimeStop(true);
 		m_bDetermine = false;
 		m_nBattleResetTimer++;
+		m_pWinnerUI->SetDrawSyouhai(true);
 
 		if (m_nBattleResetTimer > 120)
 		{
 			if (m_bDetermine == false)
 			{
 				m_nWin2P++;
+				m_pWinnerUI->SetbWinner(true);
+				m_pWinnerUI->Update();
 				m_Winner = WINNER_NONE;
 				if (m_nWin2P != 3)
 				{

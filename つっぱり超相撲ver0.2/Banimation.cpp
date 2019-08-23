@@ -23,7 +23,7 @@
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
-CBAnimation::CBAnimation() : CBillboard(7, CBillboard::OBJTYPE_EFFECT)
+CBAnimation::CBAnimation() : CBillboard(4, CBillboard::OBJTYPE_EFFECT)
 {
 	m_fUV_U = 0.0f;
 	m_fUV_V = 0.0f;
