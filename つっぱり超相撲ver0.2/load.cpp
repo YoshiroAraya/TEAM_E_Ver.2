@@ -24,7 +24,10 @@ const char *CLoad::m_apModelFilename[] =
 	"data\\MODEL\\dohyo2.x",
 	"data\\MODEL\\rikisi.x",
 	"data\\MODEL\\rikisi2.x",
-	"data\\MODEL\\customer.x",
+	"data\\MODEL\\customer\\Customer0.x",
+	"data\\MODEL\\customer\\Customer1.x",
+	"data\\MODEL\\customer\\Customer2.x",
+	"data\\MODEL\\customer\\Customer3.x",
 	"data\\MODEL\\shadow000.x",
 	"data\\MODEL\\newscaster.x",
 };

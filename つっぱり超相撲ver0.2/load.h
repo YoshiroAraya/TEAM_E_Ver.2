@@ -28,7 +28,10 @@ public:
 		MODEL_DOHYO = 0,	// 土俵
 		MODEL_PLAYER,		// 力士1
 		MODEL_ENEMY,		// 力士2
-		MODEL_CUSTMOR,		// 観客
+		MODEL_CUSTMOR0,		// 観客0
+		MODEL_CUSTMOR1,		// 観客1
+		MODEL_CUSTMOR2,		// 観客2
+		MODEL_CUSTMOR3,		// 観客3
 		MODEL_SHADOW,		// 影
 		MODEL_NEWSCASTER,	// ニュースキャスター
 	} MODEL;

@@ -117,33 +117,50 @@ void CGame::Init(void)
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 680, 0));
 
-	int nCntZ;
+	int nCntZ,nCntX;
 	int nCnt;
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 4; nCntZ++)
 	{//‰œ‹q
-		for (nCnt = 0; nCnt < 3; nCnt++)
+		for (nCnt = 0; nCnt < 4; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, 230.0f + (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//‰œ¶
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(-490.0f + (nCnt * 50.0f) + (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, -1.5f + (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//‰œ‰E
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 1.5f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//‰E‹q
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
+			CCustomer::Create(D3DXVECTOR3(300.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION_RIGHT);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//¶‹q
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//‹q
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-450.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
@@ -217,6 +234,7 @@ void CGame::Init(void)
 	m_pUITime = CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
 	//ƒ|[ƒY¶¬
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+
 
 	m_nTime = 0;
 	m_nWin1P = 0;
