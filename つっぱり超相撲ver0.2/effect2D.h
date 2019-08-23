@@ -33,6 +33,8 @@ public:
 		float fWidth, float fHeight, int nLife, int TexType);
 
 	void UpdateUI(void);
+	void UpdateWave(void);
+
 private:
 	//ƒƒ“ƒo•Ï”
 	D3DXVECTOR3					m_pos;						// ˆÊ’u

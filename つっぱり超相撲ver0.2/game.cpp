@@ -413,22 +413,38 @@ void CGame::Update(void)
 		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 
-		//	CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-		//	100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);
+			/*CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);*/
 
-		////オーラ
-		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
-		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
+		//オーラ
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			//50.0f, 50.0f, 0.166666666666667f, 1.0f, 3,6, 1, 0,CLoad::TEXTURE_EFFECT_WAVE);
 
+		////火花
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		//	50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 0, 1, CLoad::TEXTURE_EFFECT_SPARK);
+
+		//衝撃波
+		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+
+		/*CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 1, 0, CLoad::TEXTURE_EFFECT_SPARK);
+		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 1, 0, CLoad::TEXTURE_EFFECT_SPARK);*/
+		// 0.0588235294117647f
 
 		//アニメーションテクスチャの生成
 		//(Pos / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 		//奥義アニメーション
-		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+	/*	C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			200.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
 
-		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
+		COugiUI::Create(D3DXVECTOR3(200, 300, 0));*/
+
+		/*CEffect2D::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.4f),
+		10, 10, 50, CLoad::TEXTURE_EFFECT_WAVE);*/
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{

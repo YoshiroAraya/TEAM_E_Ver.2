@@ -66,12 +66,14 @@ public:
 		TEXTURE_MODESELECT_BG,			// モードセレクトのUI
 		TEXTURE_CHARASELECT,			// 決定テクスチャ
 		TEXTURE_ANIMATION_OUGI,			// 奥義のアニメーション
-		TEXTURE_TUTORIAL00,			// チュートリアルの画像
-		TEXTURE_TUTORIAL01,			// チュートリアルの画像
-		TEXTURE_TUTORIAL02,			// チュートリアルの画像
-		TEXTURE_SENSU,			// タイムの背景用
-		TEXTURE_OUGIUI00,			// 奥義時のUI画像
-		TEXTURE_IPPON,			// 一本!のUI画像
+		TEXTURE_TUTORIAL00,				// チュートリアルの画像
+		TEXTURE_TUTORIAL01,				// チュートリアルの画像
+		TEXTURE_TUTORIAL02,				// チュートリアルの画像
+		TEXTURE_SENSU,					// タイムの背景用
+		TEXTURE_OUGIUI00,				// 奥義時のUI画像
+		TEXTURE_IPPON,					// 一本!のUI画像
+		TEXTURE_EFFECT_WAVE,			// 一本!のUI画像
+		TEXTURE_EFFECT_SPARK,			// 一本!のUI画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ
