@@ -10,6 +10,7 @@
 #include "main.h"
 #include "sceneX.h"
 #include "tuppari.h"
+#include "billboard.h"
 
 //*****************************************************************************
 //　前方宣言
@@ -247,6 +248,9 @@ private:
 
 	char						m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
 	MOTION_TYPE					m_MotionType[MODEL_PARENT];					//モーションの種類を設定
+
+	//ビルボード
+	CBillboard					*m_pPlayerTag;
 #ifdef _DEBUG
 	bool						m_bColBlockDraw;
 #endif

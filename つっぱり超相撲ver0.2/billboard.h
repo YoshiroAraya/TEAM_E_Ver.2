@@ -50,7 +50,7 @@ public:
 
 	static CBillboard *Create(D3DXVECTOR3 pos,float fWidth, float fHeight);		// オブジェクトの生成
 	void CBillboard::SetSize(float fHeight, float fWidth);
-
+	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
 private:
 	D3DXVECTOR3 m_pos;					// 位置
 	D3DXVECTOR3 m_rot;
@@ -58,6 +58,7 @@ private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DTEXTURE9	m_pTexture;		//テクスチャへのポインタ
 	float					m_fWidth, m_fHeight;		// 幅,高さ
+	bool		m_bDraw;
 };
 
 #endif

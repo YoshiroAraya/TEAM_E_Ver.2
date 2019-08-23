@@ -74,6 +74,7 @@ public:
 		TEXTURE_IPPON,				// 一本!のUI画像
 		TEXTURE_GAUGEBG,			// ゲージのUI画像
 		TEXTURE_EXGAUGEBG,			// 必殺ゲージのUI画像
+		TEXTURE_WINNER_RESULT,		// 勝者の画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

@@ -47,6 +47,7 @@ CResult::CResult()
 	m_n1P = 0;				//選んだモデルNo
 	m_n2P = 0;				//選んだモデルNo
 
+	m_pWinner2D = NULL;
 }
 
 //=============================================================================
@@ -78,6 +79,53 @@ void CResult::Init(void)
 	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
 
 	LoadWinner();
+
+	if (m_pWinner2D == NULL)
+	{	//位置設定
+		m_pWinner2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 400, 0));
+		//幅高さ
+		m_pWinner2D->SetWidthHeight(800,300);
+		if (m_nWinner == 1)
+		{
+			m_pWinner2D->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
+			//頂点情報へのポインタ
+			VERTEX_2D *pVtx;
+			// 頂点バッファへのポインタ
+			LPDIRECT3DVERTEXBUFFER9	pVtxBuff;
+			//頂点バッファを取得
+			pVtxBuff = m_pWinner2D->GetBuff();
+			//頂点バッファをロックし頂点データのポインタを取得
+			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+			//頂点カラー
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 0.5f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 0.5f);
+			// 頂点バッファをアンロックする
+			pVtxBuff->Unlock();
+
+		}
+		if (m_nWinner == 2)
+		{
+			m_pWinner2D->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
+			//頂点情報へのポインタ
+			VERTEX_2D *pVtx;
+			// 頂点バッファへのポインタ
+			LPDIRECT3DVERTEXBUFFER9	pVtxBuff;
+			//頂点バッファを取得
+			pVtxBuff = m_pWinner2D->GetBuff();
+			//頂点バッファをロックし頂点データのポインタを取得
+			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+			//頂点カラー
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.5f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.5f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+			// 頂点バッファをアンロックする
+			pVtxBuff->Unlock();
+		}
+		m_pWinner2D->SetbDraw(true);
+	}
 
 	CManager::GetCamera()->Init();
 }
@@ -118,7 +166,7 @@ void CResult::Update(void)
 	//}
 
 	m_nCntDrawTimer++;
-	if (m_nCntDrawTimer > 120)
+	if (m_nCntDrawTimer > 240)
 	{
 		if (m_bDrawSelect == false)
 		{

@@ -70,6 +70,7 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/ippon.png",				//36
 	"data/TEXTURE/UI/HPgauge.png",				//37
 	"data/TEXTURE/UI/EXgauge.png",				//38
+	"data/TEXTURE/UI/ResultWinner.png",			//39
 };
 
 //=============================================================================

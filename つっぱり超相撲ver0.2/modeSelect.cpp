@@ -76,6 +76,8 @@ HRESULT CModeSelect::Init(D3DXVECTOR3 pos)
 	m_apPolygonBG->SetWidthHeight(m_fWidth * 4, m_fHeight * 3);
 	m_apPolygonBG->SetbDraw(true);
 
+
+
 	for (int nCnt = 0; nCnt < MAX_MODESELECTMENU; nCnt++)
 	{
 		if (m_apPolygon[nCnt] == NULL)
@@ -94,15 +96,15 @@ HRESULT CModeSelect::Init(D3DXVECTOR3 pos)
 	////頂点情報へのポインタ
 	//VERTEX_2D *pVtx;
 	////頂点バッファを取得
-	//m_pVtxBuff = m_apPolygonBG->GetBuff();
+	//m_pVtxBuff = m_apPolygonBG[1]->GetBuff();
 
 	////頂点バッファをロックし頂点データのポインタを取得
 	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	////頂点カラー
-	//pVtx[0].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	//pVtx[1].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	//pVtx[2].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
-	//pVtx[3].col = D3DXCOLOR(1.0f, 0.6f, 0.0f, 0.8f);
+	//pVtx[0].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.3f);
+	//pVtx[1].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.3f);
+	//pVtx[2].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.3f);
+	//pVtx[3].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.3f);
 	//// 頂点バッファをアンロックする
 	//m_pVtxBuff->Unlock();
 
@@ -153,6 +155,7 @@ void CModeSelect::Update(void)
 		m_apPolygon[nCnt]->SetbDraw(m_bModeSelect);
 	}
 	m_apPolygonBG->SetbDraw(m_bModeSelect);
+
 
 #ifdef  _DEBUG
 	if (pInput->GetTrigger(DIK_O) == true)
