@@ -28,7 +28,7 @@ CAnimation::CAnimation() : CScene3D(7,CScene3D::OBJTYPE_EFFECT)
 	m_nLife = 0;
 	m_nDrawType = 0;
 	m_nCounterAnim = 0;
-	m_fCntSpeed = 0.0f;
+	m_nCntSpeed = 0;
 	m_nPatternAnim = 0;
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -44,18 +44,21 @@ CAnimation::~CAnimation()
 //=============================================================================
 // アニメーションの初期化処理
 //=============================================================================
-HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,int nRoop,
-	int nDrawType)
+HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, int nCntSpeed, 
+	int nTotalAnim,int nRoop,int nDrawType,int nTexType)
 {
+	m_nTexType = nTexType;
 	//色を代入
 	m_col = col;
 	CScene3D::SetSize(fHeight, fWidth);
-	CScene3D::SetRot(rot);
+	
+	
 
 	//初期化
 	CScene3D::Init(pos);
+	CScene3D::SetRot(rot);
 	//テクスチャの貼り付け
-	CScene3D::BindTexture(CLoad::GetTexture(CLoad::TEXTURE_ANIMATION));
+	CScene3D::BindTexture(CLoad::GetTexture(m_nTexType));
 	CScene3D::SetColor(m_col);
 	//UVの値を代入
 	m_fUV_U = fUV_U;
@@ -65,7 +68,7 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 	SetAnimation(0, m_fUV_U, m_fUV_V);
 
 	//アニメーションの速さ
-	m_fCntSpeed = fCntSpeed;
+	m_nCntSpeed = nCntSpeed;
 
 	//アニメーションの合計枚数
 	m_nTotalAnim = nTotalAnim;
@@ -75,7 +78,6 @@ HRESULT CAnimation::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float f
 
 	//描画タイプ
 	m_nDrawType = nDrawType;
-
 
 	m_bUse = true;
 	return S_OK;
@@ -129,10 +131,10 @@ void CAnimation::Update(void)
 	{//ループしない
 
 		//寿命を減らす
-		m_nLife--;
+		//m_nLife--;
 
 		//透明度を減らす
-		m_col.a -= 0.05f;
+		m_col.a -= 0.009f;
 
 		if (m_bUse == true)
 		{
@@ -161,7 +163,7 @@ void CAnimation::Update(void)
 		Uninit();
 	}
 
-	CScene3D::SetPos(D3DXVECTOR3(pos.x,pos.y + 45.0f,pos.z - 10.0f));
+	//CScene3D::SetPos(D3DXVECTOR3(pos.x,pos.y + 45.0f,pos.z - 10.0f));
 }
 
 //=============================================================================
@@ -172,7 +174,7 @@ void CAnimation::UpdateAnim(void)
 	//アニメーションのカウンターを進める
 	m_nCounterAnim++;
 
-	if ((m_nCounterAnim % (int)m_fCntSpeed) == 0)
+	if ((m_nCounterAnim % m_nCntSpeed) == 0)
 	{
 		//パターン更新
 		m_nPatternAnim = (m_nPatternAnim + 1) % m_nTotalAnim;
@@ -226,8 +228,8 @@ void CAnimation::Draw(void)
 //=============================================================================
 // アニメーションの生成処理
 //=============================================================================
-CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,float fHeight,float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,int nRoop,
-	int nDrawType)
+CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,float fHeight,float fWidth, float fUV_U, float fUV_V, int nCntSpeed,
+	int nTotalAnim,int nRoop,int nDrawType,int nTexType)
 {
 	CAnimation *pAnimation = {};
 
@@ -240,7 +242,7 @@ CAnimation *CAnimation::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col,fl
 		if (pAnimation != NULL)
 		{
 			// ポリゴンの初期化処理
-			pAnimation->Init(pos,rot, col,fWidth,fHeight,fUV_U,fUV_V,fCntSpeed,nTotalAnim,nRoop,nDrawType);
+			pAnimation->Init(pos,rot, col,fWidth,fHeight,fUV_U,fUV_V,nCntSpeed,nTotalAnim,nRoop,nDrawType,nTexType);
 		}
 		else
 		{

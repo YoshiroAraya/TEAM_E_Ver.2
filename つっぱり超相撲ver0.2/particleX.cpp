@@ -36,7 +36,7 @@ CParticleX *CParticleX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 mov
 		{
 			pParticle->m_move = move;						// 移動量の設定
 			pParticle->m_nLife = nLife;						// ライフの設定
-			pParticle->BindModel(CLoad::GetBuffMat(CLoad::MODEL_CUSTMOR), CLoad::GetNumMat(CLoad::MODEL_CUSTMOR), CLoad::GetMesh(CLoad::MODEL_CUSTMOR));
+			pParticle->BindModel(CLoad::GetBuffMat(CLoad::MODEL_CUSTMOR0), CLoad::GetNumMat(CLoad::MODEL_CUSTMOR0), CLoad::GetMesh(CLoad::MODEL_CUSTMOR0));
 			pParticle->BindMat(m_pTexture);
 			pParticle->Init(pos);							// 初期化処理
 			pParticle->SetRot(rot);							// 回転の設定
@@ -181,12 +181,12 @@ HRESULT CParticleX::LoadMat(void)
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
 										// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)CLoad::GetBuffMat(CLoad::MODEL_CUSTMOR)->GetBufferPointer();
+	pMat = (D3DXMATERIAL*)CLoad::GetBuffMat(CLoad::MODEL_CUSTMOR0)->GetBufferPointer();
 
 	// マテリアルの数分テクスチャを入れるものを動的に確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[CLoad::GetNumMat(CLoad::MODEL_CUSTMOR)];
+	m_pTexture = new LPDIRECT3DTEXTURE9[CLoad::GetNumMat(CLoad::MODEL_CUSTMOR0)];
 
-	for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_CUSTMOR); nCntMat++)
+	for (int nCntMat = 0; nCntMat < (int)CLoad::GetNumMat(CLoad::MODEL_CUSTMOR0); nCntMat++)
 	{
 		// 入れる前に空にする
 		m_pTexture[nCntMat] = NULL;

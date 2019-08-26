@@ -41,7 +41,8 @@ private:
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
 	int m_nWinner;
-	int m_n1P;				//選んだモデルNo
-	int m_n2P;				//選んだモデルNo
+	int m_n1P;					//選んだモデルNo
+	int m_n2P;					//選んだモデルNo
+	CScene2D	*m_pWinner2D;		// メニューのポリゴン
 };
 #endif

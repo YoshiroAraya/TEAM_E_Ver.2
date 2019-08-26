@@ -10,6 +10,7 @@
 #include "main.h"
 #include "sceneX.h"
 #include "tuppari.h"
+#include "billboard.h"
 
 //*****************************************************************************
 //　前方宣言
@@ -286,6 +287,10 @@ private:
 	CPUACTION		m_CPUAction;		//行動の種類
 	bool			m_bAction;			//アクションしたかどうか
 	int				m_DamageCnt;		//ダメージを何回受けたか
+
+	//ビルボード
+	CBillboard		*m_pEnemyTag;
+
 #ifdef _DEBUG
 	bool			m_bColBlockDraw;
 #endif
