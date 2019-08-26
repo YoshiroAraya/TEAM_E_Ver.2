@@ -106,6 +106,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 		m_bMotionEnd[nCntParent] = false;
 	}
 
+	m_pPlayerTag = NULL;
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
 #endif
@@ -323,6 +324,29 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		FileLoad(FILE_NAME_1, 1);
 	}
 
+	//プレイヤーのタグ
+	m_pPlayerTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
+	m_pPlayerTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
+
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+	// 頂点バッファへのポインタ
+	LPDIRECT3DVERTEXBUFFER9	pVtxBuff;
+	//頂点バッファを取得
+	pVtxBuff = m_pPlayerTag->GetVtxBuff();
+	//頂点バッファをロックし頂点データのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	//頂点カラー
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 0.5f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 0.5f);
+	// 頂点バッファをアンロックする
+	pVtxBuff->Unlock();
+
+	//描画しない
+	m_pPlayerTag->SetbDraw(false);
+
 	//モデルの親を指定
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 
@@ -412,6 +436,8 @@ void CPlayer::Update(void)
 
 	// 前のフレームの位置代入
 	m_posOld = pos;
+	// ビルボードの位置更新
+	m_pPlayerTag->SetPosition(D3DXVECTOR3(pos.x, pos.y + 120, pos.z));
 
 	float fMovePlayer = MOVE_PLAYER;	// プレイヤーの移動量を設定
 
@@ -420,6 +446,9 @@ void CPlayer::Update(void)
 	case CManager::MODE_GAME:
 		if (CGame::GetState() == CGame::STATE_GAME)
 		{
+			//描画する
+			m_pPlayerTag->SetbDraw(true);
+
 			//プレイヤーの動作
 			fMovePlayer = PlayerOperation(pos, fMovePlayer);
 
@@ -559,6 +588,8 @@ void CPlayer::Update(void)
 			}
 		}
 	}
+
+
 
 	//モーション更新
 	UpdateMotion(0);

@@ -25,14 +25,16 @@ public:
 	CAnimation();
 	~CAnimation();
 
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth,float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,int nRoop,int nDrawType);
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXCOLOR col, float fHeight, float fWidth,float fUV_U, float fUV_V,
+		int nCntSpeed,int nTotalAnim,int nRoop,int nDrawType,int nTexType);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 	void UpdateAnim();
 
 	//静的メンバ関数
-	static CAnimation *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth,float fUV_U,float fUV_V,float fCntSpeed,int nTotalAnim,int nRoop,int nDrawType);
+	static CAnimation *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXCOLOR col, float fHeight, float fWidth,float fUV_U,float fUV_V,
+		int nCntSpeed,int nTotalAnim,int nRoop,int nDrawType,int nTexType);
 
 private:
 	//	D3DXVECTOR3 m_pos;							//位置
@@ -42,7 +44,7 @@ private:
 	int m_nCounterAnim;								//アニメーションカウンター
 	int m_nPatternAnim;								//アニメーションパターンNO
 	D3DXVECTOR3 m_pos;								//位置
-	float m_fCntSpeed;								//アニメーション再生スピード
+	int m_nCntSpeed;								//アニメーション再生スピード
 	int m_nTotalAnim;								//アニメーションの合計枚数
 	float m_fUV_U;									//テクスチャUV(U)
 	float m_fUV_V;									//テクスチャUV(V)
@@ -50,6 +52,8 @@ private:
 	int  m_nRoop;									//ループ再生するかしないか
 	int m_nLife;									//テクスチャの寿命
 	int m_nDrawType;								//描画タイプ
+	int m_nTexType;
+	D3DXVECTOR3 m_rot;								//位置
 
 };
 #endif

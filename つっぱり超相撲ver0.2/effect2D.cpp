@@ -108,6 +108,11 @@ void CEffect2D::Update(void)
 		//パーティクル
 		UpdateUI();
 	}
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_WAVE)
+	{
+		//パーティクル
+		UpdateWave();
+	}
 }
 
 //=============================================================================
@@ -131,6 +136,61 @@ void CEffect2D::UpdateUI(void)
 		//位置を更新		
 		m_pos += m_move;
 		
+		//徐々に透明にしていく
+		//m_Col.a = m_Col.a - m_fAlpha;
+		m_Col.a -= 0.002f;
+
+		////一定以下になったら0に
+		//if (m_Col.a < 0.01f)
+		//{
+		//	m_Col.a = 0;
+		//}
+		m_fWidth += 4.0f;
+		m_fHeight += 4.0f;
+		//色を設定
+		CScene2D::SetCol(m_Col);
+
+		//設定処理
+		CScene2D::SetWidthHeight(m_fWidth, m_fHeight);
+		CScene2D::SetPosition(m_pos);
+	}
+	else if (m_nLife <= 0)
+	{
+		//自分を消すフラグを立てる
+		//bDestroy = true;
+	}
+
+	//if (bDestroy == true)
+	//{
+	//	//自分を消す(破棄)
+	//	Uninit();
+	//}
+
+	//if (m_Col.a <= 0.0f)
+	//{
+	//	//自分を消す(破棄)
+	//	Uninit();
+	//}
+	CDebugProc::Print("cf", "エフェクト : ",m_Col.a);
+}
+
+//=============================================================================
+// 衝撃波の更新処理
+//=============================================================================
+void CEffect2D::UpdateWave(void)
+{
+	//自分用の死亡フラグ変数
+	bool bDestroy = false;
+
+	m_nCntTimer++;
+
+	if (m_nLife > 0)
+	{
+		m_nLife--;
+
+		//位置を更新		
+		m_pos += m_move;
+
 		//徐々に透明にしていく
 		//m_Col.a = m_Col.a - m_fAlpha;
 		m_Col.a -= 0.002f;
@@ -166,7 +226,7 @@ void CEffect2D::UpdateUI(void)
 	//	//自分を消す(破棄)
 	//	Uninit();
 	//}
-	CDebugProc::Print("cf", "エフェクト : ",m_Col.a);
+	CDebugProc::Print("cf", "エフェクト : ", m_Col.a);
 }
 
 //=============================================================================

@@ -117,33 +117,50 @@ void CGame::Init(void)
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 680, 0));
 
-	int nCntZ;
+	int nCntZ,nCntX;
 	int nCnt;
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 4; nCntZ++)
 	{//奥客
-		for (nCnt = 0; nCnt < 3; nCnt++)
+		for (nCnt = 0; nCnt < 4; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, 230.0f + (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥左
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(-490.0f + (nCnt * 50.0f) + (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, -1.5f + (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥右
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 1.5f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//右客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
+			CCustomer::Create(D3DXVECTOR3(300.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION_RIGHT);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//左客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-450.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
@@ -217,6 +234,7 @@ void CGame::Init(void)
 	m_pUITime = CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
 	//ポーズ生成
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+
 
 	m_nTime = 0;
 	m_nWin1P = 0;
@@ -418,22 +436,38 @@ void CGame::Update(void)
 		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 
-		//	CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-		//	100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);
+			/*CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);*/
 
-		////オーラ
-		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(300, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
-		//	50.0f, 50.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0);
+		//オーラ
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			//50.0f, 50.0f, 0.166666666666667f, 1.0f, 3,6, 1, 0,CLoad::TEXTURE_EFFECT_WAVE);
 
+		////火花
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		//	50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 0, 1, CLoad::TEXTURE_EFFECT_SPARK);
+
+		//衝撃波
+		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+
+		/*CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 1, 0, CLoad::TEXTURE_EFFECT_SPARK);
+		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+			50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 1, 0, CLoad::TEXTURE_EFFECT_SPARK);*/
+		// 0.0588235294117647f
 
 		//アニメーションテクスチャの生成
 		//(Pos / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 		//奥義アニメーション
-		C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+	/*	C2DAnimation::Create(D3DXVECTOR3(200, 300, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			200.0f, 0.0333333333333333f, 1.0f, 1, 30, 0, 1);
 
-		COugiUI::Create(D3DXVECTOR3(200, 300, 0));
+		COugiUI::Create(D3DXVECTOR3(200, 300, 0));*/
+
+		/*CEffect2D::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.4f),
+		10, 10, 50, CLoad::TEXTURE_EFFECT_WAVE);*/
 
 		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
