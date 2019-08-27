@@ -59,12 +59,14 @@ void CLight::Init(void)
 	m_light[1].Type = D3DLIGHT_DIRECTIONAL;
 	m_light[2].Type = D3DLIGHT_DIRECTIONAL;
 	m_light[3].Type = D3DLIGHT_DIRECTIONAL;
+	m_light[4].Type = D3DLIGHT_DIRECTIONAL;
 
 	// ライトの拡散光を設定
 	m_light[0].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_light[1].Diffuse = D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f);
 	m_light[2].Diffuse = D3DXCOLOR(0.15f, 0.15f, 0.15f, 1.0f);
 	m_light[3].Diffuse = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	m_light[4].Diffuse = D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f);
 
 	// ライトの方向の設定
 	vecDir = D3DXVECTOR3(0.2f, -0.8f, 0.4f);
@@ -83,17 +85,23 @@ void CLight::Init(void)
 	D3DXVec3Normalize(&vecDir, &vecDir);		// 正規化する
 	m_light[3].Direction = vecDir;
 
+	vecDir = D3DXVECTOR3(0.0f, -0.1f, -1.0f);
+	D3DXVec3Normalize(&vecDir, &vecDir);		// 正規化する
+	m_light[4].Direction = vecDir;
+
 	// ライトを設定する
 	pDevice->SetLight(0, &m_light[0]);
 	pDevice->SetLight(1, &m_light[1]);
 	pDevice->SetLight(2, &m_light[2]);
 	pDevice->SetLight(3, &m_light[3]);
+	pDevice->SetLight(4, &m_light[4]);
 
 	// ライトを有効にする
 	pDevice->LightEnable(0, TRUE);
 	pDevice->LightEnable(1, TRUE);
 	pDevice->LightEnable(2, TRUE);
 	pDevice->LightEnable(3, TRUE);
+	pDevice->LightEnable(4, TRUE);
 #endif // 1
 
 #if(0)
