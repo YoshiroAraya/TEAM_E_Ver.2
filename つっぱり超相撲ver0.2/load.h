@@ -80,6 +80,7 @@ public:
 		TEXTURE_WINNER_RESULT,		// 勝者の画像
 		TEXTURE_EFFECT_WAVE,			// 一本!のUI画像
 		TEXTURE_EFFECT_SPARK,			// 一本!のUI画像
+		TEXTURE_TAG,			// プレイヤータグのUI画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

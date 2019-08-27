@@ -469,24 +469,22 @@ void CGame::Update(void)
 		/*CEffect2D::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.4f),
 		10, 10, 50, CLoad::TEXTURE_EFFECT_WAVE);*/
 
-		for (int nCnt = 0; nCnt < 1; nCnt++)
+		for (int nCnt = 0; nCnt < 30; nCnt++)
 		{
 			//CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
 			//100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 			////お金
-			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
-			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
-			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
+			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
+			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
 			//moveRand.x = rand() % 2 - 2;
 
-			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				//20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+			CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+				20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
 			//煙(エラー)
 			//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 				//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
-
-
 		}
 	}
 #endif
@@ -582,6 +580,7 @@ void CGame::SaveWinner(void)
 	{// ファイルが開けたら
 		//勝者のNo
 		fprintf(pFileW, "%d\n", m_WinerNum);
+
 		if (m_WinerNum == 1)
 		{	//どのキャラか
 			fprintf(pFileW, "%d\n", m_n1P);
@@ -591,6 +590,14 @@ void CGame::SaveWinner(void)
 			fprintf(pFileW, "%d\n", m_n2P);
 		}
 
+		if (CNumPlayer::GetMode() == CNumPlayer::MODE_1P)
+		{	//モード
+			fprintf(pFileW, "%d\n", 0);
+		}
+		else if (CNumPlayer::GetMode() == CNumPlayer::MODE_2P)
+		{	//モード
+			fprintf(pFileW, "%d\n", 1);
+		}
 		//ファイルを閉じる
 		fclose(pFileW);
 	}
