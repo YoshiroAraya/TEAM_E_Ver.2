@@ -290,6 +290,8 @@ private:
 
 	//ビルボード
 	CBillboard		*m_pEnemyTag;
+	//まわし
+	CModel			*m_pMawasi;
 
 #ifdef _DEBUG
 	bool			m_bColBlockDraw;

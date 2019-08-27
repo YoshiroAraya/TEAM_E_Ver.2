@@ -249,6 +249,8 @@ private:
 	char						m_aFileNameModel[MAX_PARTS][256];			//モデルパーツの名前
 	MOTION_TYPE					m_MotionType[MODEL_PARENT];					//モーションの種類を設定
 
+	CModel						*m_pMawasi;					//パーツ情報
+
 	//ビルボード
 	CBillboard					*m_pPlayerTag;
 #ifdef _DEBUG

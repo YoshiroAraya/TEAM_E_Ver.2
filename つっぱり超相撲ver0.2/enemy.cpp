@@ -28,6 +28,7 @@
 #include "BattleSystem.h"
 #include "effect.h"
 #include "tutorial.h"
+#include "result.h"
 
 //=============================================================================
 // マクロ定義
@@ -113,6 +114,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	}
 
 	m_pEnemyTag = NULL;
+	m_pMawasi = NULL;
 
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
@@ -161,8 +163,12 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pTuto = CManager::GetTutorial();
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
+	CResult *pResult;
+	pResult = CManager::GetResult();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	int nType = 0;	//タイプ
 
 	if (mode == CManager::MODE_GAME)
 	{
@@ -170,12 +176,14 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pGame->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				nType = 0;
 			}
 			else if (pGame->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				nType = 1;
 			}
 		}
 	}
@@ -185,12 +193,14 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pTuto->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				nType = 0;
 			}
 			else if (pTuto->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				nType = 1;
 			}
 		}
 	}
@@ -200,18 +210,38 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pUltimate->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				nType = 0;
 			}
 			else if (pUltimate->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				nType = 1;
+			}
+		}
+	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get2P() == 0)
+			{// 力士
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				nType = 0;
+			}
+			else if (pResult->Get2P() == 1)
+			{// レスラー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				nType = 1;
 			}
 		}
 	}
 	else
 	{
 		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+		nType = 1;
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -310,6 +340,23 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get2P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pResult->Get2P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
 	else
 	{
 		FileLoad(FILE_NAME_2, 0);
@@ -319,7 +366,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 
 	//敵のタグ
-	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
+	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 30, 30);
 	m_pEnemyTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TAG));
 	m_pEnemyTag->SetCol(D3DXCOLOR(1.0f, 0.80f, 0.80f, 1.0f));
 
@@ -360,6 +407,22 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
 	}
+
+
+	if (nType == 0)
+	{
+		if (m_pMawasi == NULL)
+		{
+			//モデルを生成	オフセット設定
+			m_pMawasi = CModel::Create(
+				D3DXVECTOR3(m_aKayOffset[0][0].fposX, 0.0f, m_aKayOffset[0][0].fposZ),
+				D3DXVECTOR3(m_aKayOffset[0][0].frotX, m_aKayOffset[0][0].frotY, m_aKayOffset[0][0].frotZ));
+			//モデルを割り当て
+			m_pMawasi->BindModel(CLoad::GetNumMat(CLoad::MODEL_MAWASI), CLoad::GetMesh(CLoad::MODEL_MAWASI), CLoad::GetBuffMat(CLoad::MODEL_MAWASI));
+			//	モデルの親を指定
+			m_pMawasi->SetParent(m_apModel[0][1]);
+		}
+	}
 	return S_OK;
 }
 
@@ -380,10 +443,17 @@ void CEnemy::Uninit(void)
 			}
 		}
 	}
-
+	//つっぱりの破棄
 	if (m_pTuppari != NULL)
 	{
 		m_pTuppari->Uninit();
+	}
+	//まわしの破棄
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Uninit();
+		delete m_pMawasi;
+		m_pMawasi = NULL;
 	}
 
 	m_pAnimation = NULL;
@@ -764,6 +834,11 @@ void CEnemy::Draw(void)
 				m_apModel[nCnt][nCntParent]->Draw();
 			}
 		}
+	}
+	//まわしの描画
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Draw();
 	}
 }
 
