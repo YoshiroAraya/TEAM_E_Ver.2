@@ -888,7 +888,7 @@ void CBattleSys::Operation(void)
 			//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
 			if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
 			{
-				
+
 				//状態変化
 				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 				//ダメージ
@@ -931,7 +931,7 @@ void CBattleSys::Operation(void)
 				pEnemy->SetUltDamage(false);
 			}
 		}
-		
+
 		if (pPlayer->GetUltDamage() == false)
 		{
 			//ダメージなら吹っ飛ぶ エネミーのつっぱり
@@ -1438,7 +1438,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 				{
 					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
 				}
-				
+
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
 			else
@@ -1451,7 +1451,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 				{
 					pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
 				}
-				
+
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 		}
