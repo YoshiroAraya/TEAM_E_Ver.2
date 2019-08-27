@@ -213,25 +213,25 @@ void CResult::Update(void)
 	D3DXCOLOR col;
 	m_nTime++;
 
-	if (m_nTime == 20)
+	if (m_nTime == 30)
 	{
-		for (int nCnt = 0; nCnt < 20; nCnt++)
+		for (int nCnt = 0; nCnt < 40; nCnt++)
 		{
-			int nNumber = rand() % 3 + 1;
+			int nNumber = rand() % 4 + 1;
 
 			if (nNumber == 1) { col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f); }
 			if (nNumber == 2) { col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f); }
 			if (nNumber == 3) { col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f); }
-			if (nNumber == 4) { col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f); }
+			if (nNumber == 4) { col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f); }
 
 			//‚¨‹à
-			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 5 + 1));
 			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
-			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 3 + 1));
 
 
-			CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), col,
-				20, 20, 1, 200, CLoad::TEXTURE_EFFECT_CONFETTI);
+			CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z),col,
+				8, 8, 1, 200, CLoad::TEXTURE_EFFECT_CONFETTI);
 		}
 
 		m_nTime = 0;
