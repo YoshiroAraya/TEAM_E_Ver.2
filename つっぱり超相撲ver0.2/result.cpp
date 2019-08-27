@@ -23,6 +23,9 @@
 #include "enemy.h"
 #include "camera.h"
 #include "modeSelect.h"
+#include "Object3DModel.h"
+#include "customer.h"
+#include "effect2D.h"
 #include "effect3D.h"
 //============================================================================
 //	マクロ定義
@@ -77,6 +80,35 @@ void CResult::Init(void)
 	CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(0, 200.0f, -500), D3DXVECTOR3(300.0f, 600.0f, 0.0f), 200.0f, 700.0f);
 	CWall::Create(D3DXVECTOR3(550, 200.0f, 0), D3DXVECTOR3(300.0f, 900.0f, 0.0f), 200.0f, 700.0f);
+	C3DObject::Create(D3DXVECTOR3(0.0f, 20.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 9);
+
+	int nCntZ, nCntX;
+	int nCnt;
+
+	for (nCntZ = 0; nCntZ < 4; nCntZ++)
+	{//奥客
+		for (nCnt = 0; nCnt < 4; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, 230.0f + (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥左
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(-490.0f + (nCnt * 50.0f) + (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, -1.5f + (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥右
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 1.5f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
 
 	LoadWinner();
 
@@ -99,8 +131,8 @@ void CResult::Init(void)
 			//頂点カラー
 			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-			pVtx[2].tex = D3DXVECTOR2(0.0f, 0.5f);
-			pVtx[3].tex = D3DXVECTOR2(1.0f, 0.5f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 0.3333f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 0.3333f);
 			// 頂点バッファをアンロックする
 			pVtxBuff->Unlock();
 
@@ -116,11 +148,23 @@ void CResult::Init(void)
 			pVtxBuff = m_pWinner2D->GetBuff();
 			//頂点バッファをロックし頂点データのポインタを取得
 			pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
 			//頂点カラー
-			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.5f);
-			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.5f);
-			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+			if (m_nMode == 0)
+			{	//CPU
+				pVtx[0].tex = D3DXVECTOR2(0.0f, 0.6666f);
+				pVtx[1].tex = D3DXVECTOR2(1.0f, 0.6666f);
+				pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+				pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+			}
+			else if (m_nMode == 1)
+			{	//2P
+				pVtx[0].tex = D3DXVECTOR2(0.0f, 0.3333f);
+				pVtx[1].tex = D3DXVECTOR2(1.0f, 0.3333f);
+				pVtx[2].tex = D3DXVECTOR2(0.0f, 0.6666f);
+				pVtx[3].tex = D3DXVECTOR2(1.0f, 0.6666f);
+			}
+
 			// 頂点バッファをアンロックする
 			pVtxBuff->Unlock();
 		}
@@ -206,6 +250,7 @@ void CResult::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");
+
 #endif
 }
 
@@ -239,6 +284,8 @@ void CResult::LoadWinner(void)
 			fscanf(pFile, "%d\n", &m_n2P);
 		}
 
+		fscanf(pFile, "%d\n", &m_nMode);
+
 		fclose(pFile);
 	}
 
@@ -246,14 +293,14 @@ void CResult::LoadWinner(void)
 	{
 		if (m_pPlayer == NULL)
 		{// プレイヤー
-			m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
+			m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 20.0f, 10.0f), D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
 		}
 	}
 	else if(m_nWinner == 2)
 	{
 		if (m_pEnemy == NULL)
 		{// エネミー
-			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, -50.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f), CEnemy::MODE_P2);
+			m_pEnemy = CEnemy::Create(D3DXVECTOR3(0.0f, 20.0f, 10.0f), D3DXVECTOR3(0.0f,D3DX_PI * 2.0f, 0.0f), CEnemy::MODE_P2);
 		}
 	}
 }

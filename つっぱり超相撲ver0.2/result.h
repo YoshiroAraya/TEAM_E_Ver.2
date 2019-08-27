@@ -45,5 +45,6 @@ private:
 	int m_n2P;					//選んだモデルNo
 	int m_nTime;
 	CScene2D	*m_pWinner2D;		// メニューのポリゴン
+	int m_nMode;				//選んだモード
 };
 #endif

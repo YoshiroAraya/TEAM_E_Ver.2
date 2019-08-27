@@ -117,33 +117,50 @@ void CGame::Init(void)
 	m_pUltimateGauge = CUltimateGauge::Create(D3DXVECTOR3(100, 150, 0));
 	m_pSansoGauge = CSansoGauge::Create(D3DXVECTOR3(100, 680, 0));
 
-	int nCntZ;
+	int nCntZ,nCntX;
 	int nCnt;
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 4; nCntZ++)
 	{//奥客
-		for (nCnt = 0; nCnt < 3; nCnt++)
+		for (nCnt = 0; nCnt < 4; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-140.0f + (nCnt * 160.0f), 1.0f, 270.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, 230.0f + (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥左
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(-490.0f + (nCnt * 50.0f) + (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, -1.5f + (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//奥右
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//客
+
+			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 1.5f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//右客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(270.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), 3, CCustomer::POSITION_RIGHT);
+			CCustomer::Create(D3DXVECTOR3(300.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, -300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION_RIGHT);
 		}
 	}
 
-	for (nCntZ = 0; nCntZ < 2; nCntZ++)
+	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//左客
 		for (nCnt = 0; nCnt < 3; nCnt++)
 		{//客
 
-			CCustomer::Create(D3DXVECTOR3(-580.0f + (nCnt * 150.0f), 1.0f, -80.0f + (nCntZ * 160.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), 3, CCustomer::POSITION);
+			CCustomer::Create(D3DXVECTOR3(-450.0f + (nCnt * 80.0f), 1.0f, -80.0f + (nCntZ * 70.0f)), D3DXVECTOR3(0.0f, 300.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
 
@@ -217,6 +234,7 @@ void CGame::Init(void)
 	m_pUITime = CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
 	//ポーズ生成
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+
 
 	m_nTime = 0;
 	m_nWin1P = 0;
@@ -412,7 +430,7 @@ void CGame::Update(void)
 	D3DXVECTOR3 effectmove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//任意のキー←
-	//if (pInputKeyboard->GetTrigger(DIK_J) == true)
+	if (pInputKeyboard->GetTrigger(DIK_J) == true)
 	{
 		//アニメーションテクスチャの生成
 		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
@@ -456,9 +474,6 @@ void CGame::Update(void)
 		/*CEffect2D::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.4f),
 		10, 10, 50, CLoad::TEXTURE_EFFECT_WAVE);*/
 
-		if (m_nTime == 20)
-		{
-
 			for (int nCnt = 0; nCnt < 20; nCnt++)
 			{
 				//CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
@@ -473,15 +488,9 @@ void CGame::Update(void)
 				CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 					20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-				//煙(エラー)
-				//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-					//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
 				CDebugProc::Print("%.1f,%.1f,%.1f", moveRand.x, moveRand.y, moveRand.z);
 			}
-
-			m_nTime = 0;
 		}
-	}
 #endif
 }
 
@@ -575,6 +584,7 @@ void CGame::SaveWinner(void)
 	{// ファイルが開けたら
 		//勝者のNo
 		fprintf(pFileW, "%d\n", m_WinerNum);
+
 		if (m_WinerNum == 1)
 		{	//どのキャラか
 			fprintf(pFileW, "%d\n", m_n1P);
@@ -584,6 +594,14 @@ void CGame::SaveWinner(void)
 			fprintf(pFileW, "%d\n", m_n2P);
 		}
 
+		if (CNumPlayer::GetMode() == CNumPlayer::MODE_1P)
+		{	//モード
+			fprintf(pFileW, "%d\n", 0);
+		}
+		else if (CNumPlayer::GetMode() == CNumPlayer::MODE_2P)
+		{	//モード
+			fprintf(pFileW, "%d\n", 1);
+		}
 		//ファイルを閉じる
 		fclose(pFileW);
 	}

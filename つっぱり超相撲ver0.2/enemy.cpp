@@ -141,8 +141,8 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, MODE mode)
 		if (pEnemy != NULL)
 		{
 			//pEnemy->BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
-			pEnemy->Init(pos, rot);
 			pEnemy->m_Mode = mode;
+			pEnemy->Init(pos, rot);
 		}
 	}
 
@@ -320,7 +320,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	//敵のタグ
 	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
-	m_pEnemyTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
+	m_pEnemyTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TAG));
+	m_pEnemyTag->SetCol(D3DXCOLOR(1.0f, 0.80f, 0.80f, 1.0f));
 
 	//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
@@ -330,11 +331,24 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pVtxBuff = m_pEnemyTag->GetVtxBuff();
 	//頂点バッファをロックし頂点データのポインタを取得
 	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	//頂点カラー
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.5f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.5f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+	//P2かCPUでテクスチャを変える
+	if (m_Mode == MODE_P2)
+	{
+		//頂点TEX
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.3333f);
+		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.3333f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 0.6666f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 0.6666f);
+	}
+	else if (m_Mode == MODE_CPU)
+	{
+		//頂点TEX
+		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.6666f);
+		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.6666f);
+		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+	}
+
 	// 頂点バッファをアンロックする
 	pVtxBuff->Unlock();
 

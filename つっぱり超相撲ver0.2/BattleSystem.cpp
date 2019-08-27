@@ -888,7 +888,6 @@ void CBattleSys::Operation(void)
 			//ダメージなら吹っ飛ぶ プレイヤーのつっぱり
 			if (pEnemy->GetState() == CEnemy::STATE_DAMAGE)
 			{
-				
 				//状態変化
 				pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 				//ダメージ
@@ -954,8 +953,55 @@ void CBattleSys::Operation(void)
 					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 				}
 				//ダメージ
+				pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
+				pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+			}
+		}
+		else
+		{// 突っ張りの奥義を受けているとき
+		 //ダメージなら吹っ飛ぶ プレイヤーのつっぱり
+			if (pPlayer->GetState() == CPlayer::STATE_DAMAGE)
+			{
+				//状態変化
+				pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+				//ダメージ
 				pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
 				pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
+
+				if (pPlayer->GetDying() == true)
+				{
+					m_abUlt[1] = false;
+					m_bEnemyUlt = false;
+					switch (pEnemy->GetDirection())
+					{
+					case CEnemy::DIRECTION_LEFT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(((-TUPARI_MOVE * 17.0f)), KNOCKUP_MOVE_ULT * 2.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						break;
+					case CEnemy::DIRECTION_RIGHT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3(((TUPARI_MOVE * 17.0f)), KNOCKUP_MOVE_ULT * 2.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						break;
+					}
+				}
+				else
+				{
+					switch (pEnemy->GetDirection())
+					{
+					case CEnemy::DIRECTION_LEFT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((-TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE_ULT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						break;
+					case CEnemy::DIRECTION_RIGHT:
+						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
+						Battle(1, ATTACK_TYPE_TUPPARI, D3DXVECTOR3((TUPARI_MOVE * m_fMoveDying[0]), KNOCKUP_MOVE_ULT, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+						break;
+					}
+				}
+			}
+			if (pPlayer->GetWallHit() == true)
+			{
+				pPlayer->SetUltDamage(false);
 			}
 		}
 
@@ -971,7 +1017,7 @@ void CBattleSys::Operation(void)
 
 		if (pPlayer != NULL)
 		{
-			//土俵端で体力があるなら残る
+			//土俵端で体力があ//つっぱりるなら残る
 			if (/*pPlayer->GetDohyo() == CPlayer::DOHYO_HAZI && */pPlayer->GetDying() == false)
 			{
 				if (pPlayer->GetPosition().x > DOHYO_HAZI_NUM)
@@ -1417,13 +1463,27 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 		{//プレイヤーの体力がある場合で土俵端のつっぱり攻撃
 			if (nPlayer == 0)
 			{	//プレイヤーのつっぱり
-				pPlayer->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-				pEnemy->SetMove(D3DXVECTOR3(P2move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
+				if (pPlayer->GetUltDamage() == true)
+				{
+					pEnemy->SetMove(D3DXVECTOR3(P2move.x / 1.5f, 0.0f, 0.0f));
+				}
+				else
+				{
+					pEnemy->SetMove(D3DXVECTOR3(P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+				}
+				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
 			else
 			{	//エネミーのつっぱり
+				if (pPlayer->GetUltDamage() == true)
+				{
+					pEnemy->SetMove(D3DXVECTOR3(-P1move.x / 1.5f, 0.0f, 0.0f));
+				}
+				else
+				{
+					pEnemy->SetMove(D3DXVECTOR3(-P1move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
+				}
 				pPlayer->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
-				pEnemy->SetMove(D3DXVECTOR3(-P1move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
 			}
 		}
 		else if (pEnemy->GetDohyo() == CEnemy::DOHYO_HAZI && pEnemy->GetDying() == false)
@@ -1447,7 +1507,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 				{
 					pPlayer->SetMove(D3DXVECTOR3(P1move.x / 1.5f, KNOCKUP_MOVE, 0.0f));
 				}
-				else
+				else 
 				{
 					pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
 				}

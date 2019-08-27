@@ -239,6 +239,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bUltDis = false;
 	m_bEnemyDamage = false;
 	m_bUltDamage = false;
+	m_bWallHit = false;
 
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
@@ -326,8 +327,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	//プレイヤーのタグ
 	m_pPlayerTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
-	m_pPlayerTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_WINNER_RESULT));
-
+	m_pPlayerTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TAG));
+	m_pPlayerTag->SetCol(D3DXCOLOR(0.80f, 0.80f, 1.0f, 1.0f));
 	//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
 	// 頂点バッファへのポインタ
@@ -339,8 +340,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	//頂点カラー
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
 	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 0.5f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 0.5f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 0.3333f);
+	pVtx[3].tex = D3DXVECTOR2(1.0f, 0.3333f);
 	// 頂点バッファをアンロックする
 	pVtxBuff->Unlock();
 
@@ -489,6 +490,19 @@ void CPlayer::Update(void)
 				}
 				m_bUltDis = false;
 			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
+			}
 		}
 		break;
 	case CManager::MODE_TUTORIAL:
@@ -533,6 +547,19 @@ void CPlayer::Update(void)
 					m_pAnimation = NULL;
 				}
 				m_bUltDis = false;
+			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
 			}
 		}
 		break;

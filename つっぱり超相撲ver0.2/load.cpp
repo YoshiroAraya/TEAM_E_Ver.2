@@ -21,12 +21,16 @@ DWORD *CLoad::m_nNumMat = 0;				// マテリアル情報の数
 
 const char *CLoad::m_apModelFilename[] =
 {// モデル
-	"data\\MODEL\\dohyo2.x",
-	"data\\MODEL\\rikisi.x",
-	"data\\MODEL\\rikisi2.x",
-	"data\\MODEL\\customer.x",
-	"data\\MODEL\\shadow000.x",
-	"data\\MODEL\\newscaster.x",
+	"data\\MODEL\\dohyo2.x",				//0
+	"data\\MODEL\\rikisi.x",				//1
+	"data\\MODEL\\rikisi2.x",				//2
+	"data\\MODEL\\customer\\Customer0.x",	//3
+	"data\\MODEL\\customer\\Customer1.x",	//4
+	"data\\MODEL\\customer\\Customer2.x",	//5
+	"data\\MODEL\\customer\\Customer3.x",	//6
+	"data\\MODEL\\shadow000.x",				//7
+	"data\\MODEL\\newscaster.x",			//8
+	"data\\MODEL\\trophy.x",				//9
 };
 
 const char *CLoad::m_apTexFilename[] =
@@ -70,12 +74,12 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/ippon.png",				//36
 	"data/TEXTURE/UI/HPgauge.png",				//37
 	"data/TEXTURE/UI/EXgauge.png",				//38
-	"data/TEXTURE/UI/ResultWinner.png",			//39
+	"data/TEXTURE/UI/ResultWinner2.png",		//39
 	"data/TEXTURE/EFFECT/10.png",				//40
 	"data/TEXTURE/EFFECT/19.png",				//41
-	"data/TEXTURE/EFFECT/15.png",				//42
-	"data/TEXTURE/EFFECT/box.png",				//43
-
+	"data/TEXTURE/UI/Tag2.png",					//42
+	"data/TEXTURE/EFFECT/15.png",				//43
+	"data/TEXTURE/EFFECT/box.png",				//44
 };
 
 //=============================================================================
