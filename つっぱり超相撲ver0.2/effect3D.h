@@ -34,6 +34,7 @@ public:
 
 	void UpdateMoney(void);
 	void UpdateSalt(void);
+	void UpdateConfetti(void);
 	void UpdateUI(void);
 private:
 	//メンバ変数
@@ -50,6 +51,7 @@ private:
 	int							m_nCntTimer;				// タイマー
 	int							m_nTexType;
 	EFFECTTYPE					m_EffectType;
+	int							m_DrawType;
 };
 
 

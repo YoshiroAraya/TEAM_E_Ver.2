@@ -77,13 +77,15 @@ public:
 		TEXTURE_TUTORIAL02,				// チュートリアルの画像
 		TEXTURE_SENSU,					// タイムの背景用
 		TEXTURE_OUGIUI00,				// 奥義時のUI画像
-		TEXTURE_IPPON,				// 一本!のUI画像
-		TEXTURE_GAUGEBG,			// ゲージのUI画像
-		TEXTURE_EXGAUGEBG,			// 必殺ゲージのUI画像
-		TEXTURE_WINNER_RESULT,		// 勝者の画像
-		TEXTURE_EFFECT_WAVE,			// 一本!のUI画像
-		TEXTURE_EFFECT_SPARK,			// 一本!のUI画像
-		TEXTURE_TAG,			// プレイヤータグのUI画像
+		TEXTURE_IPPON,					// 一本!のUI画像
+		TEXTURE_GAUGEBG,				// ゲージのUI画像
+		TEXTURE_EXGAUGEBG,				// 必殺ゲージのUI画像
+		TEXTURE_WINNER_RESULT,			// 勝者の画像
+		TEXTURE_EFFECT_WAVE,			// 衝撃波の画像
+		TEXTURE_EFFECT_SPARK,			// 火花の画像
+		TEXTURE_TAG,					// プレイヤータグのUI画像
+		TEXTURE_EFFECT_SMOKE,			// 煙の画像
+		TEXTURE_EFFECT_CONFETTI,		// 紙吹雪の画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

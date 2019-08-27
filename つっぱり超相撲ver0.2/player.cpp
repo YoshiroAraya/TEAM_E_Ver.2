@@ -265,6 +265,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bUltDis = false;
 	m_bEnemyDamage = false;
 	m_bUltDamage = false;
+	m_bWallHit = false;
 
 	//‚Â‚Á‚Ï‚è¶¬
 	m_pTuppari = CTuppari::Create(pos);
@@ -555,6 +556,19 @@ void CPlayer::Update(void)
 				}
 				m_bUltDis = false;
 			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
+			}
 		}
 		break;
 	case CManager::MODE_TUTORIAL:
@@ -599,6 +613,19 @@ void CPlayer::Update(void)
 					m_pAnimation = NULL;
 				}
 				m_bUltDis = false;
+			}
+
+			if (pos.x > 550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = 550.0f;
+				m_move.x = 0.0f;
+			}
+			if (pos.x < -550.0f)
+			{
+				m_bWallHit = true;
+				pos.x = -550.0f;
+				m_move.x = 0.0f;
 			}
 		}
 		break;

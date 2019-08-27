@@ -79,8 +79,9 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/ResultWinner2.png",		//39
 	"data/TEXTURE/EFFECT/10.png",				//40
 	"data/TEXTURE/EFFECT/19.png",				//41
-	"data/TEXTURE/UI/Tag2.png",				//42
-
+	"data/TEXTURE/UI/Tag2.png",					//42
+	"data/TEXTURE/EFFECT/15.png",				//43
+	"data/TEXTURE/EFFECT/box.png",				//44
 };
 
 //=============================================================================

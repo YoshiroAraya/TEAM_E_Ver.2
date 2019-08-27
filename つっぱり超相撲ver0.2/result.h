@@ -24,7 +24,6 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CResult *Create(void);
 	bool GetTurn(void) { return m_bTurn; }
 	void SetTurn(bool turn) { m_bTurn = turn; }
 	void LoadWinner(void);
@@ -43,7 +42,8 @@ private:
 	int m_nWinner;
 	int m_n1P;					//選んだモデルNo
 	int m_n2P;					//選んだモデルNo
+	int m_nTime;
+	CScene2D	*m_pWinner2D;		// メニューのポリゴン
 	int m_nMode;				//選んだモード
-	CScene2D	*m_pWinner2D;	// メニューのポリゴン
 };
 #endif

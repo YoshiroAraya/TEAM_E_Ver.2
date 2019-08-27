@@ -34,6 +34,7 @@ CEffect3D::CEffect3D() : CScene3D(7, CScene::OBJTYPE_EFFECT)
 	m_pos = D3DXVECTOR3(0, 0, 0);						// 位置
 	m_move = D3DXVECTOR3(0, 0, 0);					// 移動量
 	m_posold = D3DXVECTOR3(0, 0, 0);				// 前回の位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //--------------------------------------------
@@ -77,7 +78,7 @@ CEffect3D *CEffect3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 //=============================================================================
 HRESULT CEffect3D::Init(void)
 {
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	
 	//テクスチャの設定
 	CEffect3D::BindTexture(CLoad::GetTexture(m_nTexType));
 
@@ -112,10 +113,16 @@ void CEffect3D::Update(void)
 		UpdateMoney();
 	}
 
-	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
+	if(m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
 	{
 		//塩パーティクル
 		UpdateSalt();
+	}
+
+	if (m_nTexType == CLoad::TEXTURE_EFFECT_CONFETTI)
+	{
+		//塩パーティクル
+		UpdateConfetti();
 	}
 }
 
@@ -128,7 +135,7 @@ void CEffect3D::UpdateMoney(void)
 	bool bDestroy = false;
 
 	m_nCntTimer++;
-
+	m_DrawType = 0;
 
 	/*D3DXVECTOR3 Parpos1 = D3DXVECTOR3(sinf(fAngle) * fLength1, 0.0f, cosf(fAngle) * fLength1);
 	D3DXVECTOR3 Parpos2 = D3DXVECTOR3(sinf(fAngle) * fLength2, 0.0f, cosf(fAngle) * fLength2);*/
@@ -138,14 +145,14 @@ void CEffect3D::UpdateMoney(void)
 		m_nLife--;
 
 		//重力
-		m_move.y -= cosf(D3DX_PI * 0) * 0.0001f;
+		m_move.y -= cosf(D3DX_PI * 0) * 0.005f;
 
 		//位置を更新		
 		m_pos += m_move;
-		m_rot.x += 0.2f;
+		m_rot.x += 0.06f;
 
 		//徐々に透明にしていく
-		m_Col.a = m_Col.a - m_fAlpha;
+		//m_Col.a = m_Col.a - m_fAlpha;
 
 		//一定以下になったら0に
 		if (m_Col.a < 0.01f)
@@ -183,6 +190,7 @@ void CEffect3D::UpdateSalt(void)
 	bool bDestroy = false;
 
 	m_nCntTimer++;
+	m_DrawType = 0;
 
 	if (m_nLife > 0)
 	{
@@ -234,7 +242,7 @@ void CEffect3D::UpdateUI(void)
 	bool bDestroy = false;
 
 	m_nCntTimer++;
-
+	m_DrawType = 0;
 
 	/*D3DXVECTOR3 Parpos1 = D3DXVECTOR3(sinf(fAngle) * fLength1, 0.0f, cosf(fAngle) * fLength1);
 	D3DXVECTOR3 Parpos2 = D3DXVECTOR3(sinf(fAngle) * fLength2, 0.0f, cosf(fAngle) * fLength2);*/
@@ -278,6 +286,62 @@ void CEffect3D::UpdateUI(void)
 }
 
 //=============================================================================
+// お金の更新処理
+//=============================================================================
+void CEffect3D::UpdateConfetti(void)
+{
+	//自分用の死亡フラグ変数
+	bool bDestroy = false;
+
+	m_nCntTimer++;
+	m_DrawType = 1;
+
+	/*D3DXVECTOR3 Parpos1 = D3DXVECTOR3(sinf(fAngle) * fLength1, 0.0f, cosf(fAngle) * fLength1);
+	D3DXVECTOR3 Parpos2 = D3DXVECTOR3(sinf(fAngle) * fLength2, 0.0f, cosf(fAngle) * fLength2);*/
+
+	if (m_nLife > 0)
+	{
+		m_nLife--;
+
+		//重力
+		m_move.y -= cosf(D3DX_PI * 0) * 0.000009f;
+
+		//位置を更新		
+		m_pos += m_move;
+		m_rot.x += 0.06f;
+
+		//徐々に透明にしていく
+		//m_Col.a = m_Col.a - m_fAlpha;
+
+		//一定以下になったら0に
+		if (m_Col.a < 0.01f)
+		{
+			m_Col.a = 0;
+		}
+		//色を設定
+		CScene3D::SetColor(m_Col);
+
+		//設定処理
+		CScene3D::SetSize(m_fHeight, m_fWidth);
+		CScene3D::SetPos(m_pos);
+		CScene3D::SetRot(m_rot);
+	}
+	else if (m_nLife <= 0)
+	{
+		//自分を消すフラグを立てる
+		bDestroy = true;
+	}
+
+	if (bDestroy == true)
+	{
+		//自分を消す(破棄)
+		Uninit();
+	}
+	/*CDebugProc::Print("c", "エフェクト");*/
+}
+
+
+//=============================================================================
 // 描画処理
 //=============================================================================
 void CEffect3D::Draw(void)
@@ -288,17 +352,25 @@ void CEffect3D::Draw(void)
 	CManager Manager;
 	pDevice = Manager.GetRenderer()->GetDevice();
 
-	// αブレンディングを加算合成に設定
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	if (m_DrawType == 0)
+	{
 
-	CScene3D::Draw();
-	
-	// αブレンディングを元に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		// αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+		CScene3D::Draw();
+
+		// αブレンディングを元に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	}
+	else if (m_DrawType == 1)
+	{
+		CScene3D::Draw();
+	}
 
 	//ライトを有効にする
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
