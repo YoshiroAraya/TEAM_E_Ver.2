@@ -176,6 +176,7 @@ public:
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 	bool GetUltDamage(void) { return m_bUltDamage; }
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
+	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -217,6 +218,7 @@ private:
 	int						m_nSiomakiCnt;	// 塩まきカウンター
 	bool					m_bDash;		// 走っているかどうか
 	bool					m_bJanken;		// じゃんけん
+	bool					m_bWallHit;		// 壁に激突したかどうか
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
