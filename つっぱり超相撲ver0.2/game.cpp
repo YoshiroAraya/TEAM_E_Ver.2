@@ -412,14 +412,14 @@ void CGame::Update(void)
 	D3DXVECTOR3 effectmove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	//任意のキー←
-	if (pInputKeyboard->GetTrigger(DIK_J) == true)
+	//if (pInputKeyboard->GetTrigger(DIK_J) == true)
 	{
 		//アニメーションテクスチャの生成
 		//(Pos / Rot / Col / Height / Width / UV_U / UV_V / アニメーションスピード / アニメーションの数 /
 		//ループするかしないか(0:する/ 1:しない) / 加算合成するかしないか(0:する/ 1:しない))
 
-			/*CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);*/
+		/*CAnimation::Create(D3DXVECTOR3(0, 100.0f, 0), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		100.0f, 100.0f, 0.1666666666666667f, 1.0f, 3, 5, 1, 0);*/
 
 		//オーラ
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
@@ -429,10 +429,15 @@ void CGame::Update(void)
 		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 		//	50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 0, 1, CLoad::TEXTURE_EFFECT_SPARK);
 
-		//衝撃波
-		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-			50.0f, 50.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+		////衝撃波
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		//	50.0f, 50.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
 
+		////煙
+		//CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
+		//	50.0f, 50.0f, 0.0714285714285714f, 1.0f, 2, 14, 1, 0, CLoad::TEXTURE_EFFECT_SMOKE);
+
+		//0.066666666666667f
 		/*CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
 			50.0f, 50.0f, 0.0526315789473684f, 1.0f, 1, 19, 1, 0, CLoad::TEXTURE_EFFECT_SPARK);
 		CAnimation::Create(D3DXVECTOR3(0, 100, 0), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
@@ -451,24 +456,30 @@ void CGame::Update(void)
 		/*CEffect2D::Create(D3DXVECTOR3(200.0f, 400.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.4f),
 		10, 10, 50, CLoad::TEXTURE_EFFECT_WAVE);*/
 
-		for (int nCnt = 0; nCnt < 1; nCnt++)
+		if (m_nTime == 20)
 		{
-			//CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
-			//100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
-			////お金
-			//moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
-			//moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 8 + 5));
-			//moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 1 + 1));
-			//moveRand.x = rand() % 2 - 2;
 
-			//CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				//20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+			for (int nCnt = 0; nCnt < 20; nCnt++)
+			{
+				//CEffect2D::Create(D3DXVECTOR3(300.0f, 300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXCOLOR(1, 1, 1, 0.5f),
+				//100, 100, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
-			//煙(エラー)
-			//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
-				//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
+				//お金
+				moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+				moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
+				moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+		
 
+				CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+					20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
 
+				//煙(エラー)
+				//CEffect::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(moveRand.x, 0.5f, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+					//10, 10, 1, 60, CLoad::TEXTURE_EFFECT_NORMAL002);
+				CDebugProc::Print("%.1f,%.1f,%.1f", moveRand.x, moveRand.y, moveRand.z);
+			}
+
+			m_nTime = 0;
 		}
 	}
 #endif

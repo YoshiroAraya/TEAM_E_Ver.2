@@ -43,6 +43,7 @@ private:
 	int m_nWinner;
 	int m_n1P;					//選んだモデルNo
 	int m_n2P;					//選んだモデルNo
+	int m_nTime;
 	CScene2D	*m_pWinner2D;		// メニューのポリゴン
 };
 #endif

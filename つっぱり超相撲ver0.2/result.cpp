@@ -23,7 +23,7 @@
 #include "enemy.h"
 #include "camera.h"
 #include "modeSelect.h"
-
+#include "effect3D.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -46,7 +46,7 @@ CResult::CResult()
 	m_nWinner = 0;
 	m_n1P = 0;				//選んだモデルNo
 	m_n2P = 0;				//選んだモデルNo
-
+	m_nTime = 0;
 	m_pWinner2D = NULL;
 }
 
@@ -126,6 +126,7 @@ void CResult::Init(void)
 		}
 		m_pWinner2D->SetbDraw(true);
 	}
+	m_nTime = 0;
 
 	CManager::GetCamera()->Init();
 }
@@ -164,6 +165,33 @@ void CResult::Update(void)
 	//{
 	////	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 	//}
+	D3DXVECTOR3 moveRand;
+	D3DXCOLOR col;
+	m_nTime++;
+
+	if (m_nTime == 20)
+	{
+		for (int nCnt = 0; nCnt < 20; nCnt++)
+		{
+			int nNumber = rand() % 3 + 1;
+
+			if (nNumber == 1) { col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f); }
+			if (nNumber == 2) { col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f); }
+			if (nNumber == 3) { col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f); }
+			if (nNumber == 4) { col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f); }
+
+			//お金
+			moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+			moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
+			moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+
+
+			CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), col,
+				20, 20, 1, 200, CLoad::TEXTURE_EFFECT_CONFETTI);
+		}
+
+		m_nTime = 0;
+	}
 
 	m_nCntDrawTimer++;
 	if (m_nCntDrawTimer > 240)
