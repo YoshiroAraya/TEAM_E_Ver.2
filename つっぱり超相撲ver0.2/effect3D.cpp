@@ -34,6 +34,7 @@ CEffect3D::CEffect3D() : CScene3D(7, CScene::OBJTYPE_EFFECT)
 	m_pos = D3DXVECTOR3(0, 0, 0);						// 位置
 	m_move = D3DXVECTOR3(0, 0, 0);					// 移動量
 	m_posold = D3DXVECTOR3(0, 0, 0);				// 前回の位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //--------------------------------------------
@@ -77,7 +78,7 @@ CEffect3D *CEffect3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col,
 //=============================================================================
 HRESULT CEffect3D::Init(void)
 {
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	
 	//テクスチャの設定
 	CEffect3D::BindTexture(CLoad::GetTexture(m_nTexType));
 
@@ -112,7 +113,7 @@ void CEffect3D::Update(void)
 		UpdateMoney();
 	}
 
-	if (m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
+	if(m_nTexType == CLoad::TEXTURE_EFFECT_NORMAL000)
 	{
 		//塩パーティクル
 		UpdateSalt();
@@ -138,14 +139,14 @@ void CEffect3D::UpdateMoney(void)
 		m_nLife--;
 
 		//重力
-		m_move.y -= cosf(D3DX_PI * 0) * 0.0001f;
+		m_move.y -= cosf(D3DX_PI * 0) * 0.00001f;
 
 		//位置を更新		
 		m_pos += m_move;
-		m_rot.x += 0.2f;
+		m_rot.x += 0.06f;
 
 		//徐々に透明にしていく
-		m_Col.a = m_Col.a - m_fAlpha;
+		//m_Col.a = m_Col.a - m_fAlpha;
 
 		//一定以下になったら0に
 		if (m_Col.a < 0.01f)
