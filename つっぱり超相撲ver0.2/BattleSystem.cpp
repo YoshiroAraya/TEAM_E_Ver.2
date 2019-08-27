@@ -2197,9 +2197,9 @@ void CBattleSys::ResetBattle(void)
 	m_bEnemyUlt = false;
 	m_abUlt[0] = false;
 	m_abUlt[1] = false;
+	m_nUltTimer = 0;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
-
 	CCamera *pCamera = CManager::GetCamera();
 
 	if (pCamera != NULL)
