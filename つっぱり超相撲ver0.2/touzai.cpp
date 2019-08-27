@@ -165,6 +165,9 @@ void CTouzai::Update(void)
 		pos = D3DXVECTOR3(SCREEN_WIDTH - 200.0f, 150.0f, 0.0f);
 	}
 
+	//頂点バッファをアンロック
+	pVtxBuff->Unlock();
+
 	CScene2D::SetBuff(pVtxBuff);
 	CScene2D::SetPos(pos, 0.0f, m_fScale, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
