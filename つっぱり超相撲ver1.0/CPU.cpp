@@ -352,7 +352,7 @@ void CCPU::Update(void)
 				if (m_pAnimation == NULL)
 				{
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1, CLoad::TEXTURE_ANIMATION);
 				}
 				m_bUltDis = true;
 			}

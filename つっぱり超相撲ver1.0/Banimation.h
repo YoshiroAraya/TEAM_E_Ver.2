@@ -26,14 +26,14 @@ public:
 	~CBAnimation();
 
 	HRESULT Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, 
-		int nRoop, int nDrawType, int nTypePlayer);
+		int nRoop, int nDrawType, int nTypePlayer,int nTexType);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 	void UpdateAnim();
 
 	//静的メンバ関数
-	static CBAnimation *Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType,int nTypePlayer);
+	static CBAnimation *Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop, int nDrawType,int nTypePlayer,int nTexType);
 
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
@@ -57,6 +57,8 @@ private:
 	int m_nDrawType;								//描画タイプ
 	int m_nTypePlayer;								//プレイヤーか敵かの区別
 	bool m_bDestroy;
+	int m_nTexType;
+
 
 };
 #endif
