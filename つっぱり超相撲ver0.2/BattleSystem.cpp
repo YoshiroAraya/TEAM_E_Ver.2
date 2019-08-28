@@ -20,7 +20,7 @@
 #include "UltimateGauge.h"
 #include "Banimation.h"
 #include "tutorial.h"
-
+#include "customer.h"
 #include "pause.h"
 //=============================================================================
 // 静的メンバ変数宣言
@@ -135,7 +135,7 @@ CBattleSys *CBattleSys::Create()
 //=============================================================================
 // バトルシステム初期化処理
 //=============================================================================
-HRESULT CBattleSys::Init()
+HRESULT CBattleSys::Init(void)
 {
 	// 2Dオブジェクト初期化処理
 	// オブジェクトの種類の設定
@@ -930,7 +930,7 @@ void CBattleSys::Operation(void)
 				pEnemy->SetUltDamage(false);
 			}
 		}
-		
+
 		if (pPlayer->GetUltDamage() == false)
 		{
 			//ダメージなら吹っ飛ぶ エネミーのつっぱり
@@ -1498,7 +1498,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 				{
 					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / TUPPARI_RECOIL, 0.0f, 0.0f));
 				}
-				
+
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, KNOCKUP_MOVE, 0.0f));
 			}
 			else
@@ -1507,11 +1507,11 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 				{
 					pPlayer->SetMove(D3DXVECTOR3(P1move.x / 1.5f, KNOCKUP_MOVE, 0.0f));
 				}
-				else 
+				else
 				{
 					pPlayer->SetMove(D3DXVECTOR3(P1move.x / TUPPARI_RECOIL, KNOCKUP_MOVE, 0.0f));
 				}
-				
+
 				pEnemy->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 		}
@@ -2200,6 +2200,7 @@ void CBattleSys::ResetBattle(void)
 	m_nUltTimer = 0;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
+	CustomerReset();
 	CCamera *pCamera = CManager::GetCamera();
 
 	if (pCamera != NULL)
@@ -2232,6 +2233,65 @@ void CBattleSys::ResetBattle(void)
 	}
 
 	pTime->SetTime(60);
+}
+
+//=============================================================================
+// 観客の位置を初期化
+//=============================================================================
+void CBattleSys::CustomerReset(void)
+{
+	int nCntLX = 0;
+	int nCntLZ = 0;
+	int nCntRX = 0;
+	int nCntRZ = 0;
+
+	CScene *pScene = NULL;
+
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(CUSTOMER_PRIORITY);
+
+	while (pScene != NULL)
+	{// 優先順位が3のオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_CUSTOMER)
+			{// オブジェクトの種類を確かめる
+				if (((CCustomer*)pScene)->GetCustomerPos() == ((CCustomer*)pScene)->POSITION_LEFT)
+				{// 左の客
+					((CCustomer*)pScene)->SetPosition(D3DXVECTOR3(-450.0f + (nCntLX * 80.0f), 1.0f, -80.0f + (nCntLZ * 70.0f)));
+					((CCustomer*)pScene)->SetRot(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
+					if (nCntLX < 3)
+					{
+						nCntLX++;
+					}
+					else if(nCntLX >= 3)
+					{
+						nCntLZ++;
+						nCntLX = 0;
+					}
+				}
+				if (((CCustomer*)pScene)->GetCustomerPos() == ((CCustomer*)pScene)->POSITION_RIGHT)
+				{// 右の客
+					((CCustomer*)pScene)->SetPosition(D3DXVECTOR3(300.0f + (nCntRX * 80.0f), 1.0f, -80.0f + (nCntRZ * 70.0f)));
+					((CCustomer*)pScene)->SetRot(D3DXVECTOR3(0.0f, -300.0f, 0.0f));
+					if (nCntRX < 3)
+					{
+						nCntRX++;
+					}
+					else if(nCntRX >= 3)
+					{
+						nCntRZ++;
+						nCntRX = 0;
+					}
+				}
+			}
+		}
+		// 次のシーンに進める
+		pScene = pSceneNext;
+	}
 }
 
 //=============================================================================

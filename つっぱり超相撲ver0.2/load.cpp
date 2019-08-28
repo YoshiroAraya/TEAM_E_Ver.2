@@ -31,6 +31,9 @@ const char *CLoad::m_apModelFilename[] =
 	"data\\MODEL\\shadow000.x",				//7
 	"data\\MODEL\\newscaster.x",			//8
 	"data\\MODEL\\trophy.x",				//9
+	"data\\MODEL\\gyouzi4.x",	//12
+	"data\\MODEL\\RIKISI\\Wrestlers_99_mawashi.x",	//10
+	"data\\MODEL\\RIKISI\\Wrestlers_100_symbol.x",	//11
 };
 
 const char *CLoad::m_apTexFilename[] =
@@ -59,11 +62,11 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/UI/Select00.png",				//21
 	"data/TEXTURE/UI/Select01.png",				//22
 	"data/TEXTURE/UI/Select02.png",				//23
-	"data/TEXTURE/UI/pause100.png",				//24
+	"data/TEXTURE/UI/pause101.jpg",				//24
 	"data/TEXTURE/UI/Select03.png",				//25
 	"data/TEXTURE/UI/Select04.png",				//26
 	"data/TEXTURE/UI/Select02.png",				//27
-	"data/TEXTURE/UI/pause100.png",				//28
+	"data/TEXTURE/UI/pause101.jpg",				//28
 	"data/TEXTURE/UI/select.png",				//29
 	"data/TEXTURE/EFFECT/all.png",				//30
 	"data/TEXTURE/UI/tutorial00.jpg",			//31

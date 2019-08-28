@@ -29,6 +29,9 @@
 #include "effect.h"
 #include "tutorial.h"
 #include "animation.h"
+#include "result.h"
+#include "effect3D.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -85,6 +88,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	m_nSiomakiCnt = 0;
+	m_nMoneyCnt = 0;
 	m_bDash = false;
 	//CPU用の変数
 	m_nThinkingTime = 0;
@@ -113,6 +117,7 @@ CEnemy::CEnemy() : CSceneX(ENEMY_PRIORITY)
 	}
 
 	m_pEnemyTag = NULL;
+	m_pMawasi = NULL;
 
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
@@ -161,8 +166,12 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pTuto = CManager::GetTutorial();
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
+	CResult *pResult;
+	pResult = CManager::GetResult();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	int nType = 0;	//タイプ
 
 	if (mode == CManager::MODE_GAME)
 	{
@@ -170,12 +179,16 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pGame->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pGame->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
@@ -185,12 +198,16 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pTuto->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pTuto->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
@@ -200,18 +217,43 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		{
 			// 選ばれたキャラクターのモデルを割り当て
 			if (pUltimate->Get2P() == 0)
-			{// プレイヤー
+			{// 力士
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pUltimate->Get2P() == 1)
-			{// エネミー
+			{// レスラー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
+			}
+		}
+	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get2P() == 0)
+			{// 力士
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
+			}
+			else if (pResult->Get2P() == 1)
+			{// レスラー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
 	else
 	{
 		BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+		m_Type = TYPE_WRESTLER;
+		nType = 1;
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -248,6 +290,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bPlayerDamage = false;
 	m_DamageCnt = 0;
 	m_bUltDamage = false;
+	m_bMoneyUse = true;
 
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
@@ -310,6 +353,23 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get2P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pResult->Get2P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
 	else
 	{
 		FileLoad(FILE_NAME_2, 0);
@@ -319,7 +379,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_apModel[0][1]->SetParent(m_apModel[0][0]);
 
 	//敵のタグ
-	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
+	m_pEnemyTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 30, 30);
 	m_pEnemyTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TAG));
 	m_pEnemyTag->SetCol(D3DXCOLOR(1.0f, 0.80f, 0.80f, 1.0f));
 
@@ -360,6 +420,22 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	if (mode == CManager::MODE_GAME)
 	{//ゲームモードだったら処理に入る
 	}
+
+
+	if (nType == 0)
+	{
+		if (m_pMawasi == NULL)
+		{
+			//モデルを生成	オフセット設定
+			m_pMawasi = CModel::Create(
+				D3DXVECTOR3(m_aKayOffset[0][0].fposX, 0.0f, m_aKayOffset[0][0].fposZ),
+				D3DXVECTOR3(m_aKayOffset[0][0].frotX, m_aKayOffset[0][0].frotY, m_aKayOffset[0][0].frotZ));
+			//モデルを割り当て
+			m_pMawasi->BindModel(CLoad::GetNumMat(CLoad::MODEL_MAWASI), CLoad::GetMesh(CLoad::MODEL_MAWASI), CLoad::GetBuffMat(CLoad::MODEL_MAWASI));
+			//	モデルの親を指定
+			m_pMawasi->SetParent(m_apModel[0][1]);
+		}
+	}
 	return S_OK;
 }
 
@@ -380,10 +456,17 @@ void CEnemy::Uninit(void)
 			}
 		}
 	}
-
+	//つっぱりの破棄
 	if (m_pTuppari != NULL)
 	{
 		m_pTuppari->Uninit();
+	}
+	//まわしの破棄
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Uninit();
+		delete m_pMawasi;
+		m_pMawasi = NULL;
 	}
 
 	m_pAnimation = NULL;
@@ -544,7 +627,7 @@ void CEnemy::Update(void)
 				if (m_pAnimation == NULL)
 				{
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),
-						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+						100.0f, 150.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 				}
 				m_bUltDis = true;
 			}
@@ -587,7 +670,14 @@ void CEnemy::Update(void)
 	}
 
 	//キャラ入場
-	EntryEnemy(pos, fMoveEnemy);
+	if (m_Type == TYPE_RIKISHI)
+	{
+		EntryRikishi(pos, fMoveEnemy);
+	}
+	else if (m_Type == TYPE_WRESTLER)
+	{
+		EntryWrestler(pos, fMoveEnemy);
+	}
 
 
 	pos += m_move;
@@ -764,6 +854,11 @@ void CEnemy::Draw(void)
 				m_apModel[nCnt][nCntParent]->Draw();
 			}
 		}
+	}
+	//まわしの描画
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Draw();
 	}
 }
 
@@ -1537,7 +1632,6 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 			}
 		}
 	}
-
 }
 
 //=============================================================================
@@ -1569,7 +1663,7 @@ void CEnemy::DohyoHaziWhether(D3DXVECTOR3 pos)
 //=============================================================================
 // エネミーの入場シーン
 //=============================================================================
-void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
+void CEnemy::EntryRikishi(D3DXVECTOR3 pos, float fMoveEnemy)
 {
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
@@ -1641,6 +1735,72 @@ void CEnemy::EntryEnemy(D3DXVECTOR3 pos, float fMoveEnemy)
 			pos.x = 80.0f;
 		}
 		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
+	}
+}
+
+//=============================================================================
+// レスラーの入場シーン
+//=============================================================================
+void CEnemy::EntryWrestler(D3DXVECTOR3 pos, float fMoveEnemy)
+{
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+	D3DXVECTOR3 moveRand = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 位置取得
+	D3DXVECTOR3 posPlayer;
+	posPlayer = CSceneX::GetPosition();
+
+	if (CCamera::GetState() == CCamera::STATE_NISHI)
+	{
+		if (m_bMoneyUse == true)
+		{
+			m_nMoneyCnt++;
+		}
+
+		if (m_nMotionType[0] != MOTION_SYAGAMI
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
+		{
+			m_nMotionType[0] = MOTION_WALK;
+			m_nMotionType[1] = MOTION_WALK;
+		}
+		// 右に進む
+		if (pos.x <= 80.0f)
+		{
+			if (m_nMotionType[0] != MOTION_NEUTRAL
+				&& m_nMotionType[1] != MOTION_NEUTRAL)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_NEUTRAL;
+				m_nMotionType[1] = MOTION_NEUTRAL;
+			}
+
+			fMoveEnemy = 0.0f;
+			pos.x = 80.0f;
+			m_bMoneyUse = false;
+		}
+		m_move = pCharacterMove->MoveLeft(m_move, fMoveEnemy * 0.7f);
+
+		if (m_nMoneyCnt > 15)
+		{
+			m_nMoneyCnt = 0;
+
+			for (int nCnt = 0; nCnt < 20; nCnt++)
+			{
+				//お金
+				moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+				moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
+				moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+
+
+				CEffect3D::Create(D3DXVECTOR3(posPlayer.x, 400.0f, posPlayer.z), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+					20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+			}
+		}
 	}
 }
 

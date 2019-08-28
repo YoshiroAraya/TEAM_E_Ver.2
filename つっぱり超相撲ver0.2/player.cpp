@@ -30,6 +30,7 @@
 #include "tutorial.h"
 #include "result.h"
 #include "animation.h"
+#include "effect3D.h"
 
 //=============================================================================
 // マクロ定義
@@ -87,6 +88,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	//m_turnRot = D3DXVECTOR3(0, 0, 0);
 	m_fRot = 0.0f;
 	m_nSiomakiCnt = 0;
+	m_nMoneyCnt = 0;
 	m_bDash = false;
 	m_bUse = false;
 	m_bJanken = false;
@@ -109,6 +111,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	}
 
 	m_pPlayerTag = NULL;
+	m_pMawasi = NULL;
 #ifdef _DEBUG
 	m_bColBlockDraw = false;
 #endif
@@ -155,11 +158,12 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pTuto = CManager::GetTutorial();
 	CResult *pResult;
 	pResult = CManager::GetResult();
-
 	CUltimate *pUltimate;
 	pUltimate = CManager::GetUltimate();
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	int nType = 0;	//タイプ
 
 	if (mode == CManager::MODE_GAME)
 	{
@@ -169,10 +173,14 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			if (pGame->Get1P() == 0)
 			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pGame->Get1P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
@@ -184,10 +192,14 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			if (pTuto->Get1P() == 0)
 			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pTuto->Get1P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
@@ -199,16 +211,41 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			if (pUltimate->Get1P() == 0)
 			{// プレイヤー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
 			}
 			else if (pUltimate->Get1P() == 1)
 			{// エネミー
 				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
+			}
+		}
+	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get1P() == 0)
+			{// 力士
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+				m_Type = TYPE_RIKISHI;
+				nType = 0;
+			}
+			else if (pResult->Get1P() == 1)
+			{// レスラー
+				BindModel(CLoad::GetBuffMat(CLoad::MODEL_ENEMY), CLoad::GetNumMat(CLoad::MODEL_ENEMY), CLoad::GetMesh(CLoad::MODEL_ENEMY));
+				m_Type = TYPE_WRESTLER;
+				nType = 1;
 			}
 		}
 	}
 	else
 	{
 		BindModel(CLoad::GetBuffMat(CLoad::MODEL_PLAYER), CLoad::GetNumMat(CLoad::MODEL_PLAYER), CLoad::GetMesh(CLoad::MODEL_PLAYER));
+		m_Type = TYPE_RIKISHI;
+		nType = 0;
 	}
 
 	// 2Dオブジェクト初期化処理
@@ -237,11 +274,13 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_fRot = 0.0f;
 	m_bSelect = false;
 	m_nSiomakiCnt = 0;
+	m_nMoneyCnt = 0;
 	m_bDash = false;
 	m_bUltDis = false;
 	m_bEnemyDamage = false;
 	m_bUltDamage = false;
 	m_bWallHit = false;
+	m_bMoneyUse = true;
 
 	//つっぱり生成
 	m_pTuppari = CTuppari::Create(pos);
@@ -321,6 +360,23 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 			}
 		}
 	}
+	else if (mode == CManager::MODE_RESULT)
+	{
+		if (pResult != NULL)
+		{
+			// 選ばれたキャラクターのモデルを割り当て
+			if (pResult->Get2P() == 0)
+			{// 力士
+				FileLoad(FILE_NAME_0, 0);
+				FileLoad(FILE_NAME_1, 1);
+			}
+			else if (pResult->Get2P() == 1)
+			{// レスラー
+				FileLoad(FILE_NAME_2, 0);
+				FileLoad(FILE_NAME_3, 1);
+			}
+		}
+	}
 	else
 	{
 		FileLoad(FILE_NAME_0, 0);
@@ -328,7 +384,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	}
 
 	//プレイヤーのタグ
-	m_pPlayerTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 50, 50);
+	m_pPlayerTag = CBillboard::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 30, 30);
 	m_pPlayerTag->BindTexture(CLoad::GetTexture(CLoad::TEXTURE_TAG));
 	m_pPlayerTag->SetCol(D3DXCOLOR(0.80f, 0.80f, 1.0f, 1.0f));
 	//頂点情報へのポインタ
@@ -359,6 +415,22 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		//CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXVECTOR3(0, 0, 0), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
 			//50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
 	}
+
+	if (nType == 0)
+	{
+		if (m_pMawasi == NULL)
+		{
+			//モデルを生成	オフセット設定
+			m_pMawasi = CModel::Create(
+				D3DXVECTOR3(m_aKayOffset[0][0].fposX, 0.0f, m_aKayOffset[0][0].fposZ),
+				D3DXVECTOR3(m_aKayOffset[0][0].frotX, m_aKayOffset[0][0].frotY, m_aKayOffset[0][0].frotZ));
+			//モデルを割り当て
+			m_pMawasi->BindModel(CLoad::GetNumMat(CLoad::MODEL_MAWASI), CLoad::GetMesh(CLoad::MODEL_MAWASI), CLoad::GetBuffMat(CLoad::MODEL_MAWASI));
+			//	モデルの親を指定
+			m_pMawasi->SetParent(m_apModel[0][1]);
+		}
+	}
+
 	return S_OK;
 
 }
@@ -380,10 +452,17 @@ void CPlayer::Uninit(void)
 			}
 		}
 	}
-
+	//つっぱりの破棄
 	if (m_pTuppari != NULL)
 	{
 		m_pTuppari->Uninit();
+	}
+	//まわしの破棄
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Uninit();
+		delete m_pMawasi;
+		m_pMawasi = NULL;
 	}
 
 	//m_pAnimation = NULL;
@@ -479,7 +558,7 @@ void CPlayer::Update(void)
 				if (m_pAnimation == NULL)
 				{
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
-						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
+						100.0f, 150.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0);
 				}
 				m_bUltDis = true;
 			}
@@ -574,7 +653,14 @@ void CPlayer::Update(void)
 	}
 
 	//キャラ入場
-	EntryPlayer(pos, fMovePlayer);
+	if (m_Type == TYPE_RIKISHI)
+	{
+		EntryRikishi(pos, fMovePlayer);
+	}
+	else if (m_Type == TYPE_WRESTLER)
+	{
+		EntryWrestler(pos, fMovePlayer);
+	}
 
 	//位置更新
 	pos += m_move;
@@ -755,6 +841,11 @@ void CPlayer::Draw(void)
 				m_apModel[nCnt][nCntParent]->Draw();
 			}
 		}
+	}
+	//まわしの描画
+	if (m_pMawasi != NULL)
+	{
+		m_pMawasi->Draw();
 	}
 }
 
@@ -1195,9 +1286,9 @@ void CPlayer::DohyoHaziWhether(D3DXVECTOR3 pos)
 }
 
 //=============================================================================
-// プレイヤーの入場シーン
+// 力士の入場シーン
 //=============================================================================
-void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
+void CPlayer::EntryRikishi(D3DXVECTOR3 pos, float fMovePlayer)
 {
 	// 移動処理取得
 	CCharacterMove *pCharacterMove;
@@ -1273,6 +1364,72 @@ void CPlayer::EntryPlayer(D3DXVECTOR3 pos, float fMovePlayer)
 			pos.x = -80.0f;
 		}
 		m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
+	}
+}
+
+//=============================================================================
+// レスラーの入場シーン
+//=============================================================================
+void CPlayer::EntryWrestler(D3DXVECTOR3 pos, float fMovePlayer)
+{
+	// 移動処理取得
+	CCharacterMove *pCharacterMove;
+	pCharacterMove = CManager::GetCharacterMove();
+	D3DXVECTOR3 moveRand = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 位置取得
+	D3DXVECTOR3 posPlayer;
+	posPlayer = CSceneX::GetPosition();
+
+	if (CCamera::GetState() == CCamera::STATE_HIGASHI)
+	{
+		if (m_bMoneyUse == true)
+		{
+			m_nMoneyCnt++;
+		}
+
+		if (m_nMotionType[0] != MOTION_SYAGAMI
+			&& m_nMotionType[1] != MOTION_SYAGAMI
+			&& m_nMotionType[0] != MOTION_SIOMAKI
+			&& m_nMotionType[1] != MOTION_SIOMAKI)
+		{
+			m_nMotionType[0] = MOTION_WALK;
+			m_nMotionType[1] = MOTION_WALK;
+		}
+		// 右に進む
+		if (pos.x >= -80.0f)
+		{
+			if (m_nMotionType[0] != MOTION_NEUTRAL
+				&& m_nMotionType[1] != MOTION_NEUTRAL)
+			{
+				m_nKey[0] = 0;
+				m_nKey[1] = 0;
+				m_nMotionType[0] = MOTION_NEUTRAL;
+				m_nMotionType[1] = MOTION_NEUTRAL;
+			}
+
+			fMovePlayer = 0.0f;
+			pos.x = -80.0f;
+			m_bMoneyUse = false;
+		}
+		m_move = pCharacterMove->MoveRight(m_move, fMovePlayer * 0.7f);
+
+		if (m_nMoneyCnt > 15)
+		{
+			m_nMoneyCnt = 0;
+
+			for (int nCnt = 0; nCnt < 20; nCnt++)
+			{
+				//お金
+				moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
+				moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
+				moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
+
+
+				CEffect3D::Create(D3DXVECTOR3(posPlayer.x, 400.0f, posPlayer.z), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
+					20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
+			}
+		}
 	}
 }
 

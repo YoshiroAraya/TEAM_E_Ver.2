@@ -80,7 +80,7 @@ HRESULT CCustomer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	CSceneX::SetRot(rot);
 
 	// オブジェクトの種類の設定
-	SetObjType(CScene::OBJTYPE_DOHYO);
+	SetObjType(CScene::OBJTYPE_CUSTOMER);
 	m_move = D3DXVECTOR3(sinf((rand() % 628) / 100.0f) * ((rand() % 7 + 1)), -1.0f, cosf((rand() % 628) / 100.0f) * ((rand() % 7 + 1)));
 	m_rot = D3DXVECTOR3(sinf(D3DX_PI * CUSTOMER_ROT), cosf(D3DX_PI * CUSTOMER_ROT), cosf(D3DX_PI * CUSTOMER_ROT));
 
@@ -107,6 +107,9 @@ void CCustomer::Update(void)
 	// 敵取得
 	CEnemy *pEnemy;
 	pEnemy = CGame::GetEnemy();
+	// プレイヤー取得
+	CPlayer *pPlayer;
+	pPlayer = CGame::GetPlayer();
 
 	// 位置を取得
 	D3DXVECTOR3 pos;
@@ -127,6 +130,28 @@ void CCustomer::Update(void)
 				}
 			}
 		}*/
+
+		if (pEnemy->GetDying() == true)
+		{// 敵が死んだとき
+			if (pEnemy->GetDirection() == CEnemy::DIRECTION_LEFT)
+			{// 左を向いていた時
+				if (m_CustomerPos == POSITION_RIGHT)
+				{
+					pos -= m_move * 3.5f;
+
+					CSceneX::SetRot(m_rot);
+				}
+			}
+			else if(pEnemy->GetDirection() == CEnemy::DIRECTION_RIGHT)
+			{
+				if (m_CustomerPos == POSITION_LEFT)
+				{
+					pos -= m_move * 3.5f;
+
+					CSceneX::SetRot(m_rot);
+				}
+			}
+		}
 		break;
 	}
 
