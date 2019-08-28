@@ -36,6 +36,7 @@ public:
 	{//客の種類
 		POSITION = 0,
 		POSITION_RIGHT,
+		POSITION_LEFT,
 	}CUSTOMER_POS;
 
 	CCustomer();	// コンストラクタ
@@ -45,6 +46,8 @@ public:
 	void Uninit(void);				// 客終了処理
 	void Update(void);				// 客更新処理
 	void Draw(void);				// 客描画処理
+
+	CUSTOMER_POS GetCustomerPos(void) { return m_CustomerPos; }
 
 	static CCustomer *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType, CUSTOMER_POS customerpos);	// オブジェクトの生成
 

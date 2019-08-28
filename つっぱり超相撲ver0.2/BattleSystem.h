@@ -69,6 +69,7 @@ public:
 	void PlusCntPushP2(int nCnt) { m_nCntPushP2 += nCnt; };
 	bool GetUlt(int nCharacter) { return m_abUlt[nCharacter]; }
 	void CPUBattle(CEnemy::CPUACTION CpuAction);
+	void CustomerReset(void);
 	ATTACK_TURN GetAttackTurn(void) { return m_AttackTurn; };
 
 	static CBattleSys *Create();	// オブジェクトの生成
