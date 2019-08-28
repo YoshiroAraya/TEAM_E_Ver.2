@@ -186,6 +186,7 @@ public:
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
 	bool GetLose(void) { return m_bLose; }
+	void SetLose(bool bLose) { m_bLose = bLose; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);

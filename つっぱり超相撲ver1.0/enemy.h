@@ -213,6 +213,7 @@ public:
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 	D3DXVECTOR3 GetMove(void) { return m_move; }
 	bool GetLose(void) { return m_bLose; }
+	void SetLose(bool bLose) { m_bLose = bLose; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
