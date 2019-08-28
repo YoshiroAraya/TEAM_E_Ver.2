@@ -290,6 +290,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_DamageCnt = 0;
 	m_bUltDamage = false;
 	m_bMoneyUse = true;
+	m_bLose = false;
 
 	//Ç¬Ç¡ÇœÇËê∂ê¨
 	m_pTuppari = CTuppari::Create(pos);
@@ -717,6 +718,7 @@ void CEnemy::Update(void)
 			{
 				CGame::SetWinner(CGame::WINNER_PLAYER1);
 			}
+			m_bLose = true;
 		}
 	}
 

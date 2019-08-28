@@ -279,6 +279,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bUltDamage = false;
 	m_bWallHit = false;
 	m_bMoneyUse = true;
+	m_bLose = false;
 
 	//Ç¬Ç¡ÇœÇËê∂ê¨
 	m_pTuppari = CTuppari::Create(pos);
@@ -699,6 +700,7 @@ void CPlayer::Update(void)
 			{
 				CGame::SetWinner(CGame::WINNER_PLAYER2);
 			}
+			m_bLose = true;
 		}
 	}
 

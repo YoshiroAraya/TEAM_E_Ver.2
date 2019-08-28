@@ -16,6 +16,7 @@
 #include "shadow.h"
 #include "load.h"
 #include "enemy.h"
+#include "player.h"
 #include "ultimate.h"
 
 //=============================================================================
@@ -131,7 +132,7 @@ void CCustomer::Update(void)
 			}
 		}*/
 
-		if (pEnemy->GetDying() == true)
+		if (pEnemy->GetLose() == true)
 		{// “G‚ªŽ€‚ñ‚¾‚Æ‚«
 			if (pEnemy->GetDirection() == CEnemy::DIRECTION_LEFT)
 			{// ¶‚ðŒü‚¢‚Ä‚¢‚½Žž
@@ -152,6 +153,28 @@ void CCustomer::Update(void)
 				}
 			}
 		}
+		if (pPlayer->GetLose() == true)
+		{
+			if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT)
+			{// ¶‚ðŒü‚¢‚Ä‚¢‚½Žž
+				if (m_CustomerPos == POSITION_RIGHT)
+				{
+					pos -= m_move * 3.5f;
+
+					CSceneX::SetRot(m_rot);
+				}
+			}
+			else if (pPlayer->GetDirection() == CPlayer::DIRECTION_RIGHT)
+			{
+				if (m_CustomerPos == POSITION_LEFT)
+				{
+					pos -= m_move * 3.5f;
+
+					CSceneX::SetRot(m_rot);
+				}
+			}
+		}
+
 		break;
 	}
 
