@@ -75,6 +75,13 @@ public:
 	//土俵端状態
 	typedef enum
 	{
+		TYPE_RIKISHI = 0,
+		TYPE_WRESTLER,
+	}TYPE;
+
+	//土俵端状態
+	typedef enum
+	{
 		DOHYO_NORMAL = 0,
 		DOHYO_HAZI,
 	}DOHYO;
@@ -167,7 +174,8 @@ public:
 	void TimerUpdate(void);
 	void TsuppariCollision(D3DXVECTOR3 pos);
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
-	void EntryPlayer(D3DXVECTOR3 pos,float fMovePlayer);
+	void EntryRikishi(D3DXVECTOR3 pos, float fMovePlayer);
+	void EntryWrestler(D3DXVECTOR3 pos,float fMovePlayer);
 	D3DXVECTOR3 DirectionPlayer(D3DXVECTOR3 rot, D3DXVECTOR3 pos);
 	bool GetUltDis(void) { return m_bUltDis; }
 	void SetUltDis(bool bUltDis) { m_bUltDis = bUltDis; }
@@ -177,6 +185,7 @@ public:
 	bool GetUltDamage(void) { return m_bUltDamage; }
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
+	bool GetLose(void) { return m_bLose; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -209,6 +218,7 @@ private:
 	bool					m_bUltDis;		// 必殺の演出表示
 	bool					m_bEnemyDamage;
 	bool					m_bUltDamage;
+	bool					m_bLose;		// 負けフラグ
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
@@ -216,14 +226,17 @@ private:
 	int						m_nLife;		// 体力
 	bool					m_bDying;		// 瀕死かどうか
 	int						m_nSiomakiCnt;	// 塩まきカウンター
+	int						m_nMoneyCnt;	// 札まきカウンター
 	bool					m_bDash;		// 走っているかどうか
 	bool					m_bJanken;		// じゃんけん
 	bool					m_bWallHit;		// 壁に激突したかどうか
+	bool					m_bMoneyUse;	// お札を出すか出さないか
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
 	static CBAnimation		*m_pAnimation;
 	bool					m_bUse;
+	TYPE					m_Type;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ
