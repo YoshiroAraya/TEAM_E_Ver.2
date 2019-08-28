@@ -4445,7 +4445,7 @@ Mesh {
    0.500000;0.500000;0.500000;;
    0.500000;0.500000;0.500000;;
    TextureFilename {
-    "data/TEXTURE/UV/çséi/gyouzi.jpg";
+    "data\\TEXTURE\\UV\\çséi\\gyouzi.jpg";
    }
   }
  }

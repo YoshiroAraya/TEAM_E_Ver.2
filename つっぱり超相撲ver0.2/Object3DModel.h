@@ -40,13 +40,14 @@ public:
 	static C3DObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType);	// オブジェクトの生成
 
 private:
-	static LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
+	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		// 頂点バッファへのポインタ
 
 	D3DXMATRIX				m_mtxWorld;		// ワールドマトリックス
 	OBJECTTYPE m_nType;
 	D3DXVECTOR3 m_move;
 	D3DXVECTOR3 m_rot;
+	int m_nTypeTex;
 	int m_nLife;
 };
 #endif
