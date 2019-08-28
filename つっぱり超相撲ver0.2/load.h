@@ -34,6 +34,9 @@ public:
 		MODEL_CUSTMOR3,		// 観客3
 		MODEL_SHADOW,		// 影
 		MODEL_NEWSCASTER,	// ニュースキャスター
+		MODEL_TROPHY,		// トロフィー
+		MODEL_MAWASI,		// まわし
+		MODEL_SYMBOL,		// シンボル
 	} MODEL;
 
 	typedef enum // cppのやつと数と並びを揃える

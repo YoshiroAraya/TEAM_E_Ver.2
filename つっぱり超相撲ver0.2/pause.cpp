@@ -73,7 +73,7 @@ HRESULT CPause::Init(D3DXVECTOR3 pos)
 	//BG‚Ì‰Šú‰»
 	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z), 5);
 	m_apPolygonBG->BindTexture(m_pTextureBG);
-	m_apPolygonBG->SetWidthHeight(m_fWidth * 4, m_fHeight * 3);
+	m_apPolygonBG->SetWidthHeight(m_fWidth * 4.5f, m_fHeight * 3.5f);
 	m_apPolygonBG->SetbDraw(false);
 
 	for (int nCnt = 0; nCnt < MAX_PAUSEMENU; nCnt++)

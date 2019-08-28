@@ -24,7 +24,6 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CResult *Create(void);
 	bool GetTurn(void) { return m_bTurn; }
 	void SetTurn(bool turn) { m_bTurn = turn; }
 	void LoadWinner(void);
