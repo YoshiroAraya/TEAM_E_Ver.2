@@ -31,8 +31,9 @@ const char *CLoad::m_apModelFilename[] =
 	"data\\MODEL\\shadow000.x",				//7
 	"data\\MODEL\\newscaster.x",			//8
 	"data\\MODEL\\trophy.x",				//9
+	"data\\MODEL\\gyouzi4.x",	//12
 	"data\\MODEL\\RIKISI\\Wrestlers_99_mawashi.x",	//10
-	"data\\MODEL\\RIKISI\\Wrestlers_100_symbol.x",	//10
+	"data\\MODEL\\RIKISI\\Wrestlers_100_symbol.x",	//11
 };
 
 const char *CLoad::m_apTexFilename[] =
