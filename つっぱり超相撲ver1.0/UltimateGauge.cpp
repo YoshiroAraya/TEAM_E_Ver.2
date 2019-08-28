@@ -137,9 +137,9 @@ void CUltimateGauge::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-#ifdef _DEBUG
 
 #if 1
+
 	if (pInputKeyboard->GetPress(DIK_1) == true)
 	{
 		m_fLeft += 10.0f;
@@ -197,7 +197,6 @@ void CUltimateGauge::Update(void)
 	m_pScene2D[0]->SetRIghtLeft(0.0f, m_fLeft);
 	m_pScene2D[1]->SetRIghtLeft(m_fRight, 0.0f);
 
-#endif
 	//CDebugProc::Print("cf", "m_fRight    : ", m_fRight);
 	//CDebugProc::Print("cf", "m_fLeft    : ", m_fLeft);
 #endif
