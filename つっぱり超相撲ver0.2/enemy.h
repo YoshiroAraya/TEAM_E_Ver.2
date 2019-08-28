@@ -212,6 +212,7 @@ public:
 	bool GetUltDamage(void) { return m_bUltDamage; }
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 	D3DXVECTOR3 GetMove(void) { return m_move; }
+	bool GetLose(void) { return m_bLose; }
 
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
@@ -263,6 +264,7 @@ private:
 	HAZI_LR					m_DohyoHaziLR;
 	TYPE					m_Type;	
 	bool					m_bUse;
+	bool					m_bLose;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ

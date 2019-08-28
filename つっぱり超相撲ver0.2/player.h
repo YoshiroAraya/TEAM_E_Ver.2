@@ -185,6 +185,7 @@ public:
 	bool GetUltDamage(void) { return m_bUltDamage; }
 	void SetUltDamage(bool bUltDamage) { m_bUltDamage = bUltDamage; }
 	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
+	bool GetLose(void) { return m_bLose; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -217,6 +218,7 @@ private:
 	bool					m_bUltDis;		// 必殺の演出表示
 	bool					m_bEnemyDamage;
 	bool					m_bUltDamage;
+	bool					m_bLose;		// 負けフラグ
 	int						m_nRecoveryTime;// 硬直時間
 	int						m_nCounterTime;	// カウンター時間
 	STATE					m_State;		// 状態
