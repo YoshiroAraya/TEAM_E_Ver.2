@@ -16,6 +16,7 @@
 #define NUM_PRIORITY	(8)		// óDêÊèáà ÇÃêî
 #define SCENEX_PRIORITY	(3)
 #define DOHYO_PRIORITY	(3)
+#define CUSTOMER_PRIORITY	(3)
 #define ENEMY_PRIORITY	(2)
 #define PLAYER_PRIORITY	(2)
 #define CPU_PRIORITY	(2)
@@ -52,6 +53,7 @@ public:
 		OBJTYPE_PARTICLE,
 		OBJTYPE_PAUSE,
 		OBJTYPE_MODESELECT,
+		OBJTYPE_CUSTOMER,
 		OBJTYPE_MAX			// ëçêî
 	} OBJTYPE;
 
