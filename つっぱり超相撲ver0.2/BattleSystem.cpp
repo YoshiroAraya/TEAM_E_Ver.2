@@ -953,8 +953,8 @@ void CBattleSys::Operation(void)
 					pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 				}
 				//ƒ_ƒ[ƒW
-				pGauge->SetGaugeRightLeft(-DAMAGE, HEEL);
-				pULTGauge->SetGaugeRightLeft(0.0f, 30.0f);
+				pGauge->SetGaugeRightLeft(HEEL, -DAMAGE);
+				pULTGauge->SetGaugeRightLeft(30.0f, 0.0f);
 			}
 		}
 		else

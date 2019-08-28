@@ -1230,7 +1230,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 		if (bHit == true)
 		{
 			//è’åÇîg
-			CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 70.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),70.0f, 70.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+			CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 70.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),100.0f, 100.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
 			//âå
 			CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 70.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),90.0f, 90.0f, 0.066666666666667f, 1.0f, 2, 15, 1, 1, CLoad::TEXTURE_EFFECT_SMOKE);
 			//è’åÇîg2
