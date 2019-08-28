@@ -39,7 +39,7 @@
 #include "effect2D.h"
 #include "2Danimation.h"
 #include "ougiUI.h"
-
+#include "Object3DModel.h"
 #include "number.h"
 #include "UITime.h"
 #include "pause.h"
@@ -234,6 +234,8 @@ void CGame::Init(void)
 	m_pUITime = CUITime::Create(D3DXVECTOR3(680, 70, 0), 70, 70);
 	//É|Å[ÉYê∂ê¨
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+
+	C3DObject::Create(D3DXVECTOR3(0.0f, 20.0f, 30.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLoad::MODE_GYOUZI);
 
 
 	m_nTime = 0;
@@ -483,7 +485,7 @@ void CGame::Update(void)
 				moveRand.x = sinf((rand() % 628) / 100.0f) * ((rand() % 6 + 1));
 				moveRand.y = cosf((rand() % 628) / 20.0f) * ((rand() % 5 + 2));
 				moveRand.z = cosf((rand() % 628) / 100.0f) * ((rand() % 4 + 1));
-		
+
 
 				CEffect3D::Create(D3DXVECTOR3(0.0f, 400.0f, 0.0f), D3DXVECTOR3(moveRand.x, moveRand.y, moveRand.z), D3DXCOLOR(1, 1, 1, 1),
 					20, 20, 1, 200, CLoad::TEXTURE_EFFECT_NORMAL001);
