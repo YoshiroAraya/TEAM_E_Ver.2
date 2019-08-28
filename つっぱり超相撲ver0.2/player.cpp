@@ -29,6 +29,8 @@
 #include "effect.h"
 #include "tutorial.h"
 #include "result.h"
+#include "animation.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -1105,6 +1107,10 @@ void CPlayer::TimerUpdate(void)
 //============================================================================
 void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 {
+	// 位置取得
+	D3DXVECTOR3 posPlayer;
+	posPlayer = CSceneX::GetPosition();
+
 	CEnemy *pEnemy = NULL;
 	CSansoGauge *pSansoGauge = NULL;
 	CBattleSys *pBattleSys = NULL;
@@ -1130,6 +1136,13 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 		//つっぱりにあたった
 		if (bHit == true)
 		{
+			//衝撃波
+			CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 70.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),70.0f, 70.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+			//煙
+			CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 70.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),90.0f, 90.0f, 0.066666666666667f, 1.0f, 2, 15, 1, 1, CLoad::TEXTURE_EFFECT_SMOKE);
+			//衝撃波2
+			/*CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 60.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f),70.0f, 70.0f, 0.0625f, 1.0f, 1, 16, 1, 1, CLoad::TEXTURE_EFFECT_WAVE2);*/
+
 			if (m_State != STATE_GUARD)
 			{
 				m_State = STATE_DAMAGE;
@@ -1149,6 +1162,8 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 			{
 				CGame::SetHit(false);
 			}
+			CDebugProc::Print("c%.1f", "当たった : ", posPlayer.x);
+
 		}
 	}
 }

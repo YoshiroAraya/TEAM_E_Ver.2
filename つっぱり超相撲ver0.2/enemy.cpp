@@ -28,7 +28,7 @@
 #include "BattleSystem.h"
 #include "effect.h"
 #include "tutorial.h"
-
+#include "animation.h"
 //=============================================================================
 // É}ÉNÉçíËã`
 //=============================================================================
@@ -1485,6 +1485,9 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	D3DXVECTOR3 posEnemy = CSceneX::GetPosition();
+
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		pPlayer = CTutorial::GetPlayer();
@@ -1505,6 +1508,13 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 		//Ç¬Ç¡ÇœÇËÇ…Ç†ÇΩÇ¡ÇΩ
 		if (bHit == true)
 		{
+			//è’åÇîg
+			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 60.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 70.0f, 70.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+			//âå
+			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 60.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 90.0f, 90.0f, 0.066666666666667f, 1.0f, 2, 15, 1, 1, CLoad::TEXTURE_EFFECT_SMOKE);
+			//è’åÇîg2
+			/*CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 60.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f),70.0f, 70.0f, 0.0625f, 1.0f, 1, 16, 1, 1, CLoad::TEXTURE_EFFECT_WAVE2);*/
+
 			if (m_State != STATE_GUARD)
 			{
 				m_State = STATE_DAMAGE;
