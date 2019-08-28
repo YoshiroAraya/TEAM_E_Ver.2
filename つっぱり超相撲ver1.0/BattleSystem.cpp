@@ -1465,7 +1465,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			{	//プレイヤーのつっぱり
 				if (pPlayer->GetUltDamage() == true)
 				{
-					pEnemy->SetMove(D3DXVECTOR3(P2move.x / 1.5f, 0.0f, 0.0f));
+					pEnemy->SetMove(D3DXVECTOR3(P2move.x / 3.0f, 0.0f, 0.0f));
 				}
 				else
 				{
@@ -1477,7 +1477,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			{	//エネミーのつっぱり
 				if (pPlayer->GetUltDamage() == true)
 				{
-					pEnemy->SetMove(D3DXVECTOR3(-P1move.x / 1.5f, 0.0f, 0.0f));
+					pEnemy->SetMove(D3DXVECTOR3(-P1move.x / 3.0f, 0.0f, 0.0f));
 				}
 				else
 				{
@@ -1492,7 +1492,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			{	//プレイヤーのつっぱり
 				if (pEnemy->GetUltDamage() == true)
 				{
-					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / 1.5f, 0.0f, 0.0f));
+					pPlayer->SetMove(D3DXVECTOR3(-P2move.x / 3.0f, 0.0f, 0.0f));
 				}
 				else
 				{
@@ -1505,7 +1505,7 @@ void CBattleSys::Battle(int nPlayer, ATTACK_TYPE AttackType, D3DXVECTOR3 P1move,
 			{	//エネミーのつっぱり
 				if (pEnemy->GetUltDamage() == true)
 				{
-					pPlayer->SetMove(D3DXVECTOR3(P1move.x / 1.5f, KNOCKUP_MOVE, 0.0f));
+					pPlayer->SetMove(D3DXVECTOR3(P1move.x / 3.0f, KNOCKUP_MOVE, 0.0f));
 				}
 				else
 				{
@@ -2200,6 +2200,8 @@ void CBattleSys::ResetBattle(void)
 	m_nUltTimer = 0;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
+	pPlayer->SetLose(false);
+	pEnemy->SetLose(false);
 	CustomerReset();
 	CCamera *pCamera = CManager::GetCamera();
 
@@ -2273,7 +2275,7 @@ void CBattleSys::CustomerReset(void)
 						nCntLX = 0;
 					}
 				}
-				if (((CCustomer*)pScene)->GetCustomerPos() == ((CCustomer*)pScene)->POSITION_RIGHT)
+				else if (((CCustomer*)pScene)->GetCustomerPos() == ((CCustomer*)pScene)->POSITION_RIGHT)
 				{// 右の客
 					((CCustomer*)pScene)->SetPosition(D3DXVECTOR3(300.0f + (nCntRX * 80.0f), 1.0f, -80.0f + (nCntRZ * 70.0f)));
 					((CCustomer*)pScene)->SetRot(D3DXVECTOR3(0.0f, -300.0f, 0.0f));
