@@ -48,8 +48,9 @@ CBAnimation::~CBAnimation()
 // アニメーションの初期化処理
 //=============================================================================
 HRESULT CBAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim,
-	int nRoop,int nDrawType,int nTypePlayer)
+	int nRoop,int nDrawType,int nTypePlayer,int nTexType)
 {
+	m_nTexType = nTexType; 
 	//色を代入
 	m_col = col;
 	CBillboard::SetSize(fHeight, fWidth);
@@ -58,7 +59,7 @@ HRESULT CBAnimation::Init(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float f
 	CBillboard::Init(pos);
 
 	//テクスチャの貼り付け
-	CBillboard::BindTexture(CLoad::GetTexture(CLoad::TEXTURE_ANIMATION));
+	CBillboard::BindTexture(CLoad::GetTexture(m_nTexType));
 	CBillboard::SetCol(m_col);
 
 	//UVの値を代入
@@ -149,7 +150,7 @@ void CBAnimation::Update(void)
 			m_nLife--;
 
 			//透明度を減らす
-			m_col.a -= 0.05f;
+			m_col.a -= 0.009f;
 
 			if (m_bUse == true)
 			{
@@ -185,6 +186,10 @@ void CBAnimation::Update(void)
 		else if (m_nTypePlayer == 1)
 		{
 			CBillboard::SetPosition(D3DXVECTOR3(posEnemy.x, posEnemy.y, posEnemy.z - 15.0f));
+		}
+		else if (m_nTypePlayer == 2)
+		{
+
 		}
 
 		//テクスチャの破棄フラグ
@@ -254,7 +259,7 @@ void CBAnimation::Draw(void)
 //=============================================================================
 // アニメーションの生成処理
 //=============================================================================
-CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,int nDrawType,int nTypePlayer)
+CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, float fWidth, float fUV_U, float fUV_V, float fCntSpeed, int nTotalAnim, int nRoop,int nDrawType,int nTypePlayer,int nTexType)
 {
 	CBAnimation *pBAnimation = {};
 
@@ -267,7 +272,7 @@ CBAnimation *CBAnimation::Create(D3DXVECTOR3 pos, D3DXCOLOR col, float fHeight, 
 		if (pBAnimation != NULL)
 		{
 			// ポリゴンの初期化処理
-			pBAnimation->Init(pos, col, fWidth, fHeight, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType,nTypePlayer);
+			pBAnimation->Init(pos, col, fWidth, fHeight, fUV_U, fUV_V, fCntSpeed, nTotalAnim, nRoop, nDrawType,nTypePlayer,nTexType);
 		}
 		else
 		{
