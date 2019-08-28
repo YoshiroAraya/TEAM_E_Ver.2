@@ -569,7 +569,7 @@ void CEnemy::Update(void)
 				if (m_pAnimation == NULL)
 				{
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f),
-						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
+						100.0f, 150.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 1);
 				}
 				m_bUltDis = true;
 			}
@@ -1604,9 +1604,9 @@ void CEnemy::TsuppariCollision(D3DXVECTOR3 pos)
 		if (bHit == true)
 		{
 			//è’åÇîg
-			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 60.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 70.0f, 70.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
+			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 70.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 100.0f, 100.0f, 0.1f, 1.0f, 2, 10, 1, 0, CLoad::TEXTURE_EFFECT_WAVE);
 			//âå
-			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 60.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 90.0f, 90.0f, 0.066666666666667f, 1.0f, 2, 15, 1, 1, CLoad::TEXTURE_EFFECT_SMOKE);
+			CAnimation::Create(D3DXVECTOR3(posEnemy.x, posEnemy.y + 70.0f, posEnemy.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), 90.0f, 90.0f, 0.066666666666667f, 1.0f, 2, 15, 1, 1, CLoad::TEXTURE_EFFECT_SMOKE);
 			//è’åÇîg2
 			/*CAnimation::Create(D3DXVECTOR3(posPlayer.x, posPlayer.y + 60.0f, posPlayer.z - 30.0f), D3DXVECTOR3(-1.57f, 0, 0), D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f),70.0f, 70.0f, 0.0625f, 1.0f, 1, 16, 1, 1, CLoad::TEXTURE_EFFECT_WAVE2);*/
 
