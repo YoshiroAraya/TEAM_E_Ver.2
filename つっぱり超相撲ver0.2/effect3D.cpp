@@ -135,7 +135,7 @@ void CEffect3D::UpdateMoney(void)
 	bool bDestroy = false;
 
 	m_nCntTimer++;
-	m_DrawType = 0;
+	m_DrawType = 1;
 
 	/*D3DXVECTOR3 Parpos1 = D3DXVECTOR3(sinf(fAngle) * fLength1, 0.0f, cosf(fAngle) * fLength1);
 	D3DXVECTOR3 Parpos2 = D3DXVECTOR3(sinf(fAngle) * fLength2, 0.0f, cosf(fAngle) * fLength2);*/
