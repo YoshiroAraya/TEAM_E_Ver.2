@@ -925,7 +925,7 @@ void CBattleSys::Operation(void)
 					}
 				}
 			}
-			if (pEnemy->GetWallHit() == true)
+			if (pEnemy->GetLose() == true)
 			{
 				pEnemy->SetUltDamage(false);
 			}
@@ -999,7 +999,7 @@ void CBattleSys::Operation(void)
 					}
 				}
 			}
-			if (pPlayer->GetWallHit() == true)
+			if (pPlayer->GetLose() == true)
 			{
 				pPlayer->SetUltDamage(false);
 			}
