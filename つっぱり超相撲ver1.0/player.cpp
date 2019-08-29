@@ -702,8 +702,8 @@ void CPlayer::Update(void)
 			{
 				CGame::SetWinner(CGame::WINNER_PLAYER2);
 			}
-			m_bLose = true;
 		}
+		m_bLose = true;
 	}
 
 

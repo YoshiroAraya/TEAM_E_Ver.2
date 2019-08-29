@@ -719,8 +719,8 @@ void CEnemy::Update(void)
 			{
 				CGame::SetWinner(CGame::WINNER_PLAYER1);
 			}
-			m_bLose = true;
 		}
+		m_bLose = true;
 	}
 
 	//モーション更新

@@ -999,7 +999,7 @@ void CBattleSys::Operation(void)
 					}
 				}
 			}
-			if (pPlayer->GetLose() == true)
+			if (pEnemy->GetLose() == true)
 			{
 				pPlayer->SetUltDamage(false);
 			}
