@@ -132,7 +132,7 @@ void CCustomer::Update(void)
 			}
 		}*/
 
-		if (pEnemy->GetLose() == true)
+		if (pEnemy->GetLose() == true && pPlayer->GetState() == CPlayer::STATE_ULT)
 		{// “G‚ª€‚ñ‚¾‚Æ‚«
 			if (pEnemy->GetDirection() == CEnemy::DIRECTION_LEFT)
 			{// ¶‚ğŒü‚¢‚Ä‚¢‚½
@@ -153,7 +153,7 @@ void CCustomer::Update(void)
 				}
 			}
 		}
-		if (pPlayer->GetLose() == true)
+		if (pPlayer->GetLose() == true && pEnemy->GetState() == CEnemy::STATE_ULT)
 		{
 			if (pPlayer->GetDirection() == CPlayer::DIRECTION_LEFT)
 			{// ¶‚ğŒü‚¢‚Ä‚¢‚½
