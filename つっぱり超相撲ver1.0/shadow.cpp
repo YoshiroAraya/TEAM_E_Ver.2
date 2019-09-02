@@ -27,7 +27,7 @@
 //--------------------------------------------
 //シーン3Dクラス コンストラクタ
 //--------------------------------------------
-CShadow::CShadow()/* : CScene3D(SHADOW_PRIORITY)*/
+CShadow::CShadow() : CScene3D(SHADOW_PRIORITY)
 {
 	m_pos = D3DXVECTOR3(0, 0, 0);			//位置
 	m_rot = D3DXVECTOR3(0, 0, 0);		//向き
@@ -67,10 +67,13 @@ HRESULT CShadow::Init(void)
 
 	CScene3D::SetSize(m_fDepth, m_fWidth);
 	CScene3D::SetRot(m_rot);
+	BindTexture(CLoad::GetTexture(CLoad::TEXTURE_SHADOW));
 
-	CScene3D::Create(m_pos);
-	
-	CScene3D::BindTexture(CLoad::GetTexture(CLoad::TEXTURE_SHADOW));
+	CScene3D::Init(m_pos);
+
+	//色の設定
+	CScene3D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
 	//オブジェクト種類の設定
 	CScene3D::SetObjType(CScene::OBJTYPE_SHADOW);
 
