@@ -8,6 +8,7 @@
 #define _TUTORIAL_H_
 
 #include "scene.h"
+#include "shadow.h"
 
 //=============================================================================
 // ëOï˚êÈåæ
@@ -57,7 +58,7 @@ public:
 	static CScene3D *GetScene3D(void);
 	static CPlayer *GetPlayer(void);
 	static CEnemy *GetEnemy(void);
-	static CShadow *GetShadow(void);
+	static CShadow *GetShadow(int nIdx);
 	static CMeshField *GetMeshField(void);
 	bool Collision(D3DXVECTOR3 *pos0, float fRadius0, D3DXVECTOR3 *pos1, float fRadius1);
 	static CBattleSys *GetBatlteSys(void) { return m_pBatlteSys; };
@@ -82,7 +83,7 @@ private:
 	static CScene3D *m_pScene3D;
 	static CPlayer *m_pPlayer;
 	static CEnemy *m_pEnemy;
-	static CShadow *m_pShadow;
+	static CShadow *m_pShadow[MAX_SHADOW];
 	static CUITime *m_pUITime;
 
 	static CMeshField *m_pMeshField;

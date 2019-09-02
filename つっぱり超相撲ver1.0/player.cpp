@@ -508,13 +508,13 @@ void CPlayer::Update(void)
 	{
 		pEnemy = CTutorial::GetEnemy();
 		pULTGauge = CTutorial::GetUltimateGauge();
-		pShadow = CTutorial::GetShadow();
+		pShadow = CTutorial::GetShadow(0);
 	}
 	else if (mode == CManager::MODE_GAME)
 	{
 		pEnemy = CGame::GetEnemy();
 		pULTGauge = CGame::GetUltimateGauge();
-		pShadow = CGame::GetShadow();
+		pShadow = CGame::GetShadow(0);
 	}
 
 	// 前のフレームの位置代入
@@ -679,7 +679,7 @@ void CPlayer::Update(void)
 
 	if (pShadow != NULL)
 	{
-		pShadow->SetPos(pos);
+		pShadow->SetPos(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z));
 	}
 
 	// モデルとの当たり判定

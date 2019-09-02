@@ -63,7 +63,7 @@ CShadow * CShadow::Create(D3DXVECTOR3 pos, float fWidth, float fDepth)
 //=============================================================================
 HRESULT CShadow::Init(void)
 {
-	//m_rot = D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f);
+	m_rot = D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f);
 
 	CScene3D::SetSize(m_fDepth, m_fWidth);
 	CScene3D::SetRot(m_rot);
@@ -109,22 +109,22 @@ void CShadow::Draw(void)
 	pDevice = Manager.GetRenderer()->GetDevice();
 
 	//αブレンディングを減算合成に設定
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	////アルファテスト(透明色を描画しないように)
-	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
-	//pDevice->SetRenderState(D3DRS_ALPHAREF, 90);
+	//アルファテスト(透明色を描画しないように)
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 90);
 
 	//描画処理
 	CScene3D::Draw();
 
 	// αブレンディングを元に戻す
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================
