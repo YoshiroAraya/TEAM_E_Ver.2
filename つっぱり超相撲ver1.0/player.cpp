@@ -1390,15 +1390,16 @@ void CPlayer::EntryWrestler(D3DXVECTOR3 pos, float fMovePlayer)
 		if (m_bMoneyUse == true)
 		{
 			m_nMoneyCnt++;
-		}
 
-		if (m_nMotionType[0] != MOTION_SYAGAMI
-			&& m_nMotionType[1] != MOTION_SYAGAMI
-			&& m_nMotionType[0] != MOTION_SIOMAKI
-			&& m_nMotionType[1] != MOTION_SIOMAKI)
-		{
-			m_nMotionType[0] = MOTION_WALK;
-			m_nMotionType[1] = MOTION_WALK;
+
+			if (m_nMotionType[0] != MOTION_SYAGAMI
+				&& m_nMotionType[1] != MOTION_SYAGAMI
+				&& m_nMotionType[0] != MOTION_SIOMAKI
+				&& m_nMotionType[1] != MOTION_SIOMAKI)
+			{
+				m_nMotionType[0] = MOTION_WALK;
+				m_nMotionType[1] = MOTION_WALK;
+			}
 		}
 		// ‰E‚Éi‚Þ
 		if (pos.x >= -80.0f)
