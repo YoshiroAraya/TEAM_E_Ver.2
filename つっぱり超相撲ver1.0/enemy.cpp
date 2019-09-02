@@ -696,7 +696,7 @@ void CEnemy::Update(void)
 
 	if (pShadow != NULL)
 	{
-		pShadow->SetPos(D3DXVECTOR3(pos.x, pos.y + 10.0f, pos.z));
+		pShadow->SetPos(D3DXVECTOR3(pos.x, pos.y + 1.0f, pos.z));
 	}
 
 	// ƒ‚ƒfƒ‹‚Æ‚Ì“–‚½‚è”»’è
