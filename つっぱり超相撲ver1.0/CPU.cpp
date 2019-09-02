@@ -298,8 +298,8 @@ void CCPU::Update(void)
 	CCamera *pCamera;
 	pCamera = CManager::GetCamera();
 	// ‰e‚ÌŽæ“¾
-	CShadow *pShadow;
-	pShadow = CGame::GetShadow();
+	//CShadow *pShadow;
+	//pShadow = CGame::GetShadow(1);
 	// ƒJƒƒ‰‚ÌŒü‚«‚ðŽæ“¾
 	D3DXVECTOR3 cameraRot;
 	cameraRot = pCamera->GetRot();
@@ -405,10 +405,10 @@ void CCPU::Update(void)
 	m_move.z += (0.0f - m_move.z) * 0.5f;
 	m_move.y += (0.0f - m_move.y) * 0.01f;
 
-	if (pShadow != NULL)
+	/*if (pShadow != NULL)
 	{
 		pShadow->SetPos(pos);
-	}
+	}*/
 
 	// ƒ‚ƒfƒ‹‚Æ‚Ì“–‚½‚è”»’è
 	CollisonSceneX(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, CPU_COLLISION);

@@ -88,6 +88,7 @@ public:
 		TEXTURE_EFFECT_SMOKE,			// 煙の画像
 		TEXTURE_EFFECT_CONFETTI,		// 紙吹雪の画像
 		TEXTURE_EFFECT_WAVE2,			// 衝撃波の画像
+		TEXTURE_SHADOW,					// 影の画像
 	} TEXTURE;
 
 	CLoad();		// コンストラクタ

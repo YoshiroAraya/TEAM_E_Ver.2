@@ -21,6 +21,7 @@
 #define PLAYER_PRIORITY	(2)
 #define CPU_PRIORITY	(2)
 #define SELECT_PRIORITY	(3)
+#define SHADOW_PRIORITY	(6)
 
 //========================================
 // ƒNƒ‰ƒX‚Ì’è‹`

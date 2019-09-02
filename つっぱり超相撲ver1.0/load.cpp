@@ -84,6 +84,7 @@ const char *CLoad::m_apTexFilename[] =
 	"data/TEXTURE/EFFECT/15.png",				//43
 	"data/TEXTURE/EFFECT/box.png",				//44
 	"data/TEXTURE/EFFECT/15wave.png",			//45
+	"data/TEXTURE/effect000.jpg",				//46
 };
 
 //=============================================================================

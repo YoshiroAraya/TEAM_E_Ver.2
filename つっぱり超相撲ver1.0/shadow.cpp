@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// 影の処理
+// 影の処理 [polygon.cpp]
 // Author : 長山拓実
 //
 //=============================================================================
@@ -8,25 +8,28 @@
 #include "manager.h"
 #include "renderer.h"
 #include "scene2D.h"
-#include "player.h"
-#include "mask.h"
 #include "load.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
+#define TEX_POS_X_INIT			(1.0f)		//テクスチャ座標Uの初期位置
+#define TEX_POS_Y_INIT			(1.0f)		//テクスチャ座標Vの初期位置
+#define TEX_LEFT				(0.0f)		//テクスチャ座標U左
+#define TEX_RIGHT				(1.0f)		//テクスチャ座標U右
+#define TEX_TOP					(0.0f)		//テクスチャ座標V上
+#define TEX_BOT					(1.0f)		//テクスチャ座標V下
 
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
-LPDIRECT3DTEXTURE9			CShadow::m_pTexture = NULL;
 
 //--------------------------------------------
 //シーン3Dクラス コンストラクタ
 //--------------------------------------------
-CShadow::CShadow() : CSceneX(7)
+CShadow::CShadow() : CScene3D(SHADOW_PRIORITY)
 {
-	m_pos = D3DXVECTOR3(0,0,0);			//位置
+	m_pos = D3DXVECTOR3(0, 0, 0);			//位置
 	m_rot = D3DXVECTOR3(0, 0, 0);		//向き
 	D3DXMatrixIdentity(&m_mtxWorld);	//ワールドマトリックス
 }
@@ -41,22 +44,16 @@ CShadow::~CShadow()
 //=============================================================================
 // 生成処理
 //=============================================================================
-CShadow * CShadow::Create(D3DXVECTOR3 pos)
+CShadow * CShadow::Create(D3DXVECTOR3 pos, float fWidth, float fDepth)
 {
-	CShadow *pShadow = NULL;
+	CShadow *pShadow;
 
-	if (pShadow == NULL)
-	{
-		// オブジェクトクラスの生成
-		pShadow = new CShadow;
+	pShadow = new CShadow;
 
-		if (pShadow != NULL)
-		{
-			pShadow->m_pos = pos;
-			pShadow->BindModel(CLoad::GetBuffMat(CLoad::MODEL_SHADOW), CLoad::GetNumMat(CLoad::MODEL_SHADOW), CLoad::GetMesh(CLoad::MODEL_SHADOW));
-			pShadow->Init();
-		}
-	}
+	pShadow->m_pos = pos;
+	pShadow->m_fWidth = fWidth;
+	pShadow->m_fDepth = fDepth;
+	pShadow->Init();
 
 	return pShadow;
 }
@@ -66,11 +63,19 @@ CShadow * CShadow::Create(D3DXVECTOR3 pos)
 //=============================================================================
 HRESULT CShadow::Init(void)
 {
-	// 2Dオブジェクト初期化処理
-	CSceneX::Init(m_pos);
+	m_rot = D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f);
 
-	// オブジェクトの種類の設定
-	SetObjType(CScene::OBJTYPE_SHADOW);
+	CScene3D::SetSize(m_fDepth, m_fWidth);
+	CScene3D::SetRot(m_rot);
+	BindTexture(CLoad::GetTexture(CLoad::TEXTURE_SHADOW));
+
+	CScene3D::Init(m_pos);
+
+	//色の設定
+	CScene3D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+	//オブジェクト種類の設定
+	CScene3D::SetObjType(CScene::OBJTYPE_SHADOW);
 
 	return S_OK;
 }
@@ -80,8 +85,8 @@ HRESULT CShadow::Init(void)
 //=============================================================================
 void CShadow::Uninit(void)
 {
-	// 2Dオブジェクト終了処理
-	CSceneX::Uninit();
+	//終了処理
+	CScene3D::Uninit();
 }
 
 //=============================================================================
@@ -89,7 +94,7 @@ void CShadow::Uninit(void)
 //=============================================================================
 void CShadow::Update(void)
 {
-	CSceneX::SetPosition(m_pos);
+	//CScene3D::SetPos(D3DXVECTOR3(m_pos.x, m_pos.y + 10.0f, m_pos.z));
 }
 
 //=============================================================================
@@ -97,67 +102,35 @@ void CShadow::Update(void)
 //=============================================================================
 void CShadow::Draw(void)
 {
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice;
 
-	// デバイスを取得
-	LPDIRECT3DDEVICE9 pDevice = NULL;
+	//デバイスを取得
+	CManager Manager;
+	pDevice = Manager.GetRenderer()->GetDevice();
 
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
+	//αブレンディングを減算合成に設定
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	pDevice->SetRenderState(D3DRS_STENCILENABLE, true);	// ステンシルテストを有効にする
-	//pDevice->SetRenderState(D3DRS_ZENABLE, false);	// Zテストを有効にする
+	//アルファテスト(透明色を描画しないように)
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 90);
 
-	pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0x00000000);	// 見えていない状態にする
+	//描画処理
+	CScene3D::Draw();
 
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_ALWAYS);			// ステンシルの対象となるものを全員有効にする
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_ZERO);						// ステンシルテスト→合格 / Zテスト合格
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_INCR);						// ステンシルテスト→合格 / Zテスト不合格
-	pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_ZERO);						// ステンシルテスト→不合格
-
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);				// カリング表
-
-	// 描画処理
-	CSceneX::Draw();
-
-	pDevice->SetRenderState(D3DRS_STENCILREF, 1);
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_LESSEQUAL);			// ステンシルの対象となるものを1になっているものを有効にする
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_INCR);						// ステンシルテスト→合格 / Zテスト合格
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_ZERO);						// ステンシルテスト→合格 / Zテスト不合格
-	pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_ZERO);						// ステンシルテスト→不合格
-
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// カリング裏
-
-	// 描画処理
-	CSceneX::Draw();
-
-	pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0x0000000f);	// 見えている状態にする
-
-	pDevice->SetRenderState(D3DRS_STENCILREF, 2);
-	pDevice->SetRenderState(D3DRS_STENCILFUNC, D3DCMP_EQUAL);			// ステンシルの対象となるものを2になっているものを有効にする
-	pDevice->SetRenderState(D3DRS_STENCILPASS, D3DSTENCILOP_KEEP);						// ステンシルテスト→合格 / Zテスト合格
-	pDevice->SetRenderState(D3DRS_STENCILZFAIL, D3DSTENCILOP_KEEP);						// ステンシルテスト→合格 / Zテスト不合格
-	pDevice->SetRenderState(D3DRS_STENCILFAIL, D3DSTENCILOP_KEEP);						// ステンシルテスト→不合格
-
-	// マスクの取得
-	CMask *pMask;
-	pMask = CManager::GetMask();
-
-	pMask->Draw();
-
-	pDevice->SetRenderState(D3DRS_STENCILENABLE, false);	// ステンシルテストを無効にする
-	//pDevice->SetRenderState(D3DRS_ZENABLE, true);	// Zテストを有効にする
-
+	// αブレンディングを元に戻す
+	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================
 // 位置設定処理
 //=============================================================================
-void CShadow::SetPos(D3DXVECTOR3 pos)
+void CShadow::Setpos(D3DXVECTOR3 pos)
 {
 	m_pos = pos;
 }

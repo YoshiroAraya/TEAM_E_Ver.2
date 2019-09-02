@@ -56,7 +56,7 @@
 CScene3D *CTutorial::m_pScene3D = NULL;
 CPlayer *CTutorial::m_pPlayer = NULL;
 CEnemy *CTutorial::m_pEnemy = NULL;
-CShadow *CTutorial::m_pShadow = NULL;
+CShadow *CTutorial::m_pShadow[MAX_SHADOW] = {};
 CMeshField *CTutorial::m_pMeshField = NULL;
 CBattleSys *CTutorial::m_pBatlteSys = NULL;
 CGauge *CTutorial::m_pGauge = NULL;
@@ -160,9 +160,13 @@ void CTutorial::Init(void)
 	// 3Dƒ‚ƒfƒ‹
 	//CSceneX::Create(D3DXVECTOR3(0.0f, 25.0f, 0.0f));
 
-	if (m_pShadow == NULL)
+	if (m_pShadow[0] == NULL)
 	{
-		m_pShadow = CShadow::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pShadow[0] = CShadow::Create(D3DXVECTOR3(-80.0f, 20.0f, 0.0f), 30.0f, 30.0f);
+	}
+	if (m_pShadow[1] == NULL)
+	{
+		m_pShadow[1] = CShadow::Create(D3DXVECTOR3(80.0f, 20.0f, 0.0f), 30.0f, 30.0f);
 	}
 
 	if (m_pBatlteSys == NULL)
@@ -226,8 +230,12 @@ void CTutorial::Uninit(void)
 	m_pPlayer = NULL;
 	m_pEnemy = NULL;
 	m_pMeshField = NULL;
-	m_pShadow = NULL;
 	m_pGauge = NULL;
+
+	for (int nCntShadow = 0; nCntShadow < MAX_SHADOW; nCntShadow++)
+	{
+		m_pShadow[nCntShadow] = NULL;
+	}
 
 	if (m_pBatlteSys != NULL)
 	{
@@ -453,9 +461,9 @@ CEnemy * CTutorial::GetEnemy(void)
 //=============================================================================
 // ‰e‚ÌŽæ“¾
 //=============================================================================
-CShadow *CTutorial::GetShadow(void)
+CShadow *CTutorial::GetShadow(int nIdx)
 {
-	return m_pShadow;
+	return m_pShadow[nIdx];
 }
 
 //=============================================================================
