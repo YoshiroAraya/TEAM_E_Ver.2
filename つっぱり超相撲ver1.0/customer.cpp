@@ -35,6 +35,7 @@ CCustomer::CCustomer() : CSceneX(DOHYO_PRIORITY)
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bJump = false;
 }
 
 //=============================================================================
@@ -131,6 +132,36 @@ void CCustomer::Update(void)
 				}
 			}
 		}*/
+
+		//ジャンプのランダム
+		int nJumpRand = rand() % 10;
+
+		if (m_bJump == false)
+		{
+			switch (nJumpRand)
+			{
+			case 0:
+				m_move.y = 4;
+				break;
+			case 1:
+				m_move.y = 5;
+				break;
+			}
+			m_bJump = true;
+		}
+		//位置更新
+		pos.y += m_move.y;
+		// 重力加算
+		m_move.y -= cosf(D3DX_PI * 0.0f) * 0.5f;
+		//減速
+		m_move.y += (0.0f - m_move.y) * 0.01f;
+		//地面より下に行かない
+		if (pos.y <= 0)
+		{
+			pos.y = 0;
+			m_bJump = false;
+		}
+
 
 		if (pEnemy->GetLose() == true && pPlayer->GetState() == CPlayer::STATE_ULT)
 		{// 敵が死んだとき

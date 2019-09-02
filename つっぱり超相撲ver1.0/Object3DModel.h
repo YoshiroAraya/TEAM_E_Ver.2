@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include "sceneX.h"
+#include "load.h"
 
 //========================================
 // マクロ定義
@@ -27,6 +28,8 @@ public:
 	typedef enum
 	{//オブジェクトの種類
 		OBJECTTYPE_TROPHY = 0,
+		OBJECTTYPE_GYOUZI,
+		OBJECTTYPE_MAX,
 	}OBJECTTYPE;
 
 	C3DObject();	// コンストラクタ
@@ -37,16 +40,21 @@ public:
 	void Update(void);				// オブジェクト更新処理
 	void Draw(void);				// オブジェクト描画処理
 
-	static C3DObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nType);	// オブジェクトの生成
+	static C3DObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, OBJECTTYPE nObjType,CLoad::MODEL nModelType);	// オブジェクトの生成
 
 private:
 	static LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;		// 頂点バッファへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
+	LPD3DXBUFFER			m_pBuffMat;			// マテリアル情報へのポインタ
+	DWORD					m_nNumMat;			// マテリアル情報の数
 
 	D3DXMATRIX				m_mtxWorld;		// ワールドマトリックス
-	OBJECTTYPE m_nType;
+	OBJECTTYPE m_Type;
 	D3DXVECTOR3 m_move;
 	D3DXVECTOR3 m_rot;
 	int m_nLife;
+	float					m_fDestAngle;	// 目的の角度
+	float					m_fDiffAngle;	// 角度の差分
+
 };
 #endif

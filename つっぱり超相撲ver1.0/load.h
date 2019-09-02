@@ -35,7 +35,7 @@ public:
 		MODEL_SHADOW,		// 影
 		MODEL_NEWSCASTER,	// ニュースキャスター
 		MODEL_TROPHY,		// トロフィー
-		MODE_GYOUZI,		// 行司
+		MODEL_GYOUZI,		// 行司
 		MODEL_MAWASI,		// まわし
 		MODEL_SYMBOL,		// シンボル
 	} MODEL;

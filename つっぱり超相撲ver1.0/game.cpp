@@ -235,7 +235,7 @@ void CGame::Init(void)
 	//É|Å[ÉYê∂ê¨
 	CPause::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
 
-	//C3DObject::Create(D3DXVECTOR3(0.0f, 20.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CLoad::MODE_GYOUZI);
+	C3DObject::Create(D3DXVECTOR3(0.0f, 20.0f, 90.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),C3DObject::OBJECTTYPE_GYOUZI,CLoad::MODEL_GYOUZI);
 
 
 	m_nTime = 0;

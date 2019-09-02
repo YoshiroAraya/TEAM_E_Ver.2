@@ -164,6 +164,10 @@ void CSceneX::Draw(void)
 				// テクスチャの設定
 				pDevice->SetTexture(0, m_pTexture[nCntMat]);
 			}
+			else
+			{// マテリアルにテクスチャが無かった場合
+				pDevice->SetTexture(0, NULL);
+			}
 		}
 		else
 		{// マテリアルにテクスチャが無かった場合

@@ -61,5 +61,6 @@ private:
 	D3DXVECTOR3 m_move;
 	D3DXVECTOR3 m_rot;
 	int m_nLife;
+	bool m_bJump;
 };
 #endif
