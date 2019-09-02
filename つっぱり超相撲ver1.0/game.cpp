@@ -213,7 +213,7 @@ void CGame::Init(void)
 
 	if (m_pShadow == NULL)
 	{
-		m_pShadow = CShadow::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pShadow = CShadow::Create(D3DXVECTOR3(-80.0f, 20.0f, 0.0f), 30.0f, 30.0f);
 	}
 
 	if (m_pBatlteSys == NULL)
