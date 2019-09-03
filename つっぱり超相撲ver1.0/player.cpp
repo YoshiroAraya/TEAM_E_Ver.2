@@ -48,7 +48,7 @@
 #define FILE_NAME_3				("data\\TEXT\\motion_resura_up.txt")
 #define DOHYO_COLLISION			(D3DXVECTOR3(20.0f, 60.0f, 20.0f))
 #define TSUPPARI_COLLISION		(D3DXVECTOR3(50.0f, 60.0f, 50.0f))		//つっぱりの当たり判定
-#define GUARD_NOW_SANSO			(-2.5f)
+#define GUARD_NOW_SANSO			(-3.5f)
 #define GUARD_SANSO				(-20.0f)
 
 //=============================================================================
@@ -1004,11 +1004,11 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		{
 			//任意のキー←
 			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
-				pXInput->GetPress(XPLAYER_LEFT, 1) == true)
+				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-					pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					pXInput->GetPress(XPLAYER_A_BUTTON, 0) == true)
 				{
 					fMovePlayer = DASH_MOVE;
 					m_bDash = true;
@@ -1025,11 +1025,11 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 
 			//任意のキー→
 			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
-				pXInput->GetPress(XPLAYER_RIGHT, 1) == true)
+				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
-					pXInput->GetPress(XPLAYER_B_BUTTON, 1) == true)
+					pXInput->GetPress(XPLAYER_A_BUTTON, 0) == true)
 				{
 					fMovePlayer = DASH_MOVE;
 					m_bDash = true;
@@ -1059,8 +1059,8 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 		{
 			//ガード状態
-			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true ||
-				pXInput->GetPress(XPLAYER_X_BUTTON, 1) == true)
+			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true
+				|| pXInput->GetPress(XPLAYER_RB_BUTTON, 0) == true)
 			{
 				m_State = STATE_GUARD;
 				pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
@@ -1070,12 +1070,13 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 				{
 					m_nKey[0] = 0;
 					m_nKey[1] = 0;
+					m_nCountFlame[0] = 0;
+					m_nCountFlame[1] = 0;
 					m_nMotionType[0] = MOTION_GUARD;
 					m_nMotionType[1] = MOTION_GUARD;
 				}
 			}
-			if (pInputKeyboard->GetRelese(PLAYER_C_BUTTON) == true && m_State == STATE_GUARD ||
-				pXInput->GetRelese(XPLAYER_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+			else if (m_State == STATE_GUARD)
 			{
 				m_State = STATE_NEUTRAL;
 			}

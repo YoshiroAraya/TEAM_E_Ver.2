@@ -119,6 +119,8 @@ void CCamera::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
 	// プレイヤー取得
 	CPlayer *pPlayer = NULL;
 	// 敵取得
@@ -146,7 +148,9 @@ void CCamera::Update(void)
 				// 入場のカメラワーク
 				Start(pPlayer, pEnemy);
 
-				if (pInputKeyboard->GetTrigger(DIK_SPACE) == true)
+				if (pInputKeyboard->GetTrigger(DIK_SPACE) == true
+					|| pXInput->GetPress(XPLAYER_A_BUTTON, 0) == true
+					|| pXInput->GetPress(XENEMY_A_BUTTON, 1) == true)
 				{
 					m_State = STATE_NORMAL;
 					m_posV = D3DXVECTOR3(0.0f, GAME_CAMERA_Y, GAME_CAMERA_Z);

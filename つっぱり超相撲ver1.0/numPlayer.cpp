@@ -159,7 +159,7 @@ void CNumPlayer::Update(void)
 
 	if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true
 		|| pXInput->GetTrigger(XPLAYER_RIGHT, 0) == true
-		|| pXInput->GetTrigger(XPLAYER_RIGHT, 1) == true)
+		|| pXInput->GetTrigger(XENEMY_RIGHT, 1) == true)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
@@ -172,7 +172,7 @@ void CNumPlayer::Update(void)
 	}
 	if (pInputKeyboard->GetTrigger(DIK_LEFT) == true
 		|| pXInput->GetTrigger(XPLAYER_LEFT, 0) == true
-		|| pXInput->GetTrigger(XPLAYER_LEFT, 1) == true)
+		|| pXInput->GetTrigger(XENEMY_LEFT, 1) == true)
 	{
 		//pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT);
 		m_aSelect[m_nSelect] = SELECT_NONE;
@@ -201,7 +201,9 @@ void CNumPlayer::Update(void)
 		}
 	}
 
-	if (pTitle->GetState() == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (pTitle->GetState() == CTitle::STATE_TITLE && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+		|| pTitle->GetState() == CTitle::STATE_TITLE && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true
+		|| pTitle->GetState() == CTitle::STATE_TITLE && pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 	{
 		m_bDecision = true;
 

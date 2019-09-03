@@ -48,7 +48,7 @@
 #define FILE_NAME_3				("data\\TEXT\\motion_resura_up.txt")
 
 #define DOHYO_COLLISION			(20.0f)
-#define GUARD_NOW_SANSO			(-2.5f)
+#define GUARD_NOW_SANSO			(-3.5f)
 #define GUARD_SANSO				(-20.0f)
 
 //=============================================================================
@@ -1025,7 +1025,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-					pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+					pXInput->GetPress(XENEMY_A_BUTTON, 1) == true)
 				{
 					fMoveEnemy = DASH_MOVE;
 					m_bDash = true;
@@ -1046,7 +1046,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
-					pXInput->GetPress(XENEMY_B_BUTTON, 1) == true)
+					pXInput->GetPress(XENEMY_A_BUTTON, 1) == true)
 				{
 					fMoveEnemy = DASH_MOVE;
 					m_bDash = true;
@@ -1077,7 +1077,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		{
 			//ガード状態
 			if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_X_BUTTON, 1) == true)
+				pXInput->GetPress(XENEMY_RB_BUTTON, 1) == true)
 			{
 				m_State = STATE_GUARD;
 				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
@@ -1086,12 +1086,13 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 				{
 					m_nKey[0] = 0;
 					m_nKey[1] = 0;
+					m_nCountFlame[0] = 0;
+					m_nCountFlame[1] = 0;
 					m_nMotionType[0] = MOTION_GUARD;
 					m_nMotionType[1] = MOTION_GUARD;
 				}
 			}
-			if (pInputKeyboard->GetRelese(ENEMY_C_BUTTON) == true && m_State == STATE_GUARD ||
-				pXInput->GetRelese(XENEMY_X_BUTTON, 1) == true && m_State == STATE_GUARD)
+			else if (m_State == STATE_GUARD)
 			{
 				m_State = STATE_NEUTRAL;
 			}
@@ -1206,6 +1207,8 @@ float CEnemy::EnemyCPU(D3DXVECTOR3 pos, float fMoveEnemy)
 				{
 					m_nKey[0] = 0;
 					m_nKey[1] = 0;
+					m_nCountFlame[0] = 0;
+					m_nCountFlame[1] = 0;
 					m_nMotionType[0] = MOTION_GUARD;
 					m_nMotionType[1] = MOTION_GUARD;
 				}

@@ -797,7 +797,7 @@ void CBattleSys::Operation(void)
 		if (pPlayer->GetState() == CPlayer::STATE_NEUTRAL && m_bAttack == false)
 		{
 			if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true && pPlayer->GetRecovery() == false ||
-				pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
+				pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true && pPlayer->GetRecovery() == false)
 			{
 				pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
 				pPlayer->SetbMotionEnd(0, true);
@@ -830,7 +830,7 @@ void CBattleSys::Operation(void)
 		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false && pEnemy->GetMode() == CEnemy::MODE_P2)
 		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
-				pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
+				pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true && pEnemy->GetRecovery() == false)
 			{
 				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
 				pEnemy->SetbMotionEnd(0, true);
@@ -1050,8 +1050,7 @@ void CBattleSys::Operation(void)
 			}
 		}
 		//リセット
-		if (pInputKeyboard->GetTrigger(DIK_R) == true ||
-			pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true)
+		if (pInputKeyboard->GetTrigger(DIK_R) == true)
 		{
 			pPlayer->InitStatus();
 			pEnemy->InitStatus();
@@ -1610,13 +1609,13 @@ void CBattleSys::PushJudge(void)
 			if (pPlayer->GetRecovery() == false)
 			{
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 				{
 					fPushCntP1++;
 					m_nCntPushP1++;
 				}
 				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					fPushCntP1++;
 					m_nCntPushP1++;
@@ -1642,7 +1641,7 @@ void CBattleSys::PushJudge(void)
 					m_nCntPushP2++;
 				}
 				else if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true ||
-					pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
+					pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
 				{
 					fPushCntP2++;
 					m_nCntPushP2++;
@@ -1772,7 +1771,7 @@ void CBattleSys::P1Attack(void)
 					pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 					{
 						//寄り
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
@@ -1780,7 +1779,7 @@ void CBattleSys::P1Attack(void)
 						MotionSetYORI(0);
 					}
 					else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(-OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f));
@@ -1795,7 +1794,7 @@ void CBattleSys::P1Attack(void)
 					pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((NAGE_MOVE * fHinshiNage), KNOCKUP_MOVE, 0.0f));
@@ -1812,14 +1811,14 @@ void CBattleSys::P1Attack(void)
 					pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 					{	//寄り
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(0, ATTACK_TYPE_YORI, D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
 						MotionSetYORI(0);
 					}
 					else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(0, ATTACK_TYPE_OSI, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f));
@@ -1834,7 +1833,7 @@ void CBattleSys::P1Attack(void)
 					pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(0, ATTACK_TYPE_NAGE, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3((-NAGE_MOVE * fHinshiNage), KNOCKUP_MOVE, 0.0f));
@@ -1854,12 +1853,12 @@ void CBattleSys::P1Attack(void)
 			{
 			case CPlayer::DIRECTION_LEFT:
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 				{
 					Battle(1, ATTACK_TYPE_COUNTER, D3DXVECTOR3(COUNTER_MOVE, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 				}
 				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					Battle(1, ATTACK_TYPE_COUNTER, D3DXVECTOR3(COUNTER_MOVE, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 				}
@@ -1867,12 +1866,12 @@ void CBattleSys::P1Attack(void)
 
 			case CPlayer::DIRECTION_RIGHT:
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 				{
 					Battle(1, ATTACK_TYPE_COUNTER, D3DXVECTOR3(-COUNTER_MOVE, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 				}
 				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					Battle(1, ATTACK_TYPE_COUNTER, D3DXVECTOR3(-COUNTER_MOVE, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 				}
@@ -1936,14 +1935,14 @@ void CBattleSys::P2Attack(void)
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
 					{	//寄り
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_YORI, D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(-YORI_MOVE, KNOCKUP_MOVE, 0.0f));
 						MotionSetYORI(1);
 					}
 					else if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(-OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -1958,7 +1957,7 @@ void CBattleSys::P2Attack(void)
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -1974,14 +1973,14 @@ void CBattleSys::P2Attack(void)
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
 					{	//寄り
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_YORI, D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(YORI_MOVE, KNOCKUP_MOVE, 0.0f));
 						MotionSetYORI(1);
 					}
 					else if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 					{	//押し
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_OSI, D3DXVECTOR3(OSI_MOVE * fHinshiOshi, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -1996,7 +1995,7 @@ void CBattleSys::P2Attack(void)
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
 					{	//投げ
 						pSound->PlaySound(pSound->SOUND_LABEL_SE_HIT00);
 						Battle(1, ATTACK_TYPE_NAGE, D3DXVECTOR3(-NAGE_MOVE * fHinshiNage, KNOCKUP_MOVE, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -2015,12 +2014,12 @@ void CBattleSys::P2Attack(void)
 			{
 			case CEnemy::DIRECTION_LEFT:
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 				{
 					Battle(0, ATTACK_TYPE_COUNTER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(COUNTER_MOVE, 0.0f, 0.0f));
 				}
 				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					Battle(0, ATTACK_TYPE_COUNTER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(COUNTER_MOVE, 0.0f, 0.0f));
 				}
@@ -2028,12 +2027,12 @@ void CBattleSys::P2Attack(void)
 
 			case CEnemy::DIRECTION_RIGHT:
 				if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
 				{
 					Battle(0, ATTACK_TYPE_COUNTER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(-COUNTER_MOVE, 0.0f, 0.0f));
 				}
 				else if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-					pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+					pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{
 					Battle(0, ATTACK_TYPE_COUNTER, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(-COUNTER_MOVE, 0.0f, 0.0f));
 				}
@@ -2084,7 +2083,7 @@ void CBattleSys::CounterAttack(void)
 					pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_RB_BUTTON, 0) == true)
 					{	//カウンター
 						pPlayer->SetCounter(true);
 						pPlayer->SetCounterTime(COUNTER_FLAME);
@@ -2096,7 +2095,7 @@ void CBattleSys::CounterAttack(void)
 					pXInput->GetPress(XPLAYER_LEFT, 0) == true)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_B_BUTTON) == true ||
-						pXInput->GetTrigger(XPLAYER_B_BUTTON, 0) == true)
+						pXInput->GetTrigger(XPLAYER_RB_BUTTON, 0) == true)
 					{	//カウンター
 						pPlayer->SetCounter(true);
 						pPlayer->SetCounterTime(COUNTER_FLAME);
@@ -2116,7 +2115,7 @@ void CBattleSys::CounterAttack(void)
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_RB_BUTTON, 1) == true)
 					{	//カウンター
 						pEnemy->SetCounter(true);
 						pEnemy->SetCounterTime(COUNTER_FLAME);
@@ -2128,7 +2127,7 @@ void CBattleSys::CounterAttack(void)
 					pXInput->GetPress(XENEMY_LEFT, 1) == true)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_B_BUTTON) == true ||
-						pXInput->GetTrigger(XENEMY_B_BUTTON, 1) == true)
+						pXInput->GetTrigger(XENEMY_RB_BUTTON, 1) == true)
 					{	//カウンター
 						pEnemy->SetCounter(true);
 						pEnemy->SetCounterTime(COUNTER_FLAME);

@@ -54,6 +54,8 @@ class CTutorial;
 #define XPLAYER_Y_BUTTON		(XINPUT_GAMEPAD_Y) //チョキ
 #define XPLAYER_X_BUTTON		(XINPUT_GAMEPAD_X) //パー
 #define XPLAYER_B_BUTTON		(XINPUT_GAMEPAD_B)
+#define XPLAYER_RB_BUTTON		(XINPUT_GAMEPAD_RIGHT_SHOULDER) //パー
+#define XPLAYER_LB_BUTTON		(XINPUT_GAMEPAD_LEFT_SHOULDER)
 
 #define XENEMY_RIGHT			(XINPUT_GAMEPAD_DPAD_RIGHT)
 #define XENEMY_LEFT				(XINPUT_GAMEPAD_DPAD_LEFT)
@@ -61,7 +63,12 @@ class CTutorial;
 #define XENEMY_Y_BUTTON			(XINPUT_GAMEPAD_Y) //チョキ
 #define XENEMY_X_BUTTON			(XINPUT_GAMEPAD_X) //パー
 #define XENEMY_B_BUTTON			(XINPUT_GAMEPAD_B)
-#define XENEMY_B_BUTTON			(XINPUT_GAMEPAD_B)
+#define XENEMY_RB_BUTTON		(XINPUT_GAMEPAD_RIGHT_SHOULDER) //パー
+#define XENEMY_LB_BUTTON		(XINPUT_GAMEPAD_LEFT_SHOULDER)
+
+
+//m_pos.x += sinf(pXInputJoyPad->GetLeftAxiz(0)) * PLAYER_MOVESPEED;
+//m_pos.y -= cosf(pXInputJoyPad->GetLeftAxiz(0)) * PLAYER_MOVESPEED;
 
 //=============================================================================
 // クラスの定義

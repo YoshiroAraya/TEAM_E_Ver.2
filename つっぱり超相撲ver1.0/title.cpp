@@ -97,6 +97,8 @@ void CTitle::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
 
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
@@ -107,7 +109,9 @@ void CTitle::Update(void)
 	mode = (CNumPlayer::MODE)nMode;
 	CNumPlayer::SetMode(mode);
 
-	if (m_state == CTitle::STATE_NEWS && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (m_state == CTitle::STATE_NEWS && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+		|| m_state == CTitle::STATE_NEWS && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true
+		|| m_state == CTitle::STATE_NEWS && pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 	{// ニュースの画面からタイトル画面へ
 		m_state = CTitle::STATE_TITLE;
 	}
@@ -178,17 +182,23 @@ void CTitle::Update(void)
 
 		if (m_state == STATE_CHARASELECT && m_bTurnRight == false && m_bTurnLeft == false)
 		{
-			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true)
+			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true
+				|| pXInput->GetTrigger(XPLAYER_RIGHT, 0) == true
+				|| pXInput->GetTrigger(XENEMY_RIGHT, 1) == true)
 			{// 右に回転
 				m_bTurnRight = true;
 			}
-			else if(pInputKeyboard->GetTrigger(DIK_LEFT) == true)
+			else if(pInputKeyboard->GetTrigger(DIK_LEFT) == true
+				|| pXInput->GetTrigger(XPLAYER_LEFT, 0) == true
+				|| pXInput->GetTrigger(XENEMY_LEFT, 1) == true)
 			{// 左に回転
 				m_bTurnLeft = true;
 			}
 		}
 
-		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+		if (pInputKeyboard->GetTrigger(DIK_RETURN) == true
+			|| pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true
+			|| pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 		{
 			if (m_pPlayer->GetSelect() == true || m_pEnemy->GetSelect() == true)
 			{// エンターを押した回数をカウント
@@ -200,12 +210,14 @@ void CTitle::Update(void)
 		{//
 			if (m_nCntReturn == 1)
 			{
-				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pPlayer->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{//
 					m_Character[0] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
-				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pEnemy->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{//
 					m_Character[0] = CHARACTER_WRESTLER;
 					m_pEnemy->SetSelect(false);
@@ -234,12 +246,14 @@ void CTitle::Update(void)
 			{
 				m_aCharaSelect[0] = true;
 
-				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pPlayer->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
-				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pEnemy->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON, 0) == true)
 				{// エネミーを選択
 					m_Character[0] = CHARACTER_WRESTLER;
 					m_pEnemy->SetSelect(false);
@@ -268,12 +282,14 @@ void CTitle::Update(void)
 			{// 1P選択
 				m_aCharaSelect[0] = true;
 
-				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pPlayer->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON,0) == true)
 				{// プレイヤーを選択
 					m_Character[0] = CHARACTER_RIKISI;
 
 				}
-				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pEnemy->GetSelect() == true && pXInput->GetTrigger(XENEMY_A_BUTTON, 0) == true)
 				{// エネミーを選択
 					m_Character[0] = CHARACTER_WRESTLER;
 				}
@@ -282,12 +298,14 @@ void CTitle::Update(void)
 			{// 2P選択
 				m_aCharaSelect[1] = true;
 
-				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				if (m_pPlayer->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pPlayer->GetSelect() == true && pXInput->GetTrigger(XPLAYER_A_BUTTON, 1) == true)
 				{// プレイヤーを選択
 					m_Character[1] = CHARACTER_RIKISI;
 					m_pPlayer->SetSelect(false);
 				}
-				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+				else if (m_pEnemy->GetSelect() == true && pInputKeyboard->GetTrigger(DIK_RETURN) == true
+					|| m_pEnemy->GetSelect() == true && pXInput->GetTrigger(XENEMY_A_BUTTON, 1) == true)
 				{// エネミーを選択
 					m_Character[1] = CHARACTER_WRESTLER;
 				}
@@ -298,6 +316,18 @@ void CTitle::Update(void)
 				SaveCharacter();
 			}
 		}
+
+
+		if (pXInput->GetPress(XPLAYER_RB_BUTTON, 0) == true)
+		{
+			m_Character[0] = CHARACTER_RIKISI;
+		}
+
+		if ( pXInput->GetRelese(XPLAYER_RB_BUTTON, 0) == true)
+		{
+			m_Character[0] = CHARACTER_WRESTLER;
+		}
+
 
 #ifdef _DEBUG
 		if (mode == CNumPlayer::MODE_1P)
