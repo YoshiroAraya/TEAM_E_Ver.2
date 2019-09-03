@@ -25,13 +25,12 @@ public:
 		SOUND_LABEL_BGM_RESULT,		// BGMリザルト
 		SOUND_LABEL_BGM_GAMEOVER,	// BGMゲームオーバー
 		SOUND_LABEL_BGM_RANKING,	// BGMランキング
+		SOUND_LABEL_BGM_VOICE,		// 声
 		SOUND_LABEL_SE_HIT00,		// 衝突
 		SOUND_LABEL_SE_NOISE,		// 雑音
 		SOUND_LABEL_SE_HAKKEYOI,	// はっけよい
 		SOUND_LABEL_SE_NOKOTTA,		// のこった
 		SOUND_LABEL_SE_DOHYO,		// 土俵
-
-
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
 	// パラメータ構造体定義
@@ -66,11 +65,13 @@ protected:
 		{ "data/BGM/result1.wav", -1 },		// リザルト
 		{ "data/BGM/gameover.wav", -1 },	// ゲームオーバー
 		{ "data/BGM/ranking.wav", -1 },		// ランキング
+		{ "data/BGM/voice.wav", -1 },		// 声
 		{ "data/SE/hit.wav", 0 },			// 衝撃音001
 		{ "data/SE/noise.wav", 0 },			// 雑音
 		{ "data/SE/hakkeyoi.wav", 0 },		// はっけよい
 		{ "data/SE/nokotta.wav", 0 },		// のこった
 		{ "data/SE/dohyo.wav", 0 },			// 土俵入り
+
 	};
 };
 #endif

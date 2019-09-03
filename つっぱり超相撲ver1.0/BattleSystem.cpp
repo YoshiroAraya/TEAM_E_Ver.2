@@ -312,6 +312,7 @@ void CBattleSys::Operation(void)
 
 	//サウンド情報の取得
 	CSound *pSound = CManager::GetSound(0);
+	//CSound *pSound2 = CManager::GetSound(2);
 
 	D3DXVECTOR3 p1pos, p2pos;
 
@@ -468,8 +469,16 @@ void CBattleSys::Operation(void)
 				if (m_bSound2 == false)
 				{
 					pSound->PlaySound(pSound->SOUND_LABEL_SE_NOKOTTA);
+
+					pSound->PlaySound(pSound->SOUND_LABEL_BGM_VOICE);
+
 					m_bSound2 = true;
 				}
+			}
+
+			if (m_bSound2 == true)
+			{
+
 			}
 
 			int nTime = (int)(m_nStartCounter / 60);
@@ -2195,6 +2204,12 @@ void CBattleSys::ResetBattle(void)
 	m_bSound = false;
 	m_bSound2 = false;
 	m_nCntSound = 0;
+
+	//サウンド情報の取得
+	CSound *pSound = CManager::GetSound(0);
+
+	//ゲームのBGMを止める
+	pSound->StopSound(CSound::SOUND_LABEL_BGM_VOICE);
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{
