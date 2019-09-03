@@ -4445,7 +4445,7 @@ Mesh {
    0.500000;0.500000;0.500000;;
    0.500000;0.500000;0.500000;;
    TextureFilename {
-    "C:\\Users\\game130\\Documents\\GitHub\\TEAM_E_Ver.2\\Ç¬Ç¡ÇœÇËí¥ëäñover0.2\\data\\TEXTURE\\UV\\çséi\\gyouzi.jpg";
+    "gyouzi.jpg";
    }
   }
  }
