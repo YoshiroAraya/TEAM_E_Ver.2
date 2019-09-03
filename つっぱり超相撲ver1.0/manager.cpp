@@ -581,6 +581,9 @@ void CManager::SetMode(MODE mode)
 			delete m_pGame;
 
 			m_pGame = NULL;
+
+			//ƒQ[ƒ€‚ÌBGM‚ðŽ~‚ß‚é
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_VOICE);
 		}
 		break;
 

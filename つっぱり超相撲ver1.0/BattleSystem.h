@@ -75,6 +75,7 @@ public:
 	static CBattleSys *Create();	// オブジェクトの生成
 
 	void Operation(void);
+
 private:
 	int		m_nCntAttackFlame;			//攻撃のフレーム数
 	int		m_nImpossibleFlame;		//操作不可時間
