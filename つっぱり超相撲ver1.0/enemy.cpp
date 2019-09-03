@@ -1021,7 +1021,8 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 		{
 			//任意のキー←
 			if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-				pXInput->GetPress(XENEMY_LEFT, 1) == true)
+				pXInput->GetPress(XENEMY_LEFT, 1) == true
+				|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_LEFT)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||
@@ -1042,7 +1043,8 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 
 			//任意のキー→
 			else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-				pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+				pXInput->GetPress(XENEMY_RIGHT, 1) == true
+				|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_RIGHT)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(ENEMY_B_BUTTON) == true ||

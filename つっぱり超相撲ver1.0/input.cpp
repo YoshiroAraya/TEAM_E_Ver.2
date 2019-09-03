@@ -5,7 +5,7 @@
 //
 //=============================================================================
 #include "input.h"
-
+#include "manager.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -229,6 +229,18 @@ void CXInputJoyPad::Update(void)
 		m_RightAxizX[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbRX;
 		m_RightAxizY[dCnt] = (float)m_Controllers[dCnt].state.Gamepad.sThumbRY;
 
+		////左スティックが上に倒された
+		//if (m_LeftAxizY[dCnt] > 100)
+		//{
+		////	(m_aKeyState[dCnt] & (int)XPLAYER_LEFT);
+		//}
+		////左スティックが下に倒された
+		//if (m_LeftAxizY[dCnt] < -100)
+		//{
+		////	dijs.rgbButtons[STICK_L_DOWN] = 0x80;
+		//}
+
+
 		// 情報持ってる
 		xijs = m_Controllers[dCnt].state.Gamepad.wButtons;
 
@@ -240,6 +252,20 @@ void CXInputJoyPad::Update(void)
 
 		// ジョイパッド入力情報保存(プレス)
 		m_aKeyState[dCnt] = xijs;
+
+		////左スティックが右に倒された
+		//if (m_LeftAxizX[dCnt] > 100)
+		//{
+		//	m_aKeyState[dCnt] & (int)XPLAYER_RIGHT = 0x80;
+		//		//GetPress(XPLAYER_RIGHT, dCnt);
+		//}
+		////左スティックが左に倒された
+		//if (m_LeftAxizX[dCnt] < -100)
+		//{
+		//	m_Stick
+		//	//GetPress(XPLAYER_LEFT, dCnt);
+		//}
+
 	}
 }
 //=============================================================================
@@ -304,26 +330,39 @@ float CXInputJoyPad::GetRightAxiz(int indexpad)
 //=============================================================================
 // スティックの取得
 //=============================================================================
-bool CXInputJoyPad::GetStick(int nLR, int indexpad)
+CXInputJoyPad::STICK_LEAN CXInputJoyPad::GetStick(int nLR, int indexpad)
 {
 	if (m_Controllers[indexpad].bConnected == true)
 	{
 		if (nLR == 0)
 		{
-			if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.1f ||
-				m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MAX * 0.1f)
+			//float testf = XINPUT_STICK_MIN * 1.2f;
+			//float testf2 = XINPUT_STICK_MIN * 0.8f;
+
+			if (m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MIN * 1.2f
+				&& m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.8f)
 			{
-				return true;
+				return STICK_LEAN_LEFT;
 			}
+			if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MAX * 1.2f
+				&& m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.8f)
+			{
+				return STICK_LEAN_RIGHT;
+			}
+			//if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.1f ||
+			//	m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MAX * 0.1f)
+			//{
+			//	return true;
+			//}
 		}
 		else if (nLR == 1)
 		{
 			if (m_Controllers[indexpad].state.Gamepad.sThumbRX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbRX > XINPUT_STICK_MAX * 0.1f ||
 				m_Controllers[indexpad].state.Gamepad.sThumbRY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbRY > XINPUT_STICK_MAX * 0.1f)
 			{
-				return true;
+				return STICK_LEAN_NONE;
 			}
 		}
 	}
-	return false;
+	return STICK_LEAN_NONE;
 }

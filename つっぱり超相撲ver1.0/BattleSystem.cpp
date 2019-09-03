@@ -197,7 +197,7 @@ void CBattleSys::Update(void)
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
-	
+
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{	//
@@ -256,7 +256,7 @@ void CBattleSys::Update(void)
 	CDebugProc::Print("cn", " 行動不可フレーム ", m_nCntAttackFlame);
 	CDebugProc::Print("cn", " カウント ", m_nCntSound);
 
-	
+
 #endif
 }
 
@@ -315,7 +315,7 @@ void CBattleSys::Operation(void)
 
 	D3DXVECTOR3 p1pos, p2pos;
 
-	
+
 
 	if (pPlayer != NULL)
 	{	//プレイヤー1の位置を取得
@@ -462,7 +462,7 @@ void CBattleSys::Operation(void)
 				//サウンドのカウント
 				m_nCntSound++;
 			}
-		
+
 			if (m_nCntSound >= 120)
 			{
 				if (m_bSound2 == false)
@@ -473,7 +473,7 @@ void CBattleSys::Operation(void)
 			}
 
 			int nTime = (int)(m_nStartCounter / 60);
-			
+
 
 			if (nTime < START_SECOND)
 			{
@@ -1124,13 +1124,15 @@ void CBattleSys::Operation(void)
 			}
 		}
 
-		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true)
+		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true
+			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true)
 		{
 			m_bPlayerUlt = true;
 
 			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
 		}
-		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true)
+		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true
+			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 0) == true)
 		{
 			m_bEnemyUlt = true;
 
@@ -1803,7 +1805,8 @@ void CBattleSys::P1Attack(void)
 			{
 			case CPlayer::DIRECTION_LEFT:
 				if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
-					pXInput->GetPress(XPLAYER_LEFT, 0) == true)
+					pXInput->GetPress(XPLAYER_LEFT, 0) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_LEFT)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
 						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
@@ -1826,7 +1829,8 @@ void CBattleSys::P1Attack(void)
 					}
 				}
 				else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
-					pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
+					pXInput->GetPress(XPLAYER_RIGHT, 0) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
 						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
@@ -1843,7 +1847,8 @@ void CBattleSys::P1Attack(void)
 
 			case CPlayer::DIRECTION_RIGHT:
 				if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
-					pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
+					pXInput->GetPress(XPLAYER_RIGHT, 0) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
 						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
@@ -1865,7 +1870,8 @@ void CBattleSys::P1Attack(void)
 					}
 				}
 				else if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
-					pXInput->GetPress(XPLAYER_LEFT, 0) == true)
+					pXInput->GetPress(XPLAYER_LEFT, 0) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_LEFT)
 				{
 					if (pInputKeyboard->GetTrigger(PLAYER_A_BUTTON) == true ||
 						pXInput->GetTrigger(XPLAYER_X_BUTTON, 0) == true)
@@ -1967,7 +1973,8 @@ void CBattleSys::P2Attack(void)
 			{
 			case CEnemy::DIRECTION_LEFT:
 				if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-					pXInput->GetPress(XENEMY_LEFT, 1) == true)
+					pXInput->GetPress(XENEMY_LEFT, 1) == true
+					|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_LEFT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
@@ -1989,7 +1996,8 @@ void CBattleSys::P2Attack(void)
 					}
 				}
 				else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+					pXInput->GetPress(XENEMY_RIGHT, 1) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
@@ -2005,7 +2013,8 @@ void CBattleSys::P2Attack(void)
 				break;
 			case CEnemy::DIRECTION_RIGHT:
 				if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
-					pXInput->GetPress(XENEMY_RIGHT, 1) == true)
+					pXInput->GetPress(XENEMY_RIGHT, 1) == true
+					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)

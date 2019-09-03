@@ -997,14 +997,20 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 		pBattleSys = CGame::GetBatlteSys();
 	}
 
+	pXInput->GetLeftAxiz(0);
+
+
 	if (pBattleSys->GetUlt(1) == false)
 	{
 		//通常状態で硬直していない
 		if (m_State == STATE_NEUTRAL && m_bRecovery == false)
 		{
+			//fMovePlayer = sinf(pXInput->GetLeftAxiz(0)) * fMovePlayer;
+
 			//任意のキー←
-			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true ||
-				pXInput->GetPress(XPLAYER_LEFT, 0) == true)
+			if (pInputKeyboard->GetPress(PLAYER_LEFT) == true
+				|| pXInput->GetPress(XPLAYER_LEFT, 0) == true
+				|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_LEFT)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||
@@ -1024,8 +1030,9 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 			}
 
 			//任意のキー→
-			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true ||
-				pXInput->GetPress(XPLAYER_RIGHT, 0) == true)
+			else if (pInputKeyboard->GetPress(PLAYER_RIGHT) == true
+				|| pXInput->GetPress(XPLAYER_RIGHT, 0) == true
+				|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
 			{
 				//ダッシュ設定
 				if (pInputKeyboard->GetPress(PLAYER_B_BUTTON) == true ||

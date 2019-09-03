@@ -73,6 +73,13 @@ public:
 		bool bConnected;
 	};
 
+	typedef enum
+	{
+		STICK_LEAN_NONE = 0,
+		STICK_LEAN_RIGHT,
+		STICK_LEAN_LEFT,
+	}STICK_LEAN;
+
 	CXInputJoyPad();
 	~CXInputJoyPad();
 
@@ -81,7 +88,7 @@ public:
 	bool GetPress(int nButton, int indexpad);
 	bool GetTrigger(int nButton, int indexpad);
 	bool GetRelese(int nButton, int indexpad);
-	bool GetStick(int nLR, int indexpad);
+	STICK_LEAN GetStick(int nLR, int indexpad);
 	float GetLeftAxiz(int indexpad);
 	float GetRightAxiz(int indexpad);
 
