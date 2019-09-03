@@ -92,5 +92,9 @@ private:
 	float	m_fMoveDying[2] = { 1.0f,1.0f };	//•mŽ€Žž‚ÌˆÚ“®—Ê
 	JANKEN	m_aJanken[MAX_CHARACTER];
 	ATTACK_TURN m_AttackTurn;
+	bool	m_bSound;
+	bool	m_bSound2;
+
+	int		m_nCntSound;
 };
 #endif

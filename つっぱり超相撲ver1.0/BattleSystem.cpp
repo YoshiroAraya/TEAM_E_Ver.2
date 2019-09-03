@@ -22,6 +22,7 @@
 #include "tutorial.h"
 #include "customer.h"
 #include "pause.h"
+#include"sound.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -93,6 +94,9 @@ CBattleSys::CBattleSys()
 	m_nFlamePush = 0;
 	m_AttackTurn = ATTACK_TURN_NORMAL;
 	m_nUltTimer = 0;
+	m_bSound = false;
+	m_bSound2 = false;
+	m_nCntSound = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -157,6 +161,8 @@ HRESULT CBattleSys::Init(void)
 	m_bEnemyUlt = false;
 	m_abUlt[0] = false;
 	m_abUlt[1] = false;
+	m_bSound = false;
+	m_bSound2 = false;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -190,6 +196,8 @@ void CBattleSys::Update(void)
 
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+
+	
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{	//
@@ -246,7 +254,9 @@ void CBattleSys::Update(void)
 		}
 	}
 	CDebugProc::Print("cn", " 行動不可フレーム ", m_nCntAttackFlame);
+	CDebugProc::Print("cn", " カウント ", m_nCntSound);
 
+	
 #endif
 }
 
@@ -304,6 +314,8 @@ void CBattleSys::Operation(void)
 	CSound *pSound = CManager::GetSound(0);
 
 	D3DXVECTOR3 p1pos, p2pos;
+
+	
 
 	if (pPlayer != NULL)
 	{	//プレイヤー1の位置を取得
@@ -438,7 +450,30 @@ void CBattleSys::Operation(void)
 
 		if (pPlayer->GetState() == CPlayer::STATE_NOKOTTA && pEnemy->GetState() == CEnemy::STATE_NOKOTTA)
 		{// 2人のじゃんけんが決まったら
+
+			if (m_bSound == false)
+			{
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_HAKKEYOI);
+				m_bSound = true;
+			}
+
+			if (m_bSound == true)
+			{
+				//サウンドのカウント
+				m_nCntSound++;
+			}
+		
+			if (m_nCntSound >= 120)
+			{
+				if (m_bSound2 == false)
+				{
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_NOKOTTA);
+					m_bSound2 = true;
+				}
+			}
+
 			int nTime = (int)(m_nStartCounter / 60);
+			
 
 			if (nTime < START_SECOND)
 			{
@@ -2158,6 +2193,9 @@ void CBattleSys::ResetBattle(void)
 	//モードの取得
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+	m_bSound = false;
+	m_bSound2 = false;
+	m_nCntSound = 0;
 
 	if (mode == CManager::MODE_TUTORIAL)
 	{
