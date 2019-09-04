@@ -999,6 +999,10 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 	CBattleSys *pBattleSys = NULL;
 	CPlayer *pPlayer = NULL;
 
+	// カメラの取得
+	CCamera *pCamera;
+	pCamera = CManager::GetCamera();
+
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
@@ -1075,30 +1079,34 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			}
 		}
 
-		if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
+		if (pCamera->GetGuard() == true)
 		{
-			//ガード状態
-			if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
-				pXInput->GetPress(XENEMY_RB_BUTTON, 1) == true)
+			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 			{
-				m_State = STATE_GUARD;
-				pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
-				if (m_nMotionType[0] != MOTION_GUARD
-					&& m_nMotionType[1] != MOTION_GUARD)
+				//ガード状態
+				if (pInputKeyboard->GetPress(ENEMY_C_BUTTON) == true ||
+					pXInput->GetPress(XENEMY_RB_BUTTON, 1) == true)
 				{
-					m_nKey[0] = 0;
-					m_nKey[1] = 0;
-					m_nCountFlame[0] = 0;
-					m_nCountFlame[1] = 0;
-					m_nMotionType[0] = MOTION_GUARD;
-					m_nMotionType[1] = MOTION_GUARD;
+					m_State = STATE_GUARD;
+					pSansoGauge->SetSansoGaugeRightLeft(0, GUARD_NOW_SANSO);
+					if (m_nMotionType[0] != MOTION_GUARD
+						&& m_nMotionType[1] != MOTION_GUARD)
+					{
+						m_nKey[0] = 0;
+						m_nKey[1] = 0;
+						m_nCountFlame[0] = 0;
+						m_nCountFlame[1] = 0;
+						m_nMotionType[0] = MOTION_GUARD;
+						m_nMotionType[1] = MOTION_GUARD;
+					}
+				}
+				else if (m_State == STATE_GUARD)
+				{
+					m_State = STATE_NEUTRAL;
 				}
 			}
-			else if (m_State == STATE_GUARD)
-			{
-				m_State = STATE_NEUTRAL;
-			}
 		}
+		
 	}
 
 	if (pBattleSys != NULL)

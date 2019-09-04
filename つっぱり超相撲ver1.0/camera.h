@@ -44,6 +44,17 @@ public:
 	void EnemyUlt(CPlayer *pPlayer, CEnemy *pEnemy);
 	void PlayerUlt(CPlayer *pPlayer, CEnemy *pEnemy);
 
+	void SetAGuard(bool bGuard)
+	{
+		for (int nCnt = 0; nCnt < 3; nCnt++)
+		{
+			m_abGuard[nCnt] = bGuard;
+		}
+	}
+
+	void SetGuard(bool bGuard) { m_bGuard = bGuard; }
+	bool GetGuard(void) { return m_bGuard; }
+
 	D3DXVECTOR3 GetRot(void);						// 位置の取得
 	static STATE GetState(void) { return m_State; }
 
@@ -57,6 +68,8 @@ private:
 	D3DXMATRIX	m_mtxProjection;	// プロジェクションマトリックス
 	D3DXMATRIX	m_mtxView;			// ビューマトリックス
 	int m_nStartCounter;
+	bool m_abGuard[3];
+	bool m_bGuard;
 	static STATE m_State;
 };
 
