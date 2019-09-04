@@ -336,18 +336,31 @@ CXInputJoyPad::STICK_LEAN CXInputJoyPad::GetStick(int nLR, int indexpad)
 	{
 		if (nLR == 0)
 		{
-			//float testf = XINPUT_STICK_MIN * 1.2f;
-			//float testf2 = XINPUT_STICK_MIN * 0.8f;
+			float testf = XINPUT_STICK_MIN * 1.2f;
+			float testf2 = XINPUT_STICK_MIN * 0.8f;
 
 			if (m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MIN * 1.2f
 				&& m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.8f)
 			{
 				return STICK_LEAN_LEFT;
 			}
+
 			if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MAX * 1.2f
 				&& m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.8f)
 			{
 				return STICK_LEAN_RIGHT;
+			}
+
+			if (m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MIN * 1.2f
+				&& m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MIN * 0.8f)
+			{
+				return STICK_LEAN_DOWN;
+			}
+
+			if (m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MAX * 1.2f
+				&& m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MAX * 0.8f)
+			{
+				return STICK_LEAN_UP;
 			}
 			//if (m_Controllers[indexpad].state.Gamepad.sThumbLX < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLX > XINPUT_STICK_MAX * 0.1f ||
 			//	m_Controllers[indexpad].state.Gamepad.sThumbLY < XINPUT_STICK_MIN * 0.1f || m_Controllers[indexpad].state.Gamepad.sThumbLY > XINPUT_STICK_MAX * 0.1f)

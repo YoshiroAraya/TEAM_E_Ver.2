@@ -170,7 +170,9 @@ void CModeSelect::Update(void)
 		//‘I‘ðˆ—
 		if (pInput->GetTrigger(DIK_DOWN) == true || pInput->GetTrigger(DIK_S) == true
 			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN,0) == true
-			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN,1) == true)
+			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_DOWN,1) == true
+			|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_DOWN
+			|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_DOWN)
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
@@ -179,7 +181,9 @@ void CModeSelect::Update(void)
 		}
 		else if (pInput->GetTrigger(DIK_UP) == true || pInput->GetTrigger(DIK_W) == true
 			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_UP, 0) == true
-			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_UP, 1) == true)
+			|| pXInput->GetTrigger(XINPUT_GAMEPAD_DPAD_UP, 1) == true
+			|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_UP
+			|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_UP)
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
