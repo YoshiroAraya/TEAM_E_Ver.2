@@ -97,5 +97,7 @@ private:
 	bool	m_bSound2;
 
 	int		m_nCntSound;
+
+	int		m_nCntUltTimer;
 };
 #endif

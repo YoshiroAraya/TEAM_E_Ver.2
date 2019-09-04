@@ -184,13 +184,17 @@ void CTitle::Update(void)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RIGHT) == true
 				|| pXInput->GetTrigger(XPLAYER_RIGHT, 0) == true
-				|| pXInput->GetTrigger(XENEMY_RIGHT, 1) == true)
+				|| pXInput->GetTrigger(XENEMY_RIGHT, 1) == true
+				|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT
+				|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_RIGHT)
 			{// ‰E‚É‰ñ“]
 				m_bTurnRight = true;
 			}
 			else if(pInputKeyboard->GetTrigger(DIK_LEFT) == true
 				|| pXInput->GetTrigger(XPLAYER_LEFT, 0) == true
-				|| pXInput->GetTrigger(XENEMY_LEFT, 1) == true)
+				|| pXInput->GetTrigger(XENEMY_LEFT, 1) == true
+				|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_LEFT
+				|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_LEFT)
 			{// ¶‚É‰ñ“]
 				m_bTurnLeft = true;
 			}
@@ -316,18 +320,6 @@ void CTitle::Update(void)
 				SaveCharacter();
 			}
 		}
-
-
-		if (pXInput->GetPress(XPLAYER_RB_BUTTON, 0) == true)
-		{
-			m_Character[0] = CHARACTER_RIKISI;
-		}
-
-		if ( pXInput->GetRelese(XPLAYER_RB_BUTTON, 0) == true)
-		{
-			m_Character[0] = CHARACTER_WRESTLER;
-		}
-
 
 #ifdef _DEBUG
 		if (mode == CNumPlayer::MODE_1P)

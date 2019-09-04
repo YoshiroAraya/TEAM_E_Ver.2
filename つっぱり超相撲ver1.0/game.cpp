@@ -128,7 +128,14 @@ void CGame::Init(void)
 			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, 230.0f + (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 0.0f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
 		}
 	}
+	for (nCntZ = 0; nCntZ < 4; nCntZ++)
+	{//Žè‘O‹q
+		for (nCnt = 0; nCnt < 4; nCnt++)
+		{//‹q
 
+			CCustomer::Create(D3DXVECTOR3(-120.0f + (nCnt * 80.0f), 1.0f, -230.0f - (nCntZ * 120.0f)), D3DXVECTOR3(0.0f, 3.14f, 0.0f), rand() % 3 + 3, CCustomer::POSITION);
+		}
+	}
 	for (nCntX = 0; nCntX < 3; nCntX++)
 	{//‰œ¶
 		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
@@ -145,6 +152,25 @@ void CGame::Init(void)
 			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, 150.0f + (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 1.5f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
 		}
 	}
+
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//Žè‘O¶
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(-490.0f + (nCnt * 50.0f) + (nCntX * 100.0f), 1.0f, -150.0f - (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 0.0f - (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+	for (nCntX = 0; nCntX < 3; nCntX++)
+	{//Žè‘O‰E
+		for (nCnt = 0; nCnt < 5 - nCntX; nCnt++)
+		{//‹q
+
+			CCustomer::Create(D3DXVECTOR3(470.0f - (nCnt * 50.0f) - (nCntX * 100.0f), 1.0f, -150.0f - (nCnt * 70.0f) - (nCntX * 0.0f)), D3DXVECTOR3(0.0f, 0.0f + (nCnt * 0.4f), 0.0f), rand() % 4 + 3, CCustomer::POSITION);
+		}
+	}
+
+
 
 	for (nCntZ = 0; nCntZ < 3; nCntZ++)
 	{//‰E‹q

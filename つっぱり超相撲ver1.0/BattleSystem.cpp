@@ -97,6 +97,7 @@ CBattleSys::CBattleSys()
 	m_bSound = false;
 	m_bSound2 = false;
 	m_nCntSound = 0;
+	m_nCntUltTimer = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_CHARACTER; nCntPlayer++)
 	{
@@ -1133,27 +1134,59 @@ void CBattleSys::Operation(void)
 			}
 		}
 
-		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true
-			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true)
+		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true && m_bEnemyUlt == false
+			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false)
 		{
 			m_bPlayerUlt = true;
 
 			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
 		}
-		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true
-			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 0) == true)
+		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false
+			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false)
 		{
 			m_bEnemyUlt = true;
 
-			pULTGauge->SetGaugeRightLeft(0.0f, pULTGauge->GetGaugeLeft());
+			pULTGauge->SetGaugeRightLeft(-600.0f, pULTGauge->GetGaugeLeft());
 		}
+
+
+		if (m_nCntUltTimer > 300)
+		{
+			m_bPlayerUlt = false;
+			m_bEnemyUlt = false;
+
+
+			pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
+			pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
+			pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
+			pEnemy->SetMotionType(1, CEnemy::MOTION_NEUTRAL);
+			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			m_abUlt[0] = false;
+			m_abUlt[1] = false;
+			m_nUltTimer = 0;
+			pPlayer->SetUltDis(false);
+			pEnemy->SetUltDis(false);
+			m_nCntUltTimer = 0;
+
+			//カメラを初期化
+			CCamera *pCamera = CManager::GetCamera();
+			if (pCamera != NULL)
+			{
+				pCamera->Init();
+			}
+		}
+
+
+
 
 		if (m_bPlayerUlt == true)
 		{// 奥義（プレイヤー）
+		 //タイマー加算
+			m_nCntUltTimer++;
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
 			{// ある程度の秒数がたったら
 				m_abUlt[0] = true;
-
 				// 突っ張る
 				pPlayer->SetState(CPlayer::STATE_TSUPPARI);
 				pPlayer->SetMotionType(0, CPlayer::MOTION_TSUPPARI);
@@ -1202,6 +1235,8 @@ void CBattleSys::Operation(void)
 		}
 		if (m_bEnemyUlt == true)
 		{// 奥義（エネミー）
+		 //タイマー加算
+			m_nCntUltTimer++;
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
 			{// ある程度の秒数がたったら
 				m_abUlt[1] = true;
