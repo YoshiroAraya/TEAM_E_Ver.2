@@ -984,6 +984,10 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 	CManager::MODE mode;
 	mode = CManager::GetMode();
 
+	// カメラの取得
+	CCamera *pCamera;
+	pCamera = CManager::GetCamera();
+
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		pEnemy = CTutorial::GetEnemy();
@@ -1063,29 +1067,32 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 			}
 		}
 
-		if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
+		if (pCamera->GetGuard() == true)
 		{
-			//ガード状態
-			if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true
-				|| pXInput->GetPress(XPLAYER_RB_BUTTON, 0) == true)
+			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 			{
-				m_State = STATE_GUARD;
-				pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
-
-				if (m_nMotionType[0] != MOTION_GUARD
-					&& m_nMotionType[1] != MOTION_GUARD)
+				//ガード状態
+				if (pInputKeyboard->GetPress(PLAYER_C_BUTTON) == true
+					|| pXInput->GetPress(XPLAYER_RB_BUTTON, 0) == true)
 				{
-					m_nKey[0] = 0;
-					m_nKey[1] = 0;
-					m_nCountFlame[0] = 0;
-					m_nCountFlame[1] = 0;
-					m_nMotionType[0] = MOTION_GUARD;
-					m_nMotionType[1] = MOTION_GUARD;
+					m_State = STATE_GUARD;
+					pSansoGauge->SetSansoGaugeRightLeft(GUARD_NOW_SANSO, 0);
+
+					if (m_nMotionType[0] != MOTION_GUARD
+						&& m_nMotionType[1] != MOTION_GUARD)
+					{
+						m_nKey[0] = 0;
+						m_nKey[1] = 0;
+						m_nCountFlame[0] = 0;
+						m_nCountFlame[1] = 0;
+						m_nMotionType[0] = MOTION_GUARD;
+						m_nMotionType[1] = MOTION_GUARD;
+					}
 				}
-			}
-			else if (m_State == STATE_GUARD)
-			{
-				m_State = STATE_NEUTRAL;
+				else if (m_State == STATE_GUARD)
+				{
+					m_State = STATE_NEUTRAL;
+				}
 			}
 		}
 	}
