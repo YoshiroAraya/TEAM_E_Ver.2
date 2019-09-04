@@ -310,7 +310,7 @@ void CCamera::Update(void)
 		m_posR = D3DXVECTOR3(200.0f, 70.0f, 30.0f);		// ’Ž‹“_
 	}
 
-#if 1
+#if 0
 	if (pInputKeyboard->GetPress(DIK_A) == true)
 	{// ¶•ûŒü‚ÉˆÚ“®
 		if (pInputKeyboard->GetPress(DIK_W) == true)
@@ -657,6 +657,10 @@ void CCamera::PlayerUlt(CPlayer *pPlayer, CEnemy *pEnemy)
 
 				m_posV.x = m_posR.x + sinf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
+				m_posV.y = 150.0f;
+			}
+			else
+			{
 				m_posV.y = 150.0f;
 			}
 		}

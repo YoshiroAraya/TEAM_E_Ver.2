@@ -339,6 +339,9 @@ void CBattleSys::Operation(void)
 #ifdef _DEBUG
 				CDebugProc::Print("c", " e‚¶‚á‚ñ‚¯‚ñ ");
 #endif
+				pGauge->SetGaugeRightLeft(700, 700);
+				pULTGauge->SetGaugeRightLeft(-600, -600);
+
 				if (pInputKeyboard->GetPress(DIK_Z) == true ||
 					pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
 				{
@@ -941,7 +944,7 @@ void CBattleSys::Operation(void)
 
 				if (pEnemy->GetDying() == true)
 				{
-					m_abUlt[0] = false;
+					//m_abUlt[0] = false;
 					m_bPlayerUlt = false;
 					switch (pPlayer->GetDirection())
 					{
@@ -1015,7 +1018,7 @@ void CBattleSys::Operation(void)
 
 				if (pPlayer->GetDying() == true)
 				{
-					m_abUlt[1] = false;
+					//m_abUlt[1] = false;
 					m_bEnemyUlt = false;
 					switch (pEnemy->GetDirection())
 					{
@@ -1138,14 +1141,14 @@ void CBattleSys::Operation(void)
 			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false)
 		{
 			m_bPlayerUlt = true;
-
+			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
 		}
 		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false
 			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false)
 		{
 			m_bEnemyUlt = true;
-
+			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			pULTGauge->SetGaugeRightLeft(-600.0f, pULTGauge->GetGaugeLeft());
 		}
 
@@ -1240,7 +1243,6 @@ void CBattleSys::Operation(void)
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
 			{// ‚ ‚é’ö“x‚Ì•b”‚ª‚½‚Á‚½‚ç
 				m_abUlt[1] = true;
-
 				// “Ë‚Á’£‚é
 				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
 				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
@@ -2294,6 +2296,7 @@ void CBattleSys::ResetBattle(void)
 	m_abUlt[0] = false;
 	m_abUlt[1] = false;
 	m_nUltTimer = 0;
+	m_nCntUltTimer = 0;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
 	pPlayer->SetLose(false);
@@ -2313,10 +2316,6 @@ void CBattleSys::ResetBattle(void)
 		m_abPA[nCntPlayer] = false;
 	}
 
-	pGauge->SetGaugeRightLeft(600, 600);
-	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
-	pULTGauge->SetGaugeRightLeft(-600, -600);
-
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		CTutorial::SetWinner(CTutorial::WINNER_NONE);
@@ -2329,6 +2328,10 @@ void CBattleSys::ResetBattle(void)
 		CGame::SetHit(true);
 		CManager::GetGame()->SetbUI(true);
 	}
+
+	pGauge->SetGaugeRightLeft(700, 700);
+	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
+	pULTGauge->SetGaugeRightLeft(-600, -600);
 
 	pTime->SetTime(60);
 }
