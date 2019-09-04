@@ -718,10 +718,6 @@ void CCamera::PlayerUlt(CPlayer *pPlayer, CEnemy *pEnemy)
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.y = 150.0f;
 			}
-			else
-			{
-				m_posV.y = 150.0f;
-			}
 		}
 
 		if (pEnemy->GetDying() == true)
