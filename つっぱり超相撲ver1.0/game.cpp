@@ -83,6 +83,7 @@ CGame::CGame()
 	m_WinerNum = 0;
 	m_bDetermine = false;
 	m_nBattleResetTimer = 0;
+	m_bTimeOver = false;
 }
 
 //=============================================================================
@@ -365,7 +366,8 @@ void CGame::Update(void)
 		}
 	}
 
-	//勝敗決定
+	//勝敗決定	if (m_bTimeOver == false)
+
 	if (m_Winner == WINNER_PLAYER1)
 	{
 		m_pUITime->SetTimeStop(true);
@@ -382,14 +384,15 @@ void CGame::Update(void)
 				m_Winner = WINNER_NONE;
 				if (m_nWin1P != 3)
 				{
-					m_pBatlteSys->ResetBattle();
 					m_pUITime->SetTime(TIME_INI);
 					m_pUITime->SetTimeStop(false);
 					m_pWinnerUI->SetDrawSyouhai(false);
+					m_pBatlteSys->ResetBattle();
 				}
 				m_bDetermine = true;
 				//タイマー初期化
 				m_nBattleResetTimer = 0;
+				m_bTimeOver = false;
 			}
 		}
 	}
@@ -410,14 +413,15 @@ void CGame::Update(void)
 				m_Winner = WINNER_NONE;
 				if (m_nWin2P != 3)
 				{
-					m_pBatlteSys->ResetBattle();
 					m_pUITime->SetTime(TIME_INI);
 					m_pUITime->SetTimeStop(false);
 					m_pWinnerUI->SetDrawSyouhai(false);
+					m_pBatlteSys->ResetBattle();
 				}
 				m_bDetermine = true;
 				//タイマー初期化
 				m_nBattleResetTimer = 0;
+				m_bTimeOver = false;
 			}
 		}
 	}
@@ -596,13 +600,17 @@ void CGame::TimeOver(void)
 	Life1P = m_pGauge->GetGaugeRight();
 	Life2P = m_pGauge->GetGaugeLeft();
 
-	if (Life1P < Life2P)
+	if (m_bTimeOver == false)
 	{
-		m_Winner = WINNER_PLAYER1;
-	}
-	else if(Life2P < Life1P)
-	{
-		m_Winner = WINNER_PLAYER2;
+		if (Life1P < Life2P)
+		{
+			m_Winner = WINNER_PLAYER1;
+		}
+		else if (Life2P < Life1P)
+		{
+			m_Winner = WINNER_PLAYER2;
+		}
+		m_bTimeOver = true;
 	}
 }
 

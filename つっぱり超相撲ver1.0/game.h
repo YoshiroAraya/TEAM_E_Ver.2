@@ -96,8 +96,9 @@ private:
 	int m_nWin1P;			//勝った数を記憶
 	int m_nWin2P;			//勝った数を記憶
 	int m_WinerNum;			//勝ったのはどちらか
-	int m_nTime = 0;
-	bool m_bDetermine;
-	int m_nBattleResetTimer;
+	int m_nTime = 0;		//タイム
+	bool m_bDetermine;		//決定
+	int m_nBattleResetTimer;//バトル初期化までの時間
+	bool m_bTimeOver;		//タイムオーバー
 };
 #endif
