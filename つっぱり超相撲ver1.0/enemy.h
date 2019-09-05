@@ -200,7 +200,7 @@ public:
 	float EnemyTutorial(D3DXVECTOR3 pos, float fMoveEnemy);
 	void CollisionPlayerAction(void);
 	void TimerUpdate(void);
-	void TsuppariCollision(D3DXVECTOR3 pos);
+	bool TsuppariCollision(D3DXVECTOR3 pos);
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
 	void EntryRikishi(D3DXVECTOR3 pos, float fMovePlayer);
 	void EntryWrestler(D3DXVECTOR3 pos, float fMovePlayer);
@@ -215,7 +215,7 @@ public:
 	D3DXVECTOR3 GetMove(void) { return m_move; }
 	bool GetLose(void) { return m_bLose; }
 	void SetLose(bool bLose) { m_bLose = bLose; }
-
+	bool GetTuppariHit(void) { return m_bTuppariHit; }
 	static CBAnimation *GetAnimation(void) { return m_pAnimation; }
 
 	//モーションの更新関数
@@ -267,7 +267,7 @@ private:
 	TYPE					m_Type;
 	bool					m_bUse;
 	bool					m_bLose;
-
+	bool					m_bTuppariHit;
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ
 	static LPD3DXBUFFER			m_pBuffMatModel[MAX_PARTS][MODEL_PARENT];	//マテリアル情報へのポインタ

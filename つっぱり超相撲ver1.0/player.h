@@ -172,7 +172,7 @@ public:
 	float PlayerOperation(D3DXVECTOR3 pos,float fMovePlayer);
 	void CollisionEnemyAction(void);
 	void TimerUpdate(void);
-	void TsuppariCollision(D3DXVECTOR3 pos);
+	bool TsuppariCollision(D3DXVECTOR3 pos);
 	void DohyoHaziWhether(D3DXVECTOR3 pos);
 	void EntryRikishi(D3DXVECTOR3 pos, float fMovePlayer);
 	void EntryWrestler(D3DXVECTOR3 pos,float fMovePlayer);
@@ -187,6 +187,7 @@ public:
 	bool GetWallHit(void) { return m_bWallHit; }			//壁激突判定を取得
 	bool GetLose(void) { return m_bLose; }
 	void SetLose(bool bLose) { m_bLose = bLose; }
+	bool GetTuppariHit(void) { return m_bTuppariHit; }
 
 	//モーションの更新関数
 	void UpdateMotion(int nParent);
@@ -238,6 +239,7 @@ private:
 	static CBAnimation		*m_pAnimation;
 	bool					m_bUse;
 	TYPE					m_Type;
+	bool					m_bTuppariHit;
 
 	// モーション関数
 	static LPD3DXMESH			m_pMeshModel[MAX_PARTS][MODEL_PARENT];		//メッシュ情報へのポインタ

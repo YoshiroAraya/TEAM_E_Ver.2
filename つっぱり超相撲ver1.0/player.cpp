@@ -92,6 +92,7 @@ CPlayer::CPlayer() : CSceneX(PLAYER_PRIORITY)
 	m_bDash = false;
 	m_bUse = false;
 	m_bJanken = false;
+	m_bTuppariHit = false;
 
 	for (int nCntParent = 0; nCntParent < MODEL_PARENT; nCntParent++)
 	{
@@ -282,6 +283,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	m_bWallHit = false;
 	m_bMoneyUse = true;
 	m_bLose = false;
+	m_bTuppariHit = false;
 
 	//‚Â‚Á‚Ï‚è¶¬
 	m_pTuppari = CTuppari::Create(pos);
@@ -1227,7 +1229,7 @@ void CPlayer::TimerUpdate(void)
 //=============================================================================
 // ‚Â‚Á‚Ï‚è‚Æ‚Ì“–‚½‚è”»’è
 //============================================================================
-void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
+bool CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 {
 	// ˆÊ’uŽæ“¾
 	D3DXVECTOR3 posPlayer;
@@ -1238,6 +1240,8 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	CBattleSys *pBattleSys = NULL;
 	CManager::MODE mode;
 	mode = CManager::GetMode();
+	bool bHit = false;
+
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		pEnemy = CTutorial::GetEnemy();
@@ -1254,7 +1258,7 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 	// ‚Â‚Á‚Ï‚è‚Æ‚Ì“–‚½‚è”»’è
 	if (pEnemy->GetState() == CEnemy::STATE_TSUPPARI || pEnemy->GetState() == CPlayer::STATE_ULT)
 	{
-		bool bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
+		bHit = pEnemy->GetTuppari().Collision(&pos, &D3DXVECTOR3(m_posOld.x, m_posOld.y + 1.0f, m_posOld.z), &m_move, TSUPPARI_COLLISION);
 		//‚Â‚Á‚Ï‚è‚É‚ ‚½‚Á‚½
 		if (bHit == true)
 		{
@@ -1290,6 +1294,10 @@ void CPlayer::TsuppariCollision(D3DXVECTOR3 pos)
 
 		}
 	}
+	//‚Â‚Á‚Ï‚è‚Ì”»’è
+	m_bTuppariHit = bHit;
+
+	return bHit;
 }
 
 //=============================================================================
