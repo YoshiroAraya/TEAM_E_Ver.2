@@ -343,6 +343,9 @@ void CBattleSys::Operation(void)
 #ifdef _DEBUG
 				CDebugProc::Print("c", " e‚¶‚á‚ñ‚¯‚ñ ");
 #endif
+				pGauge->SetGaugeRightLeft(700, 700);
+				pULTGauge->SetGaugeRightLeft(-600, -600);
+
 				if (pInputKeyboard->GetPress(DIK_Z) == true ||
 					pXInput->GetPress(XPLAYER_B_BUTTON, 0) == true)
 				{
@@ -481,13 +484,7 @@ void CBattleSys::Operation(void)
 				}
 			}
 
-			if (m_bSound2 == true)
-			{
-
-			}
-
 			int nTime = (int)(m_nStartCounter / 60);
-
 
 			if (nTime < START_SECOND)
 			{
@@ -1138,30 +1135,39 @@ void CBattleSys::Operation(void)
 			}
 		}
 
-		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true && m_bEnemyUlt == false
-			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false)
+		//Ž©•ª‚Ì•KŽE‹Z
+		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true && m_bEnemyUlt == false && pPlayer->GetState() != pPlayer->STATE_KUMI
+			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false && pPlayer->GetState() != pPlayer->STATE_KUMI)
 		{
 			pCamera->SetUltCamera(true);
 			m_bPlayerUlt = true;
-
-			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
+			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
+			pULTGauge->SetGaugeRightLeft(0.0f, -600.0f);
 		}
-		else if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false
-			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false)
+		//“G‚Ì•KŽE‹Z
+		else if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false && pEnemy->GetState() != pEnemy->STATE_KUMI
+			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false && pEnemy->GetState() != pEnemy->STATE_KUMI)
 		{
 			pCamera->SetUltCamera(true);
 			m_bEnemyUlt = true;
-
-			pULTGauge->SetGaugeRightLeft(-600.0f, pULTGauge->GetGaugeLeft());
+			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
+			pULTGauge->SetGaugeRightLeft(-600.0f, 0.0f);
 		}
 
+		//•KŽE’†‚ÌƒQ[ƒW
+		if (m_bPlayerUlt == true)
+		{
+			pULTGauge->SetGaugeRightLeft(0.0f, -600.0f);
+		}
+		else if (m_bEnemyUlt == true)
+		{
+			pULTGauge->SetGaugeRightLeft(-600.0f, 0.0f);
+		}
 
 		if (m_nCntUltTimer > 300)
 		{
 			m_bPlayerUlt = false;
 			m_bEnemyUlt = false;
-
-
 			pPlayer->SetMotionType(0, CPlayer::MOTION_NEUTRAL);
 			pPlayer->SetMotionType(1, CPlayer::MOTION_NEUTRAL);
 			pEnemy->SetMotionType(0, CEnemy::MOTION_NEUTRAL);
@@ -1174,6 +1180,10 @@ void CBattleSys::Operation(void)
 			pPlayer->SetUltDis(false);
 			pEnemy->SetUltDis(false);
 			m_nCntUltTimer = 0;
+			m_nCntAttackFlame = 0;
+			m_nStartCounter = 0;
+			pPlayer->SetLose(false);
+			pEnemy->SetLose(false);
 
 			//ƒJƒƒ‰‚ð‰Šú‰»
 			CCamera *pCamera = CManager::GetCamera();
@@ -1220,13 +1230,11 @@ void CBattleSys::Operation(void)
 					m_bAttack = true;
 					break;
 				}
-
 				m_nUltTimer = 70;
 			}
 			else
 			{
 				m_nUltTimer++;
-
 			}
 
 			// ƒvƒŒƒCƒ„[‚ð‰œ‹`ó‘Ô‚É‚·‚é
@@ -1246,7 +1254,6 @@ void CBattleSys::Operation(void)
 			if ((float)m_nUltTimer / 60.0f >= 1.5f)
 			{// ‚ ‚é’ö“x‚Ì•b”‚ª‚½‚Á‚½‚ç
 				m_abUlt[1] = true;
-
 				// “Ë‚Á’£‚é
 				pEnemy->SetState(CEnemy::STATE_TSUPPARI);
 				pEnemy->SetMotionType(0, CEnemy::MOTION_TSUPPARI);
@@ -2047,7 +2054,7 @@ void CBattleSys::P2Attack(void)
 				}
 				else if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true
-					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
+					|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
@@ -2064,7 +2071,7 @@ void CBattleSys::P2Attack(void)
 			case CEnemy::DIRECTION_RIGHT:
 				if (pInputKeyboard->GetPress(ENEMY_RIGHT) == true ||
 					pXInput->GetPress(XENEMY_RIGHT, 1) == true
-					|| pXInput->GetStick(0, 0) == CXInputJoyPad::STICK_LEAN_RIGHT)
+					|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_RIGHT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
@@ -2086,7 +2093,8 @@ void CBattleSys::P2Attack(void)
 					}
 				}
 				else if (pInputKeyboard->GetPress(ENEMY_LEFT) == true ||
-					pXInput->GetPress(XENEMY_LEFT, 1) == true)
+					pXInput->GetPress(XENEMY_LEFT, 1) == true
+					|| pXInput->GetStick(0, 1) == CXInputJoyPad::STICK_LEAN_LEFT)
 				{
 					if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true ||
 						pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true)
@@ -2300,6 +2308,7 @@ void CBattleSys::ResetBattle(void)
 	m_abUlt[0] = false;
 	m_abUlt[1] = false;
 	m_nUltTimer = 0;
+	m_nCntUltTimer = 0;
 	pPlayer->SetUltDis(false);
 	pEnemy->SetUltDis(false);
 	pPlayer->SetLose(false);
@@ -2319,10 +2328,6 @@ void CBattleSys::ResetBattle(void)
 		m_abPA[nCntPlayer] = false;
 	}
 
-	pGauge->SetGaugeRightLeft(600, 600);
-	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
-	pULTGauge->SetGaugeRightLeft(-600, -600);
-
 	if (mode == CManager::MODE_TUTORIAL)
 	{
 		CTutorial::SetWinner(CTutorial::WINNER_NONE);
@@ -2335,6 +2340,10 @@ void CBattleSys::ResetBattle(void)
 		CGame::SetHit(true);
 		CManager::GetGame()->SetbUI(true);
 	}
+
+	pGauge->SetGaugeRightLeft(700, 700);
+	pSansoGauge->SetSansoGaugeRightLeft(600, 600);
+	pULTGauge->SetGaugeRightLeft(-600, -600);
 
 	pTime->SetTime(60);
 }
