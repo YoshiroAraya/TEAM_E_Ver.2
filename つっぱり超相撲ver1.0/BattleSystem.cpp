@@ -284,6 +284,10 @@ void CBattleSys::Operation(void)
 	CGame::STATE GState = CGame::STATE_GAME;
 	CTutorial::STATE TState = CTutorial::STATE_GAME;
 
+	// ƒJƒƒ‰‚Ìæ“¾
+	CCamera *pCamera;
+	pCamera = CManager::GetCamera();
+
 	// ƒ‚[ƒhæ“¾
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -1137,13 +1141,15 @@ void CBattleSys::Operation(void)
 		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true && m_bEnemyUlt == false
 			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false)
 		{
+			pCamera->SetUltCamera(true);
 			m_bPlayerUlt = true;
 
 			pULTGauge->SetGaugeRightLeft(pULTGauge->GetGaugeRight(), -600.0f);
 		}
-		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false
+		else if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false
 			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false)
 		{
+			pCamera->SetUltCamera(true);
 			m_bEnemyUlt = true;
 
 			pULTGauge->SetGaugeRightLeft(-600.0f, pULTGauge->GetGaugeLeft());
