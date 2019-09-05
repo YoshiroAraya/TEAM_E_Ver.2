@@ -68,6 +68,8 @@ public:
 	void UltDamage(void);
 	void PlusCntPushP2(int nCnt) { m_nCntPushP2 += nCnt; };
 	bool GetUlt(int nCharacter) { return m_abUlt[nCharacter]; }
+	bool GetEnemyUlt(void) { return m_bEnemyUlt; }
+	bool GetPlayerUlt(void) { return m_bPlayerUlt; }
 	void CPUBattle(CEnemy::CPUACTION CpuAction);
 	void CustomerReset(void);
 	ATTACK_TURN GetAttackTurn(void) { return m_AttackTurn; };

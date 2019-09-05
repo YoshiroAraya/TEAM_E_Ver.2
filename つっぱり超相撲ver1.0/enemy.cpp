@@ -1083,7 +1083,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 			}
 		}
 
-		if (pCamera->GetGuard() == true)
+		if (pCamera->GetGuard() == true && pBattleSys->GetPlayerUlt() == false)
 		{
 			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 			{

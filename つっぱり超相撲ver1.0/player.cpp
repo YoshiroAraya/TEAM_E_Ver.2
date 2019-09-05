@@ -1067,7 +1067,7 @@ float CPlayer::PlayerOperation(D3DXVECTOR3 pos, float fMovePlayer)
 			}
 		}
 
-		if (pCamera->GetGuard() == true)
+		if (pCamera->GetGuard() == true && pBattleSys->GetEnemyUlt() == false)
 		{
 			if (m_State == STATE_NEUTRAL || m_State == STATE_GUARD)
 			{
