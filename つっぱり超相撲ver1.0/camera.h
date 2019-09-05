@@ -54,6 +54,7 @@ public:
 
 	void SetGuard(bool bGuard) { m_bGuard = bGuard; }
 	bool GetGuard(void) { return m_bGuard; }
+	void SetUltCamera(bool bUlt) { m_bUlt = bUlt; }
 
 	D3DXVECTOR3 GetRot(void);						// ˆÊ’u‚ÌŽæ“¾
 	static STATE GetState(void) { return m_State; }
@@ -70,6 +71,7 @@ private:
 	int m_nStartCounter;
 	bool m_abGuard[3];
 	bool m_bGuard;
+	bool m_bUlt;
 	static STATE m_State;
 };
 

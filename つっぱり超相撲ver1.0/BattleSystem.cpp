@@ -284,6 +284,10 @@ void CBattleSys::Operation(void)
 	CGame::STATE GState = CGame::STATE_GAME;
 	CTutorial::STATE TState = CTutorial::STATE_GAME;
 
+	// ƒJƒƒ‰‚ÌŽæ“¾
+	CCamera *pCamera;
+	pCamera = CManager::GetCamera();
+
 	// ƒ‚[ƒhŽæ“¾
 	CManager::MODE mode;
 	mode = CManager::GetMode();
@@ -1136,14 +1140,16 @@ void CBattleSys::Operation(void)
 		if (pPlayer->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_5) == true && m_bEnemyUlt == false && pPlayer->GetState() != pPlayer->STATE_KUMI
 			|| pPlayer->GetUltDis() == true && pXInput->GetTrigger(XPLAYER_Y_BUTTON, 0) == true && m_bEnemyUlt == false && pPlayer->GetState() != pPlayer->STATE_KUMI)
 		{
+			pCamera->SetUltCamera(true);
 			m_bPlayerUlt = true;
 			pPlayer->SetState(CPlayer::STATE_NEUTRAL);
 			pULTGauge->SetGaugeRightLeft(0.0f, -600.0f);
 		}
 		//“G‚Ì•KŽE‹Z
-		if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false && pEnemy->GetState() != pEnemy->STATE_KUMI
+		else if (pEnemy->GetUltDis() == true && pInputKeyboard->GetTrigger(DIK_6) == true && m_bPlayerUlt == false && pEnemy->GetState() != pEnemy->STATE_KUMI
 			|| pEnemy->GetUltDis() == true && pXInput->GetTrigger(XENEMY_Y_BUTTON, 1) == true && m_bPlayerUlt == false && pEnemy->GetState() != pEnemy->STATE_KUMI)
 		{
+			pCamera->SetUltCamera(true);
 			m_bEnemyUlt = true;
 			pEnemy->SetState(CEnemy::STATE_NEUTRAL);
 			pULTGauge->SetGaugeRightLeft(-600.0f, 0.0f);
