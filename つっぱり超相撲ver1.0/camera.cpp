@@ -706,7 +706,7 @@ void CCamera::PlayerUlt(CPlayer *pPlayer, CEnemy *pEnemy)
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.y = 150.0f;
 			}
-			if (m_bUlt == false && m_bGuard == true && pEnemy->GetDying() == true)
+			if (m_bUlt == false && m_bGuard == true && pEnemy->GetDying() == true && pPlayer->GetTuppariHit() == true)
 			{// やられたときのカメラワーク
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 20.0f, pEnemy->GetPosition().z);
 				if (pPlayer->GetDirection() == CPlayer::DIRECTION_RIGHT)
@@ -834,7 +834,7 @@ void CCamera::EnemyUlt(CPlayer *pPlayer, CEnemy *pEnemy)
 				m_posR = D3DXVECTOR3(pEnemy->GetPosition().x, pEnemy->GetPosition().y + 80.0f, pEnemy->GetPosition().z);		// 注視点
 			}
 		}
-		
+
 		if (pBattleSys != NULL)
 		{
 			if (pBattleSys->GetUlt(1) == true && m_bGuard == true)
@@ -855,7 +855,7 @@ void CCamera::EnemyUlt(CPlayer *pPlayer, CEnemy *pEnemy)
 				m_posV.z = m_posR.z + cosf(D3DX_PI + m_rot.y) * m_fLength;
 				m_posV.y = 150.0f;
 			}
-			if (m_bUlt == false && m_bGuard == true && pPlayer->GetDying() == true)
+			if (m_bUlt == false && m_bGuard == true && pPlayer->GetDying() == true && pEnemy->GetTuppariHit() == true)
 			{// やられたときのカメラワーク
 				m_posR = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 20.0f, pPlayer->GetPosition().z);
 				if (pEnemy->GetDirection() == CEnemy::DIRECTION_RIGHT)
