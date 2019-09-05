@@ -617,7 +617,7 @@ void CPlayer::Update(void)
 				if (m_pAnimation == NULL)
 				{
 					m_pAnimation = CBAnimation::Create(D3DXVECTOR3(pos.x, pos.y, pos.z), D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f),
-						50.0f, 100.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0, CLoad::TEXTURE_ANIMATION);
+						100.0f, 150.0f, 0.0625f, 1.0f, 1.5f, 16, 0, 0, 0, CLoad::TEXTURE_ANIMATION);
 				}
 				m_bUltDis = true;
 			}

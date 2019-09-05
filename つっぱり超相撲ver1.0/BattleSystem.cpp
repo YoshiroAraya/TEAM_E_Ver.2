@@ -382,7 +382,7 @@ void CBattleSys::Operation(void)
 				CDebugProc::Print("c", " eじゃんけん ");
 #endif
 				//CPUと人間のじゃんけん操作
-				if (pEnemy->GetMode() == CEnemy::MODE_CPU)
+				if (pEnemy->GetMode() == CEnemy::MODE_CPU || pEnemy->GetMode() == CEnemy::MODE_TUTORIAL)
 				{	//じゃんけんをランダムに決定
 					int nRandJanken = rand() % 3;
 
@@ -869,7 +869,8 @@ void CBattleSys::Operation(void)
 			}
 		}
 		//エネミーのつっぱり
-		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false && pEnemy->GetMode() == CEnemy::MODE_P2)
+		if (pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false && pEnemy->GetMode() == CEnemy::MODE_P2
+			|| pEnemy->GetState() == CEnemy::STATE_NEUTRAL && m_bAttack == false && pEnemy->GetMode() == CEnemy::MODE_TUTORIAL)
 		{
 			if (pInputKeyboard->GetTrigger(ENEMY_A_BUTTON) == true && pEnemy->GetRecovery() == false ||
 				pXInput->GetTrigger(XENEMY_X_BUTTON, 1) == true && pEnemy->GetRecovery() == false)

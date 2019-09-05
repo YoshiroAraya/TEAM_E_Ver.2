@@ -41,6 +41,7 @@ public:
 	{
 		MODE_P2 = 0,
 		MODE_CPU,
+		MODE_TUTORIAL,
 	}MODE;
 
 	//èÛë‘
@@ -263,7 +264,7 @@ private:
 	CTuppari				*m_pTuppari;
 	DOHYO					m_DohyoState;
 	HAZI_LR					m_DohyoHaziLR;
-	TYPE					m_Type;	
+	TYPE					m_Type;
 	bool					m_bUse;
 	bool					m_bLose;
 

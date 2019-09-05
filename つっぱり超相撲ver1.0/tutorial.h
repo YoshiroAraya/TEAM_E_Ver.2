@@ -102,6 +102,8 @@ private:
 	int m_nWin2P;			//
 	int m_WinerNum;			//
 	int m_nTime = 0;
+	bool m_bDetermine;
+	int m_nBattleResetTimer;
 
 	CScene2D *m_apScene2D[MAX_TUTORIAL];
 	CScene3D *m_apScene3D[MAX_TUTORIAL];

@@ -78,6 +78,7 @@ CTutorial::CTutorial()
 	m_nWin1P = 0;
 	m_nWin2P = 0;
 	m_WinerNum = 0;
+	m_bDetermine = false;
 	// 値をクリア
 	for (int nCnt = 0; nCnt < MAX_TUTORIAL; nCnt++)
 	{
@@ -89,6 +90,10 @@ CTutorial::CTutorial()
 	{
 		m_apScene3D[nCnt] = NULL;
 	}
+
+	m_bDetermine = false;
+	m_nBattleResetTimer = 0;
+
 }
 
 //=============================================================================
@@ -133,8 +138,10 @@ void CTutorial::Init(void)
 
 	if (m_pEnemy == NULL)
 	{// エネミー
-		m_pEnemy = CEnemy::Create(D3DXVECTOR3(80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_CPU);
+		m_pEnemy = CEnemy::Create(D3DXVECTOR3(80.0f, 20.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CEnemy::MODE_TUTORIAL);
 	}
+
+
 	if (m_pMeshField == NULL)
 	{
 		// メッシュフィールドの生成
@@ -327,17 +334,57 @@ void CTutorial::Update(void)
 	}
 
 	//勝敗決定
+	//if (m_Winner == WINNER_PLAYER1)
+	//{
+	//	m_Winner = WINNER_NONE;
+	//	m_pBatlteSys->ResetBattle();
+	////	m_pUITime->SetTime(TIME_INI);
+	//}
+	//else if (m_Winner == WINNER_PLAYER2)
+	//{
+	//	m_Winner = WINNER_NONE;
+	//	m_pBatlteSys->ResetBattle();
+	////	m_pUITime->SetTime(TIME_INI);
+	//}
+
+	//勝敗決定
 	if (m_Winner == WINNER_PLAYER1)
 	{
-		m_Winner = WINNER_NONE;
-		m_pBatlteSys->ResetBattle();
-	//	m_pUITime->SetTime(TIME_INI);
+		m_bDetermine = false;
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
+		{
+			if (m_bDetermine == false)
+			{
+				m_Winner = WINNER_NONE;
+				if (m_nWin1P != 3)
+				{
+					m_pBatlteSys->ResetBattle();
+				}
+				m_bDetermine = true;
+				//タイマー初期化
+				m_nBattleResetTimer = 0;
+			}
+		}
 	}
 	else if (m_Winner == WINNER_PLAYER2)
 	{
-		m_Winner = WINNER_NONE;
-		m_pBatlteSys->ResetBattle();
-	//	m_pUITime->SetTime(TIME_INI);
+		m_bDetermine = false;
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
+		{
+			if (m_bDetermine == false)
+			{
+				m_Winner = WINNER_NONE;
+				if (m_nWin2P != 3)
+				{
+					m_pBatlteSys->ResetBattle();
+				}
+				m_bDetermine = true;
+				//タイマー初期化
+				m_nBattleResetTimer = 0;
+			}
+		}
 	}
 
 	if (m_pPlayer->GetState() == CPlayer::STATE_JANKEN)

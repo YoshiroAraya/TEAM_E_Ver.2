@@ -604,6 +604,10 @@ void CEnemy::Update(void)
 		{
 			//エネミーの処理
 			EnemyTutorial(pos, fMoveEnemy);
+
+			fMoveEnemy = EnemyOperation(pos, fMoveEnemy);
+
+
 			//タイマーの更新
 			TimerUpdate();
 
@@ -1106,7 +1110,7 @@ float CEnemy::EnemyOperation(D3DXVECTOR3 pos, float fMoveEnemy)
 				}
 			}
 		}
-		
+
 	}
 
 	if (pBattleSys != NULL)
