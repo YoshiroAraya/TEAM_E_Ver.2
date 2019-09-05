@@ -533,7 +533,21 @@ void CPlayer::Update(void)
 			m_pPlayerTag->SetbDraw(true);
 
 			//プレイヤーの動作
-			fMovePlayer = PlayerOperation(pos, fMovePlayer);
+			if (CGame::GetTimeOver() == false)
+			{
+				fMovePlayer = PlayerOperation(pos, fMovePlayer);
+			}
+			else
+			{	//タイムアップ時のモーション
+				if (m_bMotionEnd[0] == true)
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+				}
+				if (m_bMotionEnd[1] == true)
+				{
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				}
+			}
 
 			//タイマーの更新
 			TimerUpdate();

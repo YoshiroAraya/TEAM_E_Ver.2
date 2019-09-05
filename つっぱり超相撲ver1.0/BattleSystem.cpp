@@ -1185,7 +1185,8 @@ void CBattleSys::Operation(void)
 			m_nStartCounter = 0;
 			pPlayer->SetLose(false);
 			pEnemy->SetLose(false);
-
+			pPlayer->SetUltDamage(false);
+			pEnemy->SetUltDamage(false);
 			//ƒJƒƒ‰‚ğ‰Šú‰»
 			CCamera *pCamera = CManager::GetCamera();
 			if (pCamera != NULL)

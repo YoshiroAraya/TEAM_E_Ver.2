@@ -121,7 +121,7 @@ void CTitle::Update(void)
 		{
 			// タイトルで使うオブジェクトを設置
 			CDohyo::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			CDohyoCircle::Create(D3DXVECTOR3(0, 25.0f, 0), 0.0f, 0.0f);
+			CDohyoCircle::Create(D3DXVECTOR3(0, 20.5f, 0), 0.0f, 0.0f);
 			CField::Create(D3DXVECTOR3(0, -10.0f, 0), 700.0f);
 			CWall::Create(D3DXVECTOR3(0, 200.0f, 500), D3DXVECTOR3(300.0f, 0.0f, 0.0f), 200.0f, 700.0f);
 			CWall::Create(D3DXVECTOR3(-550, 200.0f, 0), D3DXVECTOR3(300.0f, 300.0f, 0.0f), 200.0f, 700.0f);

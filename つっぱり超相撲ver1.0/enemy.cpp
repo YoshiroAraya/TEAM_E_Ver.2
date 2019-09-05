@@ -537,13 +537,27 @@ void CEnemy::Update(void)
 			m_pEnemyTag->SetbDraw(true);
 
 			//エネミーの操作
-			if (m_Mode == MODE_P2)
+			if (CGame::GetTimeOver() == false)
 			{
-				fMoveEnemy = EnemyOperation(pos, fMoveEnemy);
+				if (m_Mode == MODE_P2)
+				{
+					fMoveEnemy = EnemyOperation(pos, fMoveEnemy);
+				}
+				else if (m_Mode == MODE_CPU)
+				{
+					fMoveEnemy = EnemyCPU(pos, fMoveEnemy);
+				}
 			}
-			else if(m_Mode == MODE_CPU)
-			{
-				fMoveEnemy = EnemyCPU(pos, fMoveEnemy);
+			else
+			{//タイムアップ時のモーション
+				if (m_bMotionEnd[0] == true)
+				{
+					m_nMotionType[0] = MOTION_BATTLE_NEUTRAL;
+				}
+				if (m_bMotionEnd[1] == true)
+				{
+					m_nMotionType[1] = MOTION_BATTLE_NEUTRAL;
+				}
 			}
 
 			//タイマーの更新
