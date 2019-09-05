@@ -68,6 +68,8 @@ CUITime *CGame::m_pUITime = NULL;
 CWinnerUI *CGame::m_pWinnerUI = NULL;
 
 bool CGame::m_bHit = false;
+bool CGame::m_bTimeOver = false;
+
 CGame::STATE CGame::m_State = CGame::STATE_START;
 CGame::WINNER CGame::m_Winner = CGame::WINNER_NONE;
 
@@ -344,7 +346,7 @@ void CGame::Update(void)
 
 	if (CScene::GetbPause() == false)
 	{
-		if (m_pBatlteSys != NULL)
+		if (m_pBatlteSys != NULL && m_bTimeOver == false)
 		{
 			m_pBatlteSys->Update();
 		}
@@ -418,6 +420,27 @@ void CGame::Update(void)
 					m_pWinnerUI->SetDrawSyouhai(false);
 					m_pBatlteSys->ResetBattle();
 				}
+				m_bDetermine = true;
+				//タイマー初期化
+				m_nBattleResetTimer = 0;
+				m_bTimeOver = false;
+			}
+		}
+	}
+	else if (m_Winner == WINNER_DRAW)
+	{
+		m_pUITime->SetTimeStop(true);
+		m_bDetermine = false;
+		m_nBattleResetTimer++;
+		if (m_nBattleResetTimer > 120)
+		{
+			if (m_bDetermine == false)
+			{
+				m_Winner = WINNER_NONE;
+				m_pUITime->SetTime(TIME_INI);
+				m_pUITime->SetTimeStop(false);
+				m_pWinnerUI->SetDrawSyouhai(false);
+				m_pBatlteSys->ResetBattle();
 				m_bDetermine = true;
 				//タイマー初期化
 				m_nBattleResetTimer = 0;
@@ -609,6 +632,10 @@ void CGame::TimeOver(void)
 		else if (Life2P < Life1P)
 		{
 			m_Winner = WINNER_PLAYER2;
+		}
+		else
+		{
+			m_Winner = WINNER_DRAW;
 		}
 		m_bTimeOver = true;
 	}

@@ -31,6 +31,7 @@ public:
 		WINNER_NONE = 0,
 		WINNER_PLAYER1,
 		WINNER_PLAYER2,
+		WINNER_DRAW,
 	}WINNER;
 
 	typedef enum
@@ -72,7 +73,7 @@ public:
 	int Get2P(void) { return m_n2P; };
 	void SaveWinner(void);
 	void TimeOver(void);
-
+	static bool GetTimeOver(void) { return m_bTimeOver; };
 private:
 	static CScene3D *m_pScene3D;
 	static CPlayer *m_pPlayer;
@@ -99,6 +100,6 @@ private:
 	int m_nTime = 0;		//タイム
 	bool m_bDetermine;		//決定
 	int m_nBattleResetTimer;//バトル初期化までの時間
-	bool m_bTimeOver;		//タイムオーバー
+	static bool m_bTimeOver;		//タイムオーバー
 };
 #endif
